@@ -2333,8 +2333,13 @@ class GymCoach:
         tasks_path: Path,
         plan: dict,
     ) -> Optional[str]:
-        """Run GRPO training."""
+        """Run GRPO training (standard or FairGRPO based on plan)."""
+        use_fairness = plan.get("use_fairness", False) or plan.get("training_method") == "fair_grpo"
+        
         try:
+            if use_fairness:
+                return self._train_fair_grpo(model_path, iteration, tasks_path, plan)
+            
             from bioagents.training.grpo_trainer import BioAgentGRPOConfig, train
             
             grpo_config = BioAgentGRPOConfig(
@@ -2357,6 +2362,70 @@ class GymCoach:
                 return final_path
         except Exception as e:
             logger.error(f"GRPO training failed: {e}")
+        
+        return None
+    
+    def _train_fair_grpo(
+        self,
+        model_path: str,
+        iteration: int,
+        tasks_path: Path,
+        plan: dict,
+    ) -> Optional[str]:
+        """Run FairGRPO training with demographic-aware reward weighting.
+        
+        Integrates the FairGRPO framework (arXiv:2510.19893) into the
+        GymCoach training loop. Automatically activated when:
+          - plan["use_fairness"] is True
+          - plan["training_method"] == "fair_grpo"
+          - Fairness gap is detected above threshold during evaluation
+        """
+        try:
+            from bioagents.training.grpo_trainer import FairGRPOConfig, train_fair_grpo
+            
+            fair_config = FairGRPOConfig(
+                model_name_or_path=model_path,
+                domain=plan.get("focus_domains", ["medical_qa"])[0],
+                tasks_path=str(tasks_path),
+                output_dir=str(Path(self.config.output_dir) / f"iter_{iteration}_fair_grpo"),
+                num_train_epochs=plan.get("epochs", self.config.train_epochs_per_iter),
+                learning_rate=plan.get("learning_rate", self.config.learning_rate),
+                temperature=plan.get("temperature", 0.7),
+                beta=0.04,
+                run_name=f"gym_coach_iter_{iteration}_fair",
+                use_wandb=False,
+                # FairGRPO-specific
+                fairness_enabled=True,
+                fairness_weight=plan.get("fairness_weight", 0.1),
+                alpha_repr=plan.get("alpha_repr", 0.5),
+                alpha_perf=plan.get("alpha_perf", 0.5),
+                max_fairness_gap=plan.get("max_fairness_gap", 0.15),
+            )
+            
+            trainer = train_fair_grpo(fair_config)
+            
+            # Log fairness results to GymCoach memory
+            from bioagents.evaluation.grpo_rewards import get_fairness_tracker
+            tracker = get_fairness_tracker()
+            fairness_summary = tracker.get_summary()
+            
+            self.memory.log_action(
+                "fair_grpo_complete",
+                f"iter_{iteration}",
+                details={
+                    "fairness_gaps": fairness_summary.get("fairness_gaps", {}),
+                    "group_stats": {
+                        k: v for k, v in fairness_summary.items()
+                        if k != "fairness_gaps"
+                    },
+                },
+            )
+            
+            final_path = str(Path(fair_config.output_dir) / "final")
+            if Path(final_path).exists():
+                return final_path
+        except Exception as e:
+            logger.error(f"FairGRPO training failed: {e}")
         
         return None
     

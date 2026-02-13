@@ -43,6 +43,82 @@ AgentGym-RL과 τ²-bench의 아키텍처를 참고하되, **의료 도메인 �
 4. **Patient Agent + Tool-Use** — 동적 환자 상호작용 + 88개 임상 도구 동시 지원
 5. **Clinical Guidelines Compliance** — 10개 가이드라인 자동 준수 평가
 6. **End-to-End Training** — SFT → GRPO → Self-Play → Cross-Domain RL 완전한 파이프라인
+7. **FairGRPO** — 인구통계학적 공정성 인식 RL 학습 (demographic-aware reward weighting)
+
+### 1.4 심층 경쟁자 분석: DiagGym vs MedAgentGym vs Healthcare AI GYM
+
+#### DiagGym (arXiv:2510.24654, Oct 2025)
+- **핵심**: EHR 기반 world model로 진단 환경 시뮬레이션 + DiagAgent (LLM 기반 진단 에이전트)
+- **특징**: DiagBench (2.2K physician-validated cases), multi-turn RL로 진단 정책 학습
+- **성능**: 진단 정확도 +11.2%, 검사 추천 F1 +17.6% (vs SOTA LLM)
+- **한계**:
+  - 단일 도메인 (EHR 진단만) — cross-domain 경로 없음
+  - Tool-use 프레임워크 없음 (검사 선택만, 일반 도구 호출 아님)
+  - Safety 평가 프레임워크 명시적으로 없음
+  - Patient Agent 시뮬레이션 없음 (데이터 기반만)
+
+#### MedAgentGym (ICLR 2026 Oral, June 2025)
+- **핵심**: 코드 중심 의생명 데이터 분석 에이전트 학습 환경 (Python 실행 기반)
+- **특징**: 72,413 task instances / 129 categories / 12 real-world 시나리오
+- **성능**: Med-Copilot offline RL +43%, online RL +45% (GPT-4o 수준)
+- **한계**:
+  - 코드 실행 기반 — 임상 의사결정이 아닌 데이터 분석 중심
+  - Text-only (멀티모달 미지원)
+  - 환자 상호작용 시뮬레이션 없음
+  - Cross-domain 임상 경로 없음
+  - PhysioNet 자격 요구 (일부 데이터)
+
+#### Healthcare AI GYM (Ours) — 차별화 포인트
+
+| 차원 | DiagGym | MedAgentGym | **Healthcare AI GYM** |
+|------|---------|-------------|----------------------|
+| **도메인 수** | 1 (EHR 진단) | 129 (데이터분석) | **10 임상 도메인** |
+| **태스크 유형** | 진단/검사 선택 | 코드 실행 | **Tool-use 에이전트** |
+| **태스크 수** | 2.2K | 72.4K | **550+ (확장 가능)** |
+| **멀티모달** | ✗ | ✗ | **✓ (Text + Vision)** |
+| **Cross-domain** | ✗ | ✗ | **✓ (6 clinical pathways)** |
+| **Patient Agent** | ✗ | ✗ | **✓ (12 personalities, 13 biases)** |
+| **Safety 평가** | 제한적 | ✗ | **✓ (5D reward + 50 adversarial + 11 bias tests)** |
+| **공정성 (Fairness)** | ✗ | ✗ | **✓ (FairGRPO)** |
+| **Tool 수** | ~10 검사 | Python runtime | **88+ 임상 도구** |
+| **RL 방법** | Multi-turn RL | Offline/Online RL | **GRPO + Self-Play + GymCoach** |
+| **자율 학습** | ✗ | ✗ | **✓ (GymCoach autonomous loop)** |
+| **가이드라인 준수** | ✗ | ✗ | **✓ (10 guidelines)** |
+
+**핵심 논쟁 포인트 (Rebuttal 준비):**
+1. "MedAgentGym이 72K 태스크인데 Healthcare AI GYM은 550개뿐?" 
+   → 우리는 tool-use 에이전트 환경이므로 태스크 하나가 multi-turn interaction + tool calling + reasoning으로 구성. LLM 기반 자동 태스크 생성(GymCoach)으로 무한 확장 가능.
+2. "DiagGym이 physician-validated인데?" 
+   → 우리도 evaluation_criteria에 nl_assertions (physician-level rubric)을 포함하며, 추가로 safety violation taxonomy까지 구현.
+3. "스케일이 부족?" 
+   → 우리의 기여는 스케일이 아닌 **통합 시스템** — 10 도메인 × 88 도구 × patient agent × safety × fairness × autonomous training. 어떤 단일 논문도 이 범위를 커버하지 못함.
+
+### 1.5 FairGRPO 메커니즘 (arXiv:2510.19893)
+
+**구현 완료 (2026-02-13):**
+
+1. **Demographic Group Extraction** (`grpo_rewards.py`)
+   - 환자 데이터에서 age_group / sex / ethnicity 자동 추출
+   - 라벨 없을 때 unsupervised clustering으로 발견 가능 (추후 구현)
+
+2. **FairnessTracker** (`grpo_rewards.py`)
+   - 인구통계 그룹별 보상 통계 실시간 추적
+   - Representation weight: 소수 그룹 상향 가중 (빈도 역수)
+   - Performance weight: 저성과 그룹 상향 가중 (평균 역수)
+   - Fairness gap 모니터링: max-min 그룹 간 격차 추적
+
+3. **FairGRPO Reward Functions** (`grpo_rewards.py`)
+   - `grpo_fairness_reward`: 기본 보상에 공정성 가중치 적용
+   - `grpo_fair_composite_reward`: composite reward + fairness signal 통합
+
+4. **FairGRPO Trainer** (`grpo_trainer.py`)
+   - `FairGRPOConfig`: 공정성 파라미터 (weight, alpha_repr, alpha_perf, max_gap)
+   - `train_fair_grpo()`: TRL GRPOTrainer 기반 공정성 인식 학습
+   - 학습 완료 후 fairness_report.json 자동 저장
+
+5. **GymCoach 통합** (`gym_coach.py`)
+   - `_train_fair_grpo()`: 자율 학습 루프에서 FairGRPO 자동 활용
+   - Training Memory에 fairness 결과 기록
 
 ---
 

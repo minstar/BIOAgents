@@ -5,10 +5,22 @@
     "rad_ct_abdomen_003",
     "rad_ct_lung_nodule_005",
     "rad_mammo_birads5_007",
-    "rad_us_thyroid_008"
+    "rad_us_thyroid_008",
+    "rad_mri_knee_009",
+    "rad_ct_cspine_010",
+    "rad_ct_chest_covid_011",
+    "rad_cta_pe_013",
+    "rad_mri_liver_014",
+    "rad_vq_scan_015",
+    "rad_mri_shoulder_017",
+    "rad_cardiac_ct_020"
   ],
   "test": [
     "rad_mri_brain_tumor_004",
-    "rad_cxr_normal_006"
+    "rad_cxr_normal_006",
+    "rad_us_gallbladder_012",
+    "rad_ct_renal_016",
+    "rad_mri_brain_ms_018",
+    "rad_us_pelvic_019"
   ]
 }

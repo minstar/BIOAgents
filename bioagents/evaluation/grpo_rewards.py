@@ -403,6 +403,346 @@ def grpo_composite_reward(
 
 
 # ============================================================
+# FairGRPO: Fairness-Aware Reward Functions
+# ============================================================
+# Reference: FairGRPO (arXiv:2510.19893) — Hierarchical RL for
+# equitable clinical reasoning with demographic-aware weighting.
+
+
+# --- Demographic group extraction ---
+
+DEMOGRAPHIC_FEATURES = {
+    "age_group": {
+        "pediatric": lambda age: age is not None and age < 18,
+        "young_adult": lambda age: age is not None and 18 <= age < 40,
+        "middle_aged": lambda age: age is not None and 40 <= age < 65,
+        "elderly": lambda age: age is not None and age >= 65,
+    },
+    "sex": {
+        "male": lambda sex: sex and sex.lower() in ("m", "male"),
+        "female": lambda sex: sex and sex.lower() in ("f", "female"),
+    },
+    "ethnicity": {
+        "white": lambda eth: eth and "white" in eth.lower(),
+        "black": lambda eth: eth and "black" in eth.lower(),
+        "hispanic": lambda eth: eth and "hispanic" in eth.lower(),
+        "asian": lambda eth: eth and "asian" in eth.lower(),
+        "other": lambda eth: eth and not any(
+            k in eth.lower() for k in ("white", "black", "hispanic", "asian")
+        ),
+    },
+}
+
+
+def extract_demographic_groups(patient_data: dict) -> dict[str, str]:
+    """Extract demographic group labels from patient data.
+
+    Args:
+        patient_data: Patient record dict (may contain age, sex, ethnicity, etc.)
+
+    Returns:
+        Dict mapping feature_name -> group_label (e.g., {"age_group": "elderly", "sex": "female"})
+    """
+    groups = {}
+
+    age = patient_data.get("age")
+    sex = patient_data.get("sex", patient_data.get("gender"))
+    ethnicity = patient_data.get("ethnicity", patient_data.get("race"))
+
+    # Age group
+    for label, fn in DEMOGRAPHIC_FEATURES["age_group"].items():
+        if fn(age):
+            groups["age_group"] = label
+            break
+
+    # Sex
+    for label, fn in DEMOGRAPHIC_FEATURES["sex"].items():
+        if fn(sex):
+            groups["sex"] = label
+            break
+
+    # Ethnicity
+    if ethnicity:
+        for label, fn in DEMOGRAPHIC_FEATURES["ethnicity"].items():
+            if fn(ethnicity):
+                groups["ethnicity"] = label
+                break
+
+    return groups
+
+
+# --- Fairness group performance tracker ---
+
+class FairnessTracker:
+    """Tracks per-group performance for FairGRPO adaptive weighting.
+
+    Maintains running statistics of reward scores per demographic group,
+    enabling:
+      1. Representation-aware weighting (upweight underrepresented groups)
+      2. Performance-aware weighting (upweight groups with lower scores)
+      3. Predictive parity tracking (monitor fairness gap across groups)
+    """
+
+    def __init__(self):
+        self._group_scores: dict[str, dict[str, list[float]]] = {}
+        # {feature: {group_label: [scores...]}}
+        self._group_counts: dict[str, dict[str, int]] = {}
+
+    def record(self, groups: dict[str, str], reward: float) -> None:
+        """Record a reward for the given demographic groups."""
+        for feature, label in groups.items():
+            if feature not in self._group_scores:
+                self._group_scores[feature] = {}
+                self._group_counts[feature] = {}
+            if label not in self._group_scores[feature]:
+                self._group_scores[feature][label] = []
+                self._group_counts[feature][label] = 0
+            self._group_scores[feature][label].append(reward)
+            self._group_counts[feature][label] += 1
+
+    def get_fairness_weight(
+        self,
+        groups: dict[str, str],
+        alpha_repr: float = 0.5,
+        alpha_perf: float = 0.5,
+    ) -> float:
+        """Compute FairGRPO importance weight for a sample.
+
+        Combines:
+          - Representation weight: inverse of group frequency (upweight rare groups)
+          - Performance weight: inverse of group mean reward (upweight struggling groups)
+
+        Args:
+            groups: Demographic group labels for this sample
+            alpha_repr: Weight for representation component
+            alpha_perf: Weight for performance component
+
+        Returns:
+            Importance weight >= 1.0 (higher = more emphasis on this sample)
+        """
+        if not groups:
+            return 1.0
+
+        weights = []
+        for feature, label in groups.items():
+            if feature not in self._group_counts:
+                continue
+
+            counts = self._group_counts[feature]
+            total = sum(counts.values())
+            if total == 0:
+                continue
+
+            n_groups = len(counts)
+            group_count = counts.get(label, 1)
+
+            # Representation weight: (total / n_groups) / group_count
+            # Upweights underrepresented groups
+            uniform_count = total / max(n_groups, 1)
+            w_repr = uniform_count / max(group_count, 1)
+
+            # Performance weight: global_mean / group_mean
+            # Upweights groups with lower average reward
+            scores = self._group_scores[feature]
+            all_scores = [s for group_scores in scores.values() for s in group_scores]
+            global_mean = sum(all_scores) / max(len(all_scores), 1)
+            group_scores = scores.get(label, [])
+            group_mean = sum(group_scores) / max(len(group_scores), 1)
+
+            w_perf = (global_mean + 0.01) / (group_mean + 0.01)
+
+            # Combined weight
+            w = alpha_repr * w_repr + alpha_perf * w_perf
+            weights.append(w)
+
+        if not weights:
+            return 1.0
+
+        # Average across features, clamp to [0.5, 3.0]
+        avg_weight = sum(weights) / len(weights)
+        return max(0.5, min(3.0, avg_weight))
+
+    def get_fairness_gap(self) -> dict[str, float]:
+        """Compute the fairness gap (max - min mean reward) per feature.
+
+        Returns:
+            Dict mapping feature -> gap value. Lower is more fair.
+        """
+        gaps = {}
+        for feature, scores in self._group_scores.items():
+            means = []
+            for label, label_scores in scores.items():
+                if label_scores:
+                    means.append(sum(label_scores) / len(label_scores))
+            if len(means) >= 2:
+                gaps[feature] = max(means) - min(means)
+            else:
+                gaps[feature] = 0.0
+        return gaps
+
+    def get_summary(self) -> dict:
+        """Return a summary of per-group statistics."""
+        summary = {}
+        for feature, scores in self._group_scores.items():
+            feature_summary = {}
+            for label, label_scores in scores.items():
+                n = len(label_scores)
+                mean = sum(label_scores) / max(n, 1)
+                feature_summary[label] = {
+                    "count": n,
+                    "mean_reward": round(mean, 4),
+                }
+            summary[feature] = feature_summary
+        summary["fairness_gaps"] = self.get_fairness_gap()
+        return summary
+
+    def reset(self) -> None:
+        """Reset all tracked data (e.g., between training epochs)."""
+        self._group_scores.clear()
+        self._group_counts.clear()
+
+
+# Global fairness tracker instance
+_fairness_tracker = FairnessTracker()
+
+
+def get_fairness_tracker() -> FairnessTracker:
+    """Get the global FairnessTracker instance."""
+    return _fairness_tracker
+
+
+# --- FairGRPO reward functions ---
+
+
+def grpo_fairness_reward(
+    completions: list,
+    solution: list = None,
+    patient_data: list = None,
+    base_reward_fn: str = "accuracy",
+    alpha_repr: float = 0.5,
+    alpha_perf: float = 0.5,
+    **kwargs,
+) -> list[float]:
+    """FairGRPO-compatible fairness-aware reward function.
+
+    Computes a base reward (accuracy/composite) and applies demographic-aware
+    importance weighting from the FairGRPO framework.
+
+    The weight rebalances the training signal so that:
+      - Underrepresented demographic groups receive higher reward signal
+      - Groups where the model performs worse get amplified feedback
+      - Overall training converges toward equitable performance
+
+    Args:
+        completions: List of model completions (TRL format)
+        solution: Ground truth answers
+        patient_data: List of patient data dicts with demographic info
+        base_reward_fn: Name of base reward function to weight
+        alpha_repr: Weight for representation component (0-1)
+        alpha_perf: Weight for performance component (0-1)
+
+    Returns:
+        List of fairness-weighted reward scores
+    """
+    # Compute base rewards
+    if base_reward_fn == "composite":
+        base_rewards = grpo_composite_reward(completions, solution=solution, **kwargs)
+    elif base_reward_fn == "accuracy":
+        base_rewards = grpo_accuracy_reward(completions, solution=solution, **kwargs)
+    else:
+        base_rewards = grpo_accuracy_reward(completions, solution=solution, **kwargs)
+
+    tracker = get_fairness_tracker()
+
+    # If no patient data, return base rewards unchanged
+    if not patient_data:
+        return base_rewards
+
+    weighted_rewards = []
+    for i, (reward, pd) in enumerate(zip(base_rewards, patient_data)):
+        if pd and isinstance(pd, dict):
+            groups = extract_demographic_groups(pd)
+            # Record for tracking
+            tracker.record(groups, reward)
+            # Apply fairness weight
+            w = tracker.get_fairness_weight(groups, alpha_repr, alpha_perf)
+            weighted_rewards.append(reward * w)
+        else:
+            weighted_rewards.append(reward)
+
+    return weighted_rewards
+
+
+def grpo_fair_composite_reward(
+    completions: list,
+    solution: list = None,
+    answer: list = None,
+    patient_data: list = None,
+    expected_actions: list = None,
+    tool_call_logs: list = None,
+    bert_scorer=None,
+    weights: dict = None,
+    fairness_weight: float = 0.1,
+    alpha_repr: float = 0.5,
+    alpha_perf: float = 0.5,
+    **kwargs,
+) -> list[float]:
+    """FairGRPO composite reward: base composite + fairness signal.
+
+    Extends grpo_composite_reward with a fairness component that penalizes
+    the model for demographic disparities in performance.
+
+    reward = (1 - fairness_weight) * composite + fairness_weight * fairness_bonus
+
+    where fairness_bonus = 1.0 if this sample helps close the fairness gap.
+
+    Args:
+        completions: Model completions
+        solution: Ground truth
+        patient_data: Patient demographic data
+        fairness_weight: Weight for fairness component [0-1]
+        alpha_repr: FairGRPO representation weight
+        alpha_perf: FairGRPO performance weight
+        ... (other args passed to composite reward)
+
+    Returns:
+        List of fair composite reward scores
+    """
+    if weights is None:
+        weights = {"accuracy": 0.4, "format": 0.2, "process": 0.4}
+
+    # Base composite scores
+    base_scores = grpo_composite_reward(
+        completions, solution=solution, answer=answer,
+        expected_actions=expected_actions, tool_call_logs=tool_call_logs,
+        bert_scorer=bert_scorer, weights=weights, **kwargs,
+    )
+
+    if not patient_data or fairness_weight <= 0:
+        return base_scores
+
+    tracker = get_fairness_tracker()
+    fair_scores = []
+
+    for i, (base, pd) in enumerate(zip(base_scores, patient_data)):
+        if pd and isinstance(pd, dict):
+            groups = extract_demographic_groups(pd)
+            tracker.record(groups, base)
+
+            # Fairness bonus: higher for underperforming groups
+            w = tracker.get_fairness_weight(groups, alpha_repr, alpha_perf)
+            # Normalize weight to bonus in [0, 1]: (w - 0.5) / 2.5
+            fairness_bonus = min(1.0, max(0.0, (w - 0.5) / 2.5))
+
+            fair_score = (1 - fairness_weight) * base + fairness_weight * fairness_bonus
+            fair_scores.append(fair_score)
+        else:
+            fair_scores.append(base)
+
+    return fair_scores
+
+
+# ============================================================
 # Registry for GRPO reward functions
 # ============================================================
 
@@ -442,6 +782,9 @@ GRPO_REWARD_REGISTRY: Dict[str, Callable] = _LazyRewardRegistry({
     "process": grpo_process_reward,
     "tool_use": grpo_tool_use_reward,
     "composite": grpo_composite_reward,
+    # FairGRPO reward functions
+    "fairness": grpo_fairness_reward,
+    "fair_composite": grpo_fair_composite_reward,
 })
 
 

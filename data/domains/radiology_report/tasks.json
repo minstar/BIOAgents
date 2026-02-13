@@ -222,5 +222,342 @@
       ],
       "reward_basis": ["ACTION", "NL_ASSERTION"]
     }
+  },
+  {
+    "id": "rad_mri_knee_009",
+    "description": {
+      "purpose": "Generate knee MRI report for ACL tear with meniscal injury",
+      "difficulty": "medium",
+      "category": "musculoskeletal",
+      "key_challenges": ["Identify ACL tear", "Grade meniscal tear", "Assess bone bruise pattern"]
+    },
+    "ticket": "Study RAD015: MRI knee for 25M soccer player with acute pivot injury, swelling, and instability. Generate a complete structured MRI report.",
+    "study_id": "RAD015",
+    "correct_answer": "Complete ACL tear with lateral meniscus bucket-handle tear and bone bruise pattern",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD015"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD015"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD015"}, "compare_args": ["study_id"]},
+        {"name": "get_report_template", "arguments": {"modality": "MR", "body_part": "knee"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report identifies complete ACL tear (discontinuity, abnormal signal)",
+        "Report describes lateral meniscus bucket-handle tear",
+        "Report notes lateral tibial plateau and femoral condyle bone bruise pattern",
+        "Report assesses MCL, PCL, and patellar tendon integrity",
+        "Report grades joint effusion"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_ct_cspine_010",
+    "description": {
+      "purpose": "Generate CT cervical spine report for trauma patient",
+      "difficulty": "hard",
+      "category": "spine_imaging",
+      "key_challenges": ["Identify unstable fracture", "Assess spinal canal compromise", "Recommend MRI for ligamentous injury"]
+    },
+    "ticket": "Study RAD016: CT cervical spine without contrast for 55M after fall from ladder. Severe neck pain, bilateral arm paresthesias. Generate complete report.",
+    "study_id": "RAD016",
+    "correct_answer": "C5 burst fracture with retropulsed fragment causing spinal canal narrowing, unstable injury",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD016"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD016"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD016"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "cervical spine fracture classification"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report identifies C5 burst fracture",
+        "Report describes retropulsed fragment with spinal canal compromise",
+        "Report classifies fracture stability using validated system",
+        "Report assesses vertebral alignment and disc spaces",
+        "Report recommends MRI for ligamentous injury and cord evaluation"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_ct_chest_covid_011",
+    "description": {
+      "purpose": "Generate chest CT report for suspected COVID pneumonia",
+      "difficulty": "medium",
+      "category": "chest_radiology",
+      "key_challenges": ["Identify ground-glass opacities pattern", "CO-RADS classification", "Differentiate from other causes"]
+    },
+    "ticket": "Study RAD017: HRCT chest for 58M with 5-day cough, fever, and dyspnea. PCR pending. Generate complete structured chest CT report with COVID assessment.",
+    "study_id": "RAD017",
+    "correct_answer": "Bilateral peripheral ground-glass opacities consistent with COVID-19 pneumonia (CO-RADS 5)",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD017"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD017"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD017"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "COVID CT findings CO-RADS"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report describes bilateral peripheral ground-glass opacities",
+        "Report notes posterior and basal predominance",
+        "Report applies CO-RADS classification",
+        "Report differentiates from other causes of ground-glass opacities",
+        "Report mentions severity scoring (CT severity index)"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_us_gallbladder_012",
+    "description": {
+      "purpose": "Generate abdominal ultrasound report for acute cholecystitis",
+      "difficulty": "medium",
+      "category": "abdominal_imaging",
+      "key_challenges": ["Identify cholecystitis findings", "Positive sonographic Murphy sign", "Assess for complications"]
+    },
+    "ticket": "Study RAD018: Right upper quadrant ultrasound for 48F with RUQ pain, fever, Murphy sign positive. Generate complete ultrasound report.",
+    "study_id": "RAD018",
+    "correct_answer": "Acute cholecystitis with cholelithiasis, gallbladder wall thickening, and pericholecystic fluid",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD018"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD018"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD018"}, "compare_args": ["study_id"]},
+        {"name": "get_report_template", "arguments": {"modality": "US", "body_part": "abdomen"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report identifies gallstones (cholelithiasis)",
+        "Report describes gallbladder wall thickening (>3mm)",
+        "Report notes pericholecystic fluid",
+        "Report documents positive sonographic Murphy sign",
+        "Report assesses CBD diameter and hepatic parenchyma"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_cta_pe_013",
+    "description": {
+      "purpose": "Generate CT pulmonary angiography report for pulmonary embolism",
+      "difficulty": "hard",
+      "category": "chest_radiology",
+      "key_challenges": ["Identify PE location and extent", "Assess RV strain", "Report severity"]
+    },
+    "ticket": "Study RAD019: CT pulmonary angiography for 62F post-hip surgery with acute dyspnea and pleuritic chest pain. D-dimer elevated. Generate complete CTA report.",
+    "study_id": "RAD019",
+    "correct_answer": "Saddle pulmonary embolism with right heart strain — submassive PE",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD019"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD019"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD019"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "PE CT severity"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report identifies saddle embolus at the main pulmonary artery bifurcation",
+        "Report describes extent of bilateral pulmonary artery involvement",
+        "Report notes RV/LV ratio > 1 indicating right heart strain",
+        "Report classifies as submassive PE",
+        "Report recommends urgent clinical correlation"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_mri_liver_014",
+    "description": {
+      "purpose": "Generate MRI liver report for hepatocellular carcinoma evaluation",
+      "difficulty": "hard",
+      "category": "abdominal_imaging",
+      "key_challenges": ["Apply LI-RADS classification", "Identify hallmarks of HCC", "Assess background liver"]
+    },
+    "ticket": "Study RAD020: MRI abdomen with contrast (liver protocol) for 60M with hepatitis C cirrhosis and rising AFP. Surveillance study. Generate complete report with LI-RADS assessment.",
+    "study_id": "RAD020",
+    "correct_answer": "LI-RADS 5 (definitely HCC): 3.5cm arterially hyperenhancing mass with washout and capsule",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD020"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD020"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD020"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "LI-RADS HCC criteria"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report identifies arterially hyperenhancing liver mass",
+        "Report describes washout in portal venous/delayed phase",
+        "Report notes enhancing capsule",
+        "Report applies LI-RADS classification (LR-5)",
+        "Report describes background liver cirrhosis"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_vq_scan_015",
+    "description": {
+      "purpose": "Generate V/Q scan report for pulmonary embolism evaluation",
+      "difficulty": "medium",
+      "category": "nuclear_medicine",
+      "key_challenges": ["Apply PIOPED criteria", "Classify probability", "Recommend further workup"]
+    },
+    "ticket": "Study RAD021: V/Q lung scan for 75F with CKD (can't receive IV contrast) and suspected PE. Recent CXR shows small left effusion. Generate complete V/Q report.",
+    "study_id": "RAD021",
+    "correct_answer": "High probability V/Q scan — multiple large segmental mismatched perfusion defects",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD021"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD021"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD021"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "V/Q scan PIOPED criteria"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report describes ventilation findings (normal distribution)",
+        "Report identifies multiple segmental perfusion defects",
+        "Report recognizes ventilation-perfusion mismatch pattern",
+        "Report classifies as high probability per PIOPED criteria",
+        "Report notes contraindication to CTA as study indication"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_ct_renal_016",
+    "description": {
+      "purpose": "Generate CT report for renal mass characterization",
+      "difficulty": "medium",
+      "category": "genitourinary_imaging",
+      "key_challenges": ["Characterize renal mass", "Apply Bosniak classification", "Staging if malignant"]
+    },
+    "ticket": "Study RAD022: CT abdomen/pelvis with contrast (renal mass protocol) for 58M with incidentally found renal mass on ultrasound. Generate complete report with renal mass characterization.",
+    "study_id": "RAD022",
+    "correct_answer": "Right renal mass (Bosniak IV cystic lesion) suspicious for RCC, T1b staging",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD022"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD022"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD022"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "Bosniak renal cyst classification"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report describes mass size, location, and enhancement pattern",
+        "Report applies Bosniak classification",
+        "Report describes thick irregular septa and enhancing soft tissue",
+        "Report assesses for renal vein involvement and lymphadenopathy",
+        "Report recommends urological consultation"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_mri_shoulder_017",
+    "description": {
+      "purpose": "Generate MRI shoulder report for rotator cuff tear",
+      "difficulty": "medium",
+      "category": "musculoskeletal",
+      "key_challenges": ["Characterize rotator cuff tear", "Assess muscle atrophy", "Evaluate labrum"]
+    },
+    "ticket": "Study RAD023: MRI shoulder without contrast for 55F with 3-month shoulder pain and weakness with overhead activities. Generate complete MRI report.",
+    "study_id": "RAD023",
+    "correct_answer": "Full-thickness supraspinatus tear with moderate retraction and early fatty atrophy",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD023"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD023"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD023"}, "compare_args": ["study_id"]},
+        {"name": "get_report_template", "arguments": {"modality": "MR", "body_part": "shoulder"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report identifies full-thickness supraspinatus tendon tear",
+        "Report describes tear size and retraction",
+        "Report grades fatty atrophy (Goutallier classification)",
+        "Report evaluates other rotator cuff tendons",
+        "Report assesses labrum and biceps tendon"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_mri_brain_ms_018",
+    "description": {
+      "purpose": "Generate brain MRI report for multiple sclerosis evaluation",
+      "difficulty": "hard",
+      "category": "neuroradiology",
+      "key_challenges": ["Apply McDonald criteria", "Count and characterize lesions", "Assess dissemination in space and time"]
+    },
+    "ticket": "Study RAD024: MRI brain with and without contrast for 32F with two episodes of optic neuritis and new limb weakness. Prior MRI 8 months ago available. Generate complete MRI report.",
+    "study_id": "RAD024",
+    "correct_answer": "Multiple T2/FLAIR lesions with dissemination in space and time, consistent with MS per McDonald criteria",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD024"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD024"}, "compare_args": ["study_id"]},
+        {"name": "get_prior_reports", "arguments": {"study_id": "RAD024"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD024"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "MS McDonald criteria MRI"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report identifies multiple periventricular T2/FLAIR lesions",
+        "Report describes at least one enhancing lesion (active)",
+        "Report compares with prior and notes new lesions (dissemination in time)",
+        "Report applies McDonald criteria for dissemination in space",
+        "Report notes lesions in characteristic MS locations (periventricular, juxtacortical, infratentorial)"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_us_pelvic_019",
+    "description": {
+      "purpose": "Generate pelvic ultrasound report for suspected ovarian torsion",
+      "difficulty": "hard",
+      "category": "gynecological_imaging",
+      "key_challenges": ["Identify torsion findings", "Assess Doppler flow", "Differentiate from other causes"]
+    },
+    "ticket": "Study RAD025: Pelvic ultrasound with Doppler for 24F with acute onset right lower quadrant pain, nausea, and vomiting. Known right ovarian dermoid cyst. Generate complete ultrasound report.",
+    "study_id": "RAD025",
+    "correct_answer": "Right ovarian torsion — enlarged ovary with absent Doppler flow and whirlpool sign",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD025"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD025"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD025"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "ovarian torsion ultrasound findings"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report describes enlarged right ovary with peripheral follicles",
+        "Report identifies absent or reduced Doppler flow in right ovary",
+        "Report notes whirlpool sign of twisted vascular pedicle",
+        "Report identifies known dermoid cyst as lead point",
+        "Report recommends urgent surgical consultation"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_cardiac_ct_020",
+    "description": {
+      "purpose": "Generate coronary CTA report for chest pain evaluation",
+      "difficulty": "hard",
+      "category": "cardiac_imaging",
+      "key_challenges": ["Identify coronary stenosis", "Plaque characterization", "CAD-RADS classification"]
+    },
+    "ticket": "Study RAD026: Coronary CT angiography with calcium scoring for 52M with atypical chest pain and intermediate pre-test probability. Generate complete coronary CTA report.",
+    "study_id": "RAD026",
+    "correct_answer": "CAD-RADS 4A — high-grade stenosis of proximal LAD with mixed plaque, moderate calcium score",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD026"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD026"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD026"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "CAD-RADS classification"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report evaluates each coronary artery systematically (LAD, LCx, RCA)",
+        "Report identifies high-grade stenosis in proximal LAD",
+        "Report characterizes plaque composition (mixed/calcified/non-calcified)",
+        "Report applies CAD-RADS classification",
+        "Report reports calcium score and percentile"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
   }
 ]

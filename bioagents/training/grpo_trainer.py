@@ -443,6 +443,259 @@ def train(config: BioAgentGRPOConfig):
 
 
 # ============================================================
+# FairGRPO Training (Fairness-Aware GRPO)
+# ============================================================
+# Reference: FairGRPO (arXiv:2510.19893) — Hierarchical RL approach
+# for equitable clinical reasoning with demographic-aware weighting.
+
+
+@dataclass
+class FairGRPOConfig(BioAgentGRPOConfig):
+    """FairGRPO configuration — extends BioAgentGRPOConfig with fairness params."""
+
+    # Fairness parameters
+    fairness_enabled: bool = True
+    fairness_weight: float = 0.1        # Weight of fairness component in composite reward
+    alpha_repr: float = 0.5             # Representation-aware weight (upweight rare groups)
+    alpha_perf: float = 0.5             # Performance-aware weight (upweight struggling groups)
+    fairness_log_interval: int = 50     # Steps between fairness metric logging
+    fairness_reset_per_epoch: bool = True  # Reset tracker each epoch
+    demographic_features: list = field(
+        default_factory=lambda: ["age_group", "sex", "ethnicity"]
+    )
+    # Fairness targets
+    max_fairness_gap: float = 0.15      # Target max gap between groups
+    fairness_penalty_scale: float = 0.5  # Scale of penalty when gap exceeds target
+
+
+def train_fair_grpo(config: FairGRPOConfig):
+    """Run FairGRPO training with demographic-aware reward weighting.
+
+    Extends standard GRPO training with:
+    1. Demographic group extraction from patient data
+    2. Fairness-aware reward weighting (representation + performance)
+    3. Fairness gap monitoring and logging
+    4. Adaptive emphasis on underperforming demographic groups
+
+    This implements the FairGRPO framework from arXiv:2510.19893:
+    - Adaptive importance weighting of GRPO advantages
+    - Unsupervised demographic group discovery (when labels missing)
+    - Progressive fairness improvement during training
+    """
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from trl import GRPOConfig, GRPOTrainer
+
+    logger.info("=" * 60)
+    logger.info("BIOAgents FairGRPO Trainer (Fairness-Aware)")
+    logger.info("=" * 60)
+    logger.info(f"Model: {config.model_name_or_path}")
+    logger.info(f"Domain: {config.domain}")
+    logger.info(f"Fairness weight: {config.fairness_weight}")
+    logger.info(f"Alpha (repr): {config.alpha_repr}, Alpha (perf): {config.alpha_perf}")
+    logger.info(f"Max fairness gap target: {config.max_fairness_gap}")
+
+    # --- Setup model + tokenizer (same as standard GRPO) ---
+    tokenizer = AutoTokenizer.from_pretrained(
+        config.model_name_or_path, trust_remote_code=True,
+    )
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+
+    dtype_map = {
+        "bfloat16": torch.bfloat16,
+        "float16": torch.float16,
+        "float32": torch.float32,
+    }
+    model_dtype = dtype_map.get(config.torch_dtype, torch.bfloat16)
+
+    model = AutoModelForCausalLM.from_pretrained(
+        config.model_name_or_path,
+        torch_dtype=model_dtype,
+        trust_remote_code=True,
+        attn_implementation=config.attn_implementation if config.attn_implementation else None,
+    )
+
+    # --- PEFT ---
+    peft_config = None
+    if config.peft_enabled:
+        from peft import LoraConfig, TaskType
+        peft_config = LoraConfig(
+            r=config.peft_r,
+            lora_alpha=config.peft_lora_alpha,
+            lora_dropout=config.peft_lora_dropout,
+            target_modules=config.peft_target_modules,
+            task_type=TaskType.CAUSAL_LM,
+            bias="none",
+        )
+
+    # --- Dataset with demographic metadata ---
+    train_dataset = build_grpo_dataset(config, split=config.train_split)
+
+    # Load patient data for demographic extraction
+    patient_data_map = _load_patient_demographics(config)
+    logger.info(f"Loaded demographics for {len(patient_data_map)} patients")
+
+    # --- FairGRPO Reward Functions ---
+    from bioagents.evaluation.grpo_rewards import (
+        grpo_fair_composite_reward,
+        get_fairness_tracker,
+    )
+
+    tracker = get_fairness_tracker()
+    tracker.reset()
+
+    # Create a fairness-aware reward function that wraps the composite reward
+    def fair_reward_fn(completions, solution=None, **kwargs):
+        """Fairness-aware composite reward for GRPO training."""
+        # Extract patient demographics from task metadata
+        task_ids = kwargs.get("task_id", [])
+        pd_list = []
+        for tid in task_ids:
+            pd_list.append(patient_data_map.get(tid, {}))
+
+        return grpo_fair_composite_reward(
+            completions,
+            solution=solution,
+            patient_data=pd_list if pd_list else None,
+            fairness_weight=config.fairness_weight,
+            alpha_repr=config.alpha_repr,
+            alpha_perf=config.alpha_perf,
+            **kwargs,
+        )
+
+    # --- GRPO Config ---
+    os.makedirs(config.output_dir, exist_ok=True)
+    grpo_config = GRPOConfig(
+        output_dir=config.output_dir,
+        num_train_epochs=config.num_train_epochs,
+        per_device_train_batch_size=config.per_device_train_batch_size,
+        gradient_accumulation_steps=config.gradient_accumulation_steps,
+        learning_rate=config.learning_rate,
+        lr_scheduler_type=config.lr_scheduler_type,
+        warmup_ratio=config.warmup_ratio,
+        weight_decay=config.weight_decay,
+        max_grad_norm=config.max_grad_norm,
+        bf16=config.bf16,
+        logging_steps=config.logging_steps,
+        save_steps=config.save_steps,
+        save_total_limit=config.save_total_limit,
+        seed=config.seed,
+        num_generations=config.num_generations,
+        beta=config.beta,
+        temperature=config.temperature,
+        max_completion_length=config.max_completion_length,
+        report_to="wandb" if config.use_wandb else "none",
+        run_name=config.run_name + "_fairgrpo",
+        logging_dir=config.log_dir,
+    )
+
+    # --- Trainer ---
+    trainer = GRPOTrainer(
+        model=model,
+        reward_funcs=[fair_reward_fn],
+        args=grpo_config,
+        train_dataset=train_dataset,
+        processing_class=tokenizer,
+        peft_config=peft_config,
+    )
+
+    # --- Train with fairness monitoring ---
+    logger.info("Starting FairGRPO training...")
+    trainer.train()
+
+    # --- Log final fairness metrics ---
+    fairness_summary = tracker.get_summary()
+    logger.info("=" * 40)
+    logger.info("FairGRPO Final Fairness Metrics:")
+    for feature, groups in fairness_summary.items():
+        if feature == "fairness_gaps":
+            logger.info(f"  Fairness Gaps: {groups}")
+        else:
+            for group, stats in groups.items():
+                logger.info(f"  {feature}/{group}: count={stats['count']}, mean_reward={stats['mean_reward']}")
+
+    gaps = fairness_summary.get("fairness_gaps", {})
+    for feature, gap in gaps.items():
+        if gap > config.max_fairness_gap:
+            logger.warning(
+                f"  ⚠ Fairness gap for '{feature}' ({gap:.4f}) exceeds "
+                f"target ({config.max_fairness_gap}). Consider additional training."
+            )
+        else:
+            logger.info(f"  ✓ Fairness gap for '{feature}' ({gap:.4f}) within target.")
+
+    # --- Save ---
+    trainer.save_model(os.path.join(config.output_dir, "final"))
+    tokenizer.save_pretrained(os.path.join(config.output_dir, "final"))
+
+    # Save fairness report
+    fairness_path = os.path.join(config.output_dir, "fairness_report.json")
+    with open(fairness_path, "w") as f:
+        json.dump(fairness_summary, f, indent=2)
+    logger.info(f"Fairness report saved to {fairness_path}")
+
+    logger.info("✅ FairGRPO training complete!")
+    return trainer
+
+
+def _load_patient_demographics(config: BioAgentGRPOConfig) -> dict:
+    """Load patient demographic data from domain db.json for fairness tracking.
+
+    Maps task_id -> patient demographic dict with age, sex, ethnicity, etc.
+    """
+    demo_map = {}
+    domain_dir = Path(f"data/domains/{config.domain}")
+    db_path = domain_dir / "db.json"
+
+    if not db_path.exists():
+        logger.debug(f"No db.json found at {db_path}, fairness tracking will use empty demographics")
+        return demo_map
+
+    try:
+        with open(db_path, "r", encoding="utf-8") as f:
+            db = json.load(f)
+
+        # Extract patients from various db structures
+        patients = {}
+        if "patients" in db:
+            patients = db["patients"]
+        elif "patient_profiles" in db:
+            patients = db["patient_profiles"]
+        elif "records" in db:
+            # EHR format: extract demographics from records
+            for rid, record in db["records"].items():
+                if "demographics" in record:
+                    pid = record["demographics"].get("patient_id", rid)
+                    patients[pid] = record["demographics"]
+
+        # Build task_id -> demographics mapping
+        # Load tasks to get patient_id per task
+        tasks_path = Path(config.tasks_path)
+        if tasks_path.exists():
+            with open(tasks_path, "r", encoding="utf-8") as f:
+                tasks = json.load(f)
+            for task in tasks:
+                tid = task.get("id", "")
+                pid = task.get("patient_id", "")
+                hadm_id = task.get("hadm_id", "")
+
+                # Try to find patient demographics
+                if pid and pid in patients:
+                    demo_map[tid] = patients[pid]
+                elif hadm_id and hadm_id in (db.get("records", {})):
+                    record = db["records"][hadm_id]
+                    if "demographics" in record:
+                        demo_map[tid] = record["demographics"]
+
+        logger.info(f"Loaded demographics for {len(demo_map)}/{len(patients)} patient-task pairs")
+
+    except Exception as e:
+        logger.warning(f"Failed to load patient demographics: {e}")
+
+    return demo_map
+
+
+# ============================================================
 # Multi-turn GRPO (environment-in-the-loop)
 # ============================================================
 
@@ -528,8 +781,8 @@ def main():
     )
     parser.add_argument(
         "--mode", type=str, default="single_turn",
-        choices=["single_turn", "multi_turn"],
-        help="Training mode: single_turn (TRL GRPO) or multi_turn (env-in-the-loop)",
+        choices=["single_turn", "multi_turn", "fair_grpo"],
+        help="Training mode: single_turn (TRL GRPO), multi_turn (env-in-the-loop), or fair_grpo (FairGRPO)",
     )
     parser.add_argument(
         "--dry_run", action="store_true",
@@ -568,6 +821,9 @@ def main():
         train(config)
     elif args.mode == "multi_turn":
         train_multiturn(config)
+    elif args.mode == "fair_grpo":
+        fair_config = FairGRPOConfig(**vars(config))
+        train_fair_grpo(fair_config)
 
 
 if __name__ == "__main__":

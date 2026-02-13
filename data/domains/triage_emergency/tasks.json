@@ -276,5 +276,291 @@
       ],
       "reward_basis": ["ACTION", "NL_ASSERTION"]
     }
+  },
+  {
+    "id": "triage_dka_011",
+    "description": {
+      "purpose": "Triage a young Type 1 diabetic in DKA",
+      "difficulty": "hard",
+      "category": "metabolic_emergency",
+      "key_challenges": ["Recognize DKA presentation", "ESI-2 assignment", "Initiate insulin/fluid protocol"]
+    },
+    "ticket": "Patient ED016 (22F) brought in by roommate. Known T1DM, ran out of insulin 2 days ago. Confused, fruity breath, Kussmaul breathing, HR 120, BP 90/60. Triage assessment.",
+    "patient_id": "ED016",
+    "correct_answer": "ESI 2 - Diabetic ketoacidosis requiring immediate IV insulin and fluids",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED016"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED016"}, "compare_args": ["patient_id"]},
+        {"name": "get_medical_history", "arguments": {"patient_id": "ED016"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "DKA"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 2}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent recognized DKA (fruity breath, Kussmaul breathing, confusion)",
+        "Agent assigned ESI level 2",
+        "Agent recommended stat glucose, BMP, ABG, serum ketones",
+        "Agent initiated DKA protocol with IV fluids and insulin drip"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_tension_pneumo_012",
+    "description": {
+      "purpose": "Triage a trauma patient with tension pneumothorax",
+      "difficulty": "hard",
+      "category": "trauma_emergency",
+      "key_challenges": ["Recognize tension pneumothorax", "ESI-1 assignment", "Needle decompression before imaging"]
+    },
+    "ticket": "Patient ED017 (35M) MVC victim, unrestrained driver. Severe dyspnea, absent breath sounds on left, tracheal deviation to right, JVD, HR 130, BP 70/40. Triage and initiate management.",
+    "patient_id": "ED017",
+    "correct_answer": "ESI 1 - Tension pneumothorax, immediate needle decompression",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED017"}, "compare_args": ["patient_id"]},
+        {"name": "assess_airway_breathing", "arguments": {"patient_id": "ED017"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED017"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "tension_pneumothorax"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 1}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent recognized tension pneumothorax (absent breath sounds, tracheal deviation, JVD)",
+        "Agent assigned ESI level 1",
+        "Agent recommended immediate needle decompression before imaging",
+        "Agent activated trauma team"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_meningitis_013",
+    "description": {
+      "purpose": "Triage a patient with suspected bacterial meningitis",
+      "difficulty": "hard",
+      "category": "infectious_emergency",
+      "key_challenges": ["Recognize meningeal signs", "ESI-2 with rapid antibiotics", "Lumbar puncture indication"]
+    },
+    "ticket": "Patient ED018 (19M) college student with 12h fever (39.5C), severe headache, neck stiffness, photophobia, and petechial rash. Altered mental status, GCS 13. Triage assessment.",
+    "patient_id": "ED018",
+    "correct_answer": "ESI 2 - Suspected bacterial meningitis, stat antibiotics before LP",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED018"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED018"}, "compare_args": ["patient_id"]},
+        {"name": "assess_neurological_status", "arguments": {"patient_id": "ED018"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "meningitis"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 2}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent recognized meningitis triad (fever, headache, neck stiffness)",
+        "Agent noted petechial rash suggesting meningococcal disease",
+        "Agent assigned ESI level 2",
+        "Agent recommended empiric antibiotics before lumbar puncture",
+        "Agent recommended droplet precautions and isolation"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_appendicitis_014",
+    "description": {
+      "purpose": "Triage a patient with acute appendicitis",
+      "difficulty": "medium",
+      "category": "surgical_emergency",
+      "key_challenges": ["Peritoneal signs assessment", "ESI-3 assignment", "Surgical consult timing"]
+    },
+    "ticket": "Patient ED019 (28M) presents with 18h right lower quadrant pain that started periumbilically. Nausea, low-grade fever 38.1C. RLQ tenderness with rebound, positive Rovsing sign. Triage assessment.",
+    "patient_id": "ED019",
+    "correct_answer": "ESI 3 - Likely acute appendicitis, CT abdomen and surgical consult needed",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED019"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED019"}, "compare_args": ["patient_id"]},
+        {"name": "calculate_esi_level", "arguments": {"patient_id": "ED019"}, "compare_args": ["patient_id"]},
+        {"name": "submit_answer", "arguments": {"esi_level": 3}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent identified classic appendicitis presentation (migratory pain, RLQ, rebound)",
+        "Agent assigned ESI level 3",
+        "Agent recommended CT abdomen/pelvis with contrast",
+        "Agent initiated surgical consult"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_overdose_015",
+    "description": {
+      "purpose": "Triage an opioid overdose with respiratory depression",
+      "difficulty": "hard",
+      "category": "toxicological_emergency",
+      "key_challenges": ["Recognize opioid toxidrome", "ESI-1 assignment", "Naloxone protocol"]
+    },
+    "ticket": "Patient ED020 (31M) found unresponsive on park bench. Pinpoint pupils, RR 4, SpO2 78%, HR 52. Track marks on arms. Paramedics administered 0.4mg naloxone IM with partial response. Triage and manage.",
+    "patient_id": "ED020",
+    "correct_answer": "ESI 1 - Opioid overdose with respiratory failure, repeat naloxone, prepare intubation",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED020"}, "compare_args": ["patient_id"]},
+        {"name": "assess_airway_breathing", "arguments": {"patient_id": "ED020"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED020"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "opioid_overdose"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 1}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent recognized opioid toxidrome (pinpoint pupils, respiratory depression)",
+        "Agent assigned ESI level 1",
+        "Agent recommended repeat naloxone dose",
+        "Agent prepared for intubation given partial naloxone response",
+        "Agent checked for co-ingestants and complications"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_burns_016",
+    "description": {
+      "purpose": "Triage a patient with major burns and inhalation injury",
+      "difficulty": "hard",
+      "category": "trauma_emergency",
+      "key_challenges": ["TBSA estimation", "Inhalation injury recognition", "ESI-1 with burn center transfer"]
+    },
+    "ticket": "Patient ED021 (45M) house fire victim. Burns to face, chest, both arms. Singed nasal hairs, hoarse voice, carbonaceous sputum. Estimated 35% TBSA. HR 110, BP 100/60. Triage and initiate management.",
+    "patient_id": "ED021",
+    "correct_answer": "ESI 1 - Major burns with inhalation injury, intubation and Parkland formula resuscitation",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED021"}, "compare_args": ["patient_id"]},
+        {"name": "assess_airway_breathing", "arguments": {"patient_id": "ED021"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED021"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "burn"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 1}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent recognized inhalation injury (singed nasal hairs, hoarse voice, carbonaceous sputum)",
+        "Agent assigned ESI level 1",
+        "Agent recommended early intubation for airway protection",
+        "Agent calculated Parkland formula for fluid resuscitation",
+        "Agent recommended burn center transfer"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_ectopic_017",
+    "description": {
+      "purpose": "Triage a woman with ruptured ectopic pregnancy",
+      "difficulty": "hard",
+      "category": "obstetric_emergency",
+      "key_challenges": ["Recognize ectopic rupture", "ESI-1 assignment", "Emergent surgical consult"]
+    },
+    "ticket": "Patient ED022 (29F) LMP 7 weeks ago. Sudden onset severe left lower quadrant pain, vaginal spotting. Syncopal episode in the waiting room. HR 130, BP 80/50, abdomen rigid. Triage immediately.",
+    "patient_id": "ED022",
+    "correct_answer": "ESI 1 - Ruptured ectopic pregnancy with hemorrhagic shock, emergent OB/GYN surgery",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED022"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED022"}, "compare_args": ["patient_id"]},
+        {"name": "get_medical_history", "arguments": {"patient_id": "ED022"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "ectopic_pregnancy"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 1}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent recognized ruptured ectopic pregnancy (amenorrhea, acute abdomen, shock)",
+        "Agent assigned ESI level 1",
+        "Agent ordered stat type and crossmatch, beta-hCG",
+        "Agent initiated massive transfusion protocol",
+        "Agent called emergent OB/GYN surgical consult"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_status_epilepticus_018",
+    "description": {
+      "purpose": "Triage a patient in status epilepticus",
+      "difficulty": "hard",
+      "category": "neurological_emergency",
+      "key_challenges": ["Recognize refractory SE", "ESI-1 assignment", "Benzodiazepine protocol"]
+    },
+    "ticket": "Patient ED023 (8M) brought by parents. Witnessed generalized tonic-clonic seizure ongoing for 12 minutes. Second dose of rectal diazepam by paramedics without cessation. T 39.2, HR 160, SpO2 88%. Triage and manage.",
+    "patient_id": "ED023",
+    "correct_answer": "ESI 1 - Status epilepticus refractory to first-line, IV access and second-line AED",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED023"}, "compare_args": ["patient_id"]},
+        {"name": "assess_airway_breathing", "arguments": {"patient_id": "ED023"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED023"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "status_epilepticus"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 1}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent recognized status epilepticus (>5 min continuous seizure)",
+        "Agent assigned ESI level 1",
+        "Agent noted failure of first-line benzodiazepines",
+        "Agent recommended IV second-line AED (levetiracetam, phenytoin, or valproate)",
+        "Agent addressed airway management and hypoxia"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_acute_limb_019",
+    "description": {
+      "purpose": "Triage a patient with acute limb ischemia",
+      "difficulty": "hard",
+      "category": "vascular_emergency",
+      "key_challenges": ["Recognize 6 Ps of ischemia", "ESI-2 assignment", "Vascular surgery consult"]
+    },
+    "ticket": "Patient ED024 (68M) with atrial fibrillation, not on anticoagulation. Sudden onset right leg pain, coldness, pallor 4 hours ago. Absent dorsalis pedis and posterior tibial pulses. Motor deficit developing. Triage assessment.",
+    "patient_id": "ED024",
+    "correct_answer": "ESI 2 - Acute limb ischemia (Rutherford IIb), emergent vascular surgery",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED024"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED024"}, "compare_args": ["patient_id"]},
+        {"name": "get_medical_history", "arguments": {"patient_id": "ED024"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "acute_limb_ischemia"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 2}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent identified 6 Ps of acute limb ischemia (pain, pallor, pulselessness, paresthesia, paralysis, poikilothermia)",
+        "Agent assigned ESI level 2",
+        "Agent recognized atrial fibrillation as embolic source",
+        "Agent recommended immediate heparin anticoagulation",
+        "Agent called emergent vascular surgery consult"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_psych_emergency_020",
+    "description": {
+      "purpose": "Triage an acutely suicidal patient with immediate plan",
+      "difficulty": "hard",
+      "category": "psychiatric_emergency",
+      "key_challenges": ["Safety assessment", "ESI-2 assignment", "1:1 observation and means restriction"]
+    },
+    "ticket": "Patient ED025 (17F) brought by school counselor. Expressed suicidal ideation with specific plan (ingestion) and access to medications at home. Superficial self-harm scars on wrists. Tearful but cooperative. Triage assessment.",
+    "patient_id": "ED025",
+    "correct_answer": "ESI 2 - Acute suicidal ideation with plan and means, 1:1 observation, psychiatry consult",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED025"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED025"}, "compare_args": ["patient_id"]},
+        {"name": "assess_neurological_status", "arguments": {"patient_id": "ED025"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "suicidal_patient"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 2}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent assessed suicidal ideation with specific plan and access to means",
+        "Agent assigned ESI level 2",
+        "Agent initiated 1:1 continuous observation",
+        "Agent implemented means restriction (remove belongings, safe room)",
+        "Agent requested urgent psychiatry consult"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
   }
 ]

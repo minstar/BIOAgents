@@ -6,11 +6,21 @@
     "triage_peds_fracture_005",
     "triage_chf_exacerbation_006",
     "triage_acute_abdomen_008",
-    "triage_anaphylaxis_010"
+    "triage_anaphylaxis_010",
+    "triage_dka_011",
+    "triage_tension_pneumo_012",
+    "triage_meningitis_013",
+    "triage_burns_016",
+    "triage_ectopic_017",
+    "triage_status_epilepticus_018",
+    "triage_acute_limb_019"
   ],
   "test": [
     "triage_stroke_003",
     "triage_ankle_injury_007",
-    "triage_med_refill_009"
+    "triage_med_refill_009",
+    "triage_appendicitis_014",
+    "triage_overdose_015",
+    "triage_psych_emergency_020"
   ]
 }

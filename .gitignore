@@ -1,0 +1,69 @@
+# ============================================
+# BIOAgents .gitignore
+# ============================================
+
+# --- Large binary / model files ---
+checkpoints/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx
+*.ckpt
+
+# --- Virtual environment ---
+.venv/
+venv/
+env/
+
+# --- Large data directories ---
+databases/
+datasets/
+evaluations/
+references/
+GYM_reference/
+logs/
+
+# --- Specific large files ---
+data/domains/medical_qa_200/db.json
+
+# --- Secrets ---
+.env
+.env.*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# --- Testing / Cache ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.cover
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- OS ---
+Thumbs.db
+.DS_Store
+
+# --- Wandb / MLflow ---
+wandb/
+mlruns/

@@ -1,0 +1,984 @@
+[
+  {
+    "id": "ob_active_labor_001",
+    "description": {
+      "purpose": "Manage active labor for a term patient with GBS-positive status",
+      "difficulty": "moderate",
+      "category": "labor_management",
+      "key_challenges": [
+        "Assess labor progress and stage of labor",
+        "Interpret Category I fetal heart tracing",
+        "Initiate GBS intrapartum antibiotic prophylaxis",
+        "Monitor maternal and fetal status throughout labor"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN resident on labor and delivery",
+      "instructions": "You are managing a 32-year-old G2P1 at 39 weeks in active labor. She is GBS positive. Assess her labor progress, evaluate fetal status, and ensure appropriate GBS prophylaxis is administered."
+    },
+    "ticket": "Patient OB-001 (32F, G2P1, 39w) is in active labor with regular contractions every 3 minutes. She is GBS positive with ruptured membranes. Current cervical exam: 6cm/80%/-1 station. Fetal heart tracing shows Category I pattern. Assess labor progress, confirm fetal well-being, and manage GBS prophylaxis.",
+    "patient_id": "OB-001",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "OB-001"
+          },
+          "info": "Retrieve patient demographics and obstetric history"
+        },
+        {
+          "action_id": "a2",
+          "name": "get_labor_progress",
+          "arguments": {
+            "patient_id": "OB-001"
+          },
+          "info": "Assess cervical dilation, effacement, station, and contraction pattern"
+        },
+        {
+          "action_id": "a3",
+          "name": "get_fetal_monitoring",
+          "arguments": {
+            "patient_id": "OB-001"
+          },
+          "info": "Review fetal heart rate tracing and categorize"
+        },
+        {
+          "action_id": "a4",
+          "name": "get_prenatal_labs",
+          "arguments": {
+            "patient_id": "OB-001"
+          },
+          "info": "Check GBS status and prenatal lab results"
+        },
+        {
+          "action_id": "a5",
+          "name": "order_medication",
+          "arguments": {
+            "patient_id": "OB-001",
+            "medication": "penicillin G",
+            "dose": "5 million units IV loading then 2.5 million units q4h"
+          },
+          "info": "Administer GBS intrapartum antibiotic prophylaxis"
+        }
+      ],
+      "nl_assertions": [
+        "Agent correctly identified active labor phase (6cm dilation with regular contractions)",
+        "Agent interpreted fetal heart tracing as Category I (reassuring)",
+        "Agent recognized GBS-positive status and initiated antibiotic prophylaxis with penicillin G",
+        "Agent assessed membrane status and noted clear amniotic fluid",
+        "Agent recommended continuous fetal monitoring and labor progress tracking"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_preeclampsia_001",
+    "description": {
+      "purpose": "Evaluate and manage preeclampsia with severe features and possible HELLP syndrome",
+      "difficulty": "hard",
+      "category": "hypertensive_disorders",
+      "key_challenges": [
+        "Recognize criteria for severe features of preeclampsia",
+        "Identify laboratory findings concerning for HELLP syndrome",
+        "Initiate magnesium sulfate seizure prophylaxis",
+        "Manage acute severe hypertension",
+        "Coordinate fetal lung maturity and delivery planning at 34 weeks"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN attending managing a high-risk patient on L&D",
+      "instructions": "You are evaluating a 28-year-old G1P0 at 34 weeks presenting with severe headache, epigastric pain, and BP 168/110. Labs show elevated liver enzymes and low platelets. Assess for HELLP syndrome, initiate appropriate management, and determine delivery timeline."
+    },
+    "ticket": "Patient OB-002 (28F, G1P0, 34w) presents with severe headache, epigastric pain, and BP 168/110. Proteinuria 3+. Labs: platelets 89K, AST 186, ALT 210, LDH 680. Fetal monitoring shows Category II tracing with variable decelerations. Evaluate for preeclampsia with severe features vs HELLP syndrome, initiate seizure prophylaxis and antihypertensive therapy, administer antenatal corticosteroids, and plan delivery.",
+    "patient_id": "OB-002",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "OB-002"
+          },
+          "info": "Retrieve patient presentation and symptoms"
+        },
+        {
+          "action_id": "a2",
+          "name": "get_vital_signs",
+          "arguments": {
+            "patient_id": "OB-002"
+          },
+          "info": "Confirm severe-range blood pressures"
+        },
+        {
+          "action_id": "a3",
+          "name": "get_lab_results",
+          "arguments": {
+            "patient_id": "OB-002"
+          },
+          "info": "Review CBC, LFTs, LDH, coagulation, peripheral smear for HELLP evaluation"
+        },
+        {
+          "action_id": "a4",
+          "name": "get_fetal_monitoring",
+          "arguments": {
+            "patient_id": "OB-002"
+          },
+          "info": "Assess Category II tracing with variable decelerations"
+        },
+        {
+          "action_id": "a5",
+          "name": "order_medication",
+          "arguments": {
+            "patient_id": "OB-002",
+            "medication": "magnesium sulfate",
+            "dose": "4g IV bolus then 2g/hr"
+          },
+          "info": "Initiate seizure prophylaxis"
+        },
+        {
+          "action_id": "a6",
+          "name": "order_medication",
+          "arguments": {
+            "patient_id": "OB-002",
+            "medication": "labetalol",
+            "dose": "20mg IV"
+          },
+          "info": "Manage acute severe hypertension"
+        },
+        {
+          "action_id": "a7",
+          "name": "order_medication",
+          "arguments": {
+            "patient_id": "OB-002",
+            "medication": "betamethasone",
+            "dose": "12mg IM"
+          },
+          "info": "Administer antenatal corticosteroids for fetal lung maturation"
+        }
+      ],
+      "nl_assertions": [
+        "Agent identified preeclampsia with severe features based on BP >= 160/110, headache, epigastric pain, and laboratory abnormalities",
+        "Agent recognized HELLP syndrome criteria: hemolysis (schistocytes, elevated LDH), elevated liver enzymes (AST/ALT), low platelets (<100K)",
+        "Agent initiated magnesium sulfate for seizure prophylaxis",
+        "Agent administered labetalol for acute severe hypertension management with target BP <160/110",
+        "Agent ordered betamethasone for fetal lung maturation at 34 weeks gestation",
+        "Agent recommended serial laboratory monitoring q6h",
+        "Agent planned delivery within 24-48 hours given severity",
+        "Agent noted Category II fetal tracing requiring close surveillance"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_postdates_induction_001",
+    "description": {
+      "purpose": "Evaluate a post-dates pregnancy and plan induction of labor",
+      "difficulty": "moderate",
+      "category": "post_dates_management",
+      "key_challenges": [
+        "Assess Bishop score and cervical readiness",
+        "Interpret amniotic fluid index (borderline low)",
+        "Choose appropriate cervical ripening method for low Bishop score",
+        "Balance induction timing with fetal surveillance results"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN resident evaluating a patient in triage",
+      "instructions": "You are evaluating a 25-year-old G3P2 at 41w2d presenting for post-dates evaluation. She has a Bishop score of 4, AFI of 5.2, and reactive NST. Determine if induction is indicated and plan the approach."
+    },
+    "ticket": "Patient OB-003 (25F, G3P2, 41w2d) presents for post-dates evaluation. Bishop score: 4. AFI: 5.2 (low-normal). NST is reactive, BPP 10/10. Two prior uncomplicated SVDs. Assess fetal well-being, determine need for induction, and select appropriate cervical ripening method given the low Bishop score.",
+    "patient_id": "OB-003",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "OB-003"
+          },
+          "info": "Retrieve obstetric history and current gestational age"
+        },
+        {
+          "action_id": "a2",
+          "name": "get_fetal_monitoring",
+          "arguments": {
+            "patient_id": "OB-003"
+          },
+          "info": "Review NST results and fetal heart rate category"
+        },
+        {
+          "action_id": "a3",
+          "name": "get_bishop_score",
+          "arguments": {
+            "patient_id": "OB-003"
+          },
+          "info": "Assess cervical readiness for induction"
+        },
+        {
+          "action_id": "a4",
+          "name": "get_ultrasound_results",
+          "arguments": {
+            "patient_id": "OB-003"
+          },
+          "info": "Review AFI and BPP results"
+        },
+        {
+          "action_id": "a5",
+          "name": "submit_plan",
+          "arguments": {
+            "patient_id": "OB-003",
+            "plan": "induction with cervical ripening"
+          },
+          "info": "Recommend induction with cervical ripening given post-dates and low Bishop score"
+        }
+      ],
+      "nl_assertions": [
+        "Agent recognized that induction is indicated at 41w2d per ACOG guidelines",
+        "Agent assessed Bishop score of 4 as unfavorable for direct oxytocin induction",
+        "Agent recommended cervical ripening (misoprostol or Foley catheter balloon) prior to oxytocin",
+        "Agent noted low-normal AFI of 5.2 and its clinical significance",
+        "Agent acknowledged favorable obstetric history (prior SVDs) as positive prognostic factor",
+        "Agent confirmed reassuring fetal status via reactive NST and normal BPP"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_gdm_management_001",
+    "description": {
+      "purpose": "Manage gestational diabetes on insulin in an advanced maternal age IVF pregnancy",
+      "difficulty": "moderate",
+      "category": "maternal_medical_conditions",
+      "key_challenges": [
+        "Interpret glucose logs and A1c in context of pregnancy",
+        "Optimize insulin regimen for suboptimal glycemic control",
+        "Manage polyhydramnios and macrosomia surveillance",
+        "Coordinate multiple risk factors (AMA, IVF, GDM, PCOS)",
+        "Plan appropriate delivery timing"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN provider at a prenatal visit",
+      "instructions": "You are seeing a 38-year-old G1P0 (IVF) at 28 weeks with GDM on insulin. Her A1c is 6.8% and glucose logs show post-prandial excursions. Ultrasound shows polyhydramnios and 75th percentile growth. Optimize her diabetes management and plan surveillance."
+    },
+    "ticket": "Patient OB-004 (38F, G1P0 IVF, 28w) has GDM on insulin glargine and lispro. A1c 6.8%. Glucose logs show fasting 98, post-meal 2hr averages 128-140 (above target). Ultrasound: EFW 75th percentile, AFI 28.5 (polyhydramnios). Also has PCOS and hypothyroidism. Review glucose control, adjust insulin, plan growth surveillance, and determine delivery timing.",
+    "patient_id": "OB-004",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "OB-004"
+          },
+          "info": "Review complete medical and obstetric history"
+        },
+        {
+          "action_id": "a2",
+          "name": "get_lab_results",
+          "arguments": {
+            "patient_id": "OB-004"
+          },
+          "info": "Review A1c, glucose tolerance test, thyroid function"
+        },
+        {
+          "action_id": "a3",
+          "name": "get_glucose_log",
+          "arguments": {
+            "patient_id": "OB-004"
+          },
+          "info": "Analyze 7-day glucose averages for pattern identification"
+        },
+        {
+          "action_id": "a4",
+          "name": "get_ultrasound_results",
+          "arguments": {
+            "patient_id": "OB-004"
+          },
+          "info": "Review fetal growth, AFI, and polyhydramnios"
+        },
+        {
+          "action_id": "a5",
+          "name": "adjust_medication",
+          "arguments": {
+            "patient_id": "OB-004",
+            "medication": "insulin lispro",
+            "adjustment": "increase prandial doses"
+          },
+          "info": "Optimize prandial insulin for post-meal excursions"
+        }
+      ],
+      "nl_assertions": [
+        "Agent identified suboptimal glycemic control with A1c 6.8% and post-prandial values above target",
+        "Agent recommended increasing prandial insulin doses (target fasting <95, 2hr post-prandial <120)",
+        "Agent recognized polyhydramnios (AFI 28.5) as a complication of poorly controlled GDM",
+        "Agent planned serial growth ultrasounds q3-4 weeks for macrosomia surveillance",
+        "Agent recommended antenatal testing (NST/BPP) starting at 32 weeks",
+        "Agent addressed delivery timing (39 weeks if well-controlled, 37-39 if poorly controlled)",
+        "Agent continued low-dose aspirin for preeclampsia prophylaxis given AMA and IVF risk factors",
+        "Agent reviewed thyroid function and noted ongoing monitoring needs"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_first_prenatal_001",
+    "description": {
+      "purpose": "Conduct a comprehensive first prenatal visit with screening and counseling",
+      "difficulty": "moderate",
+      "category": "prenatal_care",
+      "key_challenges": [
+        "Order complete first trimester prenatal lab panel",
+        "Screen for depression and administer PHQ-9",
+        "Provide smoking cessation counseling",
+        "Discuss medication safety of sertraline in pregnancy",
+        "Offer genetic screening options"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN provider at a prenatal clinic",
+      "instructions": "You are seeing a 22-year-old G1P0 at 8 weeks for her first prenatal visit. She has a history of depression on sertraline and smokes 5 cigarettes/day. Conduct a comprehensive first visit including lab ordering, depression screening, smoking cessation counseling, and medication safety review."
+    },
+    "ticket": "Patient OB-005 (22F, G1P0, 8w) presents for first prenatal visit. Dating ultrasound confirms 8w0d IUP with FHR 165. She takes sertraline 100mg daily for depression and smokes 5 cigarettes/day. No prenatal labs have been drawn yet. Conduct a comprehensive first prenatal visit: order appropriate labs, screen for depression, counsel on smoking cessation, review medication safety, and offer genetic screening.",
+    "patient_id": "OB-005",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "OB-005"
+          },
+          "info": "Retrieve demographics, medical history, social history"
+        },
+        {
+          "action_id": "a2",
+          "name": "order_prenatal_labs",
+          "arguments": {
+            "patient_id": "OB-005",
+            "panel": "first_trimester_complete"
+          },
+          "info": "Order CBC, type and screen, rubella, HBsAg, HIV, RPR, UA, GC/CT NAAT"
+        },
+        {
+          "action_id": "a3",
+          "name": "screen_depression",
+          "arguments": {
+            "patient_id": "OB-005",
+            "tool": "PHQ-9"
+          },
+          "info": "Administer PHQ-9 depression screening"
+        },
+        {
+          "action_id": "a4",
+          "name": "review_medication_safety",
+          "arguments": {
+            "patient_id": "OB-005",
+            "medication": "sertraline"
+          },
+          "info": "Assess sertraline safety in pregnancy and counsel patient"
+        },
+        {
+          "action_id": "a5",
+          "name": "counsel_smoking_cessation",
+          "arguments": {
+            "patient_id": "OB-005"
+          },
+          "info": "Provide 5 As smoking cessation counseling"
+        }
+      ],
+      "nl_assertions": [
+        "Agent ordered complete first trimester prenatal lab panel (CBC, type/screen, rubella, HBsAg, HIV, RPR, UA/culture, GC/CT NAAT)",
+        "Agent administered or recommended PHQ-9 depression screening",
+        "Agent discussed sertraline safety in pregnancy (generally compatible, continue with monitoring for neonatal adaptation syndrome)",
+        "Agent provided smoking cessation counseling using 5 As framework",
+        "Agent offered first trimester genetic screening (NT + serum markers)",
+        "Agent discussed nutrition, folic acid supplementation, and weight gain goals",
+        "Agent planned appropriate follow-up schedule per ACOG guidelines"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_vbac_counseling_001",
+    "description": {
+      "purpose": "Counsel a patient on VBAC vs repeat cesarean with two prior cesarean deliveries",
+      "difficulty": "hard",
+      "category": "delivery_planning",
+      "key_challenges": [
+        "Assess TOLAC candidacy with two prior cesareans",
+        "Quantify uterine rupture risk vs repeat cesarean risks",
+        "Incorporate prior vaginal delivery as favorable factor",
+        "Conduct shared decision-making discussion",
+        "Address institutional requirements for TOLAC"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN attending in clinic",
+      "instructions": "You are counseling a 30-year-old G4P3 at 37 weeks who desires VBAC. She has two prior cesarean deliveries (both low transverse) and one prior vaginal delivery. Discuss risks, benefits, and alternatives of TOLAC vs repeat cesarean."
+    },
+    "ticket": "Patient OB-006 (30F, G4P3, 37w) desires VBAC. History: 1 prior SVD (2019), 2 prior cesareans (2021 for non-reassuring FHT, 2023 elective repeat) - both low transverse incisions. Current: EFW 3.2kg, cephalic, Category I tracing, normal prenatal course, Rh negative with RhoGAM given. Counsel on TOLAC vs repeat cesarean, assess candidacy, and develop a delivery plan.",
+    "patient_id": "OB-006",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "OB-006"
+          },
+          "info": "Review complete obstetric history and prior surgical details"
+        },
+        {
+          "action_id": "a2",
+          "name": "get_vbac_assessment",
+          "arguments": {
+            "patient_id": "OB-006"
+          },
+          "info": "Review VBAC candidacy assessment and rupture risk"
+        },
+        {
+          "action_id": "a3",
+          "name": "get_fetal_monitoring",
+          "arguments": {
+            "patient_id": "OB-006"
+          },
+          "info": "Confirm reassuring fetal status"
+        },
+        {
+          "action_id": "a4",
+          "name": "get_ultrasound_results",
+          "arguments": {
+            "patient_id": "OB-006"
+          },
+          "info": "Review estimated fetal weight, presentation, placental location"
+        },
+        {
+          "action_id": "a5",
+          "name": "submit_counseling",
+          "arguments": {
+            "patient_id": "OB-006",
+            "counseling_type": "TOLAC_vs_repeat_cesarean"
+          },
+          "info": "Document shared decision-making counseling discussion"
+        }
+      ],
+      "nl_assertions": [
+        "Agent identified that two prior cesareans increases uterine rupture risk (0.9-1.8%)",
+        "Agent recognized that prior vaginal delivery is a favorable prognostic factor for TOLAC success",
+        "Agent discussed risks of repeat cesarean (adhesions, surgical complications, placenta accreta spectrum in future pregnancies)",
+        "Agent noted institutional requirements for TOLAC (continuous monitoring, immediate OR and anesthesia availability)",
+        "Agent conducted shared decision-making and respected patient autonomy",
+        "Agent discussed that many institutions may not offer TOLAC after two cesareans",
+        "Agent confirmed both low-transverse incision types (no classical or T-incision)"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_aub_workup_001",
+    "description": {
+      "purpose": "Evaluate abnormal uterine bleeding in a young non-pregnant patient",
+      "difficulty": "moderate",
+      "category": "gynecology",
+      "key_challenges": [
+        "Systematic AUB workup using PALM-COEIN classification",
+        "Identify and treat iron deficiency anemia",
+        "Consider coagulopathy (von Willebrand disease) in young patient with menorrhagia",
+        "Provide contraception counseling",
+        "Apply age-appropriate Pap smear guidelines"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN provider in outpatient clinic",
+      "instructions": "You are seeing a 19-year-old G0P0 with 6 months of irregular heavy periods and fatigue. Labs show Hgb 9.2, ferritin 8 (iron deficiency anemia). She is sexually active with no contraception. Evaluate using PALM-COEIN approach and initiate management."
+    },
+    "ticket": "Patient OB-007 (19F, G0P0, NOT pregnant) presents with 6 months of heavy irregular periods, soaking pads every 1-2 hours on heavy days with clots. Labs: Hgb 9.2, MCV 72, ferritin 8, pregnancy test negative, TSH and prolactin normal. VWF panel pending. Sexually active, no contraception, never had Pap smear. Conduct systematic AUB workup, manage iron deficiency, and counsel on treatment options.",
+    "patient_id": "OB-007",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "OB-007"
+          },
+          "info": "Retrieve GYN history, menstrual history, sexual history"
+        },
+        {
+          "action_id": "a2",
+          "name": "get_lab_results",
+          "arguments": {
+            "patient_id": "OB-007"
+          },
+          "info": "Review CBC, iron studies, coagulation panel, thyroid, pregnancy test"
+        },
+        {
+          "action_id": "a3",
+          "name": "order_imaging",
+          "arguments": {
+            "patient_id": "OB-007",
+            "study": "pelvic_ultrasound"
+          },
+          "info": "Order pelvic ultrasound to evaluate structural causes"
+        },
+        {
+          "action_id": "a4",
+          "name": "order_medication",
+          "arguments": {
+            "patient_id": "OB-007",
+            "medication": "ferrous sulfate",
+            "dose": "325mg BID"
+          },
+          "info": "Treat iron deficiency anemia"
+        },
+        {
+          "action_id": "a5",
+          "name": "counsel_contraception",
+          "arguments": {
+            "patient_id": "OB-007"
+          },
+          "info": "Discuss contraception options including combined OCP for cycle regulation"
+        }
+      ],
+      "nl_assertions": [
+        "Agent applied PALM-COEIN classification for systematic AUB evaluation",
+        "Agent confirmed pregnancy test negative before further workup",
+        "Agent recognized iron deficiency anemia (low Hgb, low MCV, low ferritin) and initiated iron supplementation",
+        "Agent ordered or noted pending VWF panel to rule out von Willebrand disease",
+        "Agent ordered pelvic ultrasound to assess for structural causes (polyps, fibroids)",
+        "Agent offered combined OCP for cycle regulation and menorrhagia treatment",
+        "Agent correctly applied Pap smear guidelines (not due until age 21)",
+        "Agent counseled on contraception given sexually active status without protection"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_abruption_001",
+    "description": {
+      "purpose": "Manage a placental abruption emergency with Category III fetal tracing",
+      "difficulty": "expert",
+      "category": "obstetric_emergency",
+      "key_challenges": [
+        "Recognize clinical presentation of placental abruption",
+        "Interpret Category III fetal heart tracing as requiring immediate intervention",
+        "Activate emergent cesarean delivery pathway",
+        "Manage maternal hemorrhagic shock and DIC risk",
+        "Coordinate multidisciplinary emergency response"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN attending on call for emergencies",
+      "instructions": "You are called to evaluate a 35-year-old G2P1 at 32 weeks with sudden severe abdominal pain and vaginal bleeding. She has chronic hypertension and history of cocaine use. Fetal monitoring shows Category III tracing. Manage this obstetric emergency."
+    },
+    "ticket": "EMERGENT: Patient OB-008 (35F, G2P1, 32w) presents with acute severe abdominal pain and vaginal bleeding. Vitals: HR 118, BP 92/58, RR 24, SpO2 96%. Abdomen rigid with uterine hypertonus. Fetal monitoring: Category III - baseline FHR 170, absent variability, recurrent late decelerations. History of chronic HTN on labetalol, prior cocaine use. Labs: Hgb 10.2, fibrinogen 195. Blood type B-negative. Immediate assessment and management required.",
+    "patient_id": "OB-008",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "OB-008"
+          },
+          "info": "Rapid assessment of patient and risk factors"
+        },
+        {
+          "action_id": "a2",
+          "name": "get_fetal_monitoring",
+          "arguments": {
+            "patient_id": "OB-008"
+          },
+          "info": "Interpret Category III tracing and determine urgency"
+        },
+        {
+          "action_id": "a3",
+          "name": "activate_emergency",
+          "arguments": {
+            "patient_id": "OB-008",
+            "type": "emergent_cesarean"
+          },
+          "info": "Activate emergent cesarean delivery pathway"
+        },
+        {
+          "action_id": "a4",
+          "name": "order_blood_products",
+          "arguments": {
+            "patient_id": "OB-008",
+            "products": "massive_transfusion_protocol"
+          },
+          "info": "Activate massive transfusion protocol for hemorrhagic shock"
+        },
+        {
+          "action_id": "a5",
+          "name": "notify_team",
+          "arguments": {
+            "teams": [
+              "anesthesia",
+              "NICU",
+              "blood_bank"
+            ]
+          },
+          "info": "Coordinate multidisciplinary emergency response"
+        },
+        {
+          "action_id": "a6",
+          "name": "order_medication",
+          "arguments": {
+            "patient_id": "OB-008",
+            "medication": "RhoGAM"
+          },
+          "info": "Administer RhoGAM for Rh-negative patient with bleeding"
+        }
+      ],
+      "nl_assertions": [
+        "Agent immediately recognized placental abruption based on clinical presentation",
+        "Agent interpreted Category III tracing as requiring emergent delivery",
+        "Agent activated emergent cesarean delivery without delay",
+        "Agent initiated massive transfusion protocol for maternal hemodynamic instability",
+        "Agent notified NICU for preterm delivery at 32 weeks",
+        "Agent ordered RhoGAM for Rh-negative patient",
+        "Agent recognized DIC risk (low fibrinogen 195) and ordered serial coagulation studies",
+        "Agent identified risk factors (chronic HTN, cocaine history) contributing to abruption",
+        "Agent ordered urine drug screen"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_shoulder_dystocia_001",
+    "description": {
+      "purpose": "Manage shoulder dystocia emergency drill using HELPERR mnemonic",
+      "difficulty": "expert",
+      "category": "obstetric_emergency",
+      "key_challenges": [
+        "Recall HELPERR mnemonic steps in correct order",
+        "Execute McRoberts maneuver as first-line intervention",
+        "Know when to escalate to rotational maneuvers and posterior arm delivery",
+        "Understand neonatal injury risks and documentation requirements"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN resident in a simulation drill",
+      "instructions": "During a simulated vaginal delivery, the fetal head delivers but the anterior shoulder is impacted behind the pubic symphysis. Shoulder dystocia is diagnosed. Demonstrate the correct sequence of maneuvers using the HELPERR protocol and manage this emergency."
+    },
+    "ticket": "SIMULATION: Shoulder dystocia is diagnosed during vaginal delivery - the fetal head has delivered but the anterior shoulder is impacted. The clock is running. Demonstrate knowledge of the HELPERR mnemonic, describe each maneuver in order, identify potential neonatal complications, and outline proper documentation requirements.",
+    "patient_id": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "check_protocol",
+          "arguments": {
+            "protocol_name": "shoulder_dystocia"
+          },
+          "info": "Reference shoulder dystocia management protocol"
+        },
+        {
+          "action_id": "a2",
+          "name": "execute_maneuver",
+          "arguments": {
+            "maneuver": "McRoberts",
+            "step": 1
+          },
+          "info": "First-line: McRoberts maneuver with suprapubic pressure"
+        },
+        {
+          "action_id": "a3",
+          "name": "execute_maneuver",
+          "arguments": {
+            "maneuver": "rotational",
+            "step": 2
+          },
+          "info": "Second-line: Rubin II or Woods corkscrew rotational maneuvers"
+        },
+        {
+          "action_id": "a4",
+          "name": "execute_maneuver",
+          "arguments": {
+            "maneuver": "posterior_arm_delivery",
+            "step": 3
+          },
+          "info": "Third-line: Delivery of posterior arm"
+        }
+      ],
+      "nl_assertions": [
+        "Agent correctly recalled HELPERR mnemonic (Help, Episiotomy, Legs/McRoberts, Pressure, Enter/Rotate, Remove posterior arm, Roll/Gaskin)",
+        "Agent identified McRoberts with suprapubic pressure as the most effective first-line maneuver",
+        "Agent described correct technique for McRoberts (hyperflexion of hips, thighs to abdomen)",
+        "Agent distinguished suprapubic from fundal pressure (fundal pressure is contraindicated)",
+        "Agent described escalation to rotational maneuvers if McRoberts fails",
+        "Agent knew posterior arm delivery reduces shoulder diameter by ~2cm",
+        "Agent identified complications: brachial plexus injury, clavicle fracture, hypoxic ischemic encephalopathy",
+        "Agent outlined documentation requirements (times, maneuvers, personnel, neonatal outcome)"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_pph_001",
+    "description": {
+      "purpose": "Manage postpartum hemorrhage using staged protocol approach",
+      "difficulty": "hard",
+      "category": "obstetric_emergency",
+      "key_challenges": [
+        "Apply the 4 Ts framework for PPH etiology",
+        "Initiate staged management (recognition, escalation, massive hemorrhage)",
+        "Select appropriate uterotonic agents with contraindications",
+        "Know when to escalate to surgical interventions",
+        "Coordinate massive transfusion protocol"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN managing a postpartum patient on L&D",
+      "instructions": "A patient is 30 minutes post vaginal delivery with estimated blood loss of 800mL and rising. The uterus is boggy on palpation. Demonstrate systematic PPH management including uterotonic agents, their contraindications, and escalation criteria."
+    },
+    "ticket": "A patient is 30 minutes post-SVD with EBL 800mL and ongoing bleeding. Uterus is boggy (atony). Vitals: HR 105, BP 100/60. Demonstrate staged PPH management: initial recognition and treatment, appropriate uterotonic agent selection with contraindications, escalation criteria, and massive hemorrhage protocol activation if needed.",
+    "patient_id": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "check_protocol",
+          "arguments": {
+            "protocol_name": "pph"
+          },
+          "info": "Reference PPH management protocol"
+        },
+        {
+          "action_id": "a2",
+          "name": "perform_intervention",
+          "arguments": {
+            "intervention": "fundal_massage"
+          },
+          "info": "Initiate bimanual uterine massage for atony"
+        },
+        {
+          "action_id": "a3",
+          "name": "order_medication",
+          "arguments": {
+            "medication": "oxytocin",
+            "dose": "20-40 units in 1L NS IV"
+          },
+          "info": "First-line uterotonic agent"
+        },
+        {
+          "action_id": "a4",
+          "name": "order_medication",
+          "arguments": {
+            "medication": "tranexamic acid",
+            "dose": "1g IV over 10 minutes"
+          },
+          "info": "Administer TXA within 3 hours of delivery"
+        }
+      ],
+      "nl_assertions": [
+        "Agent applied 4 Ts framework: Tone (atony), Trauma, Tissue, Thrombin",
+        "Agent identified uterine atony as the most likely cause (boggy uterus)",
+        "Agent initiated fundal massage as immediate first step",
+        "Agent ordered oxytocin as first-line uterotonic",
+        "Agent knew methylergonovine is contraindicated in hypertension",
+        "Agent knew carboprost (Hemabate) is contraindicated in asthma",
+        "Agent recommended tranexamic acid within 3 hours of delivery",
+        "Agent described escalation to Bakri balloon tamponade if uterotonics fail",
+        "Agent knew when to activate massive transfusion protocol (EBL >1500mL or hemodynamic instability)",
+        "Agent outlined surgical options: B-Lynch suture, uterine artery ligation, hysterectomy"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_ectopic_001",
+    "description": {
+      "purpose": "Evaluate a patient with suspected ectopic pregnancy",
+      "difficulty": "moderate",
+      "category": "early_pregnancy_complications",
+      "key_challenges": [
+        "Correlate beta-hCG level with ultrasound findings",
+        "Determine ectopic vs intrauterine pregnancy using discriminatory zone",
+        "Select between methotrexate and surgical management",
+        "Identify hemodynamic instability requiring emergent surgery"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN provider evaluating a patient in the emergency department",
+      "instructions": "You are evaluating a 26-year-old G2P1 with 6 weeks amenorrhea, right lower quadrant pain, and positive urine HCG. Transvaginal ultrasound shows no intrauterine pregnancy and a right adnexal mass. Beta-hCG is 2,500 mIU/mL. Determine the diagnosis and management plan."
+    },
+    "ticket": "26F, G2P1, presents with 6 weeks amenorrhea and 3 days of worsening right lower quadrant pain. Positive urine pregnancy test. Vitals stable: HR 88, BP 118/72. TVUS: empty uterus, right adnexal complex mass 2.8cm, trace free fluid in cul-de-sac. Quantitative beta-hCG: 2,500 mIU/mL. Evaluate for ectopic pregnancy and determine management approach (medical vs surgical).",
+    "patient_id": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "get_vital_signs",
+          "arguments": {
+            "patient_id": "ectopic_patient"
+          },
+          "info": "Assess hemodynamic stability"
+        },
+        {
+          "action_id": "a2",
+          "name": "get_lab_results",
+          "arguments": {
+            "test": "beta_hcg"
+          },
+          "info": "Review beta-hCG level in context of discriminatory zone"
+        },
+        {
+          "action_id": "a3",
+          "name": "get_imaging",
+          "arguments": {
+            "study": "transvaginal_ultrasound"
+          },
+          "info": "Interpret TVUS findings - no IUP, adnexal mass, free fluid"
+        },
+        {
+          "action_id": "a4",
+          "name": "submit_diagnosis",
+          "arguments": {
+            "diagnosis": "ectopic pregnancy"
+          },
+          "info": "Diagnose ectopic pregnancy based on clinical, lab, and imaging correlation"
+        },
+        {
+          "action_id": "a5",
+          "name": "submit_plan",
+          "arguments": {
+            "plan": "methotrexate vs surgical management"
+          },
+          "info": "Determine appropriate management based on hemodynamic status and hCG level"
+        }
+      ],
+      "nl_assertions": [
+        "Agent recognized ectopic pregnancy based on beta-hCG above discriminatory zone with no IUP on TVUS",
+        "Agent identified right adnexal mass as likely ectopic location",
+        "Agent assessed hemodynamic stability before considering medical management",
+        "Agent discussed methotrexate eligibility criteria (hemodynamically stable, unruptured, no fetal cardiac activity)",
+        "Agent mentioned need for baseline labs before methotrexate (CBC, CMP, liver function)",
+        "Agent discussed surgical management (laparoscopy/salpingectomy) as alternative",
+        "Agent noted trace free fluid and its significance for possible rupture",
+        "Agent planned serial beta-hCG monitoring after treatment"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "ob_medication_safety_001",
+    "description": {
+      "purpose": "Review medication safety and pregnancy compatibility for a patient on multiple medications",
+      "difficulty": "moderate",
+      "category": "pharmacology",
+      "key_challenges": [
+        "Apply pregnancy medication safety categories",
+        "Identify teratogenic medications requiring discontinuation",
+        "Balance maternal disease treatment needs with fetal safety",
+        "Recommend safe alternatives for contraindicated medications",
+        "Counsel patient on risk-benefit of continuing needed medications"
+      ]
+    },
+    "user_scenario": {
+      "persona": "OB/GYN provider reviewing medication safety",
+      "instructions": "A 30-year-old newly pregnant patient at 6 weeks is on the following medications: lisinopril 10mg daily (HTN), atorvastatin 20mg daily (hyperlipidemia), sertraline 50mg daily (depression), metformin 1000mg BID (PCOS/prediabetes), and isotretinoin (acne, completed 1 month ago). Review each medication for pregnancy safety and recommend changes."
+    },
+    "ticket": "30F, newly pregnant at 6 weeks gestation, currently taking: lisinopril 10mg daily, atorvastatin 20mg daily, sertraline 50mg daily, metformin 1000mg BID, and completed isotretinoin course 1 month ago. Review each medication for pregnancy compatibility, identify those requiring immediate discontinuation, recommend safe alternatives, and counsel on risk-benefit for those that may be continued.",
+    "patient_id": null,
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "a1",
+          "name": "review_medication_safety",
+          "arguments": {
+            "medication": "lisinopril",
+            "context": "pregnancy"
+          },
+          "info": "ACE inhibitor - contraindicated in pregnancy (fetotoxic)"
+        },
+        {
+          "action_id": "a2",
+          "name": "review_medication_safety",
+          "arguments": {
+            "medication": "atorvastatin",
+            "context": "pregnancy"
+          },
+          "info": "Statin - contraindicated in pregnancy (category X)"
+        },
+        {
+          "action_id": "a3",
+          "name": "review_medication_safety",
+          "arguments": {
+            "medication": "sertraline",
+            "context": "pregnancy"
+          },
+          "info": "SSRI - generally compatible, discuss risk-benefit"
+        },
+        {
+          "action_id": "a4",
+          "name": "review_medication_safety",
+          "arguments": {
+            "medication": "metformin",
+            "context": "pregnancy"
+          },
+          "info": "Biguanide - may be continued, discuss with endocrinology"
+        },
+        {
+          "action_id": "a5",
+          "name": "review_medication_safety",
+          "arguments": {
+            "medication": "isotretinoin",
+            "context": "pregnancy"
+          },
+          "info": "Category X teratogen - assess exposure timing and counsel on risks"
+        }
+      ],
+      "nl_assertions": [
+        "Agent identified lisinopril (ACE inhibitor) as contraindicated and recommended switching to labetalol or nifedipine",
+        "Agent identified atorvastatin (statin) as contraindicated (Category X) and recommended immediate discontinuation",
+        "Agent assessed sertraline as generally compatible with pregnancy and recommended continuation with risk-benefit discussion",
+        "Agent discussed metformin safety (can be continued, especially for PCOS/prediabetes, with endocrinology input)",
+        "Agent flagged recent isotretinoin use as major concern (Category X, teratogenic, requires 1-month washout period)",
+        "Agent recommended referral to MFM for teratogen exposure counseling regarding isotretinoin timing",
+        "Agent prioritized maternal health needs while minimizing fetal exposure risks"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  }
+]

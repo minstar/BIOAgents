@@ -1,0 +1,226 @@
+[
+  {
+    "id": "rad_cxr_pneumonia_001",
+    "description": {
+      "purpose": "Generate a structured chest X-ray report for lobar pneumonia",
+      "difficulty": "easy",
+      "category": "chest_radiology",
+      "key_challenges": ["Identify lobar consolidation", "Note pleural effusion", "Compare with prior study"]
+    },
+    "ticket": "Study RAD001: PA and lateral chest X-ray for a 68M with COPD presenting with cough, fever, and dyspnea. Prior chest X-ray from 6 months ago available. Generate a complete structured radiology report.",
+    "study_id": "RAD001",
+    "correct_answer": "Right lower lobe pneumonia with small pleural effusion",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD001"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD001"}, "compare_args": ["study_id"]},
+        {"name": "get_prior_reports", "arguments": {"study_id": "RAD001"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD001"}, "compare_args": ["study_id"]},
+        {"name": "get_report_template", "arguments": {"modality": "XR", "body_part": "chest"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report mentions right lower lobe consolidation",
+        "Report identifies air bronchograms",
+        "Report notes small right pleural effusion as new finding",
+        "Report compares with prior study and notes interval change",
+        "Report provides structured impression with recommendations"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_ct_stroke_002",
+    "description": {
+      "purpose": "Generate CT head/CTA report for acute stroke",
+      "difficulty": "hard",
+      "category": "neuroradiology",
+      "key_challenges": ["Identify early ischemic changes", "Report CTA occlusion", "Note thrombectomy candidacy"]
+    },
+    "ticket": "Study RAD002: Non-contrast CT head and CTA for a 72F with acute onset right hemiparesis and aphasia. On warfarin for AFib. STAT interpretation needed. Generate complete report.",
+    "study_id": "RAD002",
+    "correct_answer": "Left MCA territory acute infarct with M1 occlusion — thrombectomy candidate",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD002"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD002"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD002"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "acute stroke CT"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report identifies early ischemic changes in left MCA territory",
+        "Report notes hyperdense MCA sign",
+        "Report describes M1 occlusion on CTA",
+        "Report mentions thrombectomy candidacy",
+        "Report confirms no intracranial hemorrhage"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_ct_abdomen_003",
+    "description": {
+      "purpose": "Generate CT abdomen report for acute cholecystitis with CBD stone",
+      "difficulty": "medium",
+      "category": "abdominal_radiology",
+      "key_challenges": ["Identify cholecystitis signs", "Detect CBD stone", "Systematic organ review"]
+    },
+    "ticket": "Study RAD003: CT abdomen/pelvis with contrast for a 55F with RUQ pain and elevated LFTs. Generate complete structured report with systematic findings.",
+    "study_id": "RAD003",
+    "correct_answer": "Acute cholecystitis with choledocholithiasis (1cm distal CBD stone)",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD003"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD003"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD003"}, "compare_args": ["study_id"]},
+        {"name": "get_report_template", "arguments": {"modality": "CT", "body_part": "abdomen"}, "compare_args": []},
+        {"name": "get_reporting_checklist", "arguments": {"modality": "CT", "body_part": "abdomen"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report identifies acute cholecystitis (wall thickening, pericholecystic fluid)",
+        "Report detects CBD stone (choledocholithiasis)",
+        "Report mentions dilated CBD measurement",
+        "Report includes systematic review of other organs",
+        "Report recommends ERCP and surgical consultation"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_mri_brain_tumor_004",
+    "description": {
+      "purpose": "Generate MRI brain report for suspected high-grade glioma",
+      "difficulty": "hard",
+      "category": "neuroradiology",
+      "key_challenges": ["Characterize mass features", "Assess mass effect", "Suggest differential"]
+    },
+    "ticket": "Study RAD004: MRI brain with and without contrast for a 48M with new-onset seizure and 2 weeks of headaches. Generate complete neuroradiology report.",
+    "study_id": "RAD004",
+    "correct_answer": "Left temporal lobe mass suspicious for high-grade glioma (GBM)",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD004"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD004"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD004"}, "compare_args": ["study_id"]},
+        {"name": "get_report_template", "arguments": {"modality": "MRI", "body_part": "brain"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report describes mass location, size, and signal characteristics",
+        "Report notes heterogeneous enhancement with central necrosis",
+        "Report measures midline shift (5mm)",
+        "Report suggests high-grade glioma as primary differential",
+        "Report recommends neurosurgery consultation"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_ct_lung_nodule_005",
+    "description": {
+      "purpose": "Generate follow-up CT chest report for growing lung nodule",
+      "difficulty": "medium",
+      "category": "chest_radiology",
+      "key_challenges": ["Compare with prior measurement", "Apply Fleischner criteria", "Risk stratification"]
+    },
+    "ticket": "Study RAD005: Low-dose CT chest follow-up for a 62M smoker with 8mm RUL nodule found 3 months ago. Generate report with comparison and Fleischner criteria application.",
+    "study_id": "RAD005",
+    "correct_answer": "Growing spiculated RUL nodule (8mm→11mm), concerning for malignancy in high-risk patient",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD005"}, "compare_args": ["study_id"]},
+        {"name": "get_prior_reports", "arguments": {"study_id": "RAD005"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD005"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "Fleischner"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report compares current (11mm) with prior (8mm) measurement",
+        "Report notes interval growth (3mm in 3 months)",
+        "Report references Fleischner Society guidelines",
+        "Report identifies spiculated margins as concerning feature",
+        "Report recommends PET/CT or tissue sampling"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_cxr_normal_006",
+    "description": {
+      "purpose": "Generate a normal pre-operative chest X-ray report",
+      "difficulty": "easy",
+      "category": "chest_radiology",
+      "key_challenges": ["Systematic normal review", "Appropriate clearance language"]
+    },
+    "ticket": "Study RAD006: PA chest X-ray for pre-operative clearance in a 75F scheduled for hip replacement. Generate report.",
+    "study_id": "RAD006",
+    "correct_answer": "Normal chest radiograph, cleared for surgery",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD006"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD006"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD006"}, "compare_args": ["study_id"]}
+      ],
+      "nl_assertions": [
+        "Report systematically reviews all structures",
+        "Report states no acute cardiopulmonary abnormality",
+        "Report mentions normal heart size",
+        "Report provides clearance language for surgery"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_mammo_birads5_007",
+    "description": {
+      "purpose": "Generate mammography report with BI-RADS classification for suspicious mass",
+      "difficulty": "hard",
+      "category": "breast_imaging",
+      "key_challenges": ["BI-RADS classification", "Describe mass features per ACR lexicon", "Compare with prior"]
+    },
+    "ticket": "Study RAD007: Screening mammogram for 50F. Prior mammogram from 12 months ago was normal. Generate complete mammography report with BI-RADS assessment.",
+    "study_id": "RAD007",
+    "correct_answer": "BI-RADS 5 right breast (new spiculated mass), BI-RADS 1 left breast",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD007"}, "compare_args": ["study_id"]},
+        {"name": "get_prior_reports", "arguments": {"study_id": "RAD007"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD007"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "BI-RADS"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report describes breast density (ACR C or D)",
+        "Report characterizes mass using BI-RADS lexicon (irregular, spiculated)",
+        "Report assigns BI-RADS 5 for right breast",
+        "Report compares with prior negative mammogram",
+        "Report recommends tissue sampling (biopsy)"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "rad_us_thyroid_008",
+    "description": {
+      "purpose": "Generate thyroid ultrasound report with TI-RADS classification",
+      "difficulty": "medium",
+      "category": "head_neck",
+      "key_challenges": ["Apply ACR TI-RADS scoring", "FNA recommendation", "Characterize nodule features"]
+    },
+    "ticket": "Study RAD008: Thyroid ultrasound for 42F with palpable nodule. TSH normal. Generate structured report with TI-RADS assessment and FNA recommendation.",
+    "study_id": "RAD008",
+    "correct_answer": "TI-RADS 5 right thyroid nodule, FNA recommended",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_study_info", "arguments": {"study_id": "RAD008"}, "compare_args": ["study_id"]},
+        {"name": "get_clinical_history", "arguments": {"study_id": "RAD008"}, "compare_args": ["study_id"]},
+        {"name": "analyze_findings", "arguments": {"study_id": "RAD008"}, "compare_args": ["study_id"]},
+        {"name": "search_radiology_knowledge", "arguments": {"query": "TI-RADS"}, "compare_args": []}
+      ],
+      "nl_assertions": [
+        "Report describes nodule characteristics (hypoechoic, microcalcifications, taller-than-wide)",
+        "Report applies TI-RADS scoring system",
+        "Report assigns TI-RADS 5 for the right thyroid nodule",
+        "Report recommends FNA biopsy",
+        "Report separately characterizes the benign left nodule"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  }
+]

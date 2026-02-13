@@ -1,0 +1,98 @@
+# ============================================================
+# P4-1: Lingshu-7B Agent GRPO Training
+# ============================================================
+# Goal: Take the medical-knowledge-strong Lingshu SFT model
+#       and train agent capabilities via GRPO
+#
+# Key insight from P2/P3:
+#   - Lingshu has strong medical benchmarks (MedQA=64.5%, MMLU=76.8%)
+#   - But agent task performance is moderate (Action Score=0.504)
+#   - GRPO can boost agent performance (Qwen3 went from 0 to 0.865)
+#   - Goal: Get the best of both worlds
+#
+# Usage:
+#   CUDA_VISIBLE_DEVICES=0 python -m bioagents.training.grpo_trainer \
+#     --config configs/grpo_p4_lingshu_agent.yaml
+# ============================================================
+
+model:
+  name_or_path: "checkpoints/sft_p2_aggressive_lingshu/merged"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+peft:
+  enabled: true
+  r: 16                              # Higher rank for more capacity
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+  task_type: "CAUSAL_LM"
+  bias: "none"
+
+dataset:
+  domain: "medical_qa"
+  tasks_path: "data/domains/medical_qa/tasks.json"
+  split_tasks_path: "data/domains/medical_qa/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 2048
+  max_completion_length: 1024
+
+training:
+  output_dir: "checkpoints/grpo_p4_lingshu_agent"
+  num_train_epochs: 3
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  learning_rate: 5.0e-6              # Slightly higher than P2 for more learning
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 50
+  eval_steps: 25
+  save_total_limit: 3
+  seed: 42
+
+  # GRPO-specific
+  num_generations: 4
+  beta: 0.04
+  temperature: 0.7
+  top_p: 0.95
+  top_k: 50
+
+rewards:
+  functions:
+    - name: "accuracy"
+      weight: 0.4
+    - name: "format"
+      weight: 0.2
+    - name: "process"
+      weight: 0.4
+
+environment:
+  max_turns: 10
+  use_gym_env: true
+  domains:
+    - "medical_qa"
+    - "clinical_diagnosis"
+    - "drug_interaction"
+    - "ehr_management"
+
+logging:
+  project: "bioagents-grpo"
+  run_name: "grpo_p4_lingshu_agent"
+  use_wandb: false
+  log_dir: "logs/runs"
+
+meta:
+  experiment: "P4-1 Lingshu Agent GRPO"
+  description: >
+    Core experiment: Take Lingshu-7B (medical benchmark strong) SFT checkpoint
+    and train agent capabilities via GRPO. Goal is best of both worlds:
+    strong medical knowledge + strong agent tool-use.

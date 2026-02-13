@@ -1,0 +1,102 @@
+# ============================================================
+# BIOAgents GRPO Training Config — Triage & Emergency Domain
+# ============================================================
+# ESI-based triage with time-critical emergency recognition.
+# Higher safety reward weight — wrong triage kills people.
+#
+# Usage:
+#   python bioagents/training/grpo_trainer.py --config configs/grpo_triage_emergency.yaml
+# ============================================================
+
+model:
+  name_or_path: "checkpoints/sft_multidomain_lingshu/merged"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+peft:
+  enabled: true
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  task_type: "CAUSAL_LM"
+  bias: "none"
+
+dataset:
+  domain: "triage_emergency"
+  tasks_path: "data/domains/triage_emergency/tasks.json"
+  split_tasks_path: "data/domains/triage_emergency/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 2048
+  max_completion_length: 1024
+
+training:
+  output_dir: "checkpoints/grpo_triage_emergency"
+  num_train_epochs: 5
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  learning_rate: 2.0e-6       # Conservative — safety-critical domain
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.15
+  weight_decay: 0.01
+  max_grad_norm: 0.5          # Tighter gradient clipping for stability
+  bf16: true
+  logging_steps: 5
+  save_steps: 25
+  eval_steps: 10
+  save_total_limit: 5
+  seed: 42
+
+  # GRPO-specific
+  num_generations: 4
+  beta: 0.05                  # Slightly higher KL penalty (don't drift from safe policy)
+  temperature: 0.6            # Lower temperature for more conservative outputs
+  top_p: 0.90
+  top_k: 40
+
+rewards:
+  functions:
+    - name: "accuracy"
+      weight: 0.25
+    - name: "format"
+      weight: 0.15
+    - name: "process"
+      weight: 0.30
+    - name: "safety"
+      weight: 0.30            # Safety reward is critical for triage
+  bertscore_model: "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext"
+
+  # Safety-specific configuration
+  safety:
+    enable_emergency_recognition: true
+    enable_contraindication_check: true
+    enable_uncertainty_calibration: true
+    critical_violation_penalty: -1.0    # Hard penalty for severity-5 violations
+
+environment:
+  max_turns: 8                # Triage should be fast
+  use_gym_env: true
+  domains:
+    - "triage_emergency"
+
+logging:
+  project: "bioagents-grpo"
+  run_name: "grpo_triage_emergency"
+  use_wandb: true
+  log_dir: "logs/runs"
+
+meta:
+  experiment: "GRPO Triage & Emergency"
+  description: >
+    GRPO training on Triage & Emergency domain.
+    Emphasis on safety reward (30%) — wrong triage level is a critical error.
+    Lower temperature and higher KL penalty for conservative, safe outputs.
+    Trains ESI assessment, time-critical recognition, and protocol activation.

@@ -1,0 +1,50 @@
+# =============================================================================
+# GPU 2: SFT — Qwen3-4B-Thinking on multi-domain medical SFT
+# =============================================================================
+# Thinking model — test if extended reasoning helps clinical tasks.
+# Slightly lower learning rate (1.5e-5) to preserve the model's reasoning
+# capabilities while adapting to the medical domain.
+# =============================================================================
+# Trainer: python -m bioagents.training.sft_trainer --config CONFIG.yaml
+# =============================================================================
+
+model:
+  name_or_path: "/data/project/private/minstar/checkpoints/Qwen3-4B-Thinking-2507"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+peft:
+  enabled: true
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+
+dataset:
+  sft_path: "datasets/sft/medical_sft_combined.jsonl"
+  min_reward: 0.0
+  max_samples: 2500
+  max_length: 4096
+  train_ratio: 0.9
+
+training:
+  output_dir: "checkpoints/8gpu/sft_qwen3_4b_thinking"
+  num_train_epochs: 3
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 1.5e-5
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 999999
+  save_total_limit: 1
+  seed: 44
+
+logging:
+  project: "bioagents-sft"
+  run_name: "sft_qwen3_4b_thinking_gpu2"
+  use_wandb: false
+  log_dir: "logs/8gpu/sft_qwen3_4b_thinking"

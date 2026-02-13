@@ -1,0 +1,119 @@
+# ============================================================
+# BIOAgents GRPO Training Config — Cross-Domain Clinical Pathways
+# ============================================================
+# Multi-phase clinical pathways spanning all domains.
+# This is the flagship training configuration.
+#
+# Usage:
+#   python bioagents/training/grpo_trainer.py --config configs/grpo_cross_domain.yaml
+# ============================================================
+
+model:
+  name_or_path: "checkpoints/grpo_p2_multidomain/merged"   # Start from multi-domain GRPO
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+peft:
+  enabled: true
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  task_type: "CAUSAL_LM"
+  bias: "none"
+
+dataset:
+  domain: "cross_domain"
+  tasks_path: "data/domains/cross_domain/tasks.json"
+  split_tasks_path: "data/domains/cross_domain/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 3072             # Longer context for cross-domain
+  max_completion_length: 1536
+
+training:
+  output_dir: "checkpoints/grpo_cross_domain"
+  num_train_epochs: 3
+  per_device_train_batch_size: 1      # Longer sequences
+  gradient_accumulation_steps: 16
+  learning_rate: 1.5e-6               # Very conservative — fine-tuning on top of multi-domain
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.15
+  weight_decay: 0.01
+  max_grad_norm: 0.5
+  bf16: true
+  logging_steps: 5
+  save_steps: 20
+  eval_steps: 10
+  save_total_limit: 5
+  seed: 42
+
+  # GRPO-specific
+  num_generations: 4
+  beta: 0.06                          # Higher KL penalty (preserve multi-domain capabilities)
+  temperature: 0.6
+  top_p: 0.90
+  top_k: 40
+
+rewards:
+  functions:
+    - name: "accuracy"
+      weight: 0.20
+    - name: "format"
+      weight: 0.15
+    - name: "process"
+      weight: 0.25
+    - name: "safety"
+      weight: 0.25
+    - name: "coherence"
+      weight: 0.15                    # Cross-domain coherence reward
+
+  # Safety is paramount in cross-domain (errors propagate across phases)
+  safety:
+    enable_emergency_recognition: true
+    enable_contraindication_check: true
+    enable_uncertainty_calibration: true
+    critical_violation_penalty: -1.0
+
+environment:
+  max_turns: 20                       # Longer pathways
+  use_gym_env: true
+  domains:
+    - "cross_domain"
+    # Tools are loaded dynamically per-phase from:
+    - "clinical_diagnosis"
+    - "drug_interaction"
+    - "ehr_management"
+    - "triage_emergency"
+    - "visual_diagnosis"
+    - "radiology_report"
+
+logging:
+  project: "bioagents-grpo"
+  run_name: "grpo_cross_domain_pathways"
+  use_wandb: true
+  log_dir: "logs/runs"
+
+meta:
+  experiment: "GRPO Cross-Domain Clinical Pathways"
+  description: >
+    Flagship GRPO training on cross-domain clinical pathways.
+    Trains agents on realistic patient journeys spanning Triage → Dx →
+    Imaging → Drugs → EHR → Disposition.
+
+    Key features:
+    - 6 pathways (Chest Pain, DKA, Stroke, Sepsis, Post-op PE, Pediatric Kawasaki)
+    - 25 phase-level tasks with multi-domain tool access
+    - Safety reward (25%) with critical violation hard penalty
+    - Cross-domain coherence reward (15%) for maintaining clinical context
+    - Built on multi-domain GRPO checkpoint (not from scratch)
+
+    This configuration represents the full Healthcare AI GYM experience:
+    no isolated toy tasks, only real clinical workflows.

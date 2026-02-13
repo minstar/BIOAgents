@@ -1,0 +1,31 @@
+{
+  "train": [
+    "xd_chest_pain_001_diagnosis",
+    "xd_chest_pain_001_disposition",
+    "xd_chest_pain_001_documentation",
+    "xd_chest_pain_001_drug_management",
+    "xd_chest_pain_001_imaging",
+    "xd_chest_pain_001_triage",
+    "xd_dka_001_diagnosis",
+    "xd_dka_001_drug_management",
+    "xd_dka_001_ehr_documentation",
+    "xd_dka_001_triage",
+    "xd_peds_fever_001_diagnosis",
+    "xd_peds_fever_001_documentation",
+    "xd_peds_fever_001_drug_management",
+    "xd_peds_fever_001_triage",
+    "xd_postop_001_chart_review",
+    "xd_postop_001_diagnosis",
+    "xd_postop_001_drug_management"
+  ],
+  "test": [
+    "xd_sepsis_001_diagnosis",
+    "xd_sepsis_001_drug_management",
+    "xd_sepsis_001_ehr_documentation",
+    "xd_sepsis_001_triage",
+    "xd_stroke_001_documentation",
+    "xd_stroke_001_imaging",
+    "xd_stroke_001_treatment_decision",
+    "xd_stroke_001_triage"
+  ]
+}

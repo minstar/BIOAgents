@@ -1,0 +1,212 @@
+{
+  "studies": {
+    "RAD001": {
+      "study_id": "RAD001",
+      "modality": "XR",
+      "body_part": "chest",
+      "indication": "Cough, fever, shortness of breath. R/O pneumonia.",
+      "technique": "PA and lateral chest radiographs",
+      "patient_id": "RAD_P001",
+      "patient_age": 68,
+      "patient_sex": "M",
+      "clinical_history": "68-year-old male with COPD, presenting with productive cough and fever for 3 days. Former smoker (40 pack-years).",
+      "prior_studies": ["PRIOR_RAD001"],
+      "findings_description": "Heart size is at the upper limits of normal. Mediastinal contour is unremarkable. There is a dense consolidation in the right lower lobe with air bronchograms, consistent with lobar pneumonia. Small right-sided pleural effusion is present, measuring approximately 1.5 cm on lateral view. The left lung is clear. No pneumothorax. Osseous structures show mild degenerative changes of the thoracic spine. Prior study 6 months ago showed clear lungs without effusion.",
+      "impression_reference": "1. Right lower lobe pneumonia with air bronchograms. 2. Small right pleural effusion, new since prior exam. 3. No pneumothorax. Recommend clinical correlation and follow-up chest X-ray after treatment.",
+      "urgency": "urgent"
+    },
+    "RAD002": {
+      "study_id": "RAD002",
+      "modality": "CT",
+      "body_part": "head",
+      "indication": "Acute onset right-sided weakness and aphasia. R/O stroke.",
+      "technique": "Non-contrast CT head, followed by CT angiography of head and neck",
+      "patient_id": "RAD_P002",
+      "patient_age": 72,
+      "patient_sex": "F",
+      "clinical_history": "72-year-old female with atrial fibrillation (on warfarin, INR 1.8), presenting with sudden onset right hemiparesis and expressive aphasia. Last known well 2 hours ago.",
+      "prior_studies": [],
+      "findings_description": "Non-contrast CT: Loss of gray-white matter differentiation in the left MCA territory involving the insular cortex, left temporal and frontal opercula. Hyperdense left MCA sign (M1 segment). No intracranial hemorrhage. No midline shift. Ventricles are age-appropriate. CT Angiography: Complete occlusion of the left MCA at the M1 segment. Left ICA is patent. Circle of Willis shows hypoplastic left A1 segment. No significant carotid stenosis bilaterally.",
+      "impression_reference": "1. Acute left MCA territory infarct with early ischemic changes. Hyperdense MCA sign. 2. CTA: Complete occlusion of left MCA M1 segment - candidate for mechanical thrombectomy given <6 hour window and large vessel occlusion. 3. No intracranial hemorrhage.",
+      "urgency": "stat"
+    },
+    "RAD003": {
+      "study_id": "RAD003",
+      "modality": "CT",
+      "body_part": "abdomen",
+      "indication": "Right upper quadrant pain, elevated liver enzymes. R/O biliary obstruction.",
+      "technique": "CT abdomen and pelvis with IV contrast (portal venous phase)",
+      "patient_id": "RAD_P003",
+      "patient_age": 55,
+      "patient_sex": "F",
+      "clinical_history": "55-year-old female with acute onset RUQ pain, nausea, vomiting. ALT 180, AST 150, total bilirubin 4.5, alkaline phosphatase 420. History of gallstones.",
+      "prior_studies": [],
+      "findings_description": "Liver: Normal size and attenuation. No focal hepatic lesion. Intrahepatic bile ducts are mildly dilated. Gallbladder: Distended with multiple gallstones, the largest measuring 1.2 cm. Gallbladder wall thickening to 5mm with pericholecystic fluid. Positive Murphy sign reported clinically. Common bile duct: Dilated to 12mm (normal <7mm). A 1.0 cm stone is identified in the distal CBD. Pancreas: Unremarkable. No pancreatic ductal dilation. Spleen: Normal. Kidneys: Bilateral simple renal cysts, otherwise unremarkable. No free fluid. No lymphadenopathy.",
+      "impression_reference": "1. Acute cholecystitis: distended gallbladder with wall thickening, pericholecystic fluid, and cholelithiasis. 2. Choledocholithiasis: 1.0 cm stone in the distal common bile duct with upstream biliary dilation (CBD 12mm). 3. Recommend surgical consultation for cholecystectomy and ERCP for CBD stone extraction.",
+      "urgency": "urgent"
+    },
+    "RAD004": {
+      "study_id": "RAD004",
+      "modality": "MRI",
+      "body_part": "brain",
+      "indication": "New-onset seizures. R/O intracranial mass.",
+      "technique": "MRI brain with and without gadolinium contrast. Sequences: T1, T2, FLAIR, DWI, post-contrast T1.",
+      "patient_id": "RAD_P004",
+      "patient_age": 48,
+      "patient_sex": "M",
+      "clinical_history": "48-year-old male with no prior neurological history, presenting with first seizure (generalized tonic-clonic). 2-week history of headaches and word-finding difficulty.",
+      "prior_studies": [],
+      "findings_description": "There is a 3.5 x 3.2 x 4.0 cm heterogeneously enhancing mass in the left temporal lobe centered at the junction of gray and white matter. The mass demonstrates surrounding T2/FLAIR hyperintense signal consistent with vasogenic edema extending into the left frontal lobe. Central areas of non-enhancement suggest necrosis. DWI shows restricted diffusion at the margins. Mass effect with 5mm rightward midline shift at the level of the septum pellucidum. Partial effacement of the left lateral ventricle. No hydrocephalus. No other enhancing lesions identified. Dural enhancement is not seen.",
+      "impression_reference": "1. Left temporal lobe mass (3.5 x 3.2 x 4.0 cm) with heterogeneous enhancement, central necrosis, and surrounding edema. Imaging characteristics are most consistent with high-grade glioma (GBM). 2. Mass effect with 5mm midline shift. 3. Recommend neurosurgery consultation for biopsy/resection. Consider dexamethasone for edema management.",
+      "urgency": "urgent"
+    },
+    "RAD005": {
+      "study_id": "RAD005",
+      "modality": "CT",
+      "body_part": "chest",
+      "indication": "Incidental lung nodule follow-up. 8mm solid nodule found 3 months ago.",
+      "technique": "Low-dose CT chest without contrast",
+      "patient_id": "RAD_P005",
+      "patient_age": 62,
+      "patient_sex": "M",
+      "clinical_history": "62-year-old male, current smoker (30 pack-years). 8mm solid nodule in right upper lobe found incidentally on CT 3 months ago. Follow-up per Fleischner Society guidelines.",
+      "prior_studies": ["PRIOR_RAD005"],
+      "findings_description": "Right upper lobe: The previously identified solid nodule now measures 11mm (prior: 8mm, 3 months ago), representing interval growth. The nodule is spiculated with irregular margins. No calcification. Left lung: Clear. No new nodules. Mediastinum: No lymphadenopathy. Heart size normal. No pleural effusion. Osseous structures: Degenerative changes, no suspicious lesions.",
+      "impression_reference": "1. Growing right upper lobe spiculated nodule, now 11mm (was 8mm 3 months ago). Interval growth in a high-risk patient (current smoker) is concerning for malignancy. 2. Recommend PET/CT and tissue sampling (CT-guided biopsy or surgical resection). 3. Refer to pulmonology/thoracic surgery. Fleischner criteria exceeded - tissue diagnosis warranted.",
+      "urgency": "urgent"
+    },
+    "RAD006": {
+      "study_id": "RAD006",
+      "modality": "XR",
+      "body_part": "chest",
+      "indication": "Pre-operative clearance for hip replacement. 75F.",
+      "technique": "PA chest radiograph",
+      "patient_id": "RAD_P006",
+      "patient_age": 75,
+      "patient_sex": "F",
+      "clinical_history": "75-year-old female with osteoarthritis, scheduled for right total hip replacement. History of well-controlled hypertension. No cardiac or pulmonary symptoms.",
+      "prior_studies": [],
+      "findings_description": "Heart size is normal. Mediastinal and hilar contours are normal. Lungs are clear without focal consolidation, effusion, or pneumothorax. Mild aortic calcification. Degenerative changes of the thoracic spine. No acute cardiopulmonary abnormality.",
+      "impression_reference": "Normal chest radiograph. No acute cardiopulmonary disease. Cleared from radiographic standpoint for planned surgery.",
+      "urgency": "routine"
+    },
+    "RAD007": {
+      "study_id": "RAD007",
+      "modality": "MG",
+      "body_part": "breast",
+      "indication": "Screening mammogram. 50F, no symptoms, no family history.",
+      "technique": "Standard 2-view digital mammography (CC and MLO views, bilateral)",
+      "patient_id": "RAD_P007",
+      "patient_age": 50,
+      "patient_sex": "F",
+      "clinical_history": "50-year-old female presenting for routine screening mammogram. No palpable mass. No nipple discharge. No family history of breast cancer. Prior mammograms have been negative.",
+      "prior_studies": ["PRIOR_RAD007"],
+      "findings_description": "Breast tissue composition: heterogeneously dense (ACR density C). Right breast: A new 1.2 cm irregular, spiculated mass is identified in the upper outer quadrant at 10 o'clock position, posterior depth. Associated architectural distortion is present. No calcifications. Left breast: No suspicious mass, calcification, or architectural distortion. Axillae: No suspicious lymphadenopathy bilaterally. Comparison: Prior screening mammogram 12 months ago showed no mass in this location.",
+      "impression_reference": "BI-RADS 5 (Highly Suggestive of Malignancy): New 1.2 cm irregular, spiculated mass in the right upper outer quadrant with architectural distortion. Not present on prior exam. Recommend tissue sampling (ultrasound-guided core biopsy). BI-RADS 1 (Negative): Left breast - no abnormality.",
+      "urgency": "urgent"
+    },
+    "RAD008": {
+      "study_id": "RAD008",
+      "modality": "US",
+      "body_part": "thyroid",
+      "indication": "Palpable thyroid nodule. Evaluate.",
+      "technique": "Ultrasound thyroid with Doppler",
+      "patient_id": "RAD_P008",
+      "patient_age": 42,
+      "patient_sex": "F",
+      "clinical_history": "42-year-old female with recently palpated thyroid nodule by PCP. TSH normal. No compressive symptoms. No radiation exposure history.",
+      "prior_studies": [],
+      "findings_description": "Right thyroid lobe: Measures 4.5 x 2.0 x 1.8 cm. Contains a 2.2 x 1.5 x 1.8 cm solid hypoechoic nodule with irregular margins, taller-than-wide shape, and punctate echogenic foci (microcalcifications). Internal vascularity is increased on Doppler. Left thyroid lobe: Measures 4.0 x 1.8 x 1.5 cm. Contains a 0.6 cm benign-appearing cystic nodule. Isthmus: Normal thickness (3mm). No suspicious cervical lymphadenopathy.",
+      "impression_reference": "1. Right thyroid lobe: 2.2 cm solid hypoechoic nodule with irregular margins, microcalcifications, and taller-than-wide shape. ACR TI-RADS 5 (Highly Suspicious). Given size >1.0 cm and TI-RADS 5, FNA biopsy is recommended. 2. Left thyroid: 0.6 cm cystic nodule, benign appearance (TI-RADS 2). No biopsy needed. 3. No suspicious lymphadenopathy.",
+      "urgency": "routine"
+    }
+  },
+  "templates": {
+    "xr_chest": {
+      "template_id": "xr_chest",
+      "modality": "XR",
+      "body_part": "chest",
+      "sections": ["clinical_indication", "technique", "comparison", "findings", "impression"],
+      "checklist": ["Heart size", "Mediastinal contour", "Hila", "Lungs (each lobe)", "Pleural spaces", "Pneumothorax", "Bones/soft tissues", "Lines/tubes if present"]
+    },
+    "ct_head": {
+      "template_id": "ct_head",
+      "modality": "CT",
+      "body_part": "head",
+      "sections": ["clinical_indication", "technique", "comparison", "findings", "impression"],
+      "checklist": ["Gray-white differentiation", "Hemorrhage", "Mass effect/midline shift", "Ventricles", "Extra-axial spaces", "Posterior fossa", "Orbits/sinuses", "Bones"]
+    },
+    "ct_abdomen": {
+      "template_id": "ct_abdomen",
+      "modality": "CT",
+      "body_part": "abdomen",
+      "sections": ["clinical_indication", "technique", "comparison", "findings", "impression"],
+      "checklist": ["Liver", "Gallbladder/biliary", "Pancreas", "Spleen", "Kidneys/adrenals", "GI tract", "Lymph nodes", "Vasculature", "Peritoneum/free fluid", "Bones"]
+    },
+    "mri_brain": {
+      "template_id": "mri_brain",
+      "modality": "MRI",
+      "body_part": "brain",
+      "sections": ["clinical_indication", "technique", "comparison", "findings", "impression"],
+      "checklist": ["Signal characteristics (T1, T2, FLAIR)", "Enhancement pattern", "Diffusion (DWI/ADC)", "Mass effect", "Midline shift", "Ventricles", "Extra-axial spaces", "Vascular flow voids", "Cranial nerves"]
+    },
+    "mg_breast": {
+      "template_id": "mg_breast",
+      "modality": "MG",
+      "body_part": "breast",
+      "sections": ["clinical_indication", "technique", "comparison", "findings", "impression"],
+      "checklist": ["Breast density (ACR A-D)", "Masses (shape, margin, density)", "Calcifications", "Architectural distortion", "Asymmetry", "Axillary lymph nodes", "BI-RADS assessment category"]
+    }
+  },
+  "prior_reports": {
+    "PRIOR_RAD001": {
+      "report_id": "PRIOR_RAD001",
+      "study_id": "RAD001_prior",
+      "date": "2025-08-15",
+      "impression": "Clear lungs bilaterally. Normal heart size. No pleural effusion. No acute cardiopulmonary abnormality.",
+      "key_findings": ["clear lungs", "normal heart size", "no effusion"]
+    },
+    "PRIOR_RAD005": {
+      "report_id": "PRIOR_RAD005",
+      "study_id": "RAD005_prior",
+      "date": "2025-11-01",
+      "impression": "8mm solid nodule in the right upper lobe. No prior comparison available. Recommend 3-month follow-up CT per Fleischner Society guidelines for high-risk patients.",
+      "key_findings": ["8mm RUL solid nodule", "no calcification", "recommend follow-up"]
+    },
+    "PRIOR_RAD007": {
+      "report_id": "PRIOR_RAD007",
+      "study_id": "RAD007_prior",
+      "date": "2025-02-01",
+      "impression": "BI-RADS 1 (Negative) bilateral. No suspicious mass or calcification. Heterogeneously dense breast tissue. Recommend routine annual screening.",
+      "key_findings": ["negative bilateral", "dense tissue", "routine screening"]
+    }
+  },
+  "knowledge_base": {
+    "fleischner": {
+      "topic": "Fleischner Society Guidelines for Incidental Pulmonary Nodules",
+      "content": "Solid nodules in high-risk patients: <6mm: no routine follow-up. 6-8mm: CT at 6-12 months, then consider CT at 18-24 months. >8mm: CT at 3 months, PET/CT, or tissue sampling. Growth: >2mm increase is significant. Doubling time <400 days is suspicious.",
+      "category": "lung_nodule"
+    },
+    "birads": {
+      "topic": "BI-RADS Assessment Categories (Mammography)",
+      "content": "BI-RADS 0: Incomplete. BI-RADS 1: Negative. BI-RADS 2: Benign. BI-RADS 3: Probably Benign (<2% malignancy). BI-RADS 4: Suspicious (4A: 2-10%, 4B: 10-50%, 4C: 50-95%). BI-RADS 5: Highly Suggestive of Malignancy (>95%). BI-RADS 6: Known biopsy-proven malignancy.",
+      "category": "breast"
+    },
+    "tirads": {
+      "topic": "ACR TI-RADS (Thyroid Imaging Reporting and Data System)",
+      "content": "Points: Composition (cystic=0, mixed=1, solid=2), Echogenicity (anechoic=0, hyper/iso=1, hypo=2, very hypo=3), Shape (wider=0, taller=3), Margin (smooth=0, ill-defined=0, lobulated/irregular=2, extra-thyroidal=3), Echogenic foci (none=0, macrocalcification=1, peripheral=2, punctate/micro=3). TR1: ≤2pts benign. TR2: 3pts not suspicious. TR3: 4-6pts mildly suspicious. TR4: 7-9pts moderately suspicious. TR5: ≥10pts highly suspicious.",
+      "category": "thyroid"
+    },
+    "acute_stroke_ct": {
+      "topic": "CT Signs of Acute Ischemic Stroke",
+      "content": "Early signs (0-6 hours): Hyperdense MCA sign (thrombus), loss of insular ribbon (loss of gray-white differentiation in insular cortex), sulcal effacement, loss of basal ganglia definition. ASPECTS score: 10-point system for MCA territory. Alberta Stroke Program Early CT Score. Each region scores 1 point; <7 suggests large infarct with poor outcome.",
+      "category": "neuroradiology"
+    },
+    "pneumonia_cxr": {
+      "topic": "Chest X-ray Findings in Pneumonia",
+      "content": "Lobar pneumonia: Dense consolidation with air bronchograms, confined to one lobe. Bronchopneumonia: Patchy bilateral opacities, often peribronchial. Interstitial: Reticular or reticulonodular pattern. Complications: Parapneumonic effusion, empyema, lung abscess, necrotizing pneumonia.",
+      "category": "chest"
+    }
+  },
+  "generated_reports": []
+}

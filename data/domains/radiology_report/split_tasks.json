@@ -1,0 +1,14 @@
+{
+  "train": [
+    "rad_cxr_pneumonia_001",
+    "rad_ct_stroke_002",
+    "rad_ct_abdomen_003",
+    "rad_ct_lung_nodule_005",
+    "rad_mammo_birads5_007",
+    "rad_us_thyroid_008"
+  ],
+  "test": [
+    "rad_mri_brain_tumor_004",
+    "rad_cxr_normal_006"
+  ]
+}

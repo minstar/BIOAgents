@@ -1,0 +1,1158 @@
+{
+  "patients": {
+    "PSY-001": {
+      "patient_id": "PSY-001",
+      "name": "Sarah Chen",
+      "age": 28,
+      "sex": "F",
+      "chief_complaint": "I can't stop thinking about ending it all",
+      "referral_source": "ED",
+      "psychiatric_history": {
+        "previous_diagnoses": ["Major Depressive Disorder, single episode, moderate"],
+        "previous_hospitalizations": [
+          {
+            "date": "2024-01-15",
+            "facility": "City General Hospital",
+            "reason": "Depressive episode with passive SI",
+            "duration_days": 5
+          }
+        ],
+        "previous_medications": ["Fluoxetine 20mg (discontinued due to sexual side effects)"],
+        "therapy_history": ["CBT (6 sessions, discontinued due to insurance change)"],
+        "suicide_attempt_history": "No prior attempts. Passive SI during 2024 hospitalization."
+      },
+      "current_diagnoses": [
+        {
+          "diagnosis": "Major Depressive Disorder, severe, recurrent",
+          "icd10": "F33.2",
+          "status": "active",
+          "onset_date": "2025-09-01"
+        }
+      ],
+      "medications": [
+        {
+          "drug_name": "Sertraline",
+          "drug_class": "SSRI",
+          "dosage": "50mg",
+          "frequency": "daily",
+          "route": "oral",
+          "start_date": "2025-11-01",
+          "indication": "MDD",
+          "prescriber": "Dr. Patel (PCP)",
+          "side_effects_reported": ["insomnia", "nausea"],
+          "adherence": "fair"
+        }
+      ],
+      "allergies": ["Penicillin (rash)"],
+      "medical_comorbidities": ["Hypothyroidism (levothyroxine 75mcg daily)", "Migraine headaches"],
+      "substance_use": {
+        "alcohol": "social, 2-3 drinks/week",
+        "tobacco": "none",
+        "cannabis": "none",
+        "illicit_drugs": "none",
+        "caffeine": "3-4 cups coffee/day"
+      },
+      "mental_status_exam": {
+        "appearance": "Thin woman appearing stated age, casually dressed, poor hygiene, poor eye contact",
+        "behavior": "Psychomotor retardation, cooperative but withdrawn",
+        "speech": "Low volume, slow rate, monotone",
+        "mood": "Depressed — 'I feel empty inside'",
+        "affect": "Constricted, tearful at times, mood-congruent",
+        "thought_process": "Linear but slowed, ruminating",
+        "thought_content": "Hopelessness, worthlessness, passive suicidal ideation with vague plan (overdose), no homicidal ideation",
+        "perceptions": "No hallucinations, no illusions",
+        "cognition": "Alert and oriented x4, concentration impaired (cannot serial 7s)",
+        "insight": "Poor — minimizes severity of symptoms",
+        "judgment": "Impaired — came to ED only at friend's insistence"
+      },
+      "screening_scores": {
+        "PHQ-9": {
+          "score": 22,
+          "severity": "severe",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Item 9 positive - thoughts of self-harm"]
+        },
+        "C-SSRS": {
+          "score": 3,
+          "severity": "moderate",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Active ideation with plan, no intent"]
+        }
+      },
+      "social_support": "Lives alone, recently divorced, limited social network",
+      "housing_status": "Apartment, stable housing",
+      "employment": "Software engineer, currently on medical leave",
+      "legal_issues": "None",
+      "trauma_history": "Emotional neglect in childhood, recent divorce (6 months ago)",
+      "family_psychiatric_history": "Mother — MDD, treated with SSRIs. Maternal uncle — completed suicide age 42.",
+      "vitals": {
+        "blood_pressure": "118/72",
+        "heart_rate": 68,
+        "respiratory_rate": 16,
+        "temperature": "98.4°F",
+        "weight": "125 lbs",
+        "bmi": 20.8
+      },
+      "correct_diagnosis": "Major Depressive Disorder, severe, recurrent with suicidal ideation",
+      "correct_treatment_plan": [
+        "Increase sertraline to 100mg or switch to alternative SSRI/SNRI",
+        "Safety plan creation",
+        "Weekly psychotherapy (CBT)",
+        "Follow-up in 1 week",
+        "Crisis hotline information",
+        "Consider partial hospitalization if no improvement"
+      ],
+      "suicide_risk_level": "moderate"
+    },
+    "PSY-002": {
+      "patient_id": "PSY-002",
+      "name": "Michael Torres",
+      "age": 45,
+      "sex": "M",
+      "chief_complaint": "I can't control my worrying and I'm having panic attacks again",
+      "referral_source": "PCP",
+      "psychiatric_history": {
+        "previous_diagnoses": ["Generalized Anxiety Disorder", "Panic Disorder"],
+        "previous_hospitalizations": [],
+        "previous_medications": ["Buspirone 15mg BID (partial response)", "Paroxetine 20mg (discontinued due to weight gain)"],
+        "therapy_history": ["CBT (12 sessions, 2023, moderate benefit)"],
+        "suicide_attempt_history": "None"
+      },
+      "current_diagnoses": [
+        {
+          "diagnosis": "Generalized Anxiety Disorder",
+          "icd10": "F41.1",
+          "status": "active",
+          "onset_date": "2020-03-01"
+        },
+        {
+          "diagnosis": "Panic Disorder",
+          "icd10": "F41.0",
+          "status": "active",
+          "onset_date": "2021-06-01"
+        }
+      ],
+      "medications": [
+        {
+          "drug_name": "Alprazolam",
+          "drug_class": "Benzodiazepine",
+          "dosage": "0.5mg",
+          "frequency": "PRN (using 2-3x daily)",
+          "route": "oral",
+          "start_date": "2025-06-01",
+          "indication": "Panic Disorder",
+          "prescriber": "Dr. Kim (PCP)",
+          "side_effects_reported": ["drowsiness"],
+          "adherence": "good"
+        }
+      ],
+      "allergies": ["None known"],
+      "medical_comorbidities": ["Hypertension (lisinopril 10mg daily)", "GERD (omeprazole 20mg daily)"],
+      "substance_use": {
+        "alcohol": "6-8 drinks/week, increasing pattern; AUDIT score 12",
+        "tobacco": "1/2 pack/day x 20 years",
+        "cannabis": "occasional, 1-2x/month",
+        "illicit_drugs": "none",
+        "caffeine": "5-6 cups coffee/day"
+      },
+      "mental_status_exam": {
+        "appearance": "Middle-aged man, neatly dressed, appears anxious, fidgeting",
+        "behavior": "Restless, leg bouncing, cooperative",
+        "speech": "Normal rate, slightly pressured when discussing worries",
+        "mood": "Anxious — 'I feel like something terrible is about to happen'",
+        "affect": "Anxious, tense, reactive",
+        "thought_process": "Linear, ruminative, catastrophizing",
+        "thought_content": "Excessive worry about health, finances, family safety; no suicidal or homicidal ideation",
+        "perceptions": "No hallucinations",
+        "cognition": "Alert and oriented x4, concentration mildly impaired due to anxiety",
+        "insight": "Fair — recognizes anxiety is excessive but feels unable to control it",
+        "judgment": "Fair"
+      },
+      "screening_scores": {
+        "GAD-7": {
+          "score": 18,
+          "severity": "severe",
+          "date_administered": "2026-02-13",
+          "risk_flags": []
+        },
+        "AUDIT": {
+          "score": 12,
+          "severity": "hazardous drinking",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Score >=8 indicates hazardous alcohol use"]
+        },
+        "PHQ-9": {
+          "score": 8,
+          "severity": "mild",
+          "date_administered": "2026-02-13",
+          "risk_flags": []
+        }
+      },
+      "social_support": "Married, two teenage children, supportive wife but marital strain due to anxiety",
+      "housing_status": "Owns home, stable",
+      "employment": "Financial analyst, high-stress job, recent layoff fears",
+      "legal_issues": "None",
+      "trauma_history": "Witnessed father's MI at age 12",
+      "family_psychiatric_history": "Father — Alcohol Use Disorder. Sister — Panic Disorder.",
+      "vitals": {
+        "blood_pressure": "142/88",
+        "heart_rate": 92,
+        "respiratory_rate": 20,
+        "temperature": "98.6°F",
+        "weight": "210 lbs",
+        "bmi": 30.2
+      },
+      "correct_diagnosis": "Generalized Anxiety Disorder, Panic Disorder, Alcohol Use Disorder (mild)",
+      "correct_treatment_plan": [
+        "Taper alprazolam with structured schedule",
+        "Start SSRI (sertraline 50mg) or SNRI (venlafaxine 75mg) for GAD/Panic",
+        "Brief alcohol intervention and motivational interviewing",
+        "Refer to CBT with panic-specific protocol",
+        "Reduce caffeine intake",
+        "Address benzodiazepine-alcohol interaction risk",
+        "Follow-up in 2 weeks"
+      ],
+      "suicide_risk_level": "low"
+    },
+    "PSY-003": {
+      "patient_id": "PSY-003",
+      "name": "Jamal Washington",
+      "age": 22,
+      "sex": "M",
+      "chief_complaint": "My son is hearing voices telling him people are following him",
+      "referral_source": "Mother brought to ED",
+      "psychiatric_history": {
+        "previous_diagnoses": [],
+        "previous_hospitalizations": [],
+        "previous_medications": [],
+        "therapy_history": [],
+        "suicide_attempt_history": "None reported, but patient is guarded and unreliable historian"
+      },
+      "current_diagnoses": [
+        {
+          "diagnosis": "Unspecified Schizophrenia Spectrum Disorder",
+          "icd10": "F29",
+          "status": "active",
+          "onset_date": "2026-01-01"
+        }
+      ],
+      "medications": [],
+      "allergies": ["None known"],
+      "medical_comorbidities": ["None known"],
+      "substance_use": {
+        "alcohol": "occasional binge drinking on weekends",
+        "tobacco": "vapes nicotine daily",
+        "cannabis": "daily use x 2 years, high-potency concentrates",
+        "illicit_drugs": "denies, but urine tox screen pending",
+        "caffeine": "2-3 energy drinks/day"
+      },
+      "mental_status_exam": {
+        "appearance": "Young man, disheveled, wearing hoodie with hood up, avoiding eye contact, malodorous",
+        "behavior": "Guarded, suspicious, looking around room frequently, internally preoccupied",
+        "speech": "Low volume, latent responses, tangential at times",
+        "mood": "Suspicious — 'I don't know why I'm here, they're the ones with the problem'",
+        "affect": "Flat, incongruent (laughing when discussing threatening voices)",
+        "thought_process": "Disorganized, tangential, loose associations",
+        "thought_content": "Paranoid delusions (believes neighbors are surveilling him), persecutory ideation, no clear suicidal ideation but command auditory hallucinations present",
+        "perceptions": "Auditory hallucinations — multiple voices commenting on actions, occasional command hallucinations ('don't trust them')",
+        "cognition": "Alert, oriented to person and place, disoriented to date, attention impaired",
+        "insight": "Poor — denies illness, believes experiences are real",
+        "judgment": "Impaired — stopped attending college, isolating in room for weeks"
+      },
+      "screening_scores": {
+        "PANSS_estimated": {
+          "positive_symptoms": 28,
+          "negative_symptoms": 18,
+          "general_psychopathology": 35,
+          "total": 81,
+          "severity": "moderate-severe",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Command hallucinations present"]
+        }
+      },
+      "social_support": "Lives with mother and younger sister, mother very involved and supportive",
+      "housing_status": "Lives with family, stable",
+      "employment": "College student (withdrew this semester), previously worked part-time retail",
+      "legal_issues": "None",
+      "trauma_history": "Father incarcerated when patient was 10, witnessed domestic violence in childhood",
+      "family_psychiatric_history": "Father — suspected Schizophrenia (never formally diagnosed). Paternal aunt — Schizoaffective Disorder.",
+      "vitals": {
+        "blood_pressure": "130/82",
+        "heart_rate": 88,
+        "respiratory_rate": 18,
+        "temperature": "98.8°F",
+        "weight": "165 lbs",
+        "bmi": 23.1
+      },
+      "correct_diagnosis": "Unspecified Schizophrenia Spectrum Disorder (first episode psychosis)",
+      "correct_treatment_plan": [
+        "Inpatient psychiatric admission for stabilization and safety",
+        "Start low-dose atypical antipsychotic (risperidone 1mg BID or aripiprazole 10mg daily)",
+        "Urine toxicology screen and baseline labs (CBC, CMP, lipid panel, A1c, prolactin, TSH)",
+        "Brain MRI to rule out organic causes",
+        "Cannabis cessation counseling",
+        "Psychoeducation for patient and family",
+        "Coordinate with first-episode psychosis (FEP) program",
+        "Monitor for command hallucinations and suicide risk",
+        "Follow-up within 72 hours of discharge"
+      ],
+      "suicide_risk_level": "moderate"
+    },
+    "PSY-004": {
+      "patient_id": "PSY-004",
+      "name": "Rebecca Martinez",
+      "age": 35,
+      "sex": "F",
+      "chief_complaint": "I don't need to be here, I feel better than ever",
+      "referral_source": "Husband called 911 after patient went on spending spree and was found directing traffic at 3 AM",
+      "psychiatric_history": {
+        "previous_diagnoses": ["Bipolar I Disorder"],
+        "previous_hospitalizations": [
+          {
+            "date": "2022-08-10",
+            "facility": "University Psychiatric Center",
+            "reason": "Manic episode",
+            "duration_days": 10
+          },
+          {
+            "date": "2019-03-22",
+            "facility": "St. Mary's Hospital",
+            "reason": "Depressive episode with SI",
+            "duration_days": 7
+          }
+        ],
+        "previous_medications": ["Lithium 900mg (current, self-discontinued)", "Quetiapine 200mg (discontinued 2023)"],
+        "therapy_history": ["IPSRT (2022-2023, good engagement)"],
+        "suicide_attempt_history": "One attempt in 2019 (overdose on OTC medications during depressive episode)"
+      },
+      "current_diagnoses": [
+        {
+          "diagnosis": "Bipolar I Disorder, current episode manic, severe",
+          "icd10": "F31.13",
+          "status": "active",
+          "onset_date": "2026-01-28"
+        }
+      ],
+      "medications": [
+        {
+          "drug_name": "Lithium",
+          "drug_class": "Mood Stabilizer",
+          "dosage": "900mg",
+          "frequency": "daily (self-discontinued 2 weeks ago)",
+          "route": "oral",
+          "start_date": "2022-09-01",
+          "indication": "Bipolar I Disorder",
+          "prescriber": "Dr. Alvarez (Psychiatrist)",
+          "side_effects_reported": ["weight gain", "tremor", "polyuria"],
+          "adherence": "non-adherent (stopped 2 weeks ago)"
+        }
+      ],
+      "allergies": ["Sulfa drugs (hives)"],
+      "medical_comorbidities": ["Polycystic Ovary Syndrome", "Obesity (BMI 32)"],
+      "substance_use": {
+        "alcohol": "normally none, but drank heavily past 3 days",
+        "tobacco": "none",
+        "cannabis": "none",
+        "illicit_drugs": "none currently, history of cocaine use during prior manic episodes",
+        "caffeine": "multiple energy drinks recently"
+      },
+      "mental_status_exam": {
+        "appearance": "Woman in bright, mismatched clothing, heavy makeup, multiple jewelry pieces, appears energized",
+        "behavior": "Hyperactive, pacing, intrusive, difficulty remaining seated, sexually disinhibited comments",
+        "speech": "Pressured, rapid, loud, difficult to interrupt, rhyming and punning",
+        "mood": "Euphoric — 'I'm on top of the world, I've never felt this good'",
+        "affect": "Expansive, labile (quickly shifts to irritable when challenged)",
+        "thought_process": "Flight of ideas, tangential, loose associations",
+        "thought_content": "Grandiose delusions (believes she has been chosen to lead a new tech company, claims special connections to celebrities), no suicidal ideation, no homicidal ideation",
+        "perceptions": "No hallucinations reported",
+        "cognition": "Alert, oriented x3 (disoriented to date), attention severely impaired, distractible",
+        "insight": "Absent — denies illness, refuses treatment",
+        "judgment": "Severely impaired — spent $15,000 in 3 days, engaging in risky behavior"
+      },
+      "screening_scores": {
+        "YMRS": {
+          "score": 38,
+          "severity": "severe mania",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Grandiose delusions", "Severely impaired judgment"]
+        }
+      },
+      "social_support": "Married with 2 children (ages 5, 8), husband supportive but exhausted",
+      "housing_status": "Owns home with husband, stable when well",
+      "employment": "Marketing director, currently on leave (employer contacted due to inappropriate emails to clients)",
+      "legal_issues": "Pending credit card fraud investigation (unauthorized charges on joint account)",
+      "trauma_history": "None reported",
+      "family_psychiatric_history": "Mother — Bipolar II Disorder. Brother — Major Depressive Disorder.",
+      "vitals": {
+        "blood_pressure": "148/92",
+        "heart_rate": 110,
+        "respiratory_rate": 22,
+        "temperature": "99.1°F",
+        "weight": "185 lbs",
+        "bmi": 32.0
+      },
+      "correct_diagnosis": "Bipolar I Disorder, current episode manic, severe",
+      "correct_treatment_plan": [
+        "Involuntary psychiatric hold if patient refuses voluntary admission",
+        "Restart lithium with level monitoring (target 0.8-1.2 mEq/L)",
+        "Add atypical antipsychotic (olanzapine 10mg or aripiprazole 15mg) for acute mania",
+        "Benzodiazepine PRN for agitation (lorazepam 2mg IM/PO)",
+        "1:1 observation until stabilized",
+        "Baseline labs: lithium level, renal function, thyroid, CBC",
+        "Sleep hygiene measures and low-stimulation environment",
+        "Family meeting with husband to discuss safety and financial safeguards",
+        "Coordinate with outpatient psychiatrist upon discharge"
+      ],
+      "suicide_risk_level": "low-moderate"
+    },
+    "PSY-005": {
+      "patient_id": "PSY-005",
+      "name": "Robert Kim",
+      "age": 67,
+      "sex": "M",
+      "chief_complaint": "My husband keeps getting confused and aggressive",
+      "referral_source": "Wife brought to geriatric psychiatry clinic",
+      "psychiatric_history": {
+        "previous_diagnoses": ["Mild Neurocognitive Disorder (diagnosed 2024)"],
+        "previous_hospitalizations": [],
+        "previous_medications": ["Donepezil 5mg (started 2024)"],
+        "therapy_history": [],
+        "suicide_attempt_history": "None"
+      },
+      "current_diagnoses": [
+        {
+          "diagnosis": "Major Neurocognitive Disorder due to Alzheimer's Disease",
+          "icd10": "F02.81",
+          "status": "active",
+          "onset_date": "2024-06-01"
+        },
+        {
+          "diagnosis": "Behavioral disturbance in dementia",
+          "icd10": "F02.81",
+          "status": "active",
+          "onset_date": "2025-11-01"
+        }
+      ],
+      "medications": [
+        {
+          "drug_name": "Donepezil",
+          "drug_class": "Cholinesterase Inhibitor",
+          "dosage": "10mg",
+          "frequency": "daily at bedtime",
+          "route": "oral",
+          "start_date": "2024-06-15",
+          "indication": "Alzheimer's Disease",
+          "prescriber": "Dr. Lee (Geriatric Psychiatrist)",
+          "side_effects_reported": ["vivid dreams", "nausea initially"],
+          "adherence": "good (wife administers)"
+        },
+        {
+          "drug_name": "Memantine",
+          "drug_class": "NMDA Receptor Antagonist",
+          "dosage": "10mg",
+          "frequency": "BID",
+          "route": "oral",
+          "start_date": "2025-06-01",
+          "indication": "Alzheimer's Disease",
+          "prescriber": "Dr. Lee (Geriatric Psychiatrist)",
+          "side_effects_reported": [],
+          "adherence": "good (wife administers)"
+        }
+      ],
+      "allergies": ["Codeine (nausea/vomiting)"],
+      "medical_comorbidities": ["Type 2 Diabetes Mellitus (metformin 1000mg BID)", "Hypertension (amlodipine 5mg daily)", "Benign Prostatic Hyperplasia", "Osteoarthritis"],
+      "substance_use": {
+        "alcohol": "none currently, social drinker historically",
+        "tobacco": "former smoker, quit 20 years ago",
+        "cannabis": "none",
+        "illicit_drugs": "none",
+        "caffeine": "1 cup tea/day"
+      },
+      "mental_status_exam": {
+        "appearance": "Elderly man, well-groomed (wife assists), appears confused, pleasant initially",
+        "behavior": "Cooperative initially, became agitated and suspicious during cognitive testing, attempted to leave room",
+        "speech": "Normal rate, word-finding difficulties, circumlocutory, confabulating",
+        "mood": "Variable — 'I'm fine' (lacks awareness of deficits)",
+        "affect": "Irritable when challenged, anxious in unfamiliar setting, labile",
+        "thought_process": "Impoverished, perseverative, concrete",
+        "thought_content": "Paranoid ideation (accuses wife of stealing things he has misplaced), no suicidal or homicidal ideation",
+        "perceptions": "Visual misperceptions in low light (sees 'people' in shadows), no formed hallucinations",
+        "cognition": "MMSE=18/30 (impaired orientation, recall, visuospatial, executive function), unable to draw clock correctly",
+        "insight": "Poor — anosognosia, denies memory problems",
+        "judgment": "Impaired — left stove on twice last week, wandered from home"
+      },
+      "screening_scores": {
+        "MMSE": {
+          "score": 18,
+          "severity": "moderate cognitive impairment",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Significant decline from baseline MMSE=24 (2024)"]
+        },
+        "NPI": {
+          "score": 36,
+          "severity": "moderate behavioral disturbance",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Agitation (8)", "Irritability (6)", "Night-time behaviors (6)", "Paranoid delusions (4)"]
+        },
+        "GDS": {
+          "score": 6,
+          "severity": "mild depression (limited reliability in moderate dementia)",
+          "date_administered": "2026-02-13",
+          "risk_flags": []
+        }
+      },
+      "social_support": "Wife (primary caregiver, showing signs of caregiver burnout), two adult children living out of state",
+      "housing_status": "Owns home with wife, home safety assessment needed",
+      "employment": "Retired engineer (retired 2 years ago due to cognitive decline)",
+      "legal_issues": "Power of attorney and advance directives need to be completed",
+      "trauma_history": "None significant",
+      "family_psychiatric_history": "Mother — Alzheimer's Disease (onset age 72). Father — unknown.",
+      "vitals": {
+        "blood_pressure": "138/78",
+        "heart_rate": 72,
+        "respiratory_rate": 16,
+        "temperature": "98.2°F",
+        "weight": "175 lbs",
+        "bmi": 25.8
+      },
+      "correct_diagnosis": "Major Neurocognitive Disorder due to Alzheimer's Disease",
+      "correct_treatment_plan": [
+        "Continue donepezil 10mg and memantine 10mg BID",
+        "Low-dose SSRI (sertraline 25mg) for comorbid depression and irritability",
+        "Non-pharmacological interventions for agitation (structured routine, music therapy, redirection)",
+        "Consider low-dose risperidone (0.25-0.5mg) only if non-pharmacological approaches fail (black box warning discussion)",
+        "Home safety evaluation and wandering prevention measures",
+        "Caregiver support and respite care referral for wife",
+        "Occupational therapy evaluation",
+        "Discuss advance care planning and legal documents",
+        "Follow-up in 4 weeks, sooner if behaviors escalate"
+      ],
+      "suicide_risk_level": "low"
+    },
+    "PSY-006": {
+      "patient_id": "PSY-006",
+      "name": "Amara Johnson",
+      "age": 19,
+      "sex": "F",
+      "chief_complaint": "I can't sleep, I keep having nightmares about what happened",
+      "referral_source": "Campus counseling center",
+      "psychiatric_history": {
+        "previous_diagnoses": ["Adjustment Disorder with anxiety (resolved, 2023)"],
+        "previous_hospitalizations": [],
+        "previous_medications": [],
+        "therapy_history": ["Supportive counseling (6 sessions, 2023, for homesickness/adjustment to college)"],
+        "suicide_attempt_history": "None"
+      },
+      "current_diagnoses": [
+        {
+          "diagnosis": "Post-Traumatic Stress Disorder",
+          "icd10": "F43.10",
+          "status": "active",
+          "onset_date": "2025-08-15"
+        }
+      ],
+      "medications": [],
+      "allergies": ["None known"],
+      "medical_comorbidities": ["Iron deficiency anemia (iron supplements)"],
+      "substance_use": {
+        "alcohol": "increased use since trauma, 4-5 drinks 3-4 nights/week; AUDIT score 8",
+        "tobacco": "none",
+        "cannabis": "1-2x/week to help sleep",
+        "illicit_drugs": "none",
+        "caffeine": "2 cups coffee/day"
+      },
+      "mental_status_exam": {
+        "appearance": "Young woman, casually dressed in oversized clothing, appears fatigued, avoids eye contact",
+        "behavior": "Cooperative but guarded, startles easily (flinched when door closed), hypervigilant (scanning room), sitting near exit",
+        "speech": "Soft, halting, becomes dysregulated when discussing trauma",
+        "mood": "Anxious and sad — 'I don't feel safe anywhere anymore'",
+        "affect": "Restricted, anxious, tearful, dissociative moments (brief staring episodes)",
+        "thought_process": "Linear but avoidant of trauma-related content",
+        "thought_content": "Intrusive memories of sexual assault, self-blame, trust difficulties, no suicidal ideation, no homicidal ideation",
+        "perceptions": "Trauma-related flashbacks (sensory re-experiencing), no hallucinations",
+        "cognition": "Alert and oriented x4, concentration impaired due to hypervigilance and poor sleep",
+        "insight": "Fair — recognizes symptoms are related to trauma but feels hopeless about recovery",
+        "judgment": "Fair — sought help but coping with alcohol"
+      },
+      "screening_scores": {
+        "PCL-5": {
+          "score": 58,
+          "severity": "severe PTSD symptoms",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Severe re-experiencing cluster", "Significant avoidance", "Marked hyperarousal"]
+        },
+        "PHQ-9": {
+          "score": 14,
+          "severity": "moderate",
+          "date_administered": "2026-02-13",
+          "risk_flags": []
+        },
+        "AUDIT": {
+          "score": 8,
+          "severity": "hazardous drinking",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Using alcohol as coping mechanism"]
+        }
+      },
+      "social_support": "College sophomore, some supportive friends, has not told family about assault, campus advocate involved",
+      "housing_status": "College dormitory, requested room change (perpetrator lives in same building)",
+      "employment": "Full-time student, part-time campus library worker",
+      "legal_issues": "Title IX investigation pending, considering pressing criminal charges",
+      "trauma_history": "Sexual assault by acquaintance 6 months ago at campus party. No prior trauma history.",
+      "family_psychiatric_history": "Mother — anxiety (untreated). No other known history.",
+      "vitals": {
+        "blood_pressure": "122/76",
+        "heart_rate": 84,
+        "respiratory_rate": 18,
+        "temperature": "98.4°F",
+        "weight": "130 lbs",
+        "bmi": 21.6
+      },
+      "correct_diagnosis": "Post-Traumatic Stress Disorder",
+      "correct_treatment_plan": [
+        "Trauma-focused psychotherapy (CPT or PE) as first-line treatment",
+        "SSRI if therapy alone insufficient (sertraline 50mg or paroxetine 20mg — FDA-approved for PTSD)",
+        "Prazosin 1mg at bedtime for trauma-related nightmares, titrate as needed",
+        "Brief alcohol intervention and harm reduction counseling",
+        "Sleep hygiene education",
+        "Safety planning for campus environment (room transfer, safety escorts)",
+        "Coordinate with Title IX office and campus victim advocacy",
+        "Psychoeducation about PTSD and normalization of symptoms",
+        "Follow-up in 1 week, then weekly for therapy"
+      ],
+      "suicide_risk_level": "low"
+    },
+    "PSY-007": {
+      "patient_id": "PSY-007",
+      "name": "Ethan Brooks",
+      "age": 16,
+      "sex": "M",
+      "chief_complaint": "He's failing every class and got suspended for fighting",
+      "referral_source": "Parents, school counselor recommendation",
+      "psychiatric_history": {
+        "previous_diagnoses": ["ADHD, Combined type (diagnosed age 8)"],
+        "previous_hospitalizations": [],
+        "previous_medications": [
+          {
+            "drug_name": "Methylphenidate ER",
+            "dosage": "27mg",
+            "duration": "age 8-12",
+            "reason_discontinued": "Appetite suppression, weight loss, patient refused to take"
+          }
+        ],
+        "therapy_history": ["Behavioral therapy (ages 9-10, inconsistent attendance)"],
+        "suicide_attempt_history": "None, but parents report he said 'everyone would be better off without me' once during argument"
+      },
+      "current_diagnoses": [
+        {
+          "diagnosis": "Attention-Deficit/Hyperactivity Disorder, Combined type",
+          "icd10": "F90.2",
+          "status": "active",
+          "onset_date": "2018-03-01"
+        },
+        {
+          "diagnosis": "Oppositional Defiant Disorder",
+          "icd10": "F91.3",
+          "status": "active",
+          "onset_date": "2024-09-01"
+        }
+      ],
+      "medications": [],
+      "allergies": ["None known"],
+      "medical_comorbidities": ["None"],
+      "substance_use": {
+        "alcohol": "denies, parents suspect occasional use at parties",
+        "tobacco": "vapes nicotine occasionally with peers",
+        "cannabis": "denies (parents unsure)",
+        "illicit_drugs": "none reported",
+        "caffeine": "2-3 energy drinks/day"
+      },
+      "mental_status_exam": {
+        "appearance": "Adolescent male, casually dressed, slouching in chair, appears annoyed",
+        "behavior": "Initially oppositional and minimally verbal, warmed up slightly, fidgeting, impulsive interruptions, difficulty staying on topic",
+        "speech": "Normal rate and volume, uses short responses, occasional profanity",
+        "mood": "Irritable — 'I don't care about school, it's stupid'",
+        "affect": "Irritable, defensive, briefly sad when discussing friendships",
+        "thought_process": "Linear but tangential when bored, difficulty maintaining focus on questions",
+        "thought_content": "Frustration with school and parents, feels misunderstood, low self-esteem masked by bravado, no suicidal or homicidal ideation",
+        "perceptions": "No hallucinations",
+        "cognition": "Alert and oriented x4, attention and concentration significantly impaired, unable to complete serial 7s, distractible",
+        "insight": "Poor — externalizes problems ('teachers have it out for me')",
+        "judgment": "Impaired — impulsive decision-making, physical altercation"
+      },
+      "screening_scores": {
+        "Vanderbilt_ADHD_Parent": {
+          "score": "Inattention: 22/27, Hyperactivity-Impulsivity: 19/27",
+          "severity": "significant symptoms in both domains",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["ODD criteria met on performance section"]
+        },
+        "Vanderbilt_ADHD_Teacher": {
+          "score": "Inattention: 24/27, Hyperactivity-Impulsivity: 17/27",
+          "severity": "significant symptoms, particularly inattention",
+          "date_administered": "2026-02-10",
+          "risk_flags": ["Academic performance impaired in all subjects"]
+        },
+        "PHQ-A": {
+          "score": 7,
+          "severity": "mild depressive symptoms",
+          "date_administered": "2026-02-13",
+          "risk_flags": []
+        }
+      },
+      "social_support": "Lives with both parents and younger sister (12), parents frustrated but engaged, few close friends, peer rejection history",
+      "housing_status": "Lives with family, stable",
+      "employment": "High school sophomore, currently suspended",
+      "legal_issues": "School disciplinary hearing pending, no legal charges",
+      "trauma_history": "Bullied in middle school for 2 years",
+      "family_psychiatric_history": "Father — ADHD (unmedicated). Mother — anxiety disorder (treated with SSRI). Paternal grandfather — suspected Conduct Disorder, alcohol problems.",
+      "vitals": {
+        "blood_pressure": "118/70",
+        "heart_rate": 78,
+        "respiratory_rate": 16,
+        "temperature": "98.6°F",
+        "weight": "155 lbs",
+        "bmi": 22.5
+      },
+      "correct_diagnosis": "Attention-Deficit/Hyperactivity Disorder, Combined type; Oppositional Defiant Disorder",
+      "correct_treatment_plan": [
+        "Re-trial stimulant medication with different formulation (lisdexamfetamine 30mg or non-stimulant atomoxetine if family prefers)",
+        "Address prior concerns about appetite (dosing strategies, nutritional counseling)",
+        "Parent management training for ODD behaviors",
+        "Individual therapy (CBT for anger management and social skills)",
+        "School-based accommodations (504 plan or IEP evaluation)",
+        "Family therapy to improve communication and reduce conflict",
+        "Limit energy drink consumption",
+        "Screen for learning disabilities",
+        "Follow-up in 2 weeks after medication initiation"
+      ],
+      "suicide_risk_level": "low"
+    },
+    "PSY-008": {
+      "patient_id": "PSY-008",
+      "name": "Linda O'Brien",
+      "age": 55,
+      "sex": "F",
+      "chief_complaint": "Nothing works for my depression anymore",
+      "referral_source": "Outpatient psychiatrist referral to treatment-resistant depression clinic",
+      "psychiatric_history": {
+        "previous_diagnoses": ["Major Depressive Disorder, recurrent (first episode age 30)"],
+        "previous_hospitalizations": [
+          {
+            "date": "2020-03-15",
+            "facility": "Riverside Psychiatric Hospital",
+            "reason": "Severe depression with SI, medication adjustment",
+            "duration_days": 14
+          },
+          {
+            "date": "2017-11-01",
+            "facility": "Community Mental Health Center",
+            "reason": "Suicidal crisis",
+            "duration_days": 7
+          }
+        ],
+        "previous_medications": [
+          {"drug": "Sertraline", "max_dose": "200mg", "duration": "8 months", "response": "Partial response, then poop-out"},
+          {"drug": "Fluoxetine", "max_dose": "60mg", "duration": "6 months", "response": "No significant improvement"},
+          {"drug": "Citalopram", "max_dose": "40mg", "duration": "4 months", "response": "Intolerable side effects (QTc prolongation concern)"},
+          {"drug": "Bupropion", "max_dose": "450mg", "duration": "5 months", "response": "Mild improvement in energy, inadequate for mood"},
+          {"drug": "Mirtazapine", "max_dose": "45mg", "duration": "3 months", "response": "Excessive sedation and weight gain"}
+        ],
+        "therapy_history": ["CBT (2 courses, moderate benefit initially)", "Psychodynamic therapy (ongoing, 2 years)"],
+        "suicide_attempt_history": "One attempt in 2017 (medication overdose), hospitalized in ICU for 3 days"
+      },
+      "current_diagnoses": [
+        {
+          "diagnosis": "Major Depressive Disorder, severe, recurrent, treatment-resistant",
+          "icd10": "F33.2",
+          "status": "active",
+          "onset_date": "2001-01-01"
+        }
+      ],
+      "medications": [
+        {
+          "drug_name": "Venlafaxine XR",
+          "drug_class": "SNRI",
+          "dosage": "225mg",
+          "frequency": "daily",
+          "route": "oral",
+          "start_date": "2025-03-01",
+          "indication": "MDD",
+          "prescriber": "Dr. Singh (Psychiatrist)",
+          "side_effects_reported": ["diaphoresis", "elevated blood pressure", "nausea"],
+          "adherence": "good"
+        },
+        {
+          "drug_name": "Aripiprazole",
+          "drug_class": "Atypical Antipsychotic (augmentation)",
+          "dosage": "5mg",
+          "frequency": "daily",
+          "route": "oral",
+          "start_date": "2025-08-01",
+          "indication": "Augmentation for TRD",
+          "prescriber": "Dr. Singh (Psychiatrist)",
+          "side_effects_reported": ["akathisia"],
+          "adherence": "good"
+        }
+      ],
+      "allergies": ["Lithium (severe tremor, nephrogenic diabetes insipidus)"],
+      "medical_comorbidities": ["Hypertension (venlafaxine-related)", "Chronic pain (fibromyalgia)", "Hypothyroidism (levothyroxine 100mcg)", "Obesity (BMI 34)"],
+      "substance_use": {
+        "alcohol": "none (sober 5 years, history of AUD in remission)",
+        "tobacco": "none",
+        "cannabis": "none",
+        "illicit_drugs": "none",
+        "caffeine": "1 cup coffee/day"
+      },
+      "mental_status_exam": {
+        "appearance": "Middle-aged woman, overweight, neatly dressed but appears exhausted, dark circles under eyes",
+        "behavior": "Cooperative, slow to respond, low energy, tearful intermittently",
+        "speech": "Low volume, slow rate, monotone, laconic",
+        "mood": "Depressed — 'I've given up hope that anything will help'",
+        "affect": "Blunted, constricted range, mood-congruent, pervasive sadness",
+        "thought_process": "Linear, ruminative, perseverative on failures of treatment",
+        "thought_content": "Hopelessness about treatment, passive SI ('I wish I wouldn't wake up'), no active plan or intent, no homicidal ideation",
+        "perceptions": "No hallucinations",
+        "cognition": "Alert and oriented x4, pseudodementia symptoms (poor concentration, subjective memory complaints, slow processing)",
+        "insight": "Good — understands illness and treatment-resistant nature",
+        "judgment": "Fair — compliant with treatment, maintains follow-up"
+      },
+      "screening_scores": {
+        "PHQ-9": {
+          "score": 19,
+          "severity": "moderately severe",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Item 9 positive — passive thoughts of death"]
+        },
+        "C-SSRS": {
+          "score": 2,
+          "severity": "low-moderate",
+          "date_administered": "2026-02-13",
+          "risk_flags": ["Passive ideation without plan"]
+        },
+        "MADRS": {
+          "score": 32,
+          "severity": "severe",
+          "date_administered": "2026-02-13",
+          "risk_flags": []
+        }
+      },
+      "social_support": "Married, supportive husband, two adult children (limited contact), attends support group",
+      "housing_status": "Owns home with husband, stable",
+      "employment": "Disability (former high school teacher, on disability for 3 years)",
+      "legal_issues": "None",
+      "trauma_history": "Childhood emotional abuse by father, loss of parent (mother died when patient was 25)",
+      "family_psychiatric_history": "Father — Alcohol Use Disorder, suspected MDD. Mother — MDD (treated). Sister — Bipolar II Disorder.",
+      "vitals": {
+        "blood_pressure": "142/88",
+        "heart_rate": 76,
+        "respiratory_rate": 16,
+        "temperature": "98.4°F",
+        "weight": "198 lbs",
+        "bmi": 34.0
+      },
+      "correct_diagnosis": "Major Depressive Disorder, severe, treatment-resistant",
+      "correct_treatment_plan": [
+        "Refer for ketamine/esketamine (Spravato) evaluation",
+        "Discuss ECT as evidence-based option for TRD",
+        "Consider TMS (transcranial magnetic stimulation) if patient prefers non-invasive",
+        "Optimize current regimen: consider switching augmentation from aripiprazole to thyroid augmentation (T3) or lithium (if tolerable formulation found)",
+        "Continue psychodynamic therapy, consider adding CBASP (Cognitive Behavioral Analysis System of Psychotherapy)",
+        "Address fibromyalgia pain as contributing factor (duloxetine switch consideration)",
+        "Genetic pharmacogenomic testing if not yet done",
+        "Safety plan review and update",
+        "Follow-up in 1-2 weeks during treatment transition"
+      ],
+      "suicide_risk_level": "moderate"
+    }
+  },
+  "screening_templates": {
+    "PHQ-9": {
+      "name": "Patient Health Questionnaire-9",
+      "domain": "Depression",
+      "items": 9,
+      "scoring": {
+        "0-4": "minimal",
+        "5-9": "mild",
+        "10-14": "moderate",
+        "15-19": "moderately severe",
+        "20-27": "severe"
+      },
+      "critical_items": ["Item 9: Thoughts of self-harm or suicide"],
+      "administration_time": "5 minutes",
+      "frequency": "Every visit or every 2 weeks"
+    },
+    "GAD-7": {
+      "name": "Generalized Anxiety Disorder-7",
+      "domain": "Anxiety",
+      "items": 7,
+      "scoring": {
+        "0-4": "minimal",
+        "5-9": "mild",
+        "10-14": "moderate",
+        "15-21": "severe"
+      },
+      "critical_items": [],
+      "administration_time": "3 minutes",
+      "frequency": "Every visit"
+    },
+    "C-SSRS": {
+      "name": "Columbia Suicide Severity Rating Scale",
+      "domain": "Suicide Risk",
+      "items": 6,
+      "scoring": {
+        "1": "Wish to be dead",
+        "2": "Non-specific active suicidal thoughts",
+        "3": "Active SI with any methods (not plan) without intent to act",
+        "4": "Active SI with some intent to act, without specific plan",
+        "5": "Active SI with specific plan and intent"
+      },
+      "critical_items": ["Any positive response requires clinical assessment"],
+      "administration_time": "5-10 minutes",
+      "frequency": "Every visit for at-risk patients"
+    },
+    "PCL-5": {
+      "name": "PTSD Checklist for DSM-5",
+      "domain": "PTSD",
+      "items": 20,
+      "scoring": {
+        "0-31": "below threshold",
+        "32-80": "probable PTSD (cutoff 31-33)"
+      },
+      "critical_items": [],
+      "administration_time": "5-10 minutes",
+      "frequency": "Baseline and every 2-4 weeks during treatment"
+    },
+    "YMRS": {
+      "name": "Young Mania Rating Scale",
+      "domain": "Mania",
+      "items": 11,
+      "scoring": {
+        "0-12": "minimal",
+        "13-19": "mild",
+        "20-25": "moderate",
+        "26-37": "severe",
+        "38-60": "very severe"
+      },
+      "critical_items": ["Items 8 (thought content) and 9 (disruptive-aggressive behavior)"],
+      "administration_time": "15-30 minutes (clinician-rated)",
+      "frequency": "Baseline, weekly during acute mania"
+    },
+    "MMSE": {
+      "name": "Mini-Mental State Examination",
+      "domain": "Cognition",
+      "items": 11,
+      "scoring": {
+        "24-30": "normal",
+        "19-23": "mild impairment",
+        "10-18": "moderate impairment",
+        "0-9": "severe impairment"
+      },
+      "critical_items": [],
+      "administration_time": "10 minutes",
+      "frequency": "Every 6 months for dementia patients"
+    },
+    "AUDIT": {
+      "name": "Alcohol Use Disorders Identification Test",
+      "domain": "Alcohol Use",
+      "items": 10,
+      "scoring": {
+        "0-7": "low risk",
+        "8-15": "hazardous drinking",
+        "16-19": "harmful drinking",
+        "20-40": "possible dependence"
+      },
+      "critical_items": [],
+      "administration_time": "3 minutes",
+      "frequency": "Annually or when substance use suspected"
+    }
+  },
+  "medication_formulary": {
+    "SSRIs": {
+      "drugs": [
+        {"name": "Sertraline", "brand": "Zoloft", "dose_range": "50-200mg", "indications": ["MDD", "GAD", "PTSD", "OCD", "Panic Disorder", "Social Anxiety"], "common_side_effects": ["nausea", "diarrhea", "insomnia", "sexual dysfunction"], "black_box_warning": "Increased suicidality in patients under 25"},
+        {"name": "Fluoxetine", "brand": "Prozac", "dose_range": "20-80mg", "indications": ["MDD", "OCD", "Panic Disorder", "Bulimia Nervosa"], "common_side_effects": ["nausea", "anxiety", "insomnia", "sexual dysfunction"], "black_box_warning": "Increased suicidality in patients under 25"},
+        {"name": "Escitalopram", "brand": "Lexapro", "dose_range": "10-20mg", "indications": ["MDD", "GAD"], "common_side_effects": ["nausea", "headache", "insomnia", "sexual dysfunction"], "black_box_warning": "Increased suicidality in patients under 25"},
+        {"name": "Paroxetine", "brand": "Paxil", "dose_range": "20-50mg", "indications": ["MDD", "GAD", "PTSD", "Panic Disorder", "Social Anxiety", "OCD"], "common_side_effects": ["weight gain", "sedation", "sexual dysfunction", "discontinuation syndrome"], "black_box_warning": "Increased suicidality in patients under 25; pregnancy category D"},
+        {"name": "Citalopram", "brand": "Celexa", "dose_range": "20-40mg", "indications": ["MDD"], "common_side_effects": ["nausea", "drowsiness", "dry mouth"], "black_box_warning": "Increased suicidality in patients under 25; QTc prolongation at doses >40mg"}
+      ]
+    },
+    "SNRIs": {
+      "drugs": [
+        {"name": "Venlafaxine XR", "brand": "Effexor XR", "dose_range": "75-225mg", "indications": ["MDD", "GAD", "Social Anxiety", "Panic Disorder"], "common_side_effects": ["nausea", "hypertension", "diaphoresis", "discontinuation syndrome"], "black_box_warning": "Increased suicidality in patients under 25"},
+        {"name": "Duloxetine", "brand": "Cymbalta", "dose_range": "60-120mg", "indications": ["MDD", "GAD", "Fibromyalgia", "Chronic Pain"], "common_side_effects": ["nausea", "dry mouth", "fatigue", "constipation"], "black_box_warning": "Increased suicidality in patients under 25"}
+      ]
+    },
+    "atypical_antipsychotics": {
+      "drugs": [
+        {"name": "Risperidone", "brand": "Risperdal", "dose_range": "0.5-6mg", "indications": ["Schizophrenia", "Bipolar Mania", "Irritability in Autism"], "common_side_effects": ["weight gain", "EPS", "prolactin elevation", "sedation"]},
+        {"name": "Olanzapine", "brand": "Zyprexa", "dose_range": "5-20mg", "indications": ["Schizophrenia", "Bipolar Mania", "TRD (with fluoxetine)"], "common_side_effects": ["significant weight gain", "metabolic syndrome", "sedation"]},
+        {"name": "Aripiprazole", "brand": "Abilify", "dose_range": "2-30mg", "indications": ["Schizophrenia", "Bipolar I", "MDD augmentation", "Irritability in Autism"], "common_side_effects": ["akathisia", "insomnia", "restlessness", "weight neutral"]},
+        {"name": "Quetiapine", "brand": "Seroquel", "dose_range": "50-800mg", "indications": ["Schizophrenia", "Bipolar Disorder", "MDD augmentation"], "common_side_effects": ["sedation", "weight gain", "metabolic effects", "orthostatic hypotension"]}
+      ]
+    },
+    "mood_stabilizers": {
+      "drugs": [
+        {"name": "Lithium", "brand": "Lithobid", "dose_range": "600-1800mg", "therapeutic_level": "0.6-1.2 mEq/L", "indications": ["Bipolar I Disorder", "MDD augmentation"], "common_side_effects": ["tremor", "polyuria", "weight gain", "thyroid dysfunction", "renal impairment"], "monitoring": "Lithium levels, renal function, thyroid every 3-6 months"},
+        {"name": "Valproate", "brand": "Depakote", "dose_range": "750-2000mg", "therapeutic_level": "50-125 mcg/mL", "indications": ["Bipolar Mania", "Seizure Disorder"], "common_side_effects": ["weight gain", "tremor", "hepatotoxicity", "teratogenicity"], "monitoring": "Valproate levels, LFTs, CBC every 3-6 months"},
+        {"name": "Lamotrigine", "brand": "Lamictal", "dose_range": "100-400mg", "indications": ["Bipolar Depression", "Bipolar Maintenance"], "common_side_effects": ["rash (SJS risk)", "headache", "dizziness"], "monitoring": "Slow titration required, watch for rash"}
+      ]
+    },
+    "benzodiazepines": {
+      "drugs": [
+        {"name": "Alprazolam", "brand": "Xanax", "dose_range": "0.25-4mg/day", "indications": ["Panic Disorder", "GAD (short-term)"], "common_side_effects": ["sedation", "dependence", "rebound anxiety"], "warnings": "High abuse potential, avoid with opioids/alcohol, taper slowly"},
+        {"name": "Lorazepam", "brand": "Ativan", "dose_range": "0.5-6mg/day", "indications": ["Anxiety", "Agitation", "Alcohol Withdrawal", "Catatonia"], "common_side_effects": ["sedation", "dependence"], "warnings": "Use short-term, taper protocol required"},
+        {"name": "Clonazepam", "brand": "Klonopin", "dose_range": "0.5-4mg/day", "indications": ["Panic Disorder", "Seizure Disorder"], "common_side_effects": ["sedation", "cognitive impairment", "dependence"], "warnings": "Long half-life, taper slowly"}
+      ]
+    },
+    "stimulants": {
+      "drugs": [
+        {"name": "Methylphenidate ER", "brand": "Concerta", "dose_range": "18-72mg", "indications": ["ADHD"], "common_side_effects": ["appetite suppression", "insomnia", "tachycardia", "growth suppression"], "monitoring": "Height, weight, HR, BP every visit"},
+        {"name": "Lisdexamfetamine", "brand": "Vyvanse", "dose_range": "30-70mg", "indications": ["ADHD", "Binge Eating Disorder"], "common_side_effects": ["appetite suppression", "insomnia", "dry mouth", "anxiety"], "monitoring": "Height, weight, HR, BP every visit"},
+        {"name": "Atomoxetine", "brand": "Strattera", "dose_range": "40-100mg", "indications": ["ADHD (non-stimulant)"], "common_side_effects": ["nausea", "decreased appetite", "fatigue", "mood changes"], "monitoring": "LFTs if symptoms of hepatotoxicity"}
+      ]
+    }
+  },
+  "treatment_guidelines": {
+    "mdd": {
+      "condition": "Major Depressive Disorder",
+      "first_line": [
+        "SSRI monotherapy (sertraline, escitalopram, or fluoxetine)",
+        "CBT or IPT psychotherapy",
+        "Combined medication + psychotherapy for moderate-severe"
+      ],
+      "second_line": [
+        "Switch SSRI or try SNRI (venlafaxine, duloxetine)",
+        "Augmentation with aripiprazole or bupropion",
+        "Lithium augmentation"
+      ],
+      "third_line": [
+        "TCA (nortriptyline, amitriptyline)",
+        "MAOI (phenelzine, tranylcypromine)",
+        "ECT for severe/treatment-resistant",
+        "Ketamine/esketamine (Spravato)",
+        "TMS (transcranial magnetic stimulation)"
+      ],
+      "special_considerations": {
+        "suicidal_ideation": "Safety plan, frequent follow-up, consider hospitalization if acute risk, avoid prescribing lethal quantities",
+        "pregnancy": "Sertraline preferred; avoid paroxetine (teratogenic); ECT is safe in pregnancy",
+        "elderly": "Start low, go slow; avoid TCAs (anticholinergic burden); monitor for hyponatremia with SSRIs",
+        "pediatric": "Fluoxetine first-line (FDA-approved age 8+); close monitoring for suicidality in first weeks; combined with CBT",
+        "treatment_resistant": "Defined as failure of ≥2 adequate antidepressant trials; consider augmentation strategies, ECT, ketamine/esketamine, or TMS"
+      }
+    },
+    "gad": {
+      "condition": "Generalized Anxiety Disorder",
+      "first_line": [
+        "SSRI (sertraline, escitalopram) or SNRI (venlafaxine, duloxetine)",
+        "CBT for anxiety",
+        "Combined medication + CBT"
+      ],
+      "second_line": [
+        "Buspirone",
+        "Pregabalin (where available)",
+        "Hydroxyzine (short-term)"
+      ],
+      "third_line": [
+        "Benzodiazepines (short-term only, avoid in substance use history)",
+        "Quetiapine low-dose"
+      ],
+      "special_considerations": {
+        "substance_use_comorbidity": "Avoid benzodiazepines; SSRIs/SNRIs are first-line; address substance use concurrently",
+        "panic_comorbidity": "SSRIs effective for both; start at lower dose to avoid initial activation",
+        "elderly": "Start low, go slow; buspirone well-tolerated; avoid benzodiazepines (fall risk)"
+      }
+    },
+    "ptsd": {
+      "condition": "Post-Traumatic Stress Disorder",
+      "first_line": [
+        "Trauma-focused CBT (CPT or PE)",
+        "EMDR",
+        "SSRI: sertraline or paroxetine (FDA-approved for PTSD)"
+      ],
+      "second_line": [
+        "SNRI (venlafaxine)",
+        "Prazosin for nightmares",
+        "Combination therapy (SSRI + trauma-focused psychotherapy)"
+      ],
+      "third_line": [
+        "Atypical antipsychotics (quetiapine, risperidone) for treatment-resistant cases",
+        "Topiramate"
+      ],
+      "special_considerations": {
+        "substance_use_comorbidity": "Integrated treatment for PTSD and SUD; avoid benzodiazepines; consider naltrexone for comorbid AUD",
+        "military_sexual_trauma": "VA resources; CPT and PE have strongest evidence base",
+        "complex_ptsd": "May need longer treatment course; phase-based approach (stabilization, processing, integration)",
+        "acute_trauma": "Psychological first aid within first month; avoid benzodiazepines; monitor for development of PTSD symptoms"
+      }
+    },
+    "bipolar": {
+      "condition": "Bipolar Disorder",
+      "first_line": [
+        "Acute mania: lithium, valproate, or atypical antipsychotic (olanzapine, risperidone, aripiprazole, quetiapine)",
+        "Acute bipolar depression: quetiapine, lurasidone, or lamotrigine",
+        "Maintenance: lithium or lamotrigine"
+      ],
+      "second_line": [
+        "Combination mood stabilizer + atypical antipsychotic",
+        "Carbamazepine for mania",
+        "ECT for severe mania or depression unresponsive to medications"
+      ],
+      "third_line": [
+        "Clozapine for treatment-resistant cases",
+        "Combination of multiple mood stabilizers"
+      ],
+      "special_considerations": {
+        "medication_nonadherence": "Most common cause of relapse; psychoeducation, long-acting injectables, family involvement",
+        "rapid_cycling": "Avoid antidepressants; optimize mood stabilizer; valproate or lamotrigine may be preferred",
+        "pregnancy": "Avoid valproate and carbamazepine; lamotrigine relatively safer; lithium with careful monitoring; ECT if needed",
+        "mixed_features": "Avoid antidepressant monotherapy; atypical antipsychotics or valproate preferred"
+      }
+    },
+    "schizophrenia": {
+      "condition": "Schizophrenia Spectrum Disorders",
+      "first_line": [
+        "Atypical antipsychotic monotherapy (risperidone, aripiprazole, paliperidone, or olanzapine)",
+        "First-episode psychosis: lower doses needed, better response rates"
+      ],
+      "second_line": [
+        "Switch to different atypical antipsychotic",
+        "Long-acting injectable antipsychotic for adherence issues",
+        "Clozapine for treatment-resistant schizophrenia (after failure of 2 adequate antipsychotic trials)"
+      ],
+      "third_line": [
+        "Clozapine augmentation (with another antipsychotic or mood stabilizer)",
+        "ECT augmentation"
+      ],
+      "special_considerations": {
+        "first_episode_psychosis": "Lower doses needed; coordinated specialty care (CSC) programs; high priority for early intervention; rule out substance-induced psychosis and medical causes",
+        "substance_use": "Common comorbidity; integrated dual-diagnosis treatment; clozapine may reduce substance use; avoid benzodiazepines",
+        "negative_symptoms": "Atypical antipsychotics may be modestly better; consider cariprazine; psychosocial interventions (social skills training, supported employment)",
+        "metabolic_monitoring": "Weight, BMI, waist circumference, fasting glucose, lipid panel at baseline and regularly; clozapine requires ANC monitoring"
+      }
+    },
+    "adhd": {
+      "condition": "Attention-Deficit/Hyperactivity Disorder",
+      "first_line": [
+        "Children/Adolescents: Stimulant medication (methylphenidate or amphetamine-based) + behavioral therapy",
+        "Adults: Stimulant medication (first-line) or atomoxetine"
+      ],
+      "second_line": [
+        "Non-stimulant: atomoxetine, guanfacine ER, clonidine ER",
+        "Extended-release formulations preferred over immediate-release"
+      ],
+      "third_line": [
+        "Bupropion (off-label)",
+        "Modafinil (off-label)",
+        "Combination stimulant + non-stimulant"
+      ],
+      "special_considerations": {
+        "comorbid_odd_cd": "Address behavioral concerns with parent management training; stimulants may improve ODD symptoms indirectly; avoid stimulants if active substance abuse",
+        "substance_use_risk": "Long-acting formulations preferred (lower abuse potential); lisdexamfetamine has prodrug mechanism; non-stimulants for high-risk patients",
+        "anxiety_comorbidity": "Atomoxetine may address both; if using stimulant, start low; concurrent SSRI may be needed",
+        "tic_disorder_comorbidity": "Stimulants generally safe; alpha-agonists (guanfacine, clonidine) may treat both; monitor tic severity",
+        "appetite_and_growth": "Drug holidays, nutritional strategies, monitor height and weight; consider appetite-sparing formulations"
+      }
+    }
+  }
+}

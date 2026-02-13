@@ -1,0 +1,37 @@
+{
+  "train": [
+    "vdx_CT_chest_solid_028",
+    "vdx_chest_xray_simple_002",
+    "vdx_chest_xray_moderate_005",
+    "vdx_fundoscopy_NPDR_mild_019",
+    "vdx_chest_xray_severe_006",
+    "vdx_dermoscopy_melanoma_024",
+    "vdx_MRI_brain_multiple_sclerosis_014",
+    "vdx_MRI_brain_ADEM_015",
+    "vdx_CT_head_epidural_010",
+    "vdx_CT_abdomen_complete_013",
+    "vdx_chest_xray_mild_004",
+    "vdx_dermoscopy_benign_nevus_022",
+    "vdx_ultrasound_cholecystitis_031",
+    "vdx_fundoscopy_PDR_021",
+    "vdx_CT_chest_part_solid_029",
+    "vdx_chest_xray_bilateral_008",
+    "vdx_chest_xray_small_003",
+    "vdx_ultrasound_asymptomatic_030",
+    "vdx_mammography_suspicious_017",
+    "vdx_chest_xray_tension_001",
+    "vdx_mammography_malignant_018"
+  ],
+  "test": [
+    "vdx_echocardiogram_mitral_regurgitation_025",
+    "vdx_dermoscopy_atypical_023",
+    "vdx_fundoscopy_NPDR_moderate_020",
+    "vdx_CT_chest_ground_glass_027",
+    "vdx_CT_head_subarachnoid_011",
+    "vdx_CT_head_subdural_009",
+    "vdx_echocardiogram_aortic_stenosis_026",
+    "vdx_CT_abdomen_partial_012",
+    "vdx_chest_xray_unilateral_007",
+    "vdx_mammography_benign_016"
+  ]
+}

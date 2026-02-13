@@ -1,0 +1,2260 @@
+{
+  "images": {
+    "IMG001": {
+      "image_id": "IMG001",
+      "modality": "xray",
+      "body_part": "chest",
+      "view": "PA",
+      "description": "PA chest radiograph of a 58-year-old male with cough and fever",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG002": {
+      "image_id": "IMG002",
+      "modality": "ct",
+      "body_part": "brain",
+      "view": "axial",
+      "description": "Non-contrast CT head of a 72-year-old female with acute onset left-sided weakness",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG003": {
+      "image_id": "IMG003",
+      "modality": "pathology",
+      "body_part": "lung",
+      "view": "microscopy",
+      "description": "H&E stained lung tissue biopsy at 40x magnification showing abnormal cellular architecture",
+      "image_path": null,
+      "source_dataset": "PathVQA"
+    },
+    "IMG004": {
+      "image_id": "IMG004",
+      "modality": "xray",
+      "body_part": "abdomen",
+      "view": "AP",
+      "description": "Supine AP abdominal radiograph of a 3-day-old neonate with bilious vomiting",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG005": {
+      "image_id": "IMG005",
+      "modality": "dermoscopy",
+      "body_part": "skin",
+      "view": "dermoscopy",
+      "description": "Dermoscopic image of a pigmented lesion on the back of a 45-year-old male",
+      "image_path": null,
+      "source_dataset": "SLAKE"
+    },
+    "IMG006": {
+      "image_id": "IMG006",
+      "modality": "fundoscopy",
+      "body_part": "eye",
+      "view": "fundus",
+      "description": "Fundus photograph of the right eye of a 55-year-old diabetic patient",
+      "image_path": null,
+      "source_dataset": "VQA-Med-2021"
+    },
+    "IMG007": {
+      "image_id": "IMG007",
+      "modality": "mri",
+      "body_part": "brain",
+      "view": "T2-weighted axial",
+      "description": "T2-weighted axial MRI of the brain of a 35-year-old female with visual disturbances",
+      "image_path": null,
+      "source_dataset": "PMC-VQA"
+    },
+    "IMG008": {
+      "image_id": "IMG008",
+      "modality": "xray",
+      "body_part": "chest",
+      "view": "lateral",
+      "description": "Lateral chest radiograph of a 65-year-old male with progressive dyspnea",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG009": {
+      "image_id": "IMG009",
+      "modality": "ct",
+      "body_part": "abdomen",
+      "view": "axial with contrast",
+      "description": "Contrast-enhanced axial CT abdomen of a 50-year-old female with right upper quadrant pain",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG010": {
+      "image_id": "IMG010",
+      "modality": "pathology",
+      "body_part": "breast",
+      "view": "microscopy",
+      "description": "H&E stained breast tissue biopsy showing ductal structures with cellular proliferation",
+      "image_path": null,
+      "source_dataset": "PathVQA"
+    },
+    "IMG011": {
+      "image_id": "IMG011",
+      "modality": "ct",
+      "body_part": "head",
+      "view": "axial",
+      "description": "Non-contrast CT head of an 84-year-old male with sudden severe headache, evaluate for subarachnoid hemorrhage",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG012": {
+      "image_id": "IMG012",
+      "modality": "ct",
+      "body_part": "abdomen",
+      "view": "axial with contrast",
+      "description": "Contrast-enhanced CT abdomen of a 19-year-old female with abdominal pain and vomiting, evaluate for bowel obstruction",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG013": {
+      "image_id": "IMG013",
+      "modality": "ct",
+      "body_part": "abdomen",
+      "view": "axial with contrast",
+      "description": "Contrast-enhanced CT abdomen of an 82-year-old female with severe abdominal distension and obstipation",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG014": {
+      "image_id": "IMG014",
+      "modality": "mri",
+      "body_part": "brain",
+      "view": "T2-weighted axial",
+      "description": "T2-weighted axial MRI brain of a 36-year-old female with visual disturbances and limb paresthesias suggesting demyelination",
+      "image_path": null,
+      "source_dataset": "PMC-VQA"
+    },
+    "IMG015": {
+      "image_id": "IMG015",
+      "modality": "mri",
+      "body_part": "brain",
+      "view": "T2-FLAIR axial",
+      "description": "T2-FLAIR axial MRI brain of a 34-year-old female with acute neurological deficits following recent viral illness",
+      "image_path": null,
+      "source_dataset": "PMC-VQA"
+    },
+    "IMG016": {
+      "image_id": "IMG016",
+      "modality": "mammography",
+      "body_part": "breast",
+      "view": "MLO",
+      "description": "Mammographic MLO view of a 65-year-old female with palpable breast lump during routine screening",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG017": {
+      "image_id": "IMG017",
+      "modality": "mammography",
+      "body_part": "breast",
+      "view": "CC",
+      "description": "Mammographic CC view of a 40-year-old female with screening-detected suspicious abnormality",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG018": {
+      "image_id": "IMG018",
+      "modality": "mammography",
+      "body_part": "breast",
+      "view": "MLO",
+      "description": "Mammographic MLO view of a 31-year-old female with rapidly growing breast mass",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG019": {
+      "image_id": "IMG019",
+      "modality": "fundoscopy",
+      "body_part": "eye",
+      "view": "fundus",
+      "description": "Fundus photograph of the right eye of an 85-year-old diabetic female for routine screening",
+      "image_path": null,
+      "source_dataset": "VQA-Med-2021"
+    },
+    "IMG020": {
+      "image_id": "IMG020",
+      "modality": "fundoscopy",
+      "body_part": "eye",
+      "view": "fundus",
+      "description": "Fundus photograph of the left eye of a 4-year-old male for diabetic retinopathy screening",
+      "image_path": null,
+      "source_dataset": "VQA-Med-2021"
+    },
+    "IMG021": {
+      "image_id": "IMG021",
+      "modality": "fundoscopy",
+      "body_part": "eye",
+      "view": "fundus",
+      "description": "Fundus photograph of the right eye of a 30-year-old diabetic female with blurred vision",
+      "image_path": null,
+      "source_dataset": "VQA-Med-2021"
+    },
+    "IMG022": {
+      "image_id": "IMG022",
+      "modality": "dermoscopy",
+      "body_part": "skin",
+      "view": "dermoscopy",
+      "description": "Dermoscopic image of a pigmented lesion on an 84-year-old male for lesion evaluation",
+      "image_path": null,
+      "source_dataset": "SLAKE"
+    },
+    "IMG023": {
+      "image_id": "IMG023",
+      "modality": "dermoscopy",
+      "body_part": "skin",
+      "view": "dermoscopy",
+      "description": "Dermoscopic image of a pigmented lesion on a 9-year-old male with atypical features",
+      "image_path": null,
+      "source_dataset": "SLAKE"
+    },
+    "IMG024": {
+      "image_id": "IMG024",
+      "modality": "dermoscopy",
+      "body_part": "skin",
+      "view": "dermoscopy",
+      "description": "Dermoscopic image of a suspicious pigmented lesion on the limb of a 43-year-old female",
+      "image_path": null,
+      "source_dataset": "SLAKE"
+    },
+    "IMG025": {
+      "image_id": "IMG025",
+      "modality": "echocardiogram",
+      "body_part": "heart",
+      "view": "apical four-chamber",
+      "description": "Echocardiogram apical four-chamber view of a 75-year-old male with progressive dyspnea and systolic murmur",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG026": {
+      "image_id": "IMG026",
+      "modality": "echocardiogram",
+      "body_part": "heart",
+      "view": "parasternal long axis",
+      "description": "Echocardiogram parasternal long axis view of a 47-year-old female with syncope and systolic murmur",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG027": {
+      "image_id": "IMG027",
+      "modality": "ct",
+      "body_part": "chest",
+      "view": "axial",
+      "description": "CT chest axial view of a 79-year-old male with incidental lung finding showing ground glass nodule",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG028": {
+      "image_id": "IMG028",
+      "modality": "ct",
+      "body_part": "chest",
+      "view": "axial",
+      "description": "CT chest axial view of a 59-year-old female with persistent cough showing solid pulmonary nodule",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG029": {
+      "image_id": "IMG029",
+      "modality": "ct",
+      "body_part": "chest",
+      "view": "axial",
+      "description": "CT chest axial view of a 35-year-old female with incidental part-solid pulmonary nodule",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG030": {
+      "image_id": "IMG030",
+      "modality": "ultrasound",
+      "body_part": "abdomen",
+      "view": "right upper quadrant",
+      "description": "Right upper quadrant ultrasound of a 33-year-old male showing gallstones without cholecystitis",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    },
+    "IMG031": {
+      "image_id": "IMG031",
+      "modality": "ultrasound",
+      "body_part": "abdomen",
+      "view": "right upper quadrant",
+      "description": "Right upper quadrant ultrasound of a 70-year-old female with right upper quadrant pain showing cholecystitis",
+      "image_path": null,
+      "source_dataset": "VQA-RAD"
+    }
+  },
+  "reports": {
+    "RPT001": {
+      "report_id": "RPT001",
+      "image_id": "IMG001",
+      "report_type": "radiology",
+      "indication": "58M with cough, fever, and dyspnea for 5 days",
+      "findings": [
+        {
+          "finding_id": "F001-1",
+          "description": "Airspace consolidation in the right lower lobe with air bronchograms",
+          "location": "right lower lobe",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Consistent with lobar pneumonia"
+        },
+        {
+          "finding_id": "F001-2",
+          "description": "Small right-sided pleural effusion",
+          "location": "right costophrenic angle",
+          "severity": "mild",
+          "confidence": "moderate",
+          "clinical_significance": "Parapneumonic effusion, monitor for empyema"
+        },
+        {
+          "finding_id": "F001-3",
+          "description": "Heart size is within normal limits",
+          "location": "cardiac silhouette",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No cardiomegaly"
+        }
+      ],
+      "impression": "Right lower lobe pneumonia with small parapneumonic effusion. No cardiomegaly.",
+      "technique": "PA upright chest radiograph",
+      "comparison": "No prior studies available for comparison",
+      "radiologist": "AI Analysis"
+    },
+    "RPT002": {
+      "report_id": "RPT002",
+      "image_id": "IMG002",
+      "report_type": "radiology",
+      "indication": "72F with acute onset left-sided weakness, rule out stroke",
+      "findings": [
+        {
+          "finding_id": "F002-1",
+          "description": "Hyperdense area in the right middle cerebral artery territory consistent with acute ischemic changes",
+          "location": "right MCA territory",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Acute ischemic stroke in right MCA territory"
+        },
+        {
+          "finding_id": "F002-2",
+          "description": "Loss of gray-white matter differentiation in the right insular cortex",
+          "location": "right insular cortex",
+          "severity": "moderate",
+          "confidence": "moderate",
+          "clinical_significance": "Early ischemic changes (insular ribbon sign)"
+        },
+        {
+          "finding_id": "F002-3",
+          "description": "No midline shift or hydrocephalus",
+          "location": "midline structures",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No mass effect at this time"
+        }
+      ],
+      "impression": "Findings consistent with acute right MCA territory ischemic stroke with early ischemic changes. No hemorrhagic transformation or significant mass effect.",
+      "technique": "Non-contrast CT head, axial 5mm sections",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT003": {
+      "report_id": "RPT003",
+      "image_id": "IMG003",
+      "report_type": "pathology",
+      "indication": "Lung biopsy for suspected malignancy",
+      "findings": [
+        {
+          "finding_id": "F003-1",
+          "description": "Irregular glandular structures with cellular pleomorphism and nuclear atypia",
+          "location": "parenchyma",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Consistent with adenocarcinoma"
+        },
+        {
+          "finding_id": "F003-2",
+          "description": "Stromal desmoplastic reaction surrounding tumor nests",
+          "location": "stroma",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Invasive component confirmed"
+        },
+        {
+          "finding_id": "F003-3",
+          "description": "Lepidic growth pattern along alveolar walls in peripheral areas",
+          "location": "peripheral parenchyma",
+          "severity": "moderate",
+          "confidence": "moderate",
+          "clinical_significance": "Mixed pattern adenocarcinoma with lepidic component"
+        }
+      ],
+      "impression": "Invasive pulmonary adenocarcinoma, acinar predominant with lepidic component. Desmoplastic stromal response consistent with invasion.",
+      "technique": "H&E stain, 40x magnification",
+      "comparison": "",
+      "radiologist": "AI Analysis"
+    },
+    "RPT004": {
+      "report_id": "RPT004",
+      "image_id": "IMG004",
+      "report_type": "radiology",
+      "indication": "3-day-old neonate with bilious vomiting",
+      "findings": [
+        {
+          "finding_id": "F004-1",
+          "description": "Dilated stomach and proximal duodenum creating a 'double bubble' sign",
+          "location": "upper abdomen",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Classic finding for duodenal obstruction"
+        },
+        {
+          "finding_id": "F004-2",
+          "description": "Paucity of distal bowel gas",
+          "location": "lower abdomen",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Consistent with proximal bowel obstruction"
+        }
+      ],
+      "impression": "Double bubble sign consistent with duodenal obstruction. Differential includes duodenal atresia, annular pancreas, or duodenal web. Surgical consultation recommended.",
+      "technique": "AP supine abdominal radiograph",
+      "comparison": "",
+      "radiologist": "AI Analysis"
+    },
+    "RPT005": {
+      "report_id": "RPT005",
+      "image_id": "IMG005",
+      "report_type": "dermatology",
+      "indication": "Pigmented lesion evaluation, rule out melanoma",
+      "findings": [
+        {
+          "finding_id": "F005-1",
+          "description": "Asymmetric pigmented lesion with irregular borders",
+          "location": "lesion center",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Asymmetry and border irregularity are concerning for melanoma (ABCDE criteria)"
+        },
+        {
+          "finding_id": "F005-2",
+          "description": "Multiple colors including dark brown, light brown, and focal blue-white structures",
+          "location": "throughout lesion",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Color variegation is a melanoma warning sign"
+        },
+        {
+          "finding_id": "F005-3",
+          "description": "Atypical pigment network with irregular lines and globules",
+          "location": "peripheral zone",
+          "severity": "moderate",
+          "confidence": "moderate",
+          "clinical_significance": "Dermoscopic features suspicious for melanoma"
+        }
+      ],
+      "impression": "Pigmented lesion with dermoscopic features suspicious for melanoma: asymmetry, irregular border, color variegation, atypical pigment network. Excisional biopsy recommended.",
+      "technique": "Polarized light dermoscopy, 10x magnification",
+      "comparison": "",
+      "radiologist": "AI Analysis"
+    },
+    "RPT006": {
+      "report_id": "RPT006",
+      "image_id": "IMG006",
+      "report_type": "ophthalmology",
+      "indication": "55M with diabetes, routine diabetic eye screening",
+      "findings": [
+        {
+          "finding_id": "F006-1",
+          "description": "Scattered dot and blot hemorrhages in all four quadrants",
+          "location": "throughout retina",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Consistent with moderate non-proliferative diabetic retinopathy"
+        },
+        {
+          "finding_id": "F006-2",
+          "description": "Hard exudates in a circinate pattern around the macula",
+          "location": "perimacular region",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Suggests diabetic macular edema"
+        },
+        {
+          "finding_id": "F006-3",
+          "description": "Cotton wool spots in the superior arcade",
+          "location": "superior retinal arcade",
+          "severity": "mild",
+          "confidence": "high",
+          "clinical_significance": "Retinal nerve fiber layer infarcts, associated with diabetic retinopathy"
+        },
+        {
+          "finding_id": "F006-4",
+          "description": "No neovascularization identified",
+          "location": "disc and retina",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No proliferative changes at this time"
+        }
+      ],
+      "impression": "Moderate non-proliferative diabetic retinopathy with clinically significant macular edema. Referral for OCT and potential anti-VEGF treatment recommended.",
+      "technique": "Non-mydriatic fundus photography",
+      "comparison": "",
+      "radiologist": "AI Analysis"
+    },
+    "RPT007": {
+      "report_id": "RPT007",
+      "image_id": "IMG007",
+      "report_type": "radiology",
+      "indication": "35F with visual disturbances and paresthesias, evaluate for demyelination",
+      "findings": [
+        {
+          "finding_id": "F007-1",
+          "description": "Multiple periventricular T2-hyperintense lesions oriented perpendicular to the ventricles (Dawson's fingers)",
+          "location": "periventricular white matter",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Classic pattern for multiple sclerosis"
+        },
+        {
+          "finding_id": "F007-2",
+          "description": "Additional T2-hyperintense lesion in the right cerebellar peduncle",
+          "location": "right cerebellar peduncle",
+          "severity": "mild",
+          "confidence": "moderate",
+          "clinical_significance": "Infratentorial involvement supports MS dissemination in space"
+        },
+        {
+          "finding_id": "F007-3",
+          "description": "No mass effect or restricted diffusion on DWI",
+          "location": "global",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No acute infarction or space-occupying lesion"
+        }
+      ],
+      "impression": "Multiple T2-hyperintense white matter lesions in periventricular distribution with Dawson's fingers pattern and infratentorial involvement. Findings highly suggestive of multiple sclerosis. Recommend gadolinium-enhanced MRI to assess for active demyelination.",
+      "technique": "T2-weighted axial MRI, 3T scanner, 3mm slices",
+      "comparison": "",
+      "radiologist": "AI Analysis"
+    },
+    "RPT010": {
+      "report_id": "RPT010",
+      "image_id": "IMG010",
+      "report_type": "pathology",
+      "indication": "Breast biopsy for suspicious calcifications on mammography",
+      "findings": [
+        {
+          "finding_id": "F010-1",
+          "description": "Atypical ductal epithelial proliferation with cribriform and micropapillary architecture",
+          "location": "ductal structures",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Features consistent with ductal carcinoma in situ (DCIS)"
+        },
+        {
+          "finding_id": "F010-2",
+          "description": "Necrotic debris and calcifications within the ductal lumens (comedonecrosis)",
+          "location": "central ducts",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Comedo-type DCIS, which is associated with higher recurrence risk"
+        },
+        {
+          "finding_id": "F010-3",
+          "description": "No definite stromal invasion identified on multiple levels",
+          "location": "periductal stroma",
+          "severity": "normal",
+          "confidence": "moderate",
+          "clinical_significance": "Currently in situ disease only"
+        }
+      ],
+      "impression": "High-grade ductal carcinoma in situ (DCIS), comedo type, with cribriform and micropapillary patterns. No stromal invasion identified. Recommend correlation with imaging extent and surgical margin assessment.",
+      "technique": "H&E stain, 10x and 40x magnification, multiple levels examined",
+      "comparison": "",
+      "radiologist": "AI Analysis"
+    },
+    "RPT011": {
+      "report_id": "RPT011",
+      "image_id": "IMG011",
+      "report_type": "radiology",
+      "indication": "84M with sudden onset severe thunderclap headache",
+      "findings": [
+        {
+          "finding_id": "F011-1",
+          "description": "Hyperdense material within the basal cisterns and sylvian fissures",
+          "location": "basal cisterns",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Consistent with acute subarachnoid hemorrhage"
+        },
+        {
+          "finding_id": "F011-2",
+          "description": "No hydrocephalus or midline shift identified",
+          "location": "ventricular system",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No obstructive hydrocephalus at this time"
+        },
+        {
+          "finding_id": "F011-3",
+          "description": "No parenchymal hematoma",
+          "location": "brain parenchyma",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No intraparenchymal extension"
+        }
+      ],
+      "impression": "Acute subarachnoid hemorrhage with blood in basal cisterns and sylvian fissures. CTA recommended to evaluate for underlying aneurysm.",
+      "technique": "Non-contrast CT head, axial 5mm sections",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT012": {
+      "report_id": "RPT012",
+      "image_id": "IMG012",
+      "report_type": "radiology",
+      "indication": "19F with abdominal pain, nausea and vomiting",
+      "findings": [
+        {
+          "finding_id": "F012-1",
+          "description": "Mildly dilated small bowel loops up to 3.5 cm in diameter",
+          "location": "small bowel",
+          "severity": "mild",
+          "confidence": "high",
+          "clinical_significance": "Small bowel dilation suggesting partial obstruction"
+        },
+        {
+          "finding_id": "F012-2",
+          "description": "Transition point identified in the distal ileum with decompressed bowel distally",
+          "location": "distal ileum",
+          "severity": "moderate",
+          "confidence": "moderate",
+          "clinical_significance": "Likely site of partial obstruction"
+        },
+        {
+          "finding_id": "F012-3",
+          "description": "Small amount of gas and fluid seen in the colon",
+          "location": "colon",
+          "severity": "mild",
+          "confidence": "high",
+          "clinical_significance": "Gas in colon indicates partial rather than complete obstruction"
+        }
+      ],
+      "impression": "Partial small bowel obstruction with transition point in the distal ileum. Gas in colon confirms incomplete obstruction. Conservative management may be appropriate.",
+      "technique": "Contrast-enhanced CT abdomen and pelvis, axial 3mm sections",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT013": {
+      "report_id": "RPT013",
+      "image_id": "IMG013",
+      "report_type": "radiology",
+      "indication": "82F with severe abdominal distension, obstipation, and bilious vomiting",
+      "findings": [
+        {
+          "finding_id": "F013-1",
+          "description": "Markedly dilated small bowel loops up to 5 cm in diameter with multiple air-fluid levels",
+          "location": "small bowel",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Significant small bowel obstruction"
+        },
+        {
+          "finding_id": "F013-2",
+          "description": "Abrupt transition point in the distal ileum with completely decompressed bowel distally",
+          "location": "distal ileum",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Complete obstruction at transition point"
+        },
+        {
+          "finding_id": "F013-3",
+          "description": "No gas in the colon or rectum",
+          "location": "colon and rectum",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Confirms complete rather than partial obstruction"
+        }
+      ],
+      "impression": "Complete small bowel obstruction with transition point in the distal ileum. No gas distally. Adhesive band obstruction is most likely given prior surgical history. Urgent surgical consultation recommended.",
+      "technique": "Contrast-enhanced CT abdomen and pelvis, axial 3mm sections",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT014": {
+      "report_id": "RPT014",
+      "image_id": "IMG014",
+      "report_type": "radiology",
+      "indication": "36F with visual disturbances and limb paresthesias, evaluate for demyelination",
+      "findings": [
+        {
+          "finding_id": "F014-1",
+          "description": "Multiple ovoid T2-hyperintense periventricular white matter lesions oriented perpendicular to the lateral ventricles (Dawson's fingers)",
+          "location": "periventricular white matter",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Classic pattern for multiple sclerosis"
+        },
+        {
+          "finding_id": "F014-2",
+          "description": "Several juxtacortical T2-hyperintense lesions in the frontal and parietal lobes",
+          "location": "juxtacortical white matter",
+          "severity": "mild",
+          "confidence": "high",
+          "clinical_significance": "Juxtacortical involvement supports MS diagnosis"
+        },
+        {
+          "finding_id": "F014-3",
+          "description": "One T2-hyperintense lesion in the left cerebellar peduncle",
+          "location": "left cerebellar peduncle",
+          "severity": "mild",
+          "confidence": "moderate",
+          "clinical_significance": "Infratentorial involvement supports dissemination in space criteria"
+        }
+      ],
+      "impression": "Multiple demyelinating lesions in periventricular, juxtacortical, and infratentorial locations consistent with multiple sclerosis meeting McDonald criteria for dissemination in space. Gadolinium-enhanced MRI recommended.",
+      "technique": "T2-weighted axial MRI, 3T scanner, 3mm slices",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT015": {
+      "report_id": "RPT015",
+      "image_id": "IMG015",
+      "report_type": "radiology",
+      "indication": "34F with acute neurological deficits following viral illness, evaluate for ADEM",
+      "findings": [
+        {
+          "finding_id": "F015-1",
+          "description": "Large bilateral asymmetric T2-FLAIR hyperintense white matter lesions involving the centrum semiovale and corona radiata",
+          "location": "bilateral cerebral white matter",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Large asymmetric lesions typical of ADEM rather than MS"
+        },
+        {
+          "finding_id": "F015-2",
+          "description": "Involvement of the deep gray matter structures including bilateral thalami",
+          "location": "bilateral thalami",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Deep gray matter involvement favors ADEM over MS"
+        },
+        {
+          "finding_id": "F015-3",
+          "description": "No restricted diffusion on DWI sequences",
+          "location": "global",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No acute infarction"
+        }
+      ],
+      "impression": "Large bilateral asymmetric white matter lesions with deep gray matter involvement following viral illness, consistent with acute disseminated encephalomyelitis (ADEM). Pattern distinguishable from MS by lesion size, symmetry, and thalamic involvement.",
+      "technique": "T2-FLAIR axial MRI, 3T scanner, 3mm slices",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT016": {
+      "report_id": "RPT016",
+      "image_id": "IMG016",
+      "report_type": "radiology",
+      "indication": "65F with palpable breast lump, routine screening mammography",
+      "findings": [
+        {
+          "finding_id": "F016-1",
+          "description": "Well-circumscribed oval mass with smooth margins in the upper outer quadrant",
+          "location": "left breast upper outer quadrant",
+          "severity": "mild",
+          "confidence": "high",
+          "clinical_significance": "Morphology suggests benign etiology"
+        },
+        {
+          "finding_id": "F016-2",
+          "description": "No associated microcalcifications or architectural distortion",
+          "location": "surrounding tissue",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "Absence of suspicious secondary features"
+        },
+        {
+          "finding_id": "F016-3",
+          "description": "No axillary lymphadenopathy",
+          "location": "axilla",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No nodal involvement"
+        }
+      ],
+      "impression": "Well-circumscribed oval breast mass with benign morphology. BI-RADS 3 - probably benign. Short-interval follow-up mammogram in 6 months recommended.",
+      "technique": "Digital mammography, MLO and CC views",
+      "comparison": "No prior mammograms available",
+      "radiologist": "AI Analysis"
+    },
+    "RPT017": {
+      "report_id": "RPT017",
+      "image_id": "IMG017",
+      "report_type": "radiology",
+      "indication": "40F with screening-detected abnormality on mammography",
+      "findings": [
+        {
+          "finding_id": "F017-1",
+          "description": "Irregular mass with spiculated margins in the central breast",
+          "location": "right breast central",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Spiculated margins raise concern for malignancy"
+        },
+        {
+          "finding_id": "F017-2",
+          "description": "Associated cluster of pleomorphic microcalcifications",
+          "location": "within and adjacent to mass",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Pleomorphic calcifications increase suspicion"
+        },
+        {
+          "finding_id": "F017-3",
+          "description": "No skin thickening or retraction",
+          "location": "overlying skin",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No skin involvement at this time"
+        }
+      ],
+      "impression": "Suspicious irregular spiculated mass with associated pleomorphic microcalcifications. BI-RADS 4C - high suspicion for malignancy. Core needle biopsy recommended.",
+      "technique": "Digital mammography, CC and MLO views with spot compression",
+      "comparison": "Prior mammogram 2 years ago was normal",
+      "radiologist": "AI Analysis"
+    },
+    "RPT018": {
+      "report_id": "RPT018",
+      "image_id": "IMG018",
+      "report_type": "radiology",
+      "indication": "31F with rapidly enlarging palpable breast mass over 2 months",
+      "findings": [
+        {
+          "finding_id": "F018-1",
+          "description": "Large dense irregular mass with spiculated margins measuring 3.5 cm",
+          "location": "right breast upper outer quadrant",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Highly suspicious morphology for invasive carcinoma"
+        },
+        {
+          "finding_id": "F018-2",
+          "description": "Skin retraction overlying the mass with thickening of Cooper's ligaments",
+          "location": "overlying skin",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Skin involvement suggests locally advanced disease"
+        },
+        {
+          "finding_id": "F018-3",
+          "description": "Enlarged axillary lymph nodes with cortical thickening",
+          "location": "right axilla",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Suspicious for nodal metastasis"
+        },
+        {
+          "finding_id": "F018-4",
+          "description": "Associated fine pleomorphic and linear calcifications",
+          "location": "within mass",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Calcification pattern associated with high-grade DCIS component"
+        }
+      ],
+      "impression": "Highly suspicious mass with skin retraction, suspicious calcifications, and axillary lymphadenopathy. BI-RADS 5 - highly suggestive of malignancy. Urgent tissue diagnosis required.",
+      "technique": "Digital mammography, MLO and CC views",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT019": {
+      "report_id": "RPT019",
+      "image_id": "IMG019",
+      "report_type": "ophthalmology",
+      "indication": "85F with long-standing diabetes, routine diabetic eye screening",
+      "findings": [
+        {
+          "finding_id": "F019-1",
+          "description": "Scattered microaneurysms in the posterior pole",
+          "location": "posterior pole",
+          "severity": "mild",
+          "confidence": "high",
+          "clinical_significance": "Earliest sign of diabetic retinopathy"
+        },
+        {
+          "finding_id": "F019-2",
+          "description": "Few dot hemorrhages in the temporal retina",
+          "location": "temporal retina",
+          "severity": "mild",
+          "confidence": "high",
+          "clinical_significance": "Consistent with mild NPDR"
+        },
+        {
+          "finding_id": "F019-3",
+          "description": "No hard exudates, cotton wool spots, or macular edema",
+          "location": "macula and retina",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No advanced features of diabetic retinopathy"
+        }
+      ],
+      "impression": "Mild non-proliferative diabetic retinopathy with microaneurysms and few dot hemorrhages. No macular edema. Annual follow-up recommended.",
+      "technique": "Non-mydriatic fundus photography",
+      "comparison": "No prior imaging",
+      "radiologist": "AI Analysis"
+    },
+    "RPT020": {
+      "report_id": "RPT020",
+      "image_id": "IMG020",
+      "report_type": "ophthalmology",
+      "indication": "Diabetic screening evaluation in young patient with type 1 diabetes",
+      "findings": [
+        {
+          "finding_id": "F020-1",
+          "description": "Multiple dot and blot hemorrhages scattered across several quadrants",
+          "location": "multiple retinal quadrants",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Hemorrhages in multiple quadrants indicate moderate NPDR"
+        },
+        {
+          "finding_id": "F020-2",
+          "description": "Scattered hard exudates in the perimacular region",
+          "location": "perimacular",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Lipid exudation suggesting vascular leakage"
+        },
+        {
+          "finding_id": "F020-3",
+          "description": "Few cotton wool spots in the superior arcade",
+          "location": "superior retinal arcade",
+          "severity": "mild",
+          "confidence": "moderate",
+          "clinical_significance": "Nerve fiber layer infarcts associated with retinal ischemia"
+        },
+        {
+          "finding_id": "F020-4",
+          "description": "No neovascularization identified",
+          "location": "disc and retina",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No proliferative changes"
+        }
+      ],
+      "impression": "Moderate non-proliferative diabetic retinopathy with dot/blot hemorrhages, hard exudates, and cotton wool spots. No proliferative changes. Follow-up in 6 months recommended.",
+      "technique": "Non-mydriatic fundus photography",
+      "comparison": "No prior imaging",
+      "radiologist": "AI Analysis"
+    },
+    "RPT021": {
+      "report_id": "RPT021",
+      "image_id": "IMG021",
+      "report_type": "ophthalmology",
+      "indication": "30F with diabetes and progressive blurred vision",
+      "findings": [
+        {
+          "finding_id": "F021-1",
+          "description": "Neovascularization of the disc (NVD) with fibrovascular proliferation",
+          "location": "optic disc",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Hallmark of proliferative diabetic retinopathy"
+        },
+        {
+          "finding_id": "F021-2",
+          "description": "Neovascularization elsewhere (NVE) along the superior temporal arcade",
+          "location": "superior temporal arcade",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Additional proliferative disease"
+        },
+        {
+          "finding_id": "F021-3",
+          "description": "Preretinal hemorrhage in the posterior pole",
+          "location": "posterior pole",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Bleeding from new vessels"
+        },
+        {
+          "finding_id": "F021-4",
+          "description": "Clinically significant macular edema with hard exudates",
+          "location": "macula",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Threatens central vision"
+        }
+      ],
+      "impression": "Proliferative diabetic retinopathy with neovascularization of the disc and elsewhere, preretinal hemorrhage, and clinically significant macular edema. Urgent panretinal photocoagulation and anti-VEGF therapy recommended.",
+      "technique": "Non-mydriatic fundus photography",
+      "comparison": "No prior imaging",
+      "radiologist": "AI Analysis"
+    },
+    "RPT022": {
+      "report_id": "RPT022",
+      "image_id": "IMG022",
+      "report_type": "dermatology",
+      "indication": "84M with long-standing pigmented lesion, routine evaluation",
+      "findings": [
+        {
+          "finding_id": "F022-1",
+          "description": "Symmetric pigmented lesion with regular borders",
+          "location": "lesion overall",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "Symmetry favors benign process"
+        },
+        {
+          "finding_id": "F022-2",
+          "description": "Regular pigment network with uniform meshwork pattern",
+          "location": "throughout lesion",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "Typical pigment network of benign melanocytic nevus"
+        },
+        {
+          "finding_id": "F022-3",
+          "description": "Homogeneous brown globules distributed evenly",
+          "location": "central and peripheral",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "Uniform globules consistent with benign nevus"
+        }
+      ],
+      "impression": "Benign melanocytic nevus with symmetric architecture, regular pigment network, and homogeneous globules. No features of concern. Routine monitoring recommended.",
+      "technique": "Polarized light dermoscopy, 10x magnification",
+      "comparison": "",
+      "radiologist": "AI Analysis"
+    },
+    "RPT023": {
+      "report_id": "RPT023",
+      "image_id": "IMG023",
+      "report_type": "dermatology",
+      "indication": "9M with changing pigmented lesion, family history of melanoma",
+      "findings": [
+        {
+          "finding_id": "F023-1",
+          "description": "Mildly asymmetric pigmented lesion in one axis",
+          "location": "lesion overall",
+          "severity": "mild",
+          "confidence": "moderate",
+          "clinical_significance": "Mild asymmetry may indicate atypical nevus"
+        },
+        {
+          "finding_id": "F023-2",
+          "description": "Slightly irregular pigment network with focal thickening",
+          "location": "peripheral zone",
+          "severity": "mild",
+          "confidence": "moderate",
+          "clinical_significance": "Irregular network warrants monitoring"
+        },
+        {
+          "finding_id": "F023-3",
+          "description": "Focal areas of regression (white scar-like areas)",
+          "location": "central region",
+          "severity": "mild",
+          "confidence": "moderate",
+          "clinical_significance": "Regression structures can be seen in both atypical nevi and early melanoma"
+        }
+      ],
+      "impression": "Atypical melanocytic lesion with mild asymmetry, slightly irregular pigment network, and focal regression. Close dermoscopic monitoring recommended with consideration for excisional biopsy if changes progress.",
+      "technique": "Polarized light dermoscopy, 10x magnification",
+      "comparison": "",
+      "radiologist": "AI Analysis"
+    },
+    "RPT024": {
+      "report_id": "RPT024",
+      "image_id": "IMG024",
+      "report_type": "dermatology",
+      "indication": "43F with new pigmented lesion with concerning features",
+      "findings": [
+        {
+          "finding_id": "F024-1",
+          "description": "Highly asymmetric pigmented lesion in both axes",
+          "location": "lesion overall",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Two-axis asymmetry strongly suggests melanoma"
+        },
+        {
+          "finding_id": "F024-2",
+          "description": "Blue-white veil overlying raised area of the lesion",
+          "location": "central region",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Blue-white veil indicates dermal melanin and fibrosis, highly specific for melanoma"
+        },
+        {
+          "finding_id": "F024-3",
+          "description": "Atypical vascular pattern with irregular dotted and linear vessels",
+          "location": "throughout lesion",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Neoangiogenesis associated with invasive melanoma"
+        },
+        {
+          "finding_id": "F024-4",
+          "description": "Irregular streaks and pseudopods at the periphery",
+          "location": "peripheral margin",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Radial growth phase of melanoma"
+        }
+      ],
+      "impression": "Dermoscopic features highly suspicious for invasive melanoma: two-axis asymmetry, blue-white veil, atypical vascular pattern, and peripheral streaks. Urgent excisional biopsy with appropriate margins required.",
+      "technique": "Polarized light dermoscopy, 10x magnification",
+      "comparison": "",
+      "radiologist": "AI Analysis"
+    },
+    "RPT025": {
+      "report_id": "RPT025",
+      "image_id": "IMG025",
+      "report_type": "cardiology",
+      "indication": "75M with progressive dyspnea on exertion and holosystolic murmur at apex",
+      "findings": [
+        {
+          "finding_id": "F025-1",
+          "description": "Prolapsing posterior mitral valve leaflet with flail segment",
+          "location": "mitral valve",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Structural cause of mitral regurgitation"
+        },
+        {
+          "finding_id": "F025-2",
+          "description": "Moderate-to-severe mitral regurgitation jet directed posterolaterally on color Doppler",
+          "location": "left atrium",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Hemodynamically significant regurgitation"
+        },
+        {
+          "finding_id": "F025-3",
+          "description": "Dilated left atrium measuring 5.2 cm",
+          "location": "left atrium",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Chronic volume overload from MR"
+        },
+        {
+          "finding_id": "F025-4",
+          "description": "Left ventricular ejection fraction preserved at 55%",
+          "location": "left ventricle",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "Preserved systolic function"
+        }
+      ],
+      "impression": "Moderate-to-severe mitral regurgitation due to posterior leaflet prolapse with flail segment. Dilated left atrium. Preserved left ventricular function. Surgical consultation for mitral valve repair recommended.",
+      "technique": "Transthoracic echocardiography with Doppler",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT026": {
+      "report_id": "RPT026",
+      "image_id": "IMG026",
+      "report_type": "cardiology",
+      "indication": "47F with exertional syncope and harsh systolic ejection murmur",
+      "findings": [
+        {
+          "finding_id": "F026-1",
+          "description": "Calcified aortic valve with severely restricted leaflet motion",
+          "location": "aortic valve",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Significant aortic stenosis"
+        },
+        {
+          "finding_id": "F026-2",
+          "description": "Peak aortic gradient of 65 mmHg, mean gradient 40 mmHg",
+          "location": "aortic valve",
+          "severity": "severe",
+          "confidence": "high",
+          "clinical_significance": "Hemodynamically severe aortic stenosis"
+        },
+        {
+          "finding_id": "F026-3",
+          "description": "Concentric left ventricular hypertrophy with wall thickness of 14 mm",
+          "location": "left ventricle",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Pressure overload hypertrophy secondary to AS"
+        },
+        {
+          "finding_id": "F026-4",
+          "description": "Preserved left ventricular ejection fraction at 60%",
+          "location": "left ventricle",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "Preserved systolic function despite severe AS"
+        }
+      ],
+      "impression": "Severe calcific aortic stenosis with mean gradient 40 mmHg and concentric LV hypertrophy. Preserved LV function. Given symptoms of syncope, aortic valve replacement should be considered.",
+      "technique": "Transthoracic echocardiography with Doppler",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT027": {
+      "report_id": "RPT027",
+      "image_id": "IMG027",
+      "report_type": "radiology",
+      "indication": "79M with incidental lung finding on routine CT chest",
+      "findings": [
+        {
+          "finding_id": "F027-1",
+          "description": "8 mm pure ground glass opacity nodule in the right upper lobe",
+          "location": "right upper lobe",
+          "severity": "mild",
+          "confidence": "high",
+          "clinical_significance": "Ground glass nodule may represent atypical adenomatous hyperplasia or early adenocarcinoma spectrum"
+        },
+        {
+          "finding_id": "F027-2",
+          "description": "No solid component identified within the nodule",
+          "location": "within nodule",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "Pure GGN without solid component has lower malignancy risk"
+        },
+        {
+          "finding_id": "F027-3",
+          "description": "No mediastinal or hilar lymphadenopathy",
+          "location": "mediastinum",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No nodal involvement"
+        }
+      ],
+      "impression": "Pure ground glass nodule in right upper lobe measuring 8 mm. No solid component. Follow-up CT in 6-12 months recommended per Fleischner Society guidelines to assess for growth or development of solid component.",
+      "technique": "CT chest without contrast, 1mm thin sections",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT028": {
+      "report_id": "RPT028",
+      "image_id": "IMG028",
+      "report_type": "radiology",
+      "indication": "59F with persistent cough for 3 months, evaluate for lung pathology",
+      "findings": [
+        {
+          "finding_id": "F028-1",
+          "description": "15 mm solid nodule in the left lower lobe with spiculated margins",
+          "location": "left lower lobe",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Spiculated solid nodule highly suspicious for primary lung malignancy"
+        },
+        {
+          "finding_id": "F028-2",
+          "description": "No calcification within the nodule",
+          "location": "within nodule",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Lack of benign calcification pattern increases suspicion"
+        },
+        {
+          "finding_id": "F028-3",
+          "description": "No mediastinal lymphadenopathy identified",
+          "location": "mediastinum",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No apparent nodal spread"
+        }
+      ],
+      "impression": "Suspicious solid pulmonary nodule in the left lower lobe with spiculated margins. No calcification. PET-CT recommended for further characterization. Consider CT-guided biopsy or surgical resection.",
+      "technique": "CT chest with contrast, 1mm thin sections",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT029": {
+      "report_id": "RPT029",
+      "image_id": "IMG029",
+      "report_type": "radiology",
+      "indication": "35F with incidental finding on screening CT chest",
+      "findings": [
+        {
+          "finding_id": "F029-1",
+          "description": "12 mm part-solid nodule in the right middle lobe with ground glass halo and 4 mm solid component",
+          "location": "right middle lobe",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Part-solid nodules have the highest malignancy rate among lung nodule subtypes"
+        },
+        {
+          "finding_id": "F029-2",
+          "description": "Well-defined ground glass component surrounding the solid core",
+          "location": "within nodule",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Mixed composition suggests possible invasive adenocarcinoma with lepidic component"
+        },
+        {
+          "finding_id": "F029-3",
+          "description": "No additional pulmonary nodules or lymphadenopathy",
+          "location": "bilateral lungs and mediastinum",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "Solitary nodule without nodal disease"
+        }
+      ],
+      "impression": "Part-solid pulmonary nodule in right middle lobe with 4 mm solid component. Part-solid nodules carry higher malignancy risk. Short-interval follow-up CT in 3 months recommended. If persistent, tissue sampling should be considered.",
+      "technique": "CT chest without contrast, 1mm thin sections",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT030": {
+      "report_id": "RPT030",
+      "image_id": "IMG030",
+      "report_type": "radiology",
+      "indication": "33M with incidental finding during routine abdominal ultrasound",
+      "findings": [
+        {
+          "finding_id": "F030-1",
+          "description": "Multiple echogenic foci within the gallbladder lumen with posterior acoustic shadowing",
+          "location": "gallbladder",
+          "severity": "mild",
+          "confidence": "high",
+          "clinical_significance": "Cholelithiasis (gallstones)"
+        },
+        {
+          "finding_id": "F030-2",
+          "description": "Normal gallbladder wall thickness measuring 2 mm",
+          "location": "gallbladder wall",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No wall thickening to suggest inflammation"
+        },
+        {
+          "finding_id": "F030-3",
+          "description": "No pericholecystic fluid collection",
+          "location": "pericholecystic space",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No evidence of acute cholecystitis"
+        },
+        {
+          "finding_id": "F030-4",
+          "description": "Negative sonographic Murphy's sign",
+          "location": "gallbladder",
+          "severity": "normal",
+          "confidence": "high",
+          "clinical_significance": "No tenderness over gallbladder"
+        }
+      ],
+      "impression": "Cholelithiasis without sonographic evidence of acute cholecystitis. Normal gallbladder wall thickness, no pericholecystic fluid, negative Murphy's sign. Asymptomatic gallstones.",
+      "technique": "Right upper quadrant ultrasound with curvilinear probe",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT031": {
+      "report_id": "RPT031",
+      "image_id": "IMG031",
+      "report_type": "radiology",
+      "indication": "70F with right upper quadrant pain, fever, and positive Murphy's sign on exam",
+      "findings": [
+        {
+          "finding_id": "F031-1",
+          "description": "Multiple gallstones within a distended gallbladder",
+          "location": "gallbladder lumen",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Cholelithiasis as likely cause of cholecystitis"
+        },
+        {
+          "finding_id": "F031-2",
+          "description": "Thickened gallbladder wall measuring 6 mm (normal <3 mm)",
+          "location": "gallbladder wall",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Wall thickening consistent with acute inflammation"
+        },
+        {
+          "finding_id": "F031-3",
+          "description": "Pericholecystic fluid collection surrounding the gallbladder",
+          "location": "pericholecystic space",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Pericholecystic fluid supports acute cholecystitis diagnosis"
+        },
+        {
+          "finding_id": "F031-4",
+          "description": "Positive sonographic Murphy's sign with maximal tenderness over the gallbladder",
+          "location": "gallbladder",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Positive Murphy's sign is highly specific for acute cholecystitis"
+        }
+      ],
+      "impression": "Acute cholecystitis: gallstones with thickened gallbladder wall (6 mm), pericholecystic fluid, and positive sonographic Murphy's sign. Surgical consultation for cholecystectomy recommended.",
+      "technique": "Right upper quadrant ultrasound with curvilinear probe",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT008": {
+      "report_id": "RPT008",
+      "image_id": "IMG008",
+      "report_type": "radiology",
+      "indication": "65M with progressive dyspnea and orthopnea",
+      "findings": [
+        {
+          "finding_id": "F008-1",
+          "description": "Bilateral pleural effusions, larger on the right side",
+          "location": "bilateral costophrenic angles",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Bilateral effusions suggest systemic cause such as heart failure"
+        },
+        {
+          "finding_id": "F008-2",
+          "description": "Blunting of both costophrenic angles with meniscus sign",
+          "location": "bilateral lower zones",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Free-flowing pleural fluid"
+        },
+        {
+          "finding_id": "F008-3",
+          "description": "Upper lobe pulmonary venous distension",
+          "location": "bilateral upper lobes",
+          "severity": "mild",
+          "confidence": "moderate",
+          "clinical_significance": "Suggests elevated left atrial pressure"
+        }
+      ],
+      "impression": "Bilateral pleural effusions with upper lobe venous distension, consistent with congestive heart failure. Clinical correlation recommended.",
+      "technique": "Lateral chest radiograph",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    },
+    "RPT009": {
+      "report_id": "RPT009",
+      "image_id": "IMG009",
+      "report_type": "radiology",
+      "indication": "47F with headache after fall, evaluate for intracranial hemorrhage",
+      "findings": [
+        {
+          "finding_id": "F009-1",
+          "description": "Hyperdense crescent-shaped collection along the right cerebral convexity",
+          "location": "right cerebral convexity",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Consistent with acute subdural hematoma"
+        },
+        {
+          "finding_id": "F009-2",
+          "description": "Mild mass effect with compression of the right lateral ventricle",
+          "location": "right lateral ventricle",
+          "severity": "moderate",
+          "confidence": "high",
+          "clinical_significance": "Mass effect from subdural collection"
+        },
+        {
+          "finding_id": "F009-3",
+          "description": "Minimal midline shift of 3 mm to the left",
+          "location": "midline structures",
+          "severity": "mild",
+          "confidence": "high",
+          "clinical_significance": "Early mass effect, requires monitoring"
+        }
+      ],
+      "impression": "Acute right-sided subdural hematoma with mild mass effect and minimal midline shift. Neurosurgical consultation recommended.",
+      "technique": "Non-contrast CT head, axial 5mm sections",
+      "comparison": "No prior studies",
+      "radiologist": "AI Analysis"
+    }
+  },
+  "questions": {
+    "VQ001": {
+      "question_id": "VQ001",
+      "image_id": "IMG001",
+      "question": "What abnormality is seen in the right lower zone of this chest X-ray?",
+      "question_type": "open_ended",
+      "answer": "Right lower lobe consolidation consistent with pneumonia",
+      "options": null,
+      "explanation": "The chest X-ray shows airspace consolidation with air bronchograms in the right lower lobe, which is the hallmark appearance of lobar pneumonia.",
+      "category": "radiology",
+      "difficulty": "easy",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ002": {
+      "question_id": "VQ002",
+      "image_id": "IMG001",
+      "question": "Is there a pleural effusion?",
+      "question_type": "yes_no",
+      "answer": "yes",
+      "options": null,
+      "explanation": "A small right-sided pleural effusion is visible as blunting of the right costophrenic angle, likely a parapneumonic effusion.",
+      "category": "radiology",
+      "difficulty": "easy",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ003": {
+      "question_id": "VQ003",
+      "image_id": "IMG002",
+      "question": "What is the most likely diagnosis based on this CT head?",
+      "question_type": "choice",
+      "answer": "Acute ischemic stroke",
+      "options": [
+        "Intracerebral hemorrhage",
+        "Acute ischemic stroke",
+        "Subarachnoid hemorrhage",
+        "Brain tumor"
+      ],
+      "explanation": "The CT shows a hyperdense area in the right MCA territory with loss of gray-white differentiation (insular ribbon sign), consistent with acute ischemic stroke.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ004": {
+      "question_id": "VQ004",
+      "image_id": "IMG003",
+      "question": "What type of lung cancer does this histology slide show?",
+      "question_type": "open_ended",
+      "answer": "Adenocarcinoma",
+      "options": null,
+      "explanation": "The histology shows irregular glandular structures with cellular pleomorphism, nuclear atypia, and desmoplastic stromal reaction, consistent with invasive pulmonary adenocarcinoma.",
+      "category": "pathology",
+      "difficulty": "medium",
+      "source_dataset": "PathVQA"
+    },
+    "VQ005": {
+      "question_id": "VQ005",
+      "image_id": "IMG004",
+      "question": "What classic radiographic sign is seen on this neonatal abdominal X-ray?",
+      "question_type": "open_ended",
+      "answer": "Double bubble sign",
+      "options": null,
+      "explanation": "The double bubble sign represents a dilated stomach and proximal duodenum, classic for duodenal obstruction which can be caused by duodenal atresia, annular pancreas, or duodenal web.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ006": {
+      "question_id": "VQ006",
+      "image_id": "IMG005",
+      "question": "Based on the dermoscopic features, what is the most concerning diagnosis?",
+      "question_type": "choice",
+      "answer": "Melanoma",
+      "options": [
+        "Seborrheic keratosis",
+        "Melanoma",
+        "Dermatofibroma",
+        "Basal cell carcinoma"
+      ],
+      "explanation": "The dermoscopy shows asymmetry, irregular border, color variegation with blue-white structures, and atypical pigment network - all suspicious features for melanoma.",
+      "category": "dermatology",
+      "difficulty": "medium",
+      "source_dataset": "SLAKE"
+    },
+    "VQ007": {
+      "question_id": "VQ007",
+      "image_id": "IMG006",
+      "question": "What stage of diabetic retinopathy is shown in this fundus photograph?",
+      "question_type": "choice",
+      "answer": "Moderate non-proliferative diabetic retinopathy",
+      "options": [
+        "Mild NPDR",
+        "Moderate non-proliferative diabetic retinopathy",
+        "Severe NPDR",
+        "Proliferative diabetic retinopathy"
+      ],
+      "explanation": "The fundus shows dot/blot hemorrhages in all quadrants, hard exudates, and cotton wool spots but no neovascularization, consistent with moderate NPDR.",
+      "category": "ophthalmology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-Med-2021"
+    },
+    "VQ008": {
+      "question_id": "VQ008",
+      "image_id": "IMG007",
+      "question": "What pattern of white matter lesions is most characteristic of multiple sclerosis on this MRI?",
+      "question_type": "open_ended",
+      "answer": "Dawson's fingers - periventricular lesions oriented perpendicular to the ventricles",
+      "options": null,
+      "explanation": "The MRI shows T2-hyperintense lesions in periventricular distribution perpendicular to the ventricles, known as Dawson's fingers, which is a classic MRI finding in MS.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "PMC-VQA"
+    },
+    "VQ009": {
+      "question_id": "VQ009",
+      "image_id": "IMG006",
+      "question": "Are there any signs of macular edema?",
+      "question_type": "yes_no",
+      "answer": "yes",
+      "options": null,
+      "explanation": "Hard exudates in a circinate pattern around the macula suggest clinically significant diabetic macular edema.",
+      "category": "ophthalmology",
+      "difficulty": "easy",
+      "source_dataset": "VQA-Med-2021"
+    },
+    "VQ010": {
+      "question_id": "VQ010",
+      "image_id": "IMG010",
+      "question": "What is the histological diagnosis of this breast biopsy?",
+      "question_type": "choice",
+      "answer": "Ductal carcinoma in situ (DCIS)",
+      "options": [
+        "Fibroadenoma",
+        "Ductal carcinoma in situ (DCIS)",
+        "Invasive ductal carcinoma",
+        "Lobular carcinoma in situ"
+      ],
+      "explanation": "The histology shows atypical ductal epithelial proliferation with cribriform architecture and comedonecrosis without stromal invasion, consistent with high-grade DCIS.",
+      "category": "pathology",
+      "difficulty": "hard",
+      "source_dataset": "PathVQA"
+    },
+    "VQ011": {
+      "question_id": "VQ011",
+      "image_id": "IMG011",
+      "question": "What type of intracranial hemorrhage is indicated by hyperdense material in the basal cisterns?",
+      "question_type": "choice",
+      "answer": "Subarachnoid hemorrhage",
+      "options": [
+        "Epidural hemorrhage",
+        "Subdural hemorrhage",
+        "Subarachnoid hemorrhage",
+        "Intraparenchymal hemorrhage"
+      ],
+      "explanation": "Hyperdense material in the basal cisterns and sylvian fissures is the classic CT appearance of acute subarachnoid hemorrhage.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ012": {
+      "question_id": "VQ012",
+      "image_id": "IMG012",
+      "question": "Is this bowel obstruction partial or complete?",
+      "question_type": "choice",
+      "answer": "Partial obstruction",
+      "options": [
+        "Partial obstruction",
+        "Complete obstruction",
+        "No obstruction",
+        "Ileus without obstruction"
+      ],
+      "explanation": "The presence of gas in the colon distal to the transition point indicates that this is a partial rather than complete small bowel obstruction.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ013": {
+      "question_id": "VQ013",
+      "image_id": "IMG013",
+      "question": "What finding indicates complete rather than partial bowel obstruction?",
+      "question_type": "open_ended",
+      "answer": "Complete absence of gas in the colon and rectum distal to the transition point",
+      "options": null,
+      "explanation": "In complete bowel obstruction, there is no passage of gas or fluid beyond the point of obstruction, resulting in a decompressed distal colon and rectum without any gas.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ014": {
+      "question_id": "VQ014",
+      "image_id": "IMG014",
+      "question": "What classic MRI pattern is seen in this patient with suspected multiple sclerosis?",
+      "question_type": "open_ended",
+      "answer": "Dawson's fingers - periventricular lesions oriented perpendicular to the lateral ventricles",
+      "options": null,
+      "explanation": "Dawson's fingers are ovoid T2-hyperintense lesions in periventricular white matter oriented perpendicular to the ventricles, representing perivenular demyelination characteristic of MS.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "PMC-VQA"
+    },
+    "VQ015": {
+      "question_id": "VQ015",
+      "image_id": "IMG015",
+      "question": "How does the ADEM pattern differ from multiple sclerosis on MRI?",
+      "question_type": "open_ended",
+      "answer": "ADEM shows large bilateral asymmetric white matter lesions with deep gray matter (thalamic) involvement, unlike the smaller periventricular lesions of MS",
+      "options": null,
+      "explanation": "ADEM typically presents with large, bilateral, asymmetric lesions involving both white matter and deep gray matter (especially thalami), often in a monophasic course after infection, unlike the smaller periventricular Dawson's fingers pattern of MS.",
+      "category": "radiology",
+      "difficulty": "hard",
+      "source_dataset": "PMC-VQA"
+    },
+    "VQ016": {
+      "question_id": "VQ016",
+      "image_id": "IMG016",
+      "question": "What BI-RADS category would this well-circumscribed breast mass receive?",
+      "question_type": "choice",
+      "answer": "BI-RADS 3 - Probably benign",
+      "options": [
+        "BI-RADS 1 - Negative",
+        "BI-RADS 2 - Benign",
+        "BI-RADS 3 - Probably benign",
+        "BI-RADS 4 - Suspicious"
+      ],
+      "explanation": "A well-circumscribed oval mass with smooth margins and no calcifications or distortion is classified as BI-RADS 3 (probably benign) with less than 2% chance of malignancy, warranting short-interval follow-up.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ017": {
+      "question_id": "VQ017",
+      "image_id": "IMG017",
+      "question": "What features make this breast mass suspicious for malignancy?",
+      "question_type": "open_ended",
+      "answer": "Irregular shape with spiculated margins and associated pleomorphic microcalcifications",
+      "options": null,
+      "explanation": "Spiculated margins and pleomorphic microcalcifications are among the most concerning mammographic features for malignancy, warranting tissue sampling.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ018": {
+      "question_id": "VQ018",
+      "image_id": "IMG018",
+      "question": "What mammographic features suggest malignancy in this case?",
+      "question_type": "open_ended",
+      "answer": "Spiculated irregular mass with skin retraction, pleomorphic calcifications, and axillary lymphadenopathy",
+      "options": null,
+      "explanation": "The combination of a spiculated mass, skin retraction, suspicious calcifications, and axillary lymphadenopathy is highly suggestive of invasive breast carcinoma with possible nodal metastasis.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ019": {
+      "question_id": "VQ019",
+      "image_id": "IMG019",
+      "question": "What stage of diabetic retinopathy is shown in this fundus photograph?",
+      "question_type": "choice",
+      "answer": "Mild non-proliferative diabetic retinopathy",
+      "options": [
+        "No diabetic retinopathy",
+        "Mild non-proliferative diabetic retinopathy",
+        "Moderate NPDR",
+        "Proliferative diabetic retinopathy"
+      ],
+      "explanation": "The presence of microaneurysms and few dot hemorrhages without more advanced features (cotton wool spots, venous beading, IRMA, neovascularization) classifies this as mild NPDR.",
+      "category": "ophthalmology",
+      "difficulty": "easy",
+      "source_dataset": "VQA-Med-2021"
+    },
+    "VQ020": {
+      "question_id": "VQ020",
+      "image_id": "IMG020",
+      "question": "What fundoscopic findings indicate moderate NPDR in this patient?",
+      "question_type": "open_ended",
+      "answer": "Multiple dot and blot hemorrhages in several quadrants with hard exudates and cotton wool spots, without neovascularization",
+      "options": null,
+      "explanation": "Moderate NPDR is characterized by more than just microaneurysms, including hemorrhages in multiple quadrants, hard exudates, and cotton wool spots, but without proliferative features like neovascularization.",
+      "category": "ophthalmology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-Med-2021"
+    },
+    "VQ021": {
+      "question_id": "VQ021",
+      "image_id": "IMG021",
+      "question": "Is there evidence of proliferative diabetic retinopathy?",
+      "question_type": "yes_no",
+      "answer": "yes",
+      "options": null,
+      "explanation": "Neovascularization of the disc (NVD) and neovascularization elsewhere (NVE) are definitive signs of proliferative diabetic retinopathy, distinguishing it from non-proliferative stages.",
+      "category": "ophthalmology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-Med-2021"
+    },
+    "VQ022": {
+      "question_id": "VQ022",
+      "image_id": "IMG022",
+      "question": "Is this pigmented lesion likely benign or malignant based on dermoscopic features?",
+      "question_type": "choice",
+      "answer": "Benign - symmetric with regular pigment network",
+      "options": [
+        "Benign - symmetric with regular pigment network",
+        "Malignant - asymmetric with irregular features",
+        "Indeterminate - needs biopsy",
+        "Pre-malignant - dysplastic features"
+      ],
+      "explanation": "The lesion shows symmetric architecture, regular pigment network, and homogeneous globules - all features consistent with a benign melanocytic nevus. No atypical features are present.",
+      "category": "dermatology",
+      "difficulty": "easy",
+      "source_dataset": "SLAKE"
+    },
+    "VQ023": {
+      "question_id": "VQ023",
+      "image_id": "IMG023",
+      "question": "What dermoscopic features make this pigmented lesion atypical?",
+      "question_type": "open_ended",
+      "answer": "Mild asymmetry, slightly irregular pigment network with focal thickening, and focal regression structures",
+      "options": null,
+      "explanation": "Atypical nevi show features intermediate between benign and malignant, including mild asymmetry, somewhat irregular pigment network, and occasionally regression structures, warranting close monitoring.",
+      "category": "dermatology",
+      "difficulty": "medium",
+      "source_dataset": "SLAKE"
+    },
+    "VQ024": {
+      "question_id": "VQ024",
+      "image_id": "IMG024",
+      "question": "What dermoscopic feature is most specific for melanoma in this lesion?",
+      "question_type": "choice",
+      "answer": "Blue-white veil",
+      "options": [
+        "Regular pigment network",
+        "Blue-white veil",
+        "Homogeneous globules",
+        "Milia-like cysts"
+      ],
+      "explanation": "The blue-white veil is one of the most specific dermoscopic features for melanoma, representing dermal melanin and fibrosis. Its presence in an asymmetric lesion with atypical vessels strongly supports melanoma diagnosis.",
+      "category": "dermatology",
+      "difficulty": "medium",
+      "source_dataset": "SLAKE"
+    },
+    "VQ025": {
+      "question_id": "VQ025",
+      "image_id": "IMG025",
+      "question": "What valvular abnormality is identified on this echocardiogram?",
+      "question_type": "choice",
+      "answer": "Mitral regurgitation due to mitral valve prolapse",
+      "options": [
+        "Aortic stenosis",
+        "Mitral regurgitation due to mitral valve prolapse",
+        "Tricuspid regurgitation",
+        "Mitral stenosis"
+      ],
+      "explanation": "The echocardiogram shows a prolapsing posterior mitral valve leaflet with a flail segment causing a moderate-to-severe posterolaterally directed regurgitation jet, characteristic of degenerative mitral valve disease.",
+      "category": "cardiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ026": {
+      "question_id": "VQ026",
+      "image_id": "IMG026",
+      "question": "What is the primary diagnosis based on this echocardiogram?",
+      "question_type": "choice",
+      "answer": "Severe aortic stenosis",
+      "options": [
+        "Mitral stenosis",
+        "Severe aortic stenosis",
+        "Aortic regurgitation",
+        "Hypertrophic cardiomyopathy"
+      ],
+      "explanation": "The calcified aortic valve with restricted leaflet motion, elevated gradients (mean 40 mmHg), and secondary concentric LV hypertrophy are diagnostic of severe aortic stenosis.",
+      "category": "cardiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ027": {
+      "question_id": "VQ027",
+      "image_id": "IMG027",
+      "question": "What type of pulmonary nodule is seen on this CT?",
+      "question_type": "choice",
+      "answer": "Pure ground glass opacity nodule",
+      "options": [
+        "Solid nodule",
+        "Pure ground glass opacity nodule",
+        "Part-solid nodule",
+        "Calcified granuloma"
+      ],
+      "explanation": "The nodule demonstrates uniform ground glass attenuation without any solid component, classifying it as a pure ground glass opacity (GGO) nodule, which may represent the adenocarcinoma spectrum.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ028": {
+      "question_id": "VQ028",
+      "image_id": "IMG028",
+      "question": "What features of this lung nodule are most concerning for malignancy?",
+      "question_type": "open_ended",
+      "answer": "Solid nodule with spiculated margins and absence of benign calcification pattern",
+      "options": null,
+      "explanation": "Spiculated margins in a solid pulmonary nodule are one of the most concerning CT features for lung malignancy, with the absence of benign calcification patterns further increasing suspicion.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ029": {
+      "question_id": "VQ029",
+      "image_id": "IMG029",
+      "question": "How would you classify this pulmonary nodule?",
+      "question_type": "choice",
+      "answer": "Part-solid nodule with mixed ground glass and solid components",
+      "options": [
+        "Pure ground glass nodule",
+        "Part-solid nodule with mixed ground glass and solid components",
+        "Solid nodule",
+        "Cavitary nodule"
+      ],
+      "explanation": "This nodule contains both a ground glass component and a solid component, making it a part-solid (or subsolid) nodule. Part-solid nodules have the highest malignancy rate among all lung nodule subtypes.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ030": {
+      "question_id": "VQ030",
+      "image_id": "IMG030",
+      "question": "Is there evidence of acute cholecystitis on this ultrasound?",
+      "question_type": "yes_no",
+      "answer": "no",
+      "options": null,
+      "explanation": "Despite the presence of gallstones, the gallbladder wall is normal thickness (2 mm), there is no pericholecystic fluid, and Murphy's sign is negative, indicating asymptomatic cholelithiasis without cholecystitis.",
+      "category": "radiology",
+      "difficulty": "easy",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ031": {
+      "question_id": "VQ031",
+      "image_id": "IMG031",
+      "question": "What sonographic findings confirm acute cholecystitis in this patient?",
+      "question_type": "open_ended",
+      "answer": "Gallstones, thickened gallbladder wall (6 mm), pericholecystic fluid, and positive sonographic Murphy's sign",
+      "options": null,
+      "explanation": "The classic sonographic triad of acute cholecystitis includes gallstones, gallbladder wall thickening (>3 mm), and positive sonographic Murphy's sign. Pericholecystic fluid provides additional supporting evidence.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ008b": {
+      "question_id": "VQ008b",
+      "image_id": "IMG008",
+      "question": "What is the distribution of the pleural effusions seen on this chest radiograph?",
+      "question_type": "choice",
+      "answer": "Bilateral pleural effusions",
+      "options": [
+        "Right-sided pleural effusion only",
+        "Left-sided pleural effusion only",
+        "Bilateral pleural effusions",
+        "No pleural effusion"
+      ],
+      "explanation": "Both costophrenic angles show blunting with meniscus signs, indicating bilateral free-flowing pleural effusions.",
+      "category": "radiology",
+      "difficulty": "easy",
+      "source_dataset": "VQA-RAD"
+    },
+    "VQ009b": {
+      "question_id": "VQ009b",
+      "image_id": "IMG009",
+      "question": "What type of intracranial hemorrhage is shown on this CT head?",
+      "question_type": "choice",
+      "answer": "Subdural hematoma",
+      "options": [
+        "Epidural hematoma",
+        "Subdural hematoma",
+        "Subarachnoid hemorrhage",
+        "Intraparenchymal hemorrhage"
+      ],
+      "explanation": "The crescent-shaped hyperdense collection along the cerebral convexity that crosses suture lines is characteristic of a subdural hematoma.",
+      "category": "radiology",
+      "difficulty": "medium",
+      "source_dataset": "VQA-RAD"
+    }
+  },
+  "patient_contexts": {
+    "PAT_IMG001": {
+      "patient_id": "PAT_IMG001",
+      "age": 58,
+      "sex": "male",
+      "clinical_history": "Type 2 diabetes, hypertension, former smoker (20 pack-years)",
+      "presenting_complaint": "5-day history of productive cough with fever and worsening dyspnea",
+      "prior_diagnoses": [
+        "Type 2 Diabetes Mellitus",
+        "Hypertension"
+      ]
+    },
+    "PAT_IMG002": {
+      "patient_id": "PAT_IMG002",
+      "age": 72,
+      "sex": "female",
+      "clinical_history": "Atrial fibrillation, not on anticoagulation, hypertension",
+      "presenting_complaint": "Acute onset left-sided weakness and facial droop 2 hours ago",
+      "prior_diagnoses": [
+        "Atrial Fibrillation",
+        "Hypertension"
+      ]
+    },
+    "PAT_IMG004": {
+      "patient_id": "PAT_IMG004",
+      "age": 0,
+      "sex": "male",
+      "clinical_history": "Full-term neonate, normal delivery",
+      "presenting_complaint": "Bilious vomiting since day 2 of life, minimally distended abdomen",
+      "prior_diagnoses": []
+    },
+    "PAT_IMG005": {
+      "patient_id": "PAT_IMG005",
+      "age": 45,
+      "sex": "male",
+      "clinical_history": "Family history of melanoma, fair skin, history of sunburns",
+      "presenting_complaint": "Changing mole on the back noticed by spouse 3 months ago",
+      "prior_diagnoses": []
+    },
+    "PAT_IMG006": {
+      "patient_id": "PAT_IMG006",
+      "age": 55,
+      "sex": "male",
+      "clinical_history": "20-year history of type 2 diabetes, HbA1c 8.5%, hypertension",
+      "presenting_complaint": "Routine diabetic eye screening, reports occasional blurred vision",
+      "prior_diagnoses": [
+        "Type 2 Diabetes Mellitus",
+        "Hypertension",
+        "Diabetic Nephropathy"
+      ]
+    },
+    "PAT_IMG007": {
+      "patient_id": "PAT_IMG007",
+      "age": 35,
+      "sex": "female",
+      "clinical_history": "Episode of optic neuritis 2 years ago that resolved, now with new symptoms",
+      "presenting_complaint": "Visual disturbances and tingling in both legs for 2 weeks",
+      "prior_diagnoses": [
+        "Optic Neuritis (resolved)"
+      ]
+    },
+    "PAT_IMG011": {
+      "patient_id": "PAT_IMG011",
+      "age": 84,
+      "sex": "male",
+      "clinical_history": "Hypertension, previous TIA",
+      "presenting_complaint": "Sudden onset severe thunderclap headache described as worst headache of life",
+      "prior_diagnoses": [
+        "Hypertension",
+        "Transient Ischemic Attack"
+      ]
+    },
+    "PAT_IMG012": {
+      "patient_id": "PAT_IMG012",
+      "age": 19,
+      "sex": "female",
+      "clinical_history": "No prior abdominal surgeries, previously healthy",
+      "presenting_complaint": "Crampy abdominal pain with nausea and vomiting for 24 hours",
+      "prior_diagnoses": []
+    },
+    "PAT_IMG013": {
+      "patient_id": "PAT_IMG013",
+      "age": 82,
+      "sex": "female",
+      "clinical_history": "Previous appendectomy and cholecystectomy, hypertension",
+      "presenting_complaint": "Severe abdominal distension with obstipation and bilious vomiting for 2 days",
+      "prior_diagnoses": [
+        "Hypertension",
+        "Prior Appendectomy",
+        "Prior Cholecystectomy"
+      ]
+    },
+    "PAT_IMG014": {
+      "patient_id": "PAT_IMG014",
+      "age": 36,
+      "sex": "female",
+      "clinical_history": "Episode of optic neuritis 1 year ago, now with new neurological symptoms",
+      "presenting_complaint": "Visual disturbances and tingling in both legs for 3 weeks",
+      "prior_diagnoses": [
+        "Optic Neuritis (resolved)"
+      ]
+    },
+    "PAT_IMG015": {
+      "patient_id": "PAT_IMG015",
+      "age": 34,
+      "sex": "female",
+      "clinical_history": "Recent upper respiratory tract infection 2 weeks ago, previously healthy",
+      "presenting_complaint": "Acute onset confusion, bilateral weakness and visual disturbances over 3 days",
+      "prior_diagnoses": []
+    },
+    "PAT_IMG016": {
+      "patient_id": "PAT_IMG016",
+      "age": 65,
+      "sex": "female",
+      "clinical_history": "No family history of breast cancer, on HRT for 5 years",
+      "presenting_complaint": "Palpable lump in left breast noticed during self-examination",
+      "prior_diagnoses": [
+        "Osteoporosis"
+      ]
+    },
+    "PAT_IMG017": {
+      "patient_id": "PAT_IMG017",
+      "age": 40,
+      "sex": "female",
+      "clinical_history": "Mother diagnosed with breast cancer at age 52",
+      "presenting_complaint": "Asymptomatic, abnormality detected on routine screening mammography",
+      "prior_diagnoses": []
+    },
+    "PAT_IMG018": {
+      "patient_id": "PAT_IMG018",
+      "age": 31,
+      "sex": "female",
+      "clinical_history": "BRCA1 mutation carrier, strong family history of breast cancer",
+      "presenting_complaint": "Rapidly growing palpable mass in right breast over 2 months",
+      "prior_diagnoses": [
+        "BRCA1 Mutation Carrier"
+      ]
+    },
+    "PAT_IMG019": {
+      "patient_id": "PAT_IMG019",
+      "age": 85,
+      "sex": "female",
+      "clinical_history": "Type 2 diabetes for 15 years, HbA1c 7.2%, hypertension",
+      "presenting_complaint": "Routine diabetic eye screening, no visual complaints",
+      "prior_diagnoses": [
+        "Type 2 Diabetes Mellitus",
+        "Hypertension"
+      ]
+    },
+    "PAT_IMG020": {
+      "patient_id": "PAT_IMG020",
+      "age": 4,
+      "sex": "male",
+      "clinical_history": "Type 1 diabetes diagnosed at age 2, on insulin therapy",
+      "presenting_complaint": "Routine diabetic eye screening",
+      "prior_diagnoses": [
+        "Type 1 Diabetes Mellitus"
+      ]
+    },
+    "PAT_IMG021": {
+      "patient_id": "PAT_IMG021",
+      "age": 30,
+      "sex": "female",
+      "clinical_history": "Type 1 diabetes for 20 years, poorly controlled HbA1c 10.5%",
+      "presenting_complaint": "Progressive blurred vision in right eye over 3 months with occasional floaters",
+      "prior_diagnoses": [
+        "Type 1 Diabetes Mellitus",
+        "Diabetic Nephropathy",
+        "Hypertension"
+      ]
+    },
+    "PAT_IMG022": {
+      "patient_id": "PAT_IMG022",
+      "age": 84,
+      "sex": "male",
+      "clinical_history": "History of sun exposure, multiple benign nevi",
+      "presenting_complaint": "Routine skin check, stable pigmented lesion on trunk",
+      "prior_diagnoses": [
+        "Actinic Keratosis (treated)"
+      ]
+    },
+    "PAT_IMG023": {
+      "patient_id": "PAT_IMG023",
+      "age": 9,
+      "sex": "male",
+      "clinical_history": "Family history of melanoma (father), fair skin type",
+      "presenting_complaint": "Parents noticed a changing mole on the child's back over 6 months",
+      "prior_diagnoses": []
+    },
+    "PAT_IMG024": {
+      "patient_id": "PAT_IMG024",
+      "age": 43,
+      "sex": "female",
+      "clinical_history": "Fair skin, history of multiple sunburns, outdoor occupation",
+      "presenting_complaint": "New pigmented lesion on left calf noticed 4 months ago, rapidly changing in size and color",
+      "prior_diagnoses": []
+    },
+    "PAT_IMG025": {
+      "patient_id": "PAT_IMG025",
+      "age": 75,
+      "sex": "male",
+      "clinical_history": "Hypertension, atrial fibrillation",
+      "presenting_complaint": "Progressive exertional dyspnea over 6 months with reduced exercise tolerance",
+      "prior_diagnoses": [
+        "Hypertension",
+        "Atrial Fibrillation"
+      ]
+    },
+    "PAT_IMG026": {
+      "patient_id": "PAT_IMG026",
+      "age": 47,
+      "sex": "female",
+      "clinical_history": "Bicuspid aortic valve diagnosed in childhood, progressive exertional symptoms",
+      "presenting_complaint": "Two episodes of exertional syncope in the past month with progressive dyspnea",
+      "prior_diagnoses": [
+        "Bicuspid Aortic Valve"
+      ]
+    },
+    "PAT_IMG027": {
+      "patient_id": "PAT_IMG027",
+      "age": 79,
+      "sex": "male",
+      "clinical_history": "Former smoker (30 pack-years, quit 10 years ago), COPD",
+      "presenting_complaint": "Incidental finding on CT performed for COPD follow-up",
+      "prior_diagnoses": [
+        "COPD",
+        "Hypertension",
+        "Former Smoker"
+      ]
+    },
+    "PAT_IMG028": {
+      "patient_id": "PAT_IMG028",
+      "age": 59,
+      "sex": "female",
+      "clinical_history": "Former smoker (15 pack-years), family history of lung cancer",
+      "presenting_complaint": "Persistent dry cough for 3 months not responding to treatment",
+      "prior_diagnoses": [
+        "Former Smoker",
+        "Gastroesophageal Reflux"
+      ]
+    },
+    "PAT_IMG029": {
+      "patient_id": "PAT_IMG029",
+      "age": 35,
+      "sex": "female",
+      "clinical_history": "Non-smoker, no significant past medical history",
+      "presenting_complaint": "Incidental finding on CT chest performed for evaluation of chest wall pain after minor trauma",
+      "prior_diagnoses": []
+    },
+    "PAT_IMG030": {
+      "patient_id": "PAT_IMG030",
+      "age": 33,
+      "sex": "male",
+      "clinical_history": "Obesity, hyperlipidemia",
+      "presenting_complaint": "Incidental finding during routine abdominal screening, no abdominal complaints",
+      "prior_diagnoses": [
+        "Obesity",
+        "Hyperlipidemia"
+      ]
+    },
+    "PAT_IMG031": {
+      "patient_id": "PAT_IMG031",
+      "age": 70,
+      "sex": "female",
+      "clinical_history": "Known cholelithiasis, hypertension, type 2 diabetes",
+      "presenting_complaint": "Acute right upper quadrant pain for 12 hours with fever (38.5\u00b0C) and nausea",
+      "prior_diagnoses": [
+        "Cholelithiasis",
+        "Hypertension",
+        "Type 2 Diabetes Mellitus"
+      ]
+    },
+    "PAT_IMG003": {
+      "patient_id": "PAT_IMG003",
+      "age": 62,
+      "sex": "male",
+      "clinical_history": "Current smoker (40 pack-years), chronic cough",
+      "presenting_complaint": "Lung biopsy for evaluation of suspicious lung mass found on CT",
+      "prior_diagnoses": [
+        "COPD",
+        "Hypertension"
+      ]
+    },
+    "PAT_IMG008": {
+      "patient_id": "PAT_IMG008",
+      "age": 65,
+      "sex": "male",
+      "clinical_history": "Congestive heart failure, coronary artery disease, type 2 diabetes",
+      "presenting_complaint": "Progressive dyspnea on exertion and orthopnea for 1 week",
+      "prior_diagnoses": [
+        "Congestive Heart Failure",
+        "Coronary Artery Disease",
+        "Type 2 Diabetes Mellitus"
+      ]
+    },
+    "PAT_IMG009": {
+      "patient_id": "PAT_IMG009",
+      "age": 47,
+      "sex": "female",
+      "clinical_history": "On anticoagulation therapy for DVT",
+      "presenting_complaint": "Headache and confusion after mechanical fall at home",
+      "prior_diagnoses": [
+        "Deep Vein Thrombosis",
+        "Anticoagulation Therapy"
+      ]
+    },
+    "PAT_IMG010": {
+      "patient_id": "PAT_IMG010",
+      "age": 52,
+      "sex": "female",
+      "clinical_history": "Suspicious calcifications found on screening mammography",
+      "presenting_complaint": "Breast biopsy for evaluation of suspicious mammographic calcifications",
+      "prior_diagnoses": []
+    }
+  },
+  "similar_cases": {},
+  "analysis_log": []
+}

@@ -1,0 +1,70 @@
+# =============================================================================
+# GPU 6: GRPO — Lingshu (SFT'd) on Triage / Emergency
+# =============================================================================
+# Safety-critical domain — lower temperature (0.6) for more conservative
+# generation, higher beta (0.05) for stronger KL penalty, and an additional
+# "safety" reward function weighted at 0.3. More epochs (5) to compensate
+# for fewer training tasks in the triage domain.
+# =============================================================================
+# Trainer: python -m bioagents.training.grpo_trainer --config CONFIG.yaml
+# =============================================================================
+
+model:
+  name_or_path: "checkpoints/sft_p2_aggressive_lingshu/merged"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+peft:
+  enabled: true
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+
+dataset:
+  domain: "triage_emergency"
+  tasks_path: "data/domains/triage_emergency/tasks.json"
+  split_tasks_path: ""
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 2048
+  max_completion_length: 1024
+
+training:
+  output_dir: "checkpoints/8gpu/grpo_lingshu_triage"
+  num_train_epochs: 5
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  learning_rate: 0.000003
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 10
+  save_steps: 100
+  eval_steps: 50
+  save_total_limit: 3
+  seed: 48
+  num_generations: 4
+  beta: 0.05
+  temperature: 0.6
+  top_p: 0.95
+  top_k: 50
+
+rewards:
+  functions:
+    - {name: "accuracy", weight: 0.3}
+    - {name: "format", weight: 0.1}
+    - {name: "process", weight: 0.3}
+    - {name: "safety", weight: 0.3}
+
+environment:
+  max_turns: 10
+  use_gym_env: true
+
+logging:
+  project: "bioagents-grpo"
+  run_name: "grpo_lingshu_triage_gpu6"
+  use_wandb: false
+  log_dir: "logs/8gpu/grpo_lingshu_triage"

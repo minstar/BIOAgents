@@ -1,0 +1,16 @@
+{
+  "train": [
+    "triage_stemi_001",
+    "triage_thunderclap_002",
+    "triage_sepsis_004",
+    "triage_peds_fracture_005",
+    "triage_chf_exacerbation_006",
+    "triage_acute_abdomen_008",
+    "triage_anaphylaxis_010"
+  ],
+  "test": [
+    "triage_stroke_003",
+    "triage_ankle_injury_007",
+    "triage_med_refill_009"
+  ]
+}

@@ -1,0 +1,364 @@
+[
+  {
+    "id": "vdx_chest_pneumonia_001",
+    "description": {
+      "purpose": "Identify pneumonia on a chest X-ray and assess for complications",
+      "difficulty": "easy",
+      "source": "VQA-RAD",
+      "category": "radiology",
+      "key_challenges": ["Identify consolidation pattern", "Detect associated pleural effusion"]
+    },
+    "ticket": "IMAGE: IMG001 (PA chest X-ray)\nPATIENT: PAT_IMG001 (58M, diabetic, former smoker)\nQUESTION: What abnormality is seen in the right lower zone of this chest X-ray? Are there any associated findings?",
+    "correct_answer": "Right lower lobe consolidation consistent with pneumonia",
+    "image_id": "IMG001",
+    "patient_id": "PAT_IMG001",
+    "question_id": "VQ001",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "analyze_image",
+          "name": "analyze_medical_image",
+          "arguments": {"image_id": "IMG001"},
+          "info": "Analyze the chest X-ray for abnormalities"
+        },
+        {
+          "action_id": "get_context",
+          "name": "get_patient_context",
+          "arguments": {"patient_id": "PAT_IMG001"},
+          "info": "Review patient clinical context"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {"answer": "Right lower lobe consolidation consistent with pneumonia"},
+          "info": "Submit the diagnosis"
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified consolidation in the right lower lobe",
+        "The agent mentioned pneumonia as the diagnosis",
+        "The agent noted the pleural effusion as an associated finding",
+        "The agent reviewed patient context before making diagnosis"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "vdx_ct_stroke_001",
+    "description": {
+      "purpose": "Diagnose acute ischemic stroke on CT head",
+      "difficulty": "medium",
+      "source": "VQA-RAD",
+      "category": "radiology",
+      "key_challenges": ["Identify early ischemic signs", "Determine vascular territory", "Rule out hemorrhage"]
+    },
+    "ticket": "IMAGE: IMG002 (Non-contrast CT head)\nPATIENT: PAT_IMG002 (72F, AFib, acute left-sided weakness)\nQUESTION: What is the most likely diagnosis based on this CT head? Which vascular territory is involved?",
+    "correct_answer": "Acute ischemic stroke",
+    "image_id": "IMG002",
+    "patient_id": "PAT_IMG002",
+    "question_id": "VQ003",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "analyze_image",
+          "name": "analyze_medical_image",
+          "arguments": {"image_id": "IMG002"},
+          "info": "Analyze CT head for stroke findings"
+        },
+        {
+          "action_id": "get_context",
+          "name": "get_patient_context",
+          "arguments": {"patient_id": "PAT_IMG002"},
+          "info": "Review patient history (AFib is key risk factor)"
+        },
+        {
+          "action_id": "get_report",
+          "name": "get_image_report",
+          "arguments": {"image_id": "IMG002"},
+          "info": "Get detailed radiology report"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {"answer": "Acute ischemic stroke"},
+          "info": "Submit the diagnosis: acute ischemic stroke in right MCA territory"
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified acute ischemic stroke",
+        "The agent mentioned the right MCA territory",
+        "The agent noted the insular ribbon sign or early ischemic changes",
+        "The agent considered atrial fibrillation as a risk factor"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "vdx_pathology_lung_001",
+    "description": {
+      "purpose": "Identify lung adenocarcinoma on histology",
+      "difficulty": "medium",
+      "source": "PathVQA",
+      "category": "pathology",
+      "key_challenges": ["Identify glandular architecture", "Distinguish adenocarcinoma subtypes"]
+    },
+    "ticket": "IMAGE: IMG003 (H&E stained lung biopsy, 40x)\nQUESTION: What type of lung cancer does this histology slide show? Describe the key histological features.",
+    "correct_answer": "Adenocarcinoma",
+    "image_id": "IMG003",
+    "question_id": "VQ004",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "analyze_image",
+          "name": "analyze_medical_image",
+          "arguments": {"image_id": "IMG003"},
+          "info": "Analyze the histology slide"
+        },
+        {
+          "action_id": "search_knowledge",
+          "name": "search_imaging_knowledge",
+          "arguments": {"query": "lung adenocarcinoma histology"},
+          "info": "Search for diagnostic criteria"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {"answer": "Adenocarcinoma"},
+          "info": "Submit lung adenocarcinoma diagnosis"
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified adenocarcinoma",
+        "The agent described glandular/acinar architecture",
+        "The agent mentioned cellular pleomorphism or nuclear atypia",
+        "The agent noted the invasive nature (desmoplastic reaction)"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "vdx_neonatal_abdomen_001",
+    "description": {
+      "purpose": "Identify double bubble sign on neonatal abdominal X-ray",
+      "difficulty": "medium",
+      "source": "VQA-RAD",
+      "category": "radiology",
+      "key_challenges": ["Recognize classic radiographic sign", "Consider differential for duodenal obstruction"]
+    },
+    "ticket": "IMAGE: IMG004 (AP abdominal X-ray)\nPATIENT: PAT_IMG004 (3-day-old neonate, bilious vomiting)\nQUESTION: What classic radiographic sign is seen on this neonatal abdominal X-ray? What are the differential diagnoses?",
+    "correct_answer": "Double bubble sign",
+    "image_id": "IMG004",
+    "patient_id": "PAT_IMG004",
+    "question_id": "VQ005",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "analyze_image",
+          "name": "analyze_medical_image",
+          "arguments": {"image_id": "IMG004"},
+          "info": "Analyze neonatal abdominal X-ray"
+        },
+        {
+          "action_id": "get_context",
+          "name": "get_patient_context",
+          "arguments": {"patient_id": "PAT_IMG004"},
+          "info": "Review neonatal clinical context"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {"answer": "Double bubble sign"},
+          "info": "Identify the double bubble sign"
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified the double bubble sign",
+        "The agent mentioned duodenal obstruction",
+        "The agent listed differential diagnoses (duodenal atresia, annular pancreas)",
+        "The agent noted the significance of bilious vomiting"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "vdx_dermoscopy_melanoma_001",
+    "description": {
+      "purpose": "Evaluate dermoscopic features for melanoma",
+      "difficulty": "medium",
+      "source": "SLAKE",
+      "category": "dermatology",
+      "key_challenges": ["Apply ABCDE criteria", "Identify dermoscopic structures", "Risk stratification"]
+    },
+    "ticket": "IMAGE: IMG005 (Dermoscopy image)\nPATIENT: PAT_IMG005 (45M, family history of melanoma)\nQUESTION: Based on the dermoscopic features, what is the most concerning diagnosis? What features support your assessment?",
+    "correct_answer": "Melanoma",
+    "image_id": "IMG005",
+    "patient_id": "PAT_IMG005",
+    "question_id": "VQ006",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "analyze_image",
+          "name": "analyze_medical_image",
+          "arguments": {"image_id": "IMG005"},
+          "info": "Analyze dermoscopic features"
+        },
+        {
+          "action_id": "get_context",
+          "name": "get_patient_context",
+          "arguments": {"patient_id": "PAT_IMG005"},
+          "info": "Review patient risk factors"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {"answer": "Melanoma"},
+          "info": "Submit melanoma as the diagnosis"
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified melanoma as the primary concern",
+        "The agent mentioned ABCDE criteria features",
+        "The agent noted asymmetry, irregular border, or color variegation",
+        "The agent recommended excisional biopsy"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "vdx_fundus_dr_001",
+    "description": {
+      "purpose": "Stage diabetic retinopathy on fundus photograph",
+      "difficulty": "medium",
+      "source": "VQA-Med-2021",
+      "category": "ophthalmology",
+      "key_challenges": ["Stage diabetic retinopathy", "Identify macular edema", "Treatment recommendation"]
+    },
+    "ticket": "IMAGE: IMG006 (Fundus photograph, right eye)\nPATIENT: PAT_IMG006 (55M, 20-year diabetic, HbA1c 8.5%)\nQUESTION: What stage of diabetic retinopathy is shown? Are there signs of macular edema?",
+    "correct_answer": "Moderate non-proliferative diabetic retinopathy",
+    "image_id": "IMG006",
+    "patient_id": "PAT_IMG006",
+    "question_id": "VQ007",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "analyze_image",
+          "name": "analyze_medical_image",
+          "arguments": {"image_id": "IMG006"},
+          "info": "Analyze fundus photograph"
+        },
+        {
+          "action_id": "get_context",
+          "name": "get_patient_context",
+          "arguments": {"patient_id": "PAT_IMG006"},
+          "info": "Review diabetic history"
+        },
+        {
+          "action_id": "get_report",
+          "name": "get_image_report",
+          "arguments": {"image_id": "IMG006"},
+          "info": "Get ophthalmology report"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {"answer": "Moderate non-proliferative diabetic retinopathy"},
+          "info": "Stage the diabetic retinopathy"
+        }
+      ],
+      "nl_assertions": [
+        "The agent correctly staged as moderate NPDR",
+        "The agent identified dot/blot hemorrhages and hard exudates",
+        "The agent mentioned macular edema",
+        "The agent noted absence of neovascularization (non-proliferative)"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "vdx_mri_ms_001",
+    "description": {
+      "purpose": "Identify multiple sclerosis on brain MRI",
+      "difficulty": "medium",
+      "source": "PMC-VQA",
+      "category": "radiology",
+      "key_challenges": ["Identify Dawson's fingers pattern", "Assess dissemination in space"]
+    },
+    "ticket": "IMAGE: IMG007 (T2-weighted axial brain MRI)\nPATIENT: PAT_IMG007 (35F, prior optic neuritis, new visual disturbances)\nQUESTION: What pattern of white matter lesions is seen? What is the most likely diagnosis?",
+    "correct_answer": "Dawson's fingers - periventricular lesions oriented perpendicular to the ventricles",
+    "image_id": "IMG007",
+    "patient_id": "PAT_IMG007",
+    "question_id": "VQ008",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "analyze_image",
+          "name": "analyze_medical_image",
+          "arguments": {"image_id": "IMG007"},
+          "info": "Analyze brain MRI for white matter lesions"
+        },
+        {
+          "action_id": "get_context",
+          "name": "get_patient_context",
+          "arguments": {"patient_id": "PAT_IMG007"},
+          "info": "Review history of prior optic neuritis"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {"answer": "Dawson's fingers - periventricular lesions oriented perpendicular to the ventricles"},
+          "info": "Identify Dawson's fingers and diagnose MS"
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified Dawson's fingers pattern",
+        "The agent mentioned multiple sclerosis as the diagnosis",
+        "The agent noted periventricular distribution",
+        "The agent considered prior optic neuritis as supporting dissemination in time"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "vdx_breast_dcis_001",
+    "description": {
+      "purpose": "Diagnose DCIS on breast biopsy histology",
+      "difficulty": "hard",
+      "source": "PathVQA",
+      "category": "pathology",
+      "key_challenges": ["Distinguish DCIS from invasive carcinoma", "Identify comedo necrosis pattern"]
+    },
+    "ticket": "IMAGE: IMG010 (H&E breast biopsy)\nQUESTION: What is the histological diagnosis? Is there evidence of invasion?",
+    "correct_answer": "Ductal carcinoma in situ (DCIS)",
+    "image_id": "IMG010",
+    "question_id": "VQ010",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "analyze_image",
+          "name": "analyze_medical_image",
+          "arguments": {"image_id": "IMG010"},
+          "info": "Analyze breast biopsy histology"
+        },
+        {
+          "action_id": "get_report",
+          "name": "get_image_report",
+          "arguments": {"image_id": "IMG010"},
+          "info": "Get pathology report"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {"answer": "Ductal carcinoma in situ (DCIS)"},
+          "info": "Diagnose DCIS"
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified DCIS",
+        "The agent noted comedonecrosis pattern",
+        "The agent confirmed no stromal invasion",
+        "The agent distinguished from invasive ductal carcinoma"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  }
+]

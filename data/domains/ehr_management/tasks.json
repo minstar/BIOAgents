@@ -1,0 +1,328 @@
+[
+  {
+    "id": "ehr_001",
+    "domain": "ehr_management",
+    "category": "chart_review",
+    "difficulty": "medium",
+    "ticket": "Patient Robert Chen (P2001) is admitted under HADM_10001 for acute decompensated heart failure. Review the patient's current admission, including labs, vitals, and medications. Identify the key clinical findings and summarize the clinical trajectory from admission to current status. Is the patient improving, stable, or deteriorating?",
+    "patient_id": "P2001",
+    "hadm_id": "HADM_10001",
+    "expected_actions": [
+      {"tool": "get_patient_demographics", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_vital_signs", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10001"}}
+    ],
+    "expected_answer": "Patient is improving. BNP trending down (1850→320 pg/mL), vital signs stabilizing (HR 110→76, SBP 92→126, SpO2 88%→98%), successfully weaned from supplemental oxygen. Creatinine peaked at 2.4 (cardiorenal syndrome) but improving to 1.6. Patient transitioned from IV to PO diuretics. On appropriate GDMT (lisinopril, carvedilol, spironolactone, furosemide). Echo showed LVEF 25% with moderate MR.",
+    "rubric": {
+      "must_mention": ["BNP trend decreasing", "creatinine peaked then improved", "cardiorenal syndrome", "vitals improving", "LVEF 25%", "GDMT initiated"],
+      "scoring": "award 1 point for each must_mention item identified. Total 6 points."
+    },
+    "split": "train"
+  },
+  {
+    "id": "ehr_002",
+    "domain": "ehr_management",
+    "category": "critical_value_identification",
+    "difficulty": "hard",
+    "ticket": "Maria Santos (P2002, HADM_10002) was admitted with sepsis. As the covering physician, review ALL available lab data and identify critical/abnormal values that require immediate attention. Prioritize the findings by clinical urgency and suggest appropriate next steps for each.",
+    "patient_id": "P2002",
+    "hadm_id": "HADM_10002",
+    "expected_actions": [
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_vital_signs", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_clinical_scores", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10002"}}
+    ],
+    "expected_answer": "Critical findings requiring immediate attention: (1) AKI Stage 3 — Creatinine rising from 2.3→3.1, consider renal dose adjustment of meropenem and assess need for RRT. (2) Thrombocytopenia worsening (95→78 K/uL) — possible DIC in setting of sepsis, order DIC panel (fibrinogen, D-dimer, PT/INR). (3) Lactate elevated (4.2→1.8, improving) — septic shock resolving but monitor closely. (4) Procalcitonin markedly elevated (8.5→5.2) — trending down but still very high, continue antibiotics. (5) Positive blood and urine cultures (E. coli) — ensure antibiotic sensitivities obtained and appropriate coverage. (6) Metformin was appropriately discontinued due to lactic acidosis risk in AKI.",
+    "rubric": {
+      "must_mention": ["AKI stage 3 with rising creatinine", "thrombocytopenia and possible DIC", "lactate trend improving", "procalcitonin trend", "positive cultures E. coli", "metformin discontinuation"],
+      "scoring": "award 1 point for each must_mention item. Bonus point for mentioning RRT consideration and DIC panel. Total 6+2 points."
+    },
+    "split": "train"
+  },
+  {
+    "id": "ehr_003",
+    "domain": "ehr_management",
+    "category": "medication_reconciliation",
+    "difficulty": "medium",
+    "ticket": "Review the medication orders for James Williams (P2003, HADM_10003) who was admitted for acute anterior STEMI and underwent primary PCI. Verify that all guideline-directed medical therapy (GDMT) for post-STEMI care has been appropriately initiated. Identify any missing therapies or potential drug interactions.",
+    "patient_id": "P2003",
+    "hadm_id": "HADM_10003",
+    "expected_actions": [
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10003"}},
+      {"tool": "get_procedures", "args": {"hadm_id": "HADM_10003"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10003"}},
+      {"tool": "get_discharge_summary", "args": {"hadm_id": "HADM_10003"}}
+    ],
+    "expected_answer": "Post-STEMI GDMT assessment: (1) DAPT — aspirin 81mg + ticagrelor 90mg BID ✓ (minimum 12 months per guidelines). (2) High-intensity statin — atorvastatin 80mg ✓ (LDL 165, needs aggressive lowering). (3) Beta-blocker — metoprolol tartrate 25mg BID ✓ (consider switching to metoprolol succinate ER for better compliance). (4) ACE inhibitor — lisinopril 5mg ✓ (LVEF 40%, indicated for LV remodeling prevention). (5) Nitroglycerin SL PRN ✓. All 5 key GDMT classes are covered. Potential concern: HbA1c 5.8% is in prediabetic range — lifestyle counseling and monitoring recommended. Consider eplerenone if LVEF remains ≤40% and patient has symptoms.",
+    "rubric": {
+      "must_mention": ["DAPT with aspirin and ticagrelor", "high-intensity statin", "beta-blocker", "ACE inhibitor", "all GDMT initiated", "LVEF 40% related management"],
+      "scoring": "award 1 point for each must_mention item. Bonus for mentioning eplerenone consideration and HbA1c concern. Total 6+2 points."
+    },
+    "split": "train"
+  },
+  {
+    "id": "ehr_004",
+    "domain": "ehr_management",
+    "category": "readmission_risk",
+    "difficulty": "hard",
+    "ticket": "Robert Chen (P2001) has a history of a prior admission (HADM_9001) and is now in his second admission (HADM_10001) for heart failure. Analyze both admissions to identify factors contributing to the readmission. What interventions should be implemented at discharge to reduce 30-day readmission risk?",
+    "patient_id": "P2001",
+    "hadm_id": "HADM_10001",
+    "expected_actions": [
+      {"tool": "get_patient_demographics", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_admission_info", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_admission_info", "args": {"hadm_id": "HADM_9001"}},
+      {"tool": "get_discharge_summary", "args": {"hadm_id": "HADM_9001"}},
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_9001"}},
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_quality_indicators", "args": {"hadm_id": "HADM_10001"}}
+    ],
+    "expected_answer": "Readmission analysis: Prior admission (HADM_9001, Dec 2025) discharged on suboptimal therapy — only furosemide 20mg and lisinopril 5mg, missing beta-blocker and aldosterone antagonist. GDMT was significantly underdosed. Readmission within 26 days. Contributing factors: (1) Inadequate GDMT at prior discharge. (2) No beta-blocker or MRA prescribed. (3) Low furosemide dose insufficient for volume management. (4) Readmission risk 35% (high). Recommended interventions: (1) Ensure full GDMT before discharge (now includes carvedilol + spironolactone). (2) Close follow-up within 7 days. (3) Daily weight monitoring with clear action plan. (4) Sodium restriction (<2g/day) and fluid restriction (1.5L/day). (5) Consider cardiology referral for device therapy evaluation (LVEF 25% — potential ICD/CRT candidate). (6) Transitional care management program enrollment.",
+    "rubric": {
+      "must_mention": ["suboptimal GDMT at prior discharge", "missing beta-blocker and MRA previously", "readmission within 30 days", "now on improved GDMT", "close follow-up needed", "device therapy consideration for LVEF 25%"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "train"
+  },
+  {
+    "id": "ehr_005",
+    "domain": "ehr_management",
+    "category": "clinical_scoring",
+    "difficulty": "medium",
+    "ticket": "Review the clinical severity scores (SOFA, NEWS2, qSOFA) for Maria Santos (P2002, HADM_10002) during her ICU stay. Interpret the score trends, explain what each score component tells us about organ dysfunction, and assess whether the patient is on a trajectory toward recovery.",
+    "patient_id": "P2002",
+    "hadm_id": "HADM_10002",
+    "expected_actions": [
+      {"tool": "get_clinical_scores", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_vital_signs", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10002"}}
+    ],
+    "expected_answer": "Score interpretation: (1) Initial SOFA 10 (severe) → 6 (moderate) in 24h, indicating improving trajectory. Key organ dysfunctions: cardiovascular (vasopressor-dependent → improving), renal (worsening from 2 to 3), respiratory (improving). (2) qSOFA 3/3 on admission (SBP≤100, RR≥22, altered mentation) — met Sepsis-3 criteria. (3) NEWS2 13 (very high) on admission — immediate emergency response level. Trajectory: Overall improving. Cardiovascular stabilizing (off vasopressors), lactate normalizing (4.2→1.8), respiratory improving. CONCERN: Renal SOFA component WORSENED (Cr 2.3→3.1), indicating AKI progression despite overall clinical improvement. Need to monitor renal function closely and consider nephrology consultation if Cr continues to rise.",
+    "rubric": {
+      "must_mention": ["SOFA trend improving 10→6", "qSOFA met sepsis criteria", "NEWS2 very high risk", "cardiovascular improving off pressors", "renal worsening despite overall improvement", "lactate normalizing"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "train"
+  },
+  {
+    "id": "ehr_006",
+    "domain": "ehr_management",
+    "category": "discharge_planning",
+    "difficulty": "hard",
+    "ticket": "James Williams (P2003, HADM_10003) is being prepared for discharge after his STEMI. Create a comprehensive discharge plan including: medication list with instructions, follow-up appointments, lifestyle modifications, red-flag symptoms to watch for, and patient education priorities.",
+    "patient_id": "P2003",
+    "hadm_id": "HADM_10003",
+    "expected_actions": [
+      {"tool": "get_discharge_summary", "args": {"hadm_id": "HADM_10003"}},
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10003"}},
+      {"tool": "get_procedures", "args": {"hadm_id": "HADM_10003"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10003"}},
+      {"tool": "get_quality_indicators", "args": {"hadm_id": "HADM_10003"}}
+    ],
+    "expected_answer": "Discharge plan: MEDICATIONS: (1) Aspirin 81mg daily — lifelong, do not stop. (2) Ticagrelor 90mg BID — minimum 12 months, critical not to miss doses. (3) Atorvastatin 80mg daily — for cholesterol (LDL 165). (4) Metoprolol tartrate 25mg BID — may need uptitration. (5) Lisinopril 5mg daily — for heart protection. (6) Nitroglycerin 0.4mg SL PRN — for chest pain. FOLLOW-UP: Cardiology in 1 week, repeat echo in 3 months, cardiac rehab program. LIFESTYLE: Heart-healthy diet, regular exercise (cardiac rehab), smoking cessation (if applicable), weight management. RED FLAGS: Return to ER if chest pain not relieved by 3 nitroglycerin doses, shortness of breath at rest, syncope, or signs of bleeding (ticagrelor). EDUCATION: Importance of DAPT compliance (stent thrombosis risk), medication side effects, when to seek emergency care.",
+    "rubric": {
+      "must_mention": ["complete medication list with instructions", "DAPT compliance critical", "cardiac rehab referral", "repeat echo in 3 months", "red flag symptoms", "lifestyle modifications"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "test"
+  },
+  {
+    "id": "ehr_007",
+    "domain": "ehr_management",
+    "category": "antibiotic_stewardship",
+    "difficulty": "hard",
+    "ticket": "Maria Santos (P2002, HADM_10002) has been on meropenem for sepsis secondary to UTI. Positive cultures show E. coli. Review the antibiotic therapy, infection markers, and clinical trajectory. Should the antibiotic regimen be de-escalated? If so, to what? When would you consider stopping antibiotics?",
+    "patient_id": "P2002",
+    "hadm_id": "HADM_10002",
+    "expected_actions": [
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_vital_signs", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_clinical_scores", "args": {"hadm_id": "HADM_10002"}}
+    ],
+    "expected_answer": "Antibiotic stewardship assessment: Current: meropenem 1g IV Q8H (broad spectrum carbapenem). Culture: E. coli from both blood and urine. DE-ESCALATION: Yes, should de-escalate once sensitivities available. If E. coli is susceptible to narrower agents, switch to ceftriaxone 2g IV daily or ciprofloxacin (if susceptible). Rationale: Reducing carbapenem use prevents resistance development. MARKERS improving: WBC 18.5→15.2 (trending down), Procalcitonin 8.5→5.2 (decreasing), Lactate normalized (1.8), temperature normalizing (39.2→37.1). DURATION: For complicated UTI with bacteremia — recommend 10-14 days total. Consider transition to oral once: afebrile >48h, tolerating PO, improving WBC and procalcitonin. CAVEAT: AKI (Cr 3.1) requires renal dose adjustment — meropenem dose may need adjustment for CrCl.",
+    "rubric": {
+      "must_mention": ["de-escalate from meropenem", "based on E. coli sensitivities", "infection markers improving", "10-14 day duration for bacteremia", "IV to PO transition criteria", "renal dose adjustment needed"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "test"
+  },
+  {
+    "id": "ehr_008",
+    "domain": "ehr_management",
+    "category": "quality_measure",
+    "difficulty": "medium",
+    "ticket": "Evaluate the quality of care provided during Robert Chen's admission (HADM_10001) for heart failure. Check against standard HF quality measures: (1) LVEF assessment, (2) GDMT optimization, (3) Discharge instructions (diet, weight monitoring, follow-up), (4) Readmission risk assessment. Report compliance with each measure.",
+    "patient_id": "P2001",
+    "hadm_id": "HADM_10001",
+    "expected_actions": [
+      {"tool": "get_procedures", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_discharge_summary", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_quality_indicators", "args": {"hadm_id": "HADM_10001"}}
+    ],
+    "expected_answer": "Quality measure compliance: (1) LVEF Assessment ✓ — Echo performed (LVEF 25%). (2) GDMT Optimization ✓ — ACEi (lisinopril), beta-blocker (carvedilol), MRA (spironolactone), diuretic (furosemide) all prescribed. Consider ARNI (sacubitril/valsartan) instead of ACEi per latest guidelines. (3) Discharge Instructions ✓ — Weight monitoring, sodium restriction (<2g/day), fluid restriction (1.5L/day), activity guidance, follow-up in 1 week. (4) Readmission Risk ✓ — Assessed at 35% (high). Appropriate given 30-day readmission history. Areas for improvement: (a) Consider ARNI instead of ACEi. (b) Consider SGLT2 inhibitor (dapagliflozin/empagliflozin) — guideline-recommended for HFrEF. (c) Consider ICD evaluation given LVEF 25% if no recovery after 3 months of GDMT. Overall quality: Good. Meets core measures with room for optimization.",
+    "rubric": {
+      "must_mention": ["LVEF documented", "GDMT prescribed (4 classes)", "discharge instructions complete", "readmission risk assessed", "consider ARNI", "consider SGLT2 inhibitor"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "test"
+  },
+  {
+    "id": "ehr_009",
+    "domain": "ehr_management",
+    "category": "icu_assessment",
+    "difficulty": "hard",
+    "ticket": "You are the night-shift ICU resident covering Maria Santos (P2002, HADM_10002). She was admitted 48 hours ago with septic shock from a UTI. Review ALL current data — vitals, labs, medications, procedures, severity scores — and prepare a concise ICU progress note. Include your assessment and plan for overnight monitoring.",
+    "patient_id": "P2002",
+    "hadm_id": "HADM_10002",
+    "expected_actions": [
+      {"tool": "get_patient_demographics", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_vital_signs", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_procedures", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_clinical_scores", "args": {"hadm_id": "HADM_10002"}}
+    ],
+    "expected_answer": "ICU Progress Note — Hospital Day 3:\n\nS: 54F septic shock from E. coli UTI/bacteremia. ICU day 3.\n\nO: Vitals: HR 88, BP 112/70, MAP 84, RR 18, T 37.1°C, SpO2 97% on RA. Off vasopressors since yesterday.\nLabs: WBC 15.2↓ (from 22.1), Lactate 1.8 (normalized), Cr 2.6↓ (peak 3.1, AKI improving), Plt 102↑ (nadir 78), Procalcitonin 5.2↓.\nMeds: Meropenem 1g Q8H, insulin glargine 20u daily. Metformin held (AKI).\nLines: R subclavian CVC, L radial art line, Foley.\nScores: SOFA 6 (was 10), qSOFA resolved.\n\nA/P:\n1. Sepsis/Bacteremia: Improving. Continue meropenem, check sensitivities for de-escalation. Monitor WBC, procalcitonin.\n2. AKI Stage 3: Cr trending down (3.1→2.6). Strict I/O monitoring. Avoid nephrotoxins. Renal consult if no continued improvement.\n3. Thrombocytopenia: Plt recovering (78→102). Monitor trend. If drops again, DIC panel.\n4. DM2: On insulin glargine. Check glucose Q6H. Hold metformin until Cr <1.5.\n5. Lines/Access: Assess CVC and art line daily for removal. Keep Foley for strict I/O.\n6. Overnight: Vitals Q4H, page if MAP <65, UO <0.5 mL/kg/h, or temp >38.5°C.",
+    "rubric": {
+      "must_mention": ["off vasopressors", "AKI improving but still significant", "thrombocytopenia trend", "antibiotic de-escalation consideration", "metformin held", "clear overnight monitoring plan"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "test"
+  },
+  {
+    "id": "ehr_010",
+    "domain": "ehr_management",
+    "category": "multi_patient_triage",
+    "difficulty": "hard",
+    "ticket": "You are the attending physician for all three patients on the ward/ICU. You have limited time and need to prioritize your rounds. Based on ALL available data for P2001 (HADM_10001), P2002 (HADM_10002), and P2003 (HADM_10003), rank these patients by clinical acuity/urgency. For each patient, state the single most important issue to address TODAY and the key metric to monitor.",
+    "patient_id": null,
+    "hadm_id": null,
+    "expected_actions": [
+      {"tool": "get_vital_signs", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_clinical_scores", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_vital_signs", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_quality_indicators", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_vital_signs", "args": {"hadm_id": "HADM_10003"}},
+      {"tool": "get_discharge_summary", "args": {"hadm_id": "HADM_10003"}}
+    ],
+    "expected_answer": "Patient Triage Priority:\n\n1. HIGHEST: Maria Santos (P2002) — Septic shock, ICU day 3. Issue: AKI worsening (Cr 3.1) with thrombocytopenia (Plt 78→102). Key metric: Creatinine trend and urine output. Action: Assess need for nephrology consult, check antibiotic sensitivities for de-escalation.\n\n2. MEDIUM: Robert Chen (P2001) — Decompensated HF, day 6. Issue: Readmission risk 35%, need to ensure optimal GDMT and discharge planning. Key metric: Daily weight and BNP trend. Action: Finalize discharge plan with close follow-up.\n\n3. LOWEST: James Williams (P2003) — Post-STEMI day 3, clinically stable. Issue: Ensure discharge medications are correct and cardiac rehab is arranged. Key metric: Troponin trend (should be declining). Action: Confirm follow-up appointments and patient education before discharge.",
+    "rubric": {
+      "must_mention": ["P2002 highest priority due to active sepsis and AKI", "P2001 medium priority with readmission risk", "P2003 lowest priority as clinically stable", "specific key metric for each patient", "specific action for each patient"],
+      "scoring": "award 1 point for correct ordering, 1 point per patient-specific key issue and metric (3 patients). Total 4 points."
+    },
+    "split": "test"
+  },
+  {
+    "id": "ehr_011",
+    "domain": "ehr_management",
+    "category": "drug_interaction",
+    "difficulty": "medium",
+    "ticket": "Review the medication list for Robert Chen (P2001, HADM_10001) who is on lisinopril, carvedilol, spironolactone, furosemide, and metformin. Given his CKD stage 3 (baseline Cr 1.8), identify any potential drug interactions or contraindications. Are there any medications that need dose adjustments or additional monitoring?",
+    "patient_id": "P2001",
+    "hadm_id": "HADM_10001",
+    "expected_actions": [
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_patient_demographics", "args": {"hadm_id": "HADM_10001"}}
+    ],
+    "expected_answer": "Drug interaction and safety review:\n\n1. LISINOPRIL + SPIRONOLACTONE + CKD3: HIGH RISK for hyperkalemia. Both ACEi and MRA increase potassium. Potassium was 5.6 on admission (hyperkalemic!), now improved to 4.5. MONITOR: Check potassium and creatinine within 1 week of discharge. Hold spironolactone if K>5.5.\n\n2. METFORMIN + CKD3: Caution. Metformin is generally safe if eGFR >30, but requires dose adjustment. With Cr 1.6-2.4, eGFR likely 25-40. At eGFR <30, metformin should be held. MONITOR: Renal function closely; may need to discontinue if kidney function worsens.\n\n3. FUROSEMIDE + LISINOPRIL: Monitor for hypotension and worsening renal function. Both can reduce renal perfusion.\n\n4. CARVEDILOL: Appropriate for HFrEF. Start low dose (12.5mg BID is reasonable). Monitor for bradycardia and hypotension.\n\n5. Additional monitoring needed: BMP (K, Cr, Na) within 3-5 days of discharge.",
+    "rubric": {
+      "must_mention": ["hyperkalemia risk with ACEi + MRA + CKD", "potassium monitoring", "metformin caution in CKD", "renal function monitoring", "hypotension risk", "electrolyte monitoring at discharge"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "train"
+  },
+  {
+    "id": "ehr_012",
+    "domain": "ehr_management",
+    "category": "procedure_interpretation",
+    "difficulty": "medium",
+    "ticket": "James Williams (P2003, HADM_10003) underwent primary PCI for STEMI. Review the procedure details, including the echocardiogram results. Explain the significance of the findings to a medical student: What is the door-to-balloon time and why does it matter? What do the echo findings mean for the patient's prognosis?",
+    "patient_id": "P2003",
+    "hadm_id": "HADM_10003",
+    "expected_actions": [
+      {"tool": "get_procedures", "args": {"hadm_id": "HADM_10003"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10003"}},
+      {"tool": "get_clinical_scores", "args": {"hadm_id": "HADM_10003"}}
+    ],
+    "expected_answer": "Procedure interpretation for teaching:\n\n1. PRIMARY PCI: Drug-eluting stent placed in proximal LAD (left anterior descending — the 'widow-maker'). TIMI 3 flow restored (complete perfusion). Door-to-balloon time: 68 minutes. Guideline target is <90 minutes — this was MET. Faster reperfusion = more myocardium saved.\n\n2. ECHO FINDINGS: LVEF 40% (reduced; normal >55%). Anterior wall hypokinesis = damaged myocardium from LAD occlusion. No MR (mitral regurgitation) or pericardial effusion — good prognostic signs. LVEF 40% = moderate dysfunction. May improve over weeks-months with GDMT (ventricular remodeling).\n\n3. TROPONIN PEAK: 45.2 ng/mL — indicates large infarct size. CK-MB peaked at 156 — correlates with moderate-large infarct.\n\n4. PROGNOSIS: GRACE score 142 (intermediate risk, 6-month mortality 3-8%). With timely PCI, appropriate GDMT, and cardiac rehab, prognosis is favorable. Repeat echo in 3 months to reassess LVEF — if no improvement, consider ICD.",
+    "rubric": {
+      "must_mention": ["door-to-balloon time 68 min within guideline", "LAD stenting with TIMI 3 flow", "LVEF 40% moderate dysfunction", "anterior wall hypokinesis", "troponin peak indicating infarct size", "repeat echo for reassessment"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "train"
+  },
+  {
+    "id": "ehr_013",
+    "domain": "ehr_management",
+    "category": "aki_management",
+    "difficulty": "hard",
+    "ticket": "Maria Santos (P2002, HADM_10002) has developed AKI stage 3 in the setting of sepsis. Review her renal function trajectory, current medications, and fluid status. Determine if she needs renal replacement therapy (RRT) initiation. What are the indications and current status relative to those indications?",
+    "patient_id": "P2002",
+    "hadm_id": "HADM_10002",
+    "expected_actions": [
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_vital_signs", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_clinical_scores", "args": {"hadm_id": "HADM_10002"}}
+    ],
+    "expected_answer": "AKI Management Assessment:\n\nRenal trajectory: Cr 2.3 → 2.8 → 3.1 → 2.6 mg/dL. Peak at 3.1, now trending down. AKI Stage 3 (>3x baseline if baseline ~0.9).\n\nRRT Indications Assessment:\n1. Refractory hyperkalemia: Potassium not documented as critical — NOT CURRENTLY MET.\n2. Severe metabolic acidosis (pH <7.1): Not documented — need ABG to confirm — UNCERTAIN.\n3. Refractory volume overload: Patient was initially fluid resuscitated (30 mL/kg bolus), has Foley for monitoring. Improving SpO2 suggests no pulmonary edema — NOT CURRENTLY MET.\n4. Uremic symptoms (encephalopathy, pericarditis): GCS 15 now — NOT MET.\n5. BUN elevation: Not documented.\n\nCONCLUSION: RRT NOT currently indicated. Creatinine is trending DOWN (3.1→2.6), suggesting AKI is recovering. Continue supportive care: maintain adequate perfusion (MAP >65), avoid nephrotoxins, renal-dose medications, strict I/O, monitor Cr Q12H. If Cr re-rises or develops RRT indications, initiate CRRT (continuous, given hemodynamic instability history). Metformin appropriately held.",
+    "rubric": {
+      "must_mention": ["AKI stage 3 classification", "creatinine trending down", "RRT indications listed", "RRT not currently needed", "continue supportive care", "nephrotoxin avoidance"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "test"
+  },
+  {
+    "id": "ehr_014",
+    "domain": "ehr_management",
+    "category": "icu_to_floor_transfer",
+    "difficulty": "medium",
+    "ticket": "Maria Santos (P2002, HADM_10002) has been in the MICU for 48+ hours. Her vital signs and clinical scores are improving. Evaluate whether she meets criteria for transfer from ICU to the general medical floor. List specific criteria and whether each is met.",
+    "patient_id": "P2002",
+    "hadm_id": "HADM_10002",
+    "expected_actions": [
+      {"tool": "get_vital_signs", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_clinical_scores", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_medication_orders", "args": {"hadm_id": "HADM_10002"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10002"}}
+    ],
+    "expected_answer": "ICU Transfer Readiness Assessment:\n\n1. Hemodynamic stability: ✓ OFF vasopressors >24h (norepinephrine stopped 2/2 14:00). MAP >65 consistently (MAP 84 latest). HR stable 88.\n\n2. Respiratory stability: ✓ SpO2 97% on room air (FiO2 0.21). RR 18 — normal.\n\n3. Mental status: ✓ GCS 15 (alert and oriented).\n\n4. No active life-threatening issues: PARTIAL — AKI still stage 3 (Cr 2.6) but trending down. Thrombocytopenia improving (Plt 102).\n\n5. Invasive monitoring needs: CAUTION — still has arterial line and central line. Art line can be removed (no longer on pressors). CVC needed for IV antibiotics — can use PICC on floor.\n\n6. Monitoring frequency: Floor can handle Q4-6H vitals. Currently stable enough.\n\nVERDICT: APPROACHING transfer readiness. Recommend: (a) Remove arterial line. (b) Place PICC for continued IV antibiotics. (c) Ensure Cr continues to trend down over next 12-24h. (d) Transfer to step-down or telemetry floor (not general ward) given AKI and recent septic shock. Target transfer: 12-24 hours if continued improvement.",
+    "rubric": {
+      "must_mention": ["off vasopressors >24h", "hemodynamically stable", "room air saturation", "AKI still present as concern", "line management needed", "step-down recommended over general ward"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "train"
+  },
+  {
+    "id": "ehr_015",
+    "domain": "ehr_management",
+    "category": "longitudinal_analysis",
+    "difficulty": "hard",
+    "ticket": "Analyze the complete longitudinal trajectory for Robert Chen (P2001) across BOTH admissions (HADM_9001 and HADM_10001). Create a timeline of key events, identify the progression of his heart failure, and propose a 6-month outpatient care plan to prevent further decompensation.",
+    "patient_id": "P2001",
+    "hadm_id": "HADM_10001",
+    "expected_actions": [
+      {"tool": "get_patient_demographics", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_admission_info", "args": {"hadm_id": "HADM_9001"}},
+      {"tool": "get_admission_info", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_9001"}},
+      {"tool": "get_lab_results", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_procedures", "args": {"hadm_id": "HADM_10001"}},
+      {"tool": "get_discharge_summary", "args": {"hadm_id": "HADM_9001"}},
+      {"tool": "get_discharge_summary", "args": {"hadm_id": "HADM_10001"}}
+    ],
+    "expected_answer": "Longitudinal Timeline:\n\n• Dec 20, 2025: 1st admission (HADM_9001) — HF exacerbation. BNP 920. Treated with IV diuresis. Discharged Dec 24 on suboptimal therapy (furosemide 20mg, lisinopril 5mg only).\n\n• Jan 15, 2026: 2nd admission (HADM_10001) — Acute decompensated HF, 26 days after prior discharge. Worse presentation: BNP 1850 (2x higher), required CCU admission, hyperkalemia (K 5.6), AKI (Cr 2.4). Echo: LVEF 25%.\n\n• Jan 15-22, 2026: CCU stay → stepdown → discharge. GDMT optimized: added carvedilol, spironolactone, increased furosemide. Weight loss 4.2 kg.\n\nProgression: Clear worsening of HFrEF between admissions. LVEF 25% is severe. Comorbidities (HTN, DM2, CKD3) contribute to poor prognosis.\n\n6-Month Outpatient Plan:\n1. Week 1: Cardiology follow-up. Labs (BMP, BNP). Daily weights.\n2. Week 2-4: Titrate GDMT — increase lisinopril to max tolerated dose or switch to sacubitril/valsartan. Add SGLT2 inhibitor.\n3. Month 1-2: Consider ICD evaluation (LVEF 25%, 40+ days post-optimization).\n4. Month 3: Repeat echo. If LVEF still ≤35%, ICD implantation. Consider CRT if QRS wide.\n5. Months 3-6: HF disease management program, dietitian referral, cardiac rehab, mental health screening.\n6. Ongoing: Monthly BNP monitoring, BMP Q2-4 weeks, telemedicine check-ins, medication adherence support.",
+    "rubric": {
+      "must_mention": ["timeline of both admissions", "GDMT was suboptimal at first discharge", "worsening trajectory between admissions", "LVEF 25% significance", "device therapy consideration (ICD/CRT)", "structured outpatient plan with GDMT optimization"],
+      "scoring": "award 1 point per must_mention item. Total 6 points."
+    },
+    "split": "test"
+  }
+]

@@ -1,0 +1,1401 @@
+[
+  {
+    "id": "xd_chest_pain_001_triage",
+    "pathway_id": "xd_chest_pain_001",
+    "phase_order": 0,
+    "domain": "triage_emergency",
+    "ticket": "[Acute Chest Pain in the Emergency Department \u2014 Phase 1: ED Triage Assessment]\n\nPatient: Robert Chen, 62M, presents to the ED with acute onset substernal chest pain radiating to the left arm, diaphoresis, nausea. PMH: HTN, HLD, DM2, smoking 30 pack-years. Current meds: metformin 1000mg BID, lisinopril 20mg daily, atorvastatin 40mg daily.\n\nYour task: Assess vital signs, determine ESI level, identify time-critical condition\n\nClinical context: This is a high-acuity ED presentation requiring rapid triage, immediate ECG and troponin, possible cath lab activation, and careful medication management considering drug interactions.",
+    "description": {
+      "purpose": "Assess vital signs, determine ESI level, identify time-critical condition",
+      "difficulty": "hard",
+      "pathway": "Acute Chest Pain in the Emergency Department",
+      "phase": "ED Triage Assessment",
+      "time_critical": true,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {
+            "patient_id": "EP001"
+          }
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {
+            "patient_id": "EP001"
+          }
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {
+            "patient_id": "EP001"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should assign ESI-1 or ESI-2 for acute chest pain with cardiac features",
+        "Agent should recognize this as a potential STEMI/ACS",
+        "Agent should flag as time-critical"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P001",
+      "name": "Robert Chen",
+      "age": 62,
+      "sex": "M",
+      "allergies": [
+        "sulfonamides"
+      ],
+      "conditions": [
+        "hypertension",
+        "hyperlipidemia",
+        "type 2 diabetes"
+      ],
+      "medications": [
+        "metformin 1000mg BID",
+        "lisinopril 20mg daily",
+        "atorvastatin 40mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_chest_pain_001_diagnosis",
+    "pathway_id": "xd_chest_pain_001",
+    "phase_order": 1,
+    "domain": "clinical_diagnosis",
+    "ticket": "[Acute Chest Pain in the Emergency Department \u2014 Phase 2: Clinical Assessment & Diagnosis]\n\nPatient: Robert Chen, 62M, presents to the ED with acute onset substernal chest pain radiating to the left arm, diaphoresis, nausea. PMH: HTN, HLD, DM2, smoking 30 pack-years. Current meds: metformin 1000mg BID, lisinopril 20mg daily, atorvastatin 40mg daily.\n\nYour task: Perform history, physical, order labs, establish differential\n\nClinical context: This is a high-acuity ED presentation requiring rapid triage, immediate ECG and troponin, possible cath lab activation, and careful medication management considering drug interactions.",
+    "description": {
+      "purpose": "Perform history, physical, order labs, establish differential",
+      "difficulty": "hard",
+      "pathway": "Acute Chest Pain in the Emergency Department",
+      "phase": "Clinical Assessment & Diagnosis",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "P001"
+          }
+        },
+        {
+          "name": "get_lab_results",
+          "arguments": {
+            "patient_id": "P001"
+          }
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {
+            "patient_id": "P001"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify acute coronary syndrome as primary diagnosis",
+        "Agent should order troponin, ECG, CBC, BMP, coagulation studies",
+        "Agent should consider differential: ACS, PE, aortic dissection, pericarditis"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P001",
+      "name": "Robert Chen",
+      "age": 62,
+      "sex": "M",
+      "allergies": [
+        "sulfonamides"
+      ],
+      "conditions": [
+        "hypertension",
+        "hyperlipidemia",
+        "type 2 diabetes"
+      ],
+      "medications": [
+        "metformin 1000mg BID",
+        "lisinopril 20mg daily",
+        "atorvastatin 40mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_chest_pain_001_imaging",
+    "pathway_id": "xd_chest_pain_001",
+    "phase_order": 2,
+    "domain": "visual_diagnosis",
+    "ticket": "[Acute Chest Pain in the Emergency Department \u2014 Phase 3: Imaging Interpretation]\n\nPatient: Robert Chen, 62M, presents to the ED with acute onset substernal chest pain radiating to the left arm, diaphoresis, nausea. PMH: HTN, HLD, DM2, smoking 30 pack-years. Current meds: metformin 1000mg BID, lisinopril 20mg daily, atorvastatin 40mg daily.\n\nYour task: Review chest X-ray and ECG findings\n\nClinical context: This is a high-acuity ED presentation requiring rapid triage, immediate ECG and troponin, possible cath lab activation, and careful medication management considering drug interactions.",
+    "description": {
+      "purpose": "Review chest X-ray and ECG findings",
+      "difficulty": "hard",
+      "pathway": "Acute Chest Pain in the Emergency Department",
+      "phase": "Imaging Interpretation",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG001"
+          }
+        },
+        {
+          "name": "get_image_report",
+          "arguments": {
+            "image_id": "IMG001"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should interpret chest X-ray findings correctly",
+        "Agent should correlate imaging with clinical picture"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P001",
+      "name": "Robert Chen",
+      "age": 62,
+      "sex": "M",
+      "allergies": [
+        "sulfonamides"
+      ],
+      "conditions": [
+        "hypertension",
+        "hyperlipidemia",
+        "type 2 diabetes"
+      ],
+      "medications": [
+        "metformin 1000mg BID",
+        "lisinopril 20mg daily",
+        "atorvastatin 40mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_chest_pain_001_drug_management",
+    "pathway_id": "xd_chest_pain_001",
+    "phase_order": 3,
+    "domain": "drug_interaction",
+    "ticket": "[Acute Chest Pain in the Emergency Department \u2014 Phase 4: Medication Management]\n\nPatient: Robert Chen, 62M, presents to the ED with acute onset substernal chest pain radiating to the left arm, diaphoresis, nausea. PMH: HTN, HLD, DM2, smoking 30 pack-years. Current meds: metformin 1000mg BID, lisinopril 20mg daily, atorvastatin 40mg daily.\n\nYour task: Check current medications, assess interactions with new drugs\n\nClinical context: This is a high-acuity ED presentation requiring rapid triage, immediate ECG and troponin, possible cath lab activation, and careful medication management considering drug interactions.",
+    "description": {
+      "purpose": "Check current medications, assess interactions with new drugs",
+      "difficulty": "hard",
+      "pathway": "Acute Chest Pain in the Emergency Department",
+      "phase": "Medication Management",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {
+            "drug_name": "aspirin"
+          }
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {
+            "drug_a": "aspirin",
+            "drug_b": "warfarin"
+          }
+        },
+        {
+          "name": "get_patient_medications",
+          "arguments": {
+            "patient_id": "P001"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should start dual antiplatelet therapy (aspirin + P2Y12 inhibitor)",
+        "Agent should check interactions with existing medications",
+        "Agent should consider heparin and note metformin hold if contrast planned"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P001",
+      "name": "Robert Chen",
+      "age": 62,
+      "sex": "M",
+      "allergies": [
+        "sulfonamides"
+      ],
+      "conditions": [
+        "hypertension",
+        "hyperlipidemia",
+        "type 2 diabetes"
+      ],
+      "medications": [
+        "metformin 1000mg BID",
+        "lisinopril 20mg daily",
+        "atorvastatin 40mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_chest_pain_001_documentation",
+    "pathway_id": "xd_chest_pain_001",
+    "phase_order": 4,
+    "domain": "ehr_management",
+    "ticket": "[Acute Chest Pain in the Emergency Department \u2014 Phase 5: EHR Documentation]\n\nPatient: Robert Chen, 62M, presents to the ED with acute onset substernal chest pain radiating to the left arm, diaphoresis, nausea. PMH: HTN, HLD, DM2, smoking 30 pack-years. Current meds: metformin 1000mg BID, lisinopril 20mg daily, atorvastatin 40mg daily.\n\nYour task: Document the encounter, update problem list, medication reconciliation\n\nClinical context: This is a high-acuity ED presentation requiring rapid triage, immediate ECG and troponin, possible cath lab activation, and careful medication management considering drug interactions.",
+    "description": {
+      "purpose": "Document the encounter, update problem list, medication reconciliation",
+      "difficulty": "hard",
+      "pathway": "Acute Chest Pain in the Emergency Department",
+      "phase": "EHR Documentation",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "patient_id": "HADM001"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should document chief complaint, HPI, assessment, and plan",
+        "Agent should update medication list",
+        "Agent should note allergies and contraindications"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P001",
+      "name": "Robert Chen",
+      "age": 62,
+      "sex": "M",
+      "allergies": [
+        "sulfonamides"
+      ],
+      "conditions": [
+        "hypertension",
+        "hyperlipidemia",
+        "type 2 diabetes"
+      ],
+      "medications": [
+        "metformin 1000mg BID",
+        "lisinopril 20mg daily",
+        "atorvastatin 40mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_chest_pain_001_disposition",
+    "pathway_id": "xd_chest_pain_001",
+    "phase_order": 5,
+    "domain": "triage_emergency",
+    "ticket": "[Acute Chest Pain in the Emergency Department \u2014 Phase 6: Disposition & Follow-up]\n\nPatient: Robert Chen, 62M, presents to the ED with acute onset substernal chest pain radiating to the left arm, diaphoresis, nausea. PMH: HTN, HLD, DM2, smoking 30 pack-years. Current meds: metformin 1000mg BID, lisinopril 20mg daily, atorvastatin 40mg daily.\n\nYour task: Determine admit vs discharge, arrange follow-up\n\nClinical context: This is a high-acuity ED presentation requiring rapid triage, immediate ECG and troponin, possible cath lab activation, and careful medication management considering drug interactions.",
+    "description": {
+      "purpose": "Determine admit vs discharge, arrange follow-up",
+      "difficulty": "hard",
+      "pathway": "Acute Chest Pain in the Emergency Department",
+      "phase": "Disposition & Follow-up",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "submit_answer",
+          "arguments": {}
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should recommend cardiac cath lab / CCU admission",
+        "Agent should specify monitoring requirements",
+        "Agent should arrange cardiology follow-up"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P001",
+      "name": "Robert Chen",
+      "age": 62,
+      "sex": "M",
+      "allergies": [
+        "sulfonamides"
+      ],
+      "conditions": [
+        "hypertension",
+        "hyperlipidemia",
+        "type 2 diabetes"
+      ],
+      "medications": [
+        "metformin 1000mg BID",
+        "lisinopril 20mg daily",
+        "atorvastatin 40mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_dka_001_triage",
+    "pathway_id": "xd_dka_001",
+    "phase_order": 0,
+    "domain": "triage_emergency",
+    "ticket": "[Diabetic Ketoacidosis Emergency \u2014 Phase 1: Emergency Triage]\n\nPatient: Maria Santos, 28F, brought to ED by EMS with altered mental status, Kussmaul breathing, fruity breath odor. Blood glucose >500 mg/dL. PMH: Type 1 DM (poorly controlled), depression. Meds: insulin glargine 20u daily (admits non-compliance), sertraline 100mg daily.\n\nYour task: Rapid assessment, ESI-1 or ESI-2, initiate resuscitation\n\nClinical context: Severe DKA requiring aggressive fluid resuscitation, insulin drip, electrolyte monitoring, and ICU admission. Must address medication non-compliance and psychiatric comorbidity.",
+    "description": {
+      "purpose": "Rapid assessment, ESI-1 or ESI-2, initiate resuscitation",
+      "difficulty": "hard",
+      "pathway": "Diabetic Ketoacidosis Emergency",
+      "phase": "Emergency Triage",
+      "time_critical": true,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {
+            "patient_id": "EP002"
+          }
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {
+            "patient_id": "EP002"
+          }
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {
+            "patient_id": "EP002"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should assign ESI-1 or ESI-2 for altered mental status + metabolic emergency",
+        "Agent should recognize DKA immediately",
+        "Agent should initiate IV access and fluid resuscitation"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P002",
+      "name": "Maria Santos",
+      "age": 28,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [
+        "type 1 diabetes",
+        "depression"
+      ],
+      "medications": [
+        "insulin glargine 20u daily",
+        "sertraline 100mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_dka_001_diagnosis",
+    "pathway_id": "xd_dka_001",
+    "phase_order": 1,
+    "domain": "clinical_diagnosis",
+    "ticket": "[Diabetic Ketoacidosis Emergency \u2014 Phase 2: DKA Workup & Severity Assessment]\n\nPatient: Maria Santos, 28F, brought to ED by EMS with altered mental status, Kussmaul breathing, fruity breath odor. Blood glucose >500 mg/dL. PMH: Type 1 DM (poorly controlled), depression. Meds: insulin glargine 20u daily (admits non-compliance), sertraline 100mg daily.\n\nYour task: Labs (ABG, BMP, CBC, UA, ketones), determine DKA severity\n\nClinical context: Severe DKA requiring aggressive fluid resuscitation, insulin drip, electrolyte monitoring, and ICU admission. Must address medication non-compliance and psychiatric comorbidity.",
+    "description": {
+      "purpose": "Labs (ABG, BMP, CBC, UA, ketones), determine DKA severity",
+      "difficulty": "hard",
+      "pathway": "Diabetic Ketoacidosis Emergency",
+      "phase": "DKA Workup & Severity Assessment",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "P002"
+          }
+        },
+        {
+          "name": "get_lab_results",
+          "arguments": {
+            "patient_id": "P002"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should order ABG, BMP (K+, bicarb, anion gap), CBC, UA, beta-hydroxybutyrate",
+        "Agent should classify DKA severity (mild/moderate/severe)",
+        "Agent should identify precipitating factor (non-compliance, infection, etc.)"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P002",
+      "name": "Maria Santos",
+      "age": 28,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [
+        "type 1 diabetes",
+        "depression"
+      ],
+      "medications": [
+        "insulin glargine 20u daily",
+        "sertraline 100mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_dka_001_drug_management",
+    "pathway_id": "xd_dka_001",
+    "phase_order": 2,
+    "domain": "drug_interaction",
+    "ticket": "[Diabetic Ketoacidosis Emergency \u2014 Phase 3: Insulin Protocol & Medication Safety]\n\nPatient: Maria Santos, 28F, brought to ED by EMS with altered mental status, Kussmaul breathing, fruity breath odor. Blood glucose >500 mg/dL. PMH: Type 1 DM (poorly controlled), depression. Meds: insulin glargine 20u daily (admits non-compliance), sertraline 100mg daily.\n\nYour task: Start insulin drip, manage potassium, check interaction with sertraline\n\nClinical context: Severe DKA requiring aggressive fluid resuscitation, insulin drip, electrolyte monitoring, and ICU admission. Must address medication non-compliance and psychiatric comorbidity.",
+    "description": {
+      "purpose": "Start insulin drip, manage potassium, check interaction with sertraline",
+      "difficulty": "hard",
+      "pathway": "Diabetic Ketoacidosis Emergency",
+      "phase": "Insulin Protocol & Medication Safety",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {
+            "drug_name": "metformin"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should start regular insulin infusion (0.1-0.14 U/kg/hr)",
+        "Agent should hold metformin due to acute illness",
+        "Agent should replete potassium before/with insulin if K+ < 5.3",
+        "Agent should check interaction between insulin and other medications"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P002",
+      "name": "Maria Santos",
+      "age": 28,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [
+        "type 1 diabetes",
+        "depression"
+      ],
+      "medications": [
+        "insulin glargine 20u daily",
+        "sertraline 100mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_dka_001_ehr_documentation",
+    "pathway_id": "xd_dka_001",
+    "phase_order": 3,
+    "domain": "ehr_management",
+    "ticket": "[Diabetic Ketoacidosis Emergency \u2014 Phase 4: ICU Admission Documentation]\n\nPatient: Maria Santos, 28F, brought to ED by EMS with altered mental status, Kussmaul breathing, fruity breath odor. Blood glucose >500 mg/dL. PMH: Type 1 DM (poorly controlled), depression. Meds: insulin glargine 20u daily (admits non-compliance), sertraline 100mg daily.\n\nYour task: Critical care admission note, order sets, monitoring plan\n\nClinical context: Severe DKA requiring aggressive fluid resuscitation, insulin drip, electrolyte monitoring, and ICU admission. Must address medication non-compliance and psychiatric comorbidity.",
+    "description": {
+      "purpose": "Critical care admission note, order sets, monitoring plan",
+      "difficulty": "hard",
+      "pathway": "Diabetic Ketoacidosis Emergency",
+      "phase": "ICU Admission Documentation",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "patient_id": "HADM002"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should document ICU admission with DKA protocol orders",
+        "Agent should include Q1h glucose, Q2h BMP, Q4h ABG monitoring",
+        "Agent should address transition plan from drip to subcutaneous insulin"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P002",
+      "name": "Maria Santos",
+      "age": 28,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [
+        "type 1 diabetes",
+        "depression"
+      ],
+      "medications": [
+        "insulin glargine 20u daily",
+        "sertraline 100mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_stroke_001_triage",
+    "pathway_id": "xd_stroke_001",
+    "phase_order": 0,
+    "domain": "triage_emergency",
+    "ticket": "[Acute Stroke Code Activation \u2014 Phase 1: Stroke Code Activation]\n\nPatient: Helen Park, 68F, found by husband with right facial droop, right arm weakness, and slurred speech. Last known well 90 minutes ago. PMH: Atrial fibrillation (on apixaban 5mg BID), HTN, HLD.\n\nYour task: ESI-1, activate stroke team, rapid NIHSS\n\nClinical context: Acute stroke code with narrow tPA window. Must rapidly image, assess for hemorrhage vs ischemic stroke, decide on thrombolysis considering anticoagulation status.",
+    "description": {
+      "purpose": "ESI-1, activate stroke team, rapid NIHSS",
+      "difficulty": "expert",
+      "pathway": "Acute Stroke Code Activation",
+      "phase": "Stroke Code Activation",
+      "time_critical": true,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {
+            "patient_id": "EP003"
+          }
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {
+            "patient_id": "EP003"
+          }
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {
+            "protocol_name": "Stroke"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should activate stroke code immediately",
+        "Agent should assign ESI-1",
+        "Agent should request STAT CT head",
+        "Agent should note time of last known well (90 min)"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P003",
+      "name": "Helen Park",
+      "age": 68,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [
+        "atrial fibrillation",
+        "hypertension",
+        "hyperlipidemia"
+      ],
+      "medications": [
+        "apixaban 5mg BID",
+        "amlodipine 10mg daily",
+        "rosuvastatin 20mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_stroke_001_imaging",
+    "pathway_id": "xd_stroke_001",
+    "phase_order": 1,
+    "domain": "visual_diagnosis",
+    "ticket": "[Acute Stroke Code Activation \u2014 Phase 2: CT Head Interpretation]\n\nPatient: Helen Park, 68F, found by husband with right facial droop, right arm weakness, and slurred speech. Last known well 90 minutes ago. PMH: Atrial fibrillation (on apixaban 5mg BID), HTN, HLD.\n\nYour task: Interpret CT head, rule out hemorrhage, assess for early ischemic changes\n\nClinical context: Acute stroke code with narrow tPA window. Must rapidly image, assess for hemorrhage vs ischemic stroke, decide on thrombolysis considering anticoagulation status.",
+    "description": {
+      "purpose": "Interpret CT head, rule out hemorrhage, assess for early ischemic changes",
+      "difficulty": "expert",
+      "pathway": "Acute Stroke Code Activation",
+      "phase": "CT Head Interpretation",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG002"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should rule out hemorrhagic stroke on CT",
+        "Agent should identify early ischemic changes if present",
+        "Agent should determine ASPECTS score if applicable"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P003",
+      "name": "Helen Park",
+      "age": 68,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [
+        "atrial fibrillation",
+        "hypertension",
+        "hyperlipidemia"
+      ],
+      "medications": [
+        "apixaban 5mg BID",
+        "amlodipine 10mg daily",
+        "rosuvastatin 20mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_stroke_001_treatment_decision",
+    "pathway_id": "xd_stroke_001",
+    "phase_order": 2,
+    "domain": "drug_interaction",
+    "ticket": "[Acute Stroke Code Activation \u2014 Phase 3: Thrombolysis Decision & Anticoagulation Management]\n\nPatient: Helen Park, 68F, found by husband with right facial droop, right arm weakness, and slurred speech. Last known well 90 minutes ago. PMH: Atrial fibrillation (on apixaban 5mg BID), HTN, HLD.\n\nYour task: Decide on tPA, manage anticoagulation reversal, check drug interactions\n\nClinical context: Acute stroke code with narrow tPA window. Must rapidly image, assess for hemorrhage vs ischemic stroke, decide on thrombolysis considering anticoagulation status.",
+    "description": {
+      "purpose": "Decide on tPA, manage anticoagulation reversal, check drug interactions",
+      "difficulty": "expert",
+      "pathway": "Acute Stroke Code Activation",
+      "phase": "Thrombolysis Decision & Anticoagulation Management",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {
+            "drug_name": "aspirin"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider tPA eligibility (within 4.5h window)",
+        "Agent should address apixaban status \u2014 recent dose contraindicates tPA",
+        "Agent should consider mechanical thrombectomy as alternative",
+        "Agent should NOT give tPA if last apixaban dose within 48h without reversal"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P003",
+      "name": "Helen Park",
+      "age": 68,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [
+        "atrial fibrillation",
+        "hypertension",
+        "hyperlipidemia"
+      ],
+      "medications": [
+        "apixaban 5mg BID",
+        "amlodipine 10mg daily",
+        "rosuvastatin 20mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_stroke_001_documentation",
+    "pathway_id": "xd_stroke_001",
+    "phase_order": 3,
+    "domain": "ehr_management",
+    "ticket": "[Acute Stroke Code Activation \u2014 Phase 4: Stroke Code Documentation]\n\nPatient: Helen Park, 68F, found by husband with right facial droop, right arm weakness, and slurred speech. Last known well 90 minutes ago. PMH: Atrial fibrillation (on apixaban 5mg BID), HTN, HLD.\n\nYour task: Document stroke code, NIHSS, time metrics, treatment decision\n\nClinical context: Acute stroke code with narrow tPA window. Must rapidly image, assess for hemorrhage vs ischemic stroke, decide on thrombolysis considering anticoagulation status.",
+    "description": {
+      "purpose": "Document stroke code, NIHSS, time metrics, treatment decision",
+      "difficulty": "expert",
+      "pathway": "Acute Stroke Code Activation",
+      "phase": "Stroke Code Documentation",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "patient_id": "HADM003"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should document door-to-CT time",
+        "Agent should record NIHSS score",
+        "Agent should note tPA decision with rationale",
+        "Agent should arrange neurology admission / stroke unit"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P003",
+      "name": "Helen Park",
+      "age": 68,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [
+        "atrial fibrillation",
+        "hypertension",
+        "hyperlipidemia"
+      ],
+      "medications": [
+        "apixaban 5mg BID",
+        "amlodipine 10mg daily",
+        "rosuvastatin 20mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_sepsis_001_triage",
+    "pathway_id": "xd_sepsis_001",
+    "phase_order": 0,
+    "domain": "triage_emergency",
+    "ticket": "[Sepsis Hour-1 Bundle \u2014 Phase 1: Sepsis Screening & Activation]\n\nPatient: James Thompson, 74M, nursing home resident brought to ED with fever 39.5\u00b0C, altered mental status, hypotension (BP 82/50), tachycardia (HR 118), tachypnea (RR 24). PMH: COPD, CHF (EF 30%), CKD stage 3 (GFR 40), spironolactone 25mg. Suspected UTI source.\n\nYour task: Recognize sepsis, activate code sepsis, initiate hour-1 bundle\n\nClinical context: Sepsis/septic shock requiring hour-1 bundle. Complicating factors: CHF limits fluid resuscitation, CKD affects antibiotic choice and dosing, spironolactone \u2192 risk of hyperkalemia.",
+    "description": {
+      "purpose": "Recognize sepsis, activate code sepsis, initiate hour-1 bundle",
+      "difficulty": "expert",
+      "pathway": "Sepsis Hour-1 Bundle",
+      "phase": "Sepsis Screening & Activation",
+      "time_critical": true,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {
+            "patient_id": "EP004"
+          }
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {
+            "patient_id": "EP004"
+          }
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {
+            "protocol_name": "Sepsis"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify sepsis/septic shock (qSOFA \u22652, hypotension)",
+        "Agent should activate sepsis code",
+        "Agent should order blood cultures BEFORE antibiotics",
+        "Agent should initiate 30 mL/kg crystalloid (but cautious with CHF)"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P004",
+      "name": "James Thompson",
+      "age": 74,
+      "sex": "M",
+      "allergies": [
+        "penicillin"
+      ],
+      "conditions": [
+        "COPD",
+        "CHF",
+        "CKD stage 3",
+        "BPH"
+      ],
+      "medications": [
+        "spironolactone 25mg",
+        "carvedilol 12.5mg BID",
+        "furosemide 40mg daily",
+        "tiotropium inhaler",
+        "albuterol PRN"
+      ]
+    }
+  },
+  {
+    "id": "xd_sepsis_001_diagnosis",
+    "pathway_id": "xd_sepsis_001",
+    "phase_order": 1,
+    "domain": "clinical_diagnosis",
+    "ticket": "[Sepsis Hour-1 Bundle \u2014 Phase 2: Source Identification & Severity Assessment]\n\nPatient: James Thompson, 74M, nursing home resident brought to ED with fever 39.5\u00b0C, altered mental status, hypotension (BP 82/50), tachycardia (HR 118), tachypnea (RR 24). PMH: COPD, CHF (EF 30%), CKD stage 3 (GFR 40), spironolactone 25mg. Suspected UTI source.\n\nYour task: Identify sepsis source, assess organ dysfunction, calculate SOFA\n\nClinical context: Sepsis/septic shock requiring hour-1 bundle. Complicating factors: CHF limits fluid resuscitation, CKD affects antibiotic choice and dosing, spironolactone \u2192 risk of hyperkalemia.",
+    "description": {
+      "purpose": "Identify sepsis source, assess organ dysfunction, calculate SOFA",
+      "difficulty": "expert",
+      "pathway": "Sepsis Hour-1 Bundle",
+      "phase": "Source Identification & Severity Assessment",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "P003"
+          }
+        },
+        {
+          "name": "get_lab_results",
+          "arguments": {
+            "patient_id": "P003"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should calculate SOFA score",
+        "Agent should identify urinary source (UTI \u2192 urosepsis)",
+        "Agent should assess for multi-organ dysfunction",
+        "Agent should note renal impairment affecting drug clearance"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P004",
+      "name": "James Thompson",
+      "age": 74,
+      "sex": "M",
+      "allergies": [
+        "penicillin"
+      ],
+      "conditions": [
+        "COPD",
+        "CHF",
+        "CKD stage 3",
+        "BPH"
+      ],
+      "medications": [
+        "spironolactone 25mg",
+        "carvedilol 12.5mg BID",
+        "furosemide 40mg daily",
+        "tiotropium inhaler",
+        "albuterol PRN"
+      ]
+    }
+  },
+  {
+    "id": "xd_sepsis_001_drug_management",
+    "pathway_id": "xd_sepsis_001",
+    "phase_order": 2,
+    "domain": "drug_interaction",
+    "ticket": "[Sepsis Hour-1 Bundle \u2014 Phase 3: Antibiotic Selection & Drug Safety]\n\nPatient: James Thompson, 74M, nursing home resident brought to ED with fever 39.5\u00b0C, altered mental status, hypotension (BP 82/50), tachycardia (HR 118), tachypnea (RR 24). PMH: COPD, CHF (EF 30%), CKD stage 3 (GFR 40), spironolactone 25mg. Suspected UTI source.\n\nYour task: Choose empiric antibiotics considering CKD, check interactions\n\nClinical context: Sepsis/septic shock requiring hour-1 bundle. Complicating factors: CHF limits fluid resuscitation, CKD affects antibiotic choice and dosing, spironolactone \u2192 risk of hyperkalemia.",
+    "description": {
+      "purpose": "Choose empiric antibiotics considering CKD, check interactions",
+      "difficulty": "expert",
+      "pathway": "Sepsis Hour-1 Bundle",
+      "phase": "Antibiotic Selection & Drug Safety",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {
+            "drug_name": "ciprofloxacin"
+          }
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {
+            "drug_a": "spironolactone",
+            "drug_b": "lisinopril"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should select appropriate empiric antibiotics within 1 hour",
+        "Agent should adjust doses for CKD (GFR 40)",
+        "Agent should hold spironolactone (hypotension + hyperkalemia risk)",
+        "Agent should check interactions between new antibiotics and existing meds"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P004",
+      "name": "James Thompson",
+      "age": 74,
+      "sex": "M",
+      "allergies": [
+        "penicillin"
+      ],
+      "conditions": [
+        "COPD",
+        "CHF",
+        "CKD stage 3",
+        "BPH"
+      ],
+      "medications": [
+        "spironolactone 25mg",
+        "carvedilol 12.5mg BID",
+        "furosemide 40mg daily",
+        "tiotropium inhaler",
+        "albuterol PRN"
+      ]
+    }
+  },
+  {
+    "id": "xd_sepsis_001_ehr_documentation",
+    "pathway_id": "xd_sepsis_001",
+    "phase_order": 3,
+    "domain": "ehr_management",
+    "ticket": "[Sepsis Hour-1 Bundle \u2014 Phase 4: Sepsis Bundle Documentation]\n\nPatient: James Thompson, 74M, nursing home resident brought to ED with fever 39.5\u00b0C, altered mental status, hypotension (BP 82/50), tachycardia (HR 118), tachypnea (RR 24). PMH: COPD, CHF (EF 30%), CKD stage 3 (GFR 40), spironolactone 25mg. Suspected UTI source.\n\nYour task: Document hour-1 bundle compliance, time metrics, ICU admission\n\nClinical context: Sepsis/septic shock requiring hour-1 bundle. Complicating factors: CHF limits fluid resuscitation, CKD affects antibiotic choice and dosing, spironolactone \u2192 risk of hyperkalemia.",
+    "description": {
+      "purpose": "Document hour-1 bundle compliance, time metrics, ICU admission",
+      "difficulty": "expert",
+      "pathway": "Sepsis Hour-1 Bundle",
+      "phase": "Sepsis Bundle Documentation",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "patient_id": "HADM004"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should document bundle compliance (cultures, antibiotics, fluids, lactate, vasopressors)",
+        "Agent should record time of each bundle element",
+        "Agent should document fluid volume (cautious given CHF)",
+        "Agent should arrange ICU admission with vasopressor plan"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P004",
+      "name": "James Thompson",
+      "age": 74,
+      "sex": "M",
+      "allergies": [
+        "penicillin"
+      ],
+      "conditions": [
+        "COPD",
+        "CHF",
+        "CKD stage 3",
+        "BPH"
+      ],
+      "medications": [
+        "spironolactone 25mg",
+        "carvedilol 12.5mg BID",
+        "furosemide 40mg daily",
+        "tiotropium inhaler",
+        "albuterol PRN"
+      ]
+    }
+  },
+  {
+    "id": "xd_postop_001_chart_review",
+    "pathway_id": "xd_postop_001",
+    "phase_order": 0,
+    "domain": "ehr_management",
+    "ticket": "[Post-operative Pulmonary Embolism \u2014 Phase 1: Chart Review & Assessment]\n\nPatient: David Kim, 55M, POD#3 after right total knee arthroplasty. Acute onset dyspnea, chest pain, tachycardia (HR 110), SpO2 89%. PMH: Obesity (BMI 38), HTN, GERD. Current meds: enoxaparin 40mg daily (prophylactic dose), oxycodone 5mg Q6h, acetaminophen 1g Q6h, omeprazole 20mg daily.\n\nYour task: Review surgical notes, post-op course, current orders\n\nClinical context: High clinical suspicion for PE in post-surgical patient. Prophylactic anticoagulation was likely insufficient. Need CT-PA, assess for massive vs submassive PE, transition to therapeutic anticoagulation.",
+    "description": {
+      "purpose": "Review surgical notes, post-op course, current orders",
+      "difficulty": "hard",
+      "pathway": "Post-operative Pulmonary Embolism",
+      "phase": "Chart Review & Assessment",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "patient_id": "HADM005"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should review surgical notes and post-op course",
+        "Agent should note Wells score components (surgery, immobilization, tachycardia)",
+        "Agent should recognize high pre-test probability for PE"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P005",
+      "name": "David Kim",
+      "age": 55,
+      "sex": "M",
+      "allergies": [],
+      "conditions": [
+        "obesity",
+        "hypertension",
+        "GERD",
+        "s/p right TKA POD#3"
+      ],
+      "medications": [
+        "enoxaparin 40mg daily",
+        "oxycodone 5mg Q6h",
+        "acetaminophen 1g Q6h",
+        "omeprazole 20mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_postop_001_diagnosis",
+    "pathway_id": "xd_postop_001",
+    "phase_order": 1,
+    "domain": "clinical_diagnosis",
+    "ticket": "[Post-operative Pulmonary Embolism \u2014 Phase 2: PE Workup]\n\nPatient: David Kim, 55M, POD#3 after right total knee arthroplasty. Acute onset dyspnea, chest pain, tachycardia (HR 110), SpO2 89%. PMH: Obesity (BMI 38), HTN, GERD. Current meds: enoxaparin 40mg daily (prophylactic dose), oxycodone 5mg Q6h, acetaminophen 1g Q6h, omeprazole 20mg daily.\n\nYour task: Calculate Wells score, order D-dimer/CT-PA, assess severity\n\nClinical context: High clinical suspicion for PE in post-surgical patient. Prophylactic anticoagulation was likely insufficient. Need CT-PA, assess for massive vs submassive PE, transition to therapeutic anticoagulation.",
+    "description": {
+      "purpose": "Calculate Wells score, order D-dimer/CT-PA, assess severity",
+      "difficulty": "hard",
+      "pathway": "Post-operative Pulmonary Embolism",
+      "phase": "PE Workup",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "P005"
+          }
+        },
+        {
+          "name": "get_lab_results",
+          "arguments": {
+            "patient_id": "P005"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should calculate Wells score (likely >4, PE likely)",
+        "Agent should order CT-PA (not D-dimer, as pre-test probability is high)",
+        "Agent should check troponin and BNP for RV strain",
+        "Agent should assess hemodynamic stability"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P005",
+      "name": "David Kim",
+      "age": 55,
+      "sex": "M",
+      "allergies": [],
+      "conditions": [
+        "obesity",
+        "hypertension",
+        "GERD",
+        "s/p right TKA POD#3"
+      ],
+      "medications": [
+        "enoxaparin 40mg daily",
+        "oxycodone 5mg Q6h",
+        "acetaminophen 1g Q6h",
+        "omeprazole 20mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_postop_001_drug_management",
+    "pathway_id": "xd_postop_001",
+    "phase_order": 2,
+    "domain": "drug_interaction",
+    "ticket": "[Post-operative Pulmonary Embolism \u2014 Phase 3: Anticoagulation Transition]\n\nPatient: David Kim, 55M, POD#3 after right total knee arthroplasty. Acute onset dyspnea, chest pain, tachycardia (HR 110), SpO2 89%. PMH: Obesity (BMI 38), HTN, GERD. Current meds: enoxaparin 40mg daily (prophylactic dose), oxycodone 5mg Q6h, acetaminophen 1g Q6h, omeprazole 20mg daily.\n\nYour task: Transition from prophylactic to therapeutic anticoagulation\n\nClinical context: High clinical suspicion for PE in post-surgical patient. Prophylactic anticoagulation was likely insufficient. Need CT-PA, assess for massive vs submassive PE, transition to therapeutic anticoagulation.",
+    "description": {
+      "purpose": "Transition from prophylactic to therapeutic anticoagulation",
+      "difficulty": "hard",
+      "pathway": "Post-operative Pulmonary Embolism",
+      "phase": "Anticoagulation Transition",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {
+            "drug_name": "warfarin"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should transition to therapeutic-dose anticoagulation",
+        "Agent should consider timing relative to surgery (bleeding risk)",
+        "Agent should adjust or stop opioid if respiratory depression concern",
+        "Agent should check interaction between anticoagulant and other meds"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P005",
+      "name": "David Kim",
+      "age": 55,
+      "sex": "M",
+      "allergies": [],
+      "conditions": [
+        "obesity",
+        "hypertension",
+        "GERD",
+        "s/p right TKA POD#3"
+      ],
+      "medications": [
+        "enoxaparin 40mg daily",
+        "oxycodone 5mg Q6h",
+        "acetaminophen 1g Q6h",
+        "omeprazole 20mg daily"
+      ]
+    }
+  },
+  {
+    "id": "xd_peds_fever_001_triage",
+    "pathway_id": "xd_peds_fever_001",
+    "phase_order": 0,
+    "domain": "triage_emergency",
+    "ticket": "[Pediatric Fever of Unknown Origin \u2014 Phase 1: Pediatric Triage]\n\nPatient: Emily Chen, 4F, brought to ED by parents with 5-day fever (Tmax 40.1\u00b0C), rash, bilateral conjunctival injection, cracked lips, swollen hands. No significant PMH. Up to date on immunizations.\n\nYour task: Assess febrile child, determine ESI, identify red flags\n\nClinical context: Clinical features suggest Kawasaki disease \u2014 must be diagnosed clinically within 10 days of fever onset to prevent coronary artery aneurysm. Requires IVIG and high-dose aspirin (exception to usual pediatric aspirin contraindication).",
+    "description": {
+      "purpose": "Assess febrile child, determine ESI, identify red flags",
+      "difficulty": "hard",
+      "pathway": "Pediatric Fever of Unknown Origin",
+      "phase": "Pediatric Triage",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {
+            "patient_id": "EP005"
+          }
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {
+            "patient_id": "EP005"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should assess hydration status and overall appearance",
+        "Agent should note the constellation of mucocutaneous findings",
+        "Agent should assign appropriate ESI (2 or 3 depending on stability)"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P006",
+      "name": "Emily Chen",
+      "age": 4,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    }
+  },
+  {
+    "id": "xd_peds_fever_001_diagnosis",
+    "pathway_id": "xd_peds_fever_001",
+    "phase_order": 1,
+    "domain": "clinical_diagnosis",
+    "ticket": "[Pediatric Fever of Unknown Origin \u2014 Phase 2: Kawasaki Disease Diagnosis]\n\nPatient: Emily Chen, 4F, brought to ED by parents with 5-day fever (Tmax 40.1\u00b0C), rash, bilateral conjunctival injection, cracked lips, swollen hands. No significant PMH. Up to date on immunizations.\n\nYour task: Apply diagnostic criteria, order labs and echo\n\nClinical context: Clinical features suggest Kawasaki disease \u2014 must be diagnosed clinically within 10 days of fever onset to prevent coronary artery aneurysm. Requires IVIG and high-dose aspirin (exception to usual pediatric aspirin contraindication).",
+    "description": {
+      "purpose": "Apply diagnostic criteria, order labs and echo",
+      "difficulty": "hard",
+      "pathway": "Pediatric Fever of Unknown Origin",
+      "phase": "Kawasaki Disease Diagnosis",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {
+            "patient_id": "P006"
+          }
+        },
+        {
+          "name": "get_lab_results",
+          "arguments": {
+            "patient_id": "P006"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should recognize Kawasaki disease (\u22655 days fever + 4/5 criteria)",
+        "Agent should order CBC, CRP, ESR, LFTs, UA, albumin",
+        "Agent should order echocardiogram to assess coronary arteries",
+        "Agent should consider incomplete Kawasaki if <4 criteria but high suspicion"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P006",
+      "name": "Emily Chen",
+      "age": 4,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    }
+  },
+  {
+    "id": "xd_peds_fever_001_drug_management",
+    "pathway_id": "xd_peds_fever_001",
+    "phase_order": 2,
+    "domain": "drug_interaction",
+    "ticket": "[Pediatric Fever of Unknown Origin \u2014 Phase 3: IVIG + Aspirin Protocol]\n\nPatient: Emily Chen, 4F, brought to ED by parents with 5-day fever (Tmax 40.1\u00b0C), rash, bilateral conjunctival injection, cracked lips, swollen hands. No significant PMH. Up to date on immunizations.\n\nYour task: Initiate IVIG and high-dose aspirin, check interactions\n\nClinical context: Clinical features suggest Kawasaki disease \u2014 must be diagnosed clinically within 10 days of fever onset to prevent coronary artery aneurysm. Requires IVIG and high-dose aspirin (exception to usual pediatric aspirin contraindication).",
+    "description": {
+      "purpose": "Initiate IVIG and high-dose aspirin, check interactions",
+      "difficulty": "hard",
+      "pathway": "Pediatric Fever of Unknown Origin",
+      "phase": "IVIG + Aspirin Protocol",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {
+            "drug_name": "aspirin"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should prescribe IVIG 2g/kg single infusion",
+        "Agent should start high-dose aspirin (80-100 mg/kg/day in 4 doses)",
+        "Agent should know aspirin is SPECIFICALLY INDICATED in Kawasaki despite pediatric age",
+        "Agent should plan transition to low-dose aspirin after afebrile"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P006",
+      "name": "Emily Chen",
+      "age": 4,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    }
+  },
+  {
+    "id": "xd_peds_fever_001_documentation",
+    "pathway_id": "xd_peds_fever_001",
+    "phase_order": 3,
+    "domain": "ehr_management",
+    "ticket": "[Pediatric Fever of Unknown Origin \u2014 Phase 4: Admission Documentation]\n\nPatient: Emily Chen, 4F, brought to ED by parents with 5-day fever (Tmax 40.1\u00b0C), rash, bilateral conjunctival injection, cracked lips, swollen hands. No significant PMH. Up to date on immunizations.\n\nYour task: Document Kawasaki diagnosis, criteria met, treatment plan\n\nClinical context: Clinical features suggest Kawasaki disease \u2014 must be diagnosed clinically within 10 days of fever onset to prevent coronary artery aneurysm. Requires IVIG and high-dose aspirin (exception to usual pediatric aspirin contraindication).",
+    "description": {
+      "purpose": "Document Kawasaki diagnosis, criteria met, treatment plan",
+      "difficulty": "hard",
+      "pathway": "Pediatric Fever of Unknown Origin",
+      "phase": "Admission Documentation",
+      "time_critical": false,
+      "safety_critical": true
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "patient_id": "HADM006"
+          }
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should document all diagnostic criteria met",
+        "Agent should note day of illness relative to treatment",
+        "Agent should plan follow-up echocardiogram",
+        "Agent should include cardiology consultation"
+      ]
+    },
+    "patient_data": {
+      "patient_id": "XD_P006",
+      "name": "Emily Chen",
+      "age": 4,
+      "sex": "F",
+      "allergies": [],
+      "conditions": [],
+      "medications": []
+    }
+  }
+]

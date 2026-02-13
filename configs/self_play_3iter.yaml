@@ -1,0 +1,43 @@
+# Self-Play Training Loop - 3 Iterations
+# Goal: Show iterative improvement curve (core contribution)
+model_name_or_path: "checkpoints/sft_p2_aggressive_lingshu/merged"
+backend: "transformers"
+
+# Trajectory collection
+domains:
+  - clinical_diagnosis
+  - medical_qa
+  - drug_interaction
+  - ehr_management
+tasks_per_domain: 20
+max_turns: 15
+temperature: 0.7
+num_trajectories_per_task: 1
+
+# Quality filtering
+quality_threshold: 0.35
+use_llm_judge: false
+judge_model: "self"
+
+# Training
+training_method: "sft"
+lora_r: 16
+lora_target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+learning_rate: 1.0e-5
+num_train_epochs: 2
+batch_size: 2
+gradient_accumulation_steps: 8
+
+# Iteration control
+max_iterations: 3
+eval_every: 1
+min_trajectories_for_training: 15
+
+# Paths
+output_dir: "checkpoints/self_play_3iter"
+log_dir: "logs/self_play_3iter"
+trajectory_dir: "datasets/self_play_3iter_trajectories"

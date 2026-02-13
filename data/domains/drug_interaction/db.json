@@ -581,6 +581,46 @@
       "weight_kg": 85.0,
       "renal_function": "eGFR 70 mL/min",
       "hepatic_function": null
+    },
+    "DI_P005": {
+      "patient_id": "DI_P005",
+      "current_medications": ["warfarin", "phenytoin", "fluoxetine"],
+      "allergies": ["carbamazepine"],
+      "conditions": ["epilepsy (focal seizures)", "major depressive disorder", "atrial fibrillation"],
+      "age": 52,
+      "weight_kg": 68.0,
+      "renal_function": "eGFR 85 mL/min (normal)",
+      "hepatic_function": "Child-Pugh A (mild impairment)"
+    },
+    "DI_P006": {
+      "patient_id": "DI_P006",
+      "current_medications": ["methotrexate", "lithium", "NSAIDs", "omeprazole"],
+      "allergies": [],
+      "conditions": ["rheumatoid arthritis", "bipolar disorder type I", "chronic pain (OA knees)", "GERD"],
+      "age": 48,
+      "weight_kg": 72.0,
+      "renal_function": "eGFR 65 mL/min (mild-moderate impairment)",
+      "hepatic_function": null
+    },
+    "DI_P007": {
+      "patient_id": "DI_P007",
+      "current_medications": ["digoxin", "amiodarone", "theophylline", "ciprofloxacin"],
+      "allergies": ["penicillin", "levofloxacin"],
+      "conditions": ["atrial fibrillation", "heart failure (HFrEF)", "COPD (GOLD II)", "acute bronchitis"],
+      "age": 78,
+      "weight_kg": 75.0,
+      "renal_function": "eGFR 35 mL/min (moderate-severe impairment)",
+      "hepatic_function": "Child-Pugh B (moderate)"
+    },
+    "DI_P008": {
+      "patient_id": "DI_P008",
+      "current_medications": ["rifampin", "oral_contraceptives", "fluoxetine", "omeprazole"],
+      "allergies": ["sulfa drugs"],
+      "conditions": ["latent tuberculosis infection", "major depressive disorder", "GERD", "endometriosis"],
+      "age": 32,
+      "weight_kg": 58.0,
+      "renal_function": "eGFR 110 mL/min (normal)",
+      "hepatic_function": null
     }
   },
   "alternatives": {

@@ -17,11 +17,14 @@ venv/
 env/
 
 # --- Large data directories ---
-databases/
+# Use /* pattern to ignore contents but allow submodule entries
+databases/*
+!databases/tau2-bench
 datasets/
 evaluations/
 references/
-GYM_reference/
+GYM_reference/*
+!GYM_reference/AgentGym-RL
 logs/
 
 # --- Specific large files ---

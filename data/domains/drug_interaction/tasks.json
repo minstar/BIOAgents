@@ -1,0 +1,237 @@
+[
+  {
+    "id": "di_warfarin_aspirin_001",
+    "description": {
+      "purpose": "Evaluate whether adding aspirin to a patient on warfarin is safe.",
+      "difficulty": "medium",
+      "source": "Drug-Interaction-Sim",
+      "category": "anticoagulation"
+    },
+    "ticket": "Patient DI_P001 (68M, atrial fibrillation, type 2 diabetes, hypertension) is currently on warfarin, lisinopril, and metformin. The cardiology team has requested adding low-dose aspirin (81 mg) for additional cardiovascular protection. Please assess the safety of this combination and provide your recommendation.",
+    "patient_id": "DI_P001",
+    "new_drug": "aspirin",
+    "correct_answer": "Major interaction: warfarin + aspirin increases bleeding risk significantly. If combination is necessary, use low-dose aspirin with PPI protection and close INR monitoring.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "get_meds",
+          "name": "get_patient_medications",
+          "arguments": {"patient_id": "DI_P001"},
+          "info": "Retrieve the patient's medication profile."
+        },
+        {
+          "action_id": "check_main",
+          "name": "check_interaction",
+          "arguments": {"drug_a": "warfarin", "drug_b": "aspirin"},
+          "info": "Check the key warfarin-aspirin interaction."
+        },
+        {
+          "action_id": "drug_info",
+          "name": "get_drug_info",
+          "arguments": {"drug_name": "warfarin"},
+          "info": "Review warfarin drug information."
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {},
+          "info": "Submit final recommendation."
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified the major warfarin-aspirin bleeding risk.",
+        "The agent considered the patient's renal function when assessing bleeding risk.",
+        "The agent provided a specific management recommendation (PPI, monitoring, or alternative)."
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "di_serotonin_syndrome_001",
+    "description": {
+      "purpose": "Identify serotonin syndrome risk when adding tramadol to a patient on fluoxetine.",
+      "difficulty": "medium",
+      "source": "Drug-Interaction-Sim",
+      "category": "serotonin_syndrome"
+    },
+    "ticket": "Patient DI_P002 (45F, depression, hypertension, diabetes, hyperlipidemia) is on fluoxetine, lisinopril, metformin, and simvastatin. She presents with moderate back pain and the physician wants to prescribe tramadol 50 mg TID. Assess the drug interaction risk and provide your recommendation.",
+    "patient_id": "DI_P002",
+    "new_drug": "tramadol",
+    "correct_answer": "Major interaction: fluoxetine + tramadol has high serotonin syndrome risk. Additionally, fluoxetine inhibits CYP2D6, reducing tramadol efficacy. Recommend alternative analgesic (acetaminophen or non-serotonergic option).",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "get_meds",
+          "name": "get_patient_medications",
+          "arguments": {"patient_id": "DI_P002"},
+          "info": "Retrieve the patient's medication profile."
+        },
+        {
+          "action_id": "check_main",
+          "name": "check_interaction",
+          "arguments": {"drug_a": "fluoxetine", "drug_b": "tramadol"},
+          "info": "Check the critical fluoxetine-tramadol interaction."
+        },
+        {
+          "action_id": "get_alternatives",
+          "name": "search_alternatives",
+          "arguments": {"drug_name": "tramadol"},
+          "info": "Find safer analgesic alternatives."
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {},
+          "info": "Submit final recommendation."
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified the serotonin syndrome risk from fluoxetine + tramadol.",
+        "The agent mentioned the CYP2D6 interaction reducing tramadol efficacy.",
+        "The agent recommended a specific alternative analgesic."
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "di_complex_polypharmacy_001",
+    "description": {
+      "purpose": "Comprehensively assess multiple interactions in a complex heart failure patient.",
+      "difficulty": "hard",
+      "source": "Drug-Interaction-Sim",
+      "category": "polypharmacy"
+    },
+    "ticket": "Patient DI_P003 (72M, atrial fibrillation, HFrEF, hypertension) is on warfarin, amiodarone, lisinopril, and spironolactone. eGFR is 40 mL/min. Please perform a comprehensive drug interaction review and identify all clinically significant interactions. Provide specific management recommendations for each.",
+    "patient_id": "DI_P003",
+    "correct_answer": "Multiple major interactions: (1) amiodarone + warfarin → reduce warfarin 30-50%, monitor INR weekly; (2) lisinopril + spironolactone → hyperkalemia risk, monitor K+ closely especially with eGFR 40; (3) amiodarone has long half-life affecting all interactions.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "get_meds",
+          "name": "get_patient_medications",
+          "arguments": {"patient_id": "DI_P003"},
+          "info": "Retrieve the patient's complete medication profile."
+        },
+        {
+          "action_id": "check_all",
+          "name": "check_all_interactions",
+          "arguments": {"patient_id": "DI_P003"},
+          "info": "Run comprehensive interaction check."
+        },
+        {
+          "action_id": "check_amio_warf",
+          "name": "check_interaction",
+          "arguments": {"drug_a": "amiodarone", "drug_b": "warfarin"},
+          "info": "Specifically check amiodarone-warfarin interaction."
+        },
+        {
+          "action_id": "check_lis_spiro",
+          "name": "check_interaction",
+          "arguments": {"drug_a": "lisinopril", "drug_b": "spironolactone"},
+          "info": "Specifically check lisinopril-spironolactone hyperkalemia risk."
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {},
+          "info": "Submit final comprehensive recommendation."
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified the amiodarone-warfarin interaction requiring warfarin dose reduction.",
+        "The agent identified the lisinopril-spironolactone hyperkalemia risk.",
+        "The agent considered the patient's reduced renal function (eGFR 40) as an aggravating factor.",
+        "The agent provided specific management for each interaction found.",
+        "The agent noted that amiodarone's long half-life affects the timeline of interaction management."
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "di_clopidogrel_ppi_001",
+    "description": {
+      "purpose": "Evaluate the clopidogrel-omeprazole interaction in a post-PCI patient.",
+      "difficulty": "medium",
+      "source": "Drug-Interaction-Sim",
+      "category": "antiplatelet"
+    },
+    "ticket": "Patient DI_P004 (60M, post-PCI with stent, type 2 diabetes, GERD, hypertension) is currently on clopidogrel, omeprazole, metformin, and lisinopril. He is allergic to aspirin. Review his medication profile for interactions and recommend any changes.",
+    "patient_id": "DI_P004",
+    "correct_answer": "Moderate interaction: omeprazole inhibits CYP2C19, reducing clopidogrel activation. Switch to pantoprazole or famotidine. Critical in post-PCI patient where stent thrombosis risk is high.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "get_meds",
+          "name": "get_patient_medications",
+          "arguments": {"patient_id": "DI_P004"},
+          "info": "Retrieve the patient's medication profile."
+        },
+        {
+          "action_id": "check_main",
+          "name": "check_interaction",
+          "arguments": {"drug_a": "clopidogrel", "drug_b": "omeprazole"},
+          "info": "Check the critical clopidogrel-omeprazole interaction."
+        },
+        {
+          "action_id": "get_alternatives",
+          "name": "search_alternatives",
+          "arguments": {"drug_name": "omeprazole"},
+          "info": "Find PPI alternatives with less CYP2C19 inhibition."
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {},
+          "info": "Submit final recommendation."
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified the clopidogrel-omeprazole CYP2C19 interaction.",
+        "The agent recognized the clinical significance in a post-PCI/stent patient.",
+        "The agent recommended switching to pantoprazole or famotidine.",
+        "The agent noted the patient's aspirin allergy as relevant context."
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "di_safe_combination_001",
+    "description": {
+      "purpose": "Verify that a safe drug combination is correctly identified as low-risk.",
+      "difficulty": "easy",
+      "source": "Drug-Interaction-Sim",
+      "category": "safety_check"
+    },
+    "ticket": "Patient DI_P001 is being considered for adding metformin dose optimization. Please verify that the current combination of warfarin, lisinopril, and metformin is safe from a drug interaction standpoint (excluding the potential aspirin addition).",
+    "patient_id": "DI_P001",
+    "correct_answer": "The metformin-lisinopril combination is generally safe (minor beneficial interaction). Warfarin-metformin has no significant interaction. Warfarin-lisinopril: minor, monitor INR. Overall, the current regimen is acceptable with standard monitoring.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "get_meds",
+          "name": "get_patient_medications",
+          "arguments": {"patient_id": "DI_P001"},
+          "info": "Retrieve the patient's medication profile."
+        },
+        {
+          "action_id": "check_all",
+          "name": "check_all_interactions",
+          "arguments": {"patient_id": "DI_P001"},
+          "info": "Comprehensive interaction check for current medications."
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {},
+          "info": "Submit recommendation confirming safety."
+        }
+      ],
+      "nl_assertions": [
+        "The agent checked interactions among all current medications.",
+        "The agent correctly identified that the current regimen has no major interactions.",
+        "The agent noted the minor metformin-lisinopril interaction as clinically benign or beneficial."
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  }
+]

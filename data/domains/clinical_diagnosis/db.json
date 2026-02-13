@@ -1,0 +1,162 @@
+{
+  "patients": {
+    "P001": {
+      "patient_id": "P001",
+      "name": "James Wilson",
+      "age": 58,
+      "sex": "male",
+      "date_of_birth": "1967-08-14",
+      "blood_type": "A+",
+      "chief_complaint": "Persistent cough with fever for 5 days, worsening shortness of breath",
+      "allergies": [
+        {"allergen": "Penicillin", "reaction": "rash", "severity": "moderate"},
+        {"allergen": "Sulfonamides", "reaction": "anaphylaxis", "severity": "severe"}
+      ],
+      "medications": [
+        {"drug_name": "Metformin", "dosage": "1000mg", "frequency": "twice daily", "route": "oral", "start_date": "2023-01-15", "end_date": null, "prescriber": "Dr. Chen"},
+        {"drug_name": "Lisinopril", "dosage": "10mg", "frequency": "once daily", "route": "oral", "start_date": "2022-06-20", "end_date": null, "prescriber": "Dr. Chen"},
+        {"drug_name": "Atorvastatin", "dosage": "20mg", "frequency": "once daily", "route": "oral", "start_date": "2023-03-10", "end_date": null, "prescriber": "Dr. Chen"}
+      ],
+      "conditions": [
+        {"condition_name": "Type 2 Diabetes Mellitus", "icd10_code": "E11.9", "status": "chronic", "onset_date": "2020-03-15", "notes": "HbA1c 7.2% at last check"},
+        {"condition_name": "Hypertension", "icd10_code": "I10", "status": "chronic", "onset_date": "2019-06-20", "notes": "Well controlled on Lisinopril"},
+        {"condition_name": "Hyperlipidemia", "icd10_code": "E78.5", "status": "chronic", "onset_date": "2023-01-10", "notes": null}
+      ],
+      "vital_signs": [
+        {"timestamp": "2026-02-12T08:00:00", "blood_pressure_systolic": 148, "blood_pressure_diastolic": 92, "heart_rate": 98, "temperature": 38.7, "respiratory_rate": 22, "spo2": 93, "weight": 88.5},
+        {"timestamp": "2026-02-12T14:00:00", "blood_pressure_systolic": 142, "blood_pressure_diastolic": 88, "heart_rate": 102, "temperature": 39.1, "respiratory_rate": 24, "spo2": 91, "weight": null}
+      ],
+      "lab_results": [
+        {"test_id": "LAB-P001-001", "test_name": "White Blood Cell Count", "category": "hematology", "value": "15.2", "unit": "x10^9/L", "reference_range": "4.5-11.0", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P001-002", "test_name": "C-Reactive Protein", "category": "chemistry", "value": "85", "unit": "mg/L", "reference_range": "0-5", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P001-003", "test_name": "Procalcitonin", "category": "chemistry", "value": "2.1", "unit": "ng/mL", "reference_range": "0-0.5", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P001-004", "test_name": "Blood Glucose (Fasting)", "category": "chemistry", "value": "165", "unit": "mg/dL", "reference_range": "70-100", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P001-005", "test_name": "HbA1c", "category": "chemistry", "value": "7.8", "unit": "%", "reference_range": "4.0-5.6", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P001-006", "test_name": "Blood Culture", "category": "microbiology", "value": "Pending", "unit": "", "reference_range": "No growth", "flag": null, "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "pending"}
+      ],
+      "clinical_notes": [
+        {"note_id": "NOTE-P001-001", "note_type": "admission", "author": "Dr. Park", "date": "2026-02-12", "content": "58M presents with 5-day history of productive cough with yellow-green sputum, fever (self-measured 38.5C at home), and progressive dyspnea. No hemoptysis. Reports decreased appetite and malaise. PMH significant for T2DM, HTN, hyperlipidemia. Chest auscultation reveals crackles in right lower lobe. Decreased breath sounds on right base. CXR pending.", "diagnosis_codes": null}
+      ],
+      "family_history": "Father: MI at age 62. Mother: T2DM, alive. Brother: hypertension.",
+      "social_history": "Former smoker (20 pack-years, quit 5 years ago). Occasional alcohol use. Retired office worker. Lives with wife."
+    },
+    "P002": {
+      "patient_id": "P002",
+      "name": "Sarah Kim",
+      "age": 32,
+      "sex": "female",
+      "date_of_birth": "1993-11-22",
+      "blood_type": "O-",
+      "chief_complaint": "Severe headache with neck stiffness and photophobia for 2 days",
+      "allergies": [],
+      "medications": [
+        {"drug_name": "Oral Contraceptive", "dosage": "standard", "frequency": "once daily", "route": "oral", "start_date": "2024-01-10", "end_date": null, "prescriber": "Dr. Lee"}
+      ],
+      "conditions": [
+        {"condition_name": "Migraine without aura", "icd10_code": "G43.009", "status": "chronic", "onset_date": "2018-05-01", "notes": "Usually responds to triptans"}
+      ],
+      "vital_signs": [
+        {"timestamp": "2026-02-12T10:30:00", "blood_pressure_systolic": 132, "blood_pressure_diastolic": 84, "heart_rate": 110, "temperature": 39.4, "respiratory_rate": 20, "spo2": 98, "weight": 58.0}
+      ],
+      "lab_results": [
+        {"test_id": "LAB-P002-001", "test_name": "White Blood Cell Count", "category": "hematology", "value": "18.5", "unit": "x10^9/L", "reference_range": "4.5-11.0", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P002-002", "test_name": "C-Reactive Protein", "category": "chemistry", "value": "120", "unit": "mg/L", "reference_range": "0-5", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"}
+      ],
+      "clinical_notes": [
+        {"note_id": "NOTE-P002-001", "note_type": "admission", "author": "Dr. Martinez", "date": "2026-02-12", "content": "32F presents with severe headache (8/10) that started 2 days ago with progressive neck stiffness and photophobia. Reports fever at home. Denies recent travel or sick contacts. No history of immunosuppression. Kernig and Brudzinski signs positive on exam. This presentation is different from her usual migraines - more acute onset, higher fever, and nuchal rigidity.", "diagnosis_codes": null}
+      ],
+      "family_history": "Unremarkable.",
+      "social_history": "Non-smoker. Social drinker. Software engineer. No recent travel."
+    },
+    "P003": {
+      "patient_id": "P003",
+      "name": "Robert Chen",
+      "age": 45,
+      "sex": "male",
+      "date_of_birth": "1980-04-03",
+      "blood_type": "B+",
+      "chief_complaint": "Acute right lower quadrant abdominal pain with nausea and vomiting",
+      "allergies": [
+        {"allergen": "Ibuprofen", "reaction": "GI bleeding", "severity": "severe"}
+      ],
+      "medications": [],
+      "conditions": [],
+      "vital_signs": [
+        {"timestamp": "2026-02-12T16:00:00", "blood_pressure_systolic": 138, "blood_pressure_diastolic": 82, "heart_rate": 96, "temperature": 38.2, "respiratory_rate": 18, "spo2": 99, "weight": 75.0}
+      ],
+      "lab_results": [
+        {"test_id": "LAB-P003-001", "test_name": "White Blood Cell Count", "category": "hematology", "value": "14.8", "unit": "x10^9/L", "reference_range": "4.5-11.0", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P003-002", "test_name": "Neutrophils", "category": "hematology", "value": "82", "unit": "%", "reference_range": "40-70", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"}
+      ],
+      "clinical_notes": [
+        {"note_id": "NOTE-P003-001", "note_type": "admission", "author": "Dr. Williams", "date": "2026-02-12", "content": "45M presents with acute onset RLQ abdominal pain started 12 hours ago, initially periumbilical then migrated to RLQ. Associated nausea and 2 episodes of vomiting. Low-grade fever. McBurney's point tenderness positive. Rebound tenderness and guarding present. Psoas sign positive. Rovsing sign positive.", "diagnosis_codes": null}
+      ],
+      "family_history": "Father: colon cancer at age 65. Mother: alive and well.",
+      "social_history": "Non-smoker. No alcohol. Restaurant manager."
+    }
+  },
+  "drug_interactions": [
+    {"drug_a": "Metformin", "drug_b": "Levofloxacin", "severity": "moderate", "description": "Fluoroquinolones may alter blood glucose levels when used with metformin. May cause hypoglycemia or hyperglycemia.", "recommendation": "Monitor blood glucose closely. Adjust metformin dosage if necessary."},
+    {"drug_a": "Lisinopril", "drug_b": "Potassium supplements", "severity": "major", "description": "ACE inhibitors increase potassium retention. Concurrent potassium supplementation may lead to hyperkalemia.", "recommendation": "Avoid concurrent use or monitor potassium levels very closely."},
+    {"drug_a": "Warfarin", "drug_b": "Azithromycin", "severity": "moderate", "description": "Macrolide antibiotics may increase the anticoagulant effect of warfarin, increasing bleeding risk.", "recommendation": "Monitor INR closely. May need warfarin dose adjustment."},
+    {"drug_a": "Atorvastatin", "drug_b": "Clarithromycin", "severity": "major", "description": "Clarithromycin inhibits CYP3A4, significantly increasing statin levels and risk of rhabdomyolysis.", "recommendation": "Avoid combination. Use azithromycin as alternative macrolide."},
+    {"drug_a": "Oral Contraceptive", "drug_b": "Rifampin", "severity": "major", "description": "Rifampin is a potent CYP3A4 inducer that significantly reduces oral contraceptive efficacy.", "recommendation": "Use alternative contraception method during and 28 days after rifampin therapy."},
+    {"drug_a": "Metformin", "drug_b": "IV Contrast", "severity": "major", "description": "Risk of lactic acidosis. Metformin should be held before and 48h after iodinated contrast.", "recommendation": "Hold metformin 48 hours before and after contrast administration. Check renal function."}
+  ],
+  "clinical_guidelines": {
+    "GL001": {
+      "guideline_id": "GL001",
+      "condition": "Community-acquired pneumonia",
+      "title": "ATS/IDSA Guidelines for Management of Community-Acquired Pneumonia",
+      "source": "American Thoracic Society / Infectious Diseases Society of America",
+      "summary": "Evidence-based recommendations for the diagnosis and treatment of community-acquired pneumonia in adults.",
+      "recommendations": [
+        "For outpatient treatment without comorbidities: amoxicillin or doxycycline",
+        "For outpatient with comorbidities: respiratory fluoroquinolone OR beta-lactam + macrolide",
+        "For inpatient non-ICU: respiratory fluoroquinolone OR beta-lactam + macrolide",
+        "For inpatient ICU: beta-lactam + macrolide OR beta-lactam + respiratory fluoroquinolone",
+        "Obtain blood cultures and sputum culture before initiating antibiotics in hospitalized patients",
+        "Start antibiotics within 4 hours of admission",
+        "Consider local antibiogram for empiric therapy"
+      ],
+      "last_updated": "2024-01-15"
+    },
+    "GL002": {
+      "guideline_id": "GL002",
+      "condition": "Bacterial meningitis",
+      "title": "IDSA Guidelines for Bacterial Meningitis Management",
+      "source": "Infectious Diseases Society of America",
+      "summary": "Clinical practice guidelines for the management of bacterial meningitis.",
+      "recommendations": [
+        "Perform lumbar puncture urgently if meningitis is suspected (unless contraindicated)",
+        "Start empiric antibiotics immediately - do not delay for imaging",
+        "Empiric therapy for adults: vancomycin + third-generation cephalosporin (ceftriaxone or cefotaxime)",
+        "Add dexamethasone 0.15 mg/kg IV q6h for 4 days, started before or with first antibiotic dose",
+        "Blood cultures before antibiotics",
+        "CT scan before LP only if: immunocompromised, history of CNS disease, new-onset seizure, papilledema, altered consciousness, focal neurologic deficit",
+        "Adjust antibiotics based on CSF culture and sensitivity results"
+      ],
+      "last_updated": "2024-06-01"
+    },
+    "GL003": {
+      "guideline_id": "GL003",
+      "condition": "Acute appendicitis",
+      "title": "SAGES Guidelines for Diagnosis and Treatment of Acute Appendicitis",
+      "source": "Society of American Gastrointestinal and Endoscopic Surgeons",
+      "summary": "Guidelines for the clinical diagnosis and surgical management of acute appendicitis.",
+      "recommendations": [
+        "CT abdomen/pelvis is the imaging modality of choice (sensitivity >95%)",
+        "Ultrasound as first-line imaging in pediatric patients and pregnant women",
+        "Alvarado score ≥7 strongly suggests appendicitis",
+        "Laparoscopic appendectomy is the standard of care for uncomplicated appendicitis",
+        "Antibiotic-first approach may be considered for uncomplicated appendicitis in select patients",
+        "Preoperative antibiotics: single dose of broad-spectrum antibiotic",
+        "NPO status and IV fluid resuscitation before surgery",
+        "Pain management: avoid NSAIDs if GI bleeding risk; use acetaminophen or opioids"
+      ],
+      "last_updated": "2025-03-20"
+    }
+  },
+  "lab_orders": {},
+  "diagnosis_log": []
+}

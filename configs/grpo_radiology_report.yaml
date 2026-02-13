@@ -1,0 +1,101 @@
+# ============================================================
+# BIOAgents GRPO Training Config — Radiology Report Domain
+# ============================================================
+# Structured radiology report generation following clinical standards.
+# High process reward weight — structured format matters here.
+#
+# Usage:
+#   python bioagents/training/grpo_trainer.py --config configs/grpo_radiology_report.yaml
+# ============================================================
+
+model:
+  name_or_path: "checkpoints/sft_multidomain_lingshu/merged"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+peft:
+  enabled: true
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  task_type: "CAUSAL_LM"
+  bias: "none"
+
+dataset:
+  domain: "radiology_report"
+  tasks_path: "data/domains/radiology_report/tasks.json"
+  split_tasks_path: "data/domains/radiology_report/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 2048
+  max_completion_length: 2048         # Longer output for structured reports
+
+training:
+  output_dir: "checkpoints/grpo_radiology_report"
+  num_train_epochs: 5
+  per_device_train_batch_size: 1      # Longer sequences → smaller batch
+  gradient_accumulation_steps: 16
+  learning_rate: 3.0e-6
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 25
+  eval_steps: 10
+  save_total_limit: 5
+  seed: 42
+
+  # GRPO-specific
+  num_generations: 4
+  beta: 0.04
+  temperature: 0.5                    # Lower temperature for structured output
+  top_p: 0.90
+  top_k: 40
+
+rewards:
+  functions:
+    - name: "accuracy"
+      weight: 0.30
+    - name: "format"
+      weight: 0.30                    # Higher format weight (structured reports)
+    - name: "process"
+      weight: 0.25
+    - name: "safety"
+      weight: 0.15
+  bertscore_model: "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext"
+
+  # Report-specific reward signals
+  report:
+    require_sections: ["findings", "impression", "technique"]
+    require_comparison: true
+    terminology_bonus: true            # Reward for using standard radiology terminology
+
+environment:
+  max_turns: 12
+  use_gym_env: true
+  domains:
+    - "radiology_report"
+
+logging:
+  project: "bioagents-grpo"
+  run_name: "grpo_radiology_report"
+  use_wandb: true
+  log_dir: "logs/runs"
+
+meta:
+  experiment: "GRPO Radiology Report Generation"
+  description: >
+    GRPO training on Radiology Report domain.
+    Higher format reward (30%) for structured report compliance.
+    Lower temperature for consistent, professional report language.
+    Longer completion length (2048) to accommodate full structured reports.

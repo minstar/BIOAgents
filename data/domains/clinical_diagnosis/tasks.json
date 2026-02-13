@@ -1,0 +1,317 @@
+[
+  {
+    "id": "dx_pneumonia_001",
+    "description": {
+      "purpose": "Diagnose and manage community-acquired pneumonia in a diabetic patient with drug allergies",
+      "difficulty": "moderate",
+      "key_challenges": ["penicillin allergy constrains antibiotic choice", "diabetic comorbidity affects management", "must identify critical lab values"]
+    },
+    "user_scenario": {
+      "persona": "An attending physician seeking a clinical workup and diagnosis for a newly admitted patient",
+      "instructions": "You are an attending physician who has a new patient, James Wilson (P001), admitted with respiratory symptoms. Ask the agent to perform a complete clinical assessment and provide a diagnosis with treatment plan. You should ask follow-up questions about the antibiotic choice given his allergies."
+    },
+    "ticket": "Patient P001 (James Wilson, 58M) admitted with 5-day productive cough, fever, and worsening dyspnea. Needs complete clinical assessment, diagnosis, and treatment plan. Note: penicillin and sulfonamide allergies.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "review_patient",
+          "name": "get_patient_info",
+          "arguments": {"patient_id": "P001"},
+          "info": "Review patient demographics, allergies, and current medications"
+        },
+        {
+          "action_id": "check_vitals",
+          "name": "get_vital_signs",
+          "arguments": {"patient_id": "P001"},
+          "info": "Check current vital signs - should note fever, tachycardia, low SpO2"
+        },
+        {
+          "action_id": "review_labs",
+          "name": "get_lab_results",
+          "arguments": {"patient_id": "P001"},
+          "info": "Review lab results - should identify elevated WBC, CRP, procalcitonin"
+        },
+        {
+          "action_id": "differential",
+          "name": "get_differential_diagnosis",
+          "arguments": {"symptoms": "fever, cough, dyspnea"},
+          "info": "Generate differential diagnosis"
+        },
+        {
+          "action_id": "guidelines",
+          "name": "search_clinical_guidelines",
+          "arguments": {"condition": "Community-acquired pneumonia"},
+          "info": "Search for CAP treatment guidelines"
+        },
+        {
+          "action_id": "record_dx",
+          "name": "record_diagnosis",
+          "arguments": {
+            "patient_id": "P001",
+            "diagnosis": "Community-acquired pneumonia",
+            "icd10_code": "J18.9",
+            "confidence": "high"
+          },
+          "compare_args": ["patient_id", "diagnosis"],
+          "info": "Record the diagnosis"
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified the patient's penicillin and sulfonamide allergies",
+        "The agent noted critical findings: elevated WBC, CRP, procalcitonin, low SpO2, fever",
+        "The agent diagnosed community-acquired pneumonia",
+        "The agent recommended an antibiotic that avoids penicillin and sulfonamide classes",
+        "The agent considered the patient's diabetes in the management plan"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "dx_meningitis_001",
+    "description": {
+      "purpose": "Diagnose suspected bacterial meningitis requiring urgent workup",
+      "difficulty": "hard",
+      "key_challenges": ["time-sensitive condition", "must order LP", "empiric antibiotics needed immediately"]
+    },
+    "user_scenario": {
+      "persona": "An emergency medicine physician consulting for an urgent case",
+      "instructions": "You have a 32-year-old woman (P002) presenting with severe headache, neck stiffness, and photophobia. You need the agent to urgently assess this patient and provide management recommendations. Emphasize the urgency."
+    },
+    "ticket": "URGENT: Patient P002 (Sarah Kim, 32F) with severe headache, neck stiffness, photophobia, and fever. Positive Kernig and Brudzinski signs. Needs immediate assessment and management plan.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "review_patient",
+          "name": "get_patient_info",
+          "arguments": {"patient_id": "P002"},
+          "info": "Review patient information"
+        },
+        {
+          "action_id": "check_vitals",
+          "name": "get_vital_signs",
+          "arguments": {"patient_id": "P002"},
+          "info": "Check vital signs - note fever and tachycardia"
+        },
+        {
+          "action_id": "review_labs",
+          "name": "get_lab_results",
+          "arguments": {"patient_id": "P002"},
+          "info": "Review available labs"
+        },
+        {
+          "action_id": "order_lp",
+          "name": "order_lab_test",
+          "arguments": {"patient_id": "P002", "test_name": "Lumbar Puncture / CSF Analysis", "priority": "stat"},
+          "compare_args": ["patient_id", "priority"],
+          "info": "Order lumbar puncture - critical for meningitis diagnosis"
+        },
+        {
+          "action_id": "order_blood_culture",
+          "name": "order_lab_test",
+          "arguments": {"patient_id": "P002", "test_name": "Blood Culture", "priority": "stat"},
+          "compare_args": ["patient_id"],
+          "info": "Order blood cultures before antibiotics"
+        },
+        {
+          "action_id": "guidelines",
+          "name": "search_clinical_guidelines",
+          "arguments": {"condition": "Bacterial meningitis"},
+          "info": "Search meningitis guidelines"
+        },
+        {
+          "action_id": "record_dx",
+          "name": "record_diagnosis",
+          "arguments": {
+            "patient_id": "P002",
+            "diagnosis": "Suspected bacterial meningitis",
+            "confidence": "high"
+          },
+          "compare_args": ["patient_id"],
+          "info": "Record suspected diagnosis"
+        }
+      ],
+      "nl_assertions": [
+        "The agent recognized the urgency of the situation",
+        "The agent ordered a lumbar puncture as a priority/stat test",
+        "The agent recommended empiric antibiotics (vancomycin + ceftriaxone) before LP results",
+        "The agent recommended adjunctive dexamethasone",
+        "The agent considered differentiating from the patient's known migraine history"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "dx_appendicitis_001",
+    "description": {
+      "purpose": "Diagnose acute appendicitis and manage appropriately, considering drug allergy",
+      "difficulty": "moderate",
+      "key_challenges": ["classic presentation", "patient has NSAID allergy", "surgical referral needed"]
+    },
+    "user_scenario": {
+      "persona": "A surgical resident asking for pre-operative assessment",
+      "instructions": "You are a surgical resident with patient Robert Chen (P003) who has acute abdominal pain. You need the agent to complete the assessment, confirm the diagnosis, and prepare the patient for potential surgery. Ask about pain management given his ibuprofen allergy."
+    },
+    "ticket": "Patient P003 (Robert Chen, 45M) with acute RLQ pain, nausea, vomiting. McBurney's point tenderness. Needs assessment, diagnosis confirmation, and pre-op preparation. Note: ibuprofen allergy (GI bleeding).",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "review_patient",
+          "name": "get_patient_info",
+          "arguments": {"patient_id": "P003"},
+          "info": "Review patient information and allergy"
+        },
+        {
+          "action_id": "check_vitals",
+          "name": "get_vital_signs",
+          "arguments": {"patient_id": "P003"},
+          "info": "Check vital signs"
+        },
+        {
+          "action_id": "review_labs",
+          "name": "get_lab_results",
+          "arguments": {"patient_id": "P003"},
+          "info": "Review labs - elevated WBC with neutrophilia"
+        },
+        {
+          "action_id": "differential",
+          "name": "get_differential_diagnosis",
+          "arguments": {"symptoms": "abdominal pain, nausea, vomiting"},
+          "info": "Generate differential diagnosis for abdominal pain"
+        },
+        {
+          "action_id": "guidelines",
+          "name": "search_clinical_guidelines",
+          "arguments": {"condition": "Acute appendicitis"},
+          "info": "Search appendicitis guidelines"
+        },
+        {
+          "action_id": "record_dx",
+          "name": "record_diagnosis",
+          "arguments": {
+            "patient_id": "P003",
+            "diagnosis": "Acute appendicitis",
+            "icd10_code": "K35.80",
+            "confidence": "high"
+          },
+          "compare_args": ["patient_id", "diagnosis"],
+          "info": "Record diagnosis"
+        },
+        {
+          "action_id": "refer_surgery",
+          "name": "transfer_to_specialist",
+          "arguments": {
+            "summary": "45M with classic acute appendicitis presentation requiring laparoscopic appendectomy",
+            "specialty": "surgery"
+          },
+          "compare_args": ["specialty"],
+          "info": "Refer to surgery for appendectomy"
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified classic signs of acute appendicitis (McBurney's point, rebound, psoas sign)",
+        "The agent recommended CT abdomen for confirmation",
+        "The agent noted the ibuprofen allergy and avoided NSAIDs for pain management",
+        "The agent recommended acetaminophen for pain control",
+        "The agent referred the patient to surgery for appendectomy"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "dx_drug_interaction_001",
+    "description": {
+      "purpose": "Identify and manage a potential drug interaction when prescribing antibiotics",
+      "difficulty": "moderate",
+      "key_challenges": ["must check interaction between new antibiotic and existing statin", "must suggest safe alternative"]
+    },
+    "user_scenario": {
+      "persona": "A pharmacist flagging a potential interaction",
+      "instructions": "You are a pharmacist who noticed the attending considered prescribing clarithromycin for patient P001's pneumonia. Ask the agent to check the interaction with the patient's current atorvastatin and recommend an alternative."
+    },
+    "ticket": "Pharmacist query: Please check drug interaction between clarithromycin and atorvastatin for patient P001 and recommend a safe antibiotic alternative.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "get_meds",
+          "name": "get_medications",
+          "arguments": {"patient_id": "P001"},
+          "info": "Check current medication list"
+        },
+        {
+          "action_id": "check_interaction",
+          "name": "check_drug_interaction",
+          "arguments": {"drug_a": "Atorvastatin", "drug_b": "Clarithromycin"},
+          "info": "Check interaction - should flag as major (CYP3A4 inhibition, rhabdomyolysis risk)"
+        },
+        {
+          "action_id": "check_allergies",
+          "name": "get_patient_info",
+          "arguments": {"patient_id": "P001"},
+          "info": "Verify allergies before suggesting alternative"
+        }
+      ],
+      "nl_assertions": [
+        "The agent identified the major interaction between clarithromycin and atorvastatin",
+        "The agent mentioned CYP3A4 inhibition and rhabdomyolysis risk",
+        "The agent recommended azithromycin as a safer macrolide alternative",
+        "The agent confirmed azithromycin doesn't conflict with patient's penicillin allergy",
+        "The agent recommended monitoring during antibiotic therapy"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "dx_critical_vitals_001",
+    "description": {
+      "purpose": "Respond appropriately to deteriorating vital signs",
+      "difficulty": "hard",
+      "key_challenges": ["recognize critical SpO2 drop", "identify possible sepsis", "take urgent action"]
+    },
+    "user_scenario": {
+      "persona": "A nurse alerting about deteriorating patient",
+      "instructions": "You are a nurse who noticed that patient P001's oxygen saturation has been trending down (93% → 91%). The patient also has a rising heart rate and temperature. Alert the agent and ask what to do."
+    },
+    "ticket": "ALERT: Patient P001 vital signs deteriorating. SpO2 dropped from 93% to 91%. Heart rate rising. Temperature 39.1°C. Please assess and advise.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "check_vitals_trend",
+          "name": "get_vital_signs_trend",
+          "arguments": {"patient_id": "P001"},
+          "info": "Review vital signs trend"
+        },
+        {
+          "action_id": "review_labs",
+          "name": "get_lab_results",
+          "arguments": {"patient_id": "P001"},
+          "info": "Review latest labs for signs of worsening infection/sepsis"
+        },
+        {
+          "action_id": "review_notes",
+          "name": "get_clinical_notes",
+          "arguments": {"patient_id": "P001"},
+          "info": "Review admission notes for context"
+        },
+        {
+          "action_id": "add_progress_note",
+          "name": "add_clinical_note",
+          "arguments": {
+            "patient_id": "P001",
+            "note_type": "progress",
+            "content": "Clinical deterioration noted with declining SpO2 and rising temperature"
+          },
+          "compare_args": ["patient_id", "note_type"],
+          "info": "Document the clinical change"
+        }
+      ],
+      "nl_assertions": [
+        "The agent recognized the critical nature of declining oxygen saturation",
+        "The agent recommended supplemental oxygen",
+        "The agent considered possible sepsis or pneumonia progression",
+        "The agent recommended repeat blood cultures and/or chest imaging",
+        "The agent recommended escalation of care if condition continues to deteriorate"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  }
+]

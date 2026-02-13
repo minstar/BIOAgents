@@ -1,0 +1,93 @@
+# ============================================================
+# P2-3: Qwen3-8B GRPO Training Config
+# ============================================================
+# Goal: Optimize turn efficiency and tool-use quality
+# Qwen3-8B baseline: Action Score 0.806 (best model)
+# Target: Action Score 0.85+ with better turn efficiency
+#
+# Usage:
+#   python bioagents/training/grpo_trainer.py --config configs/grpo_p2_qwen3_8b.yaml
+#   accelerate launch --num_processes 4 bioagents/training/grpo_trainer.py \
+#       --config configs/grpo_p2_qwen3_8b.yaml
+# ============================================================
+
+model:
+  name_or_path: "/data/project/private/minstar/models/Qwen3-8B-Base"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+peft:
+  enabled: true
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  task_type: "CAUSAL_LM"
+  bias: "none"
+
+dataset:
+  domain: "medical_qa"
+  tasks_path: "data/domains/medical_qa/tasks.json"
+  split_tasks_path: "data/domains/medical_qa/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 2048
+  max_completion_length: 1024
+
+training:
+  output_dir: "checkpoints/grpo_p2_qwen3_8b"
+  num_train_epochs: 2
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4      # Effective batch 8
+  learning_rate: 5.0e-6               # Conservative for RL
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 50
+  eval_steps: 25
+  save_total_limit: 3
+  seed: 42
+
+  # GRPO-specific
+  num_generations: 4
+  beta: 0.04                          # KL penalty
+  temperature: 0.7
+  top_p: 0.95
+  top_k: 50
+
+rewards:
+  functions:
+    - name: "accuracy"
+      weight: 0.4
+    - name: "format"
+      weight: 0.2
+    - name: "process"
+      weight: 0.4
+
+environment:
+  max_turns: 10
+  use_gym_env: true
+  domains:
+    - "medical_qa"
+
+logging:
+  project: "bioagents-grpo"
+  run_name: "grpo_p2_qwen3_8b_medqa"
+  use_wandb: false
+  log_dir: "logs/runs"
+
+meta:
+  experiment: "P2-3 Qwen3-8B GRPO"
+  description: >
+    GRPO training on Medical QA with Qwen3-8B-Base.
+    LoRA r=16 (attention + FFN). Turn efficiency optimization.

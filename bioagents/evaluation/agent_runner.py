@@ -1,0 +1,729 @@
+"""LLM Agent Runner for BIOAgents.
+
+Connects a language model to the BIOAgents environment for multi-turn
+tool-use evaluation. Supports:
+- vLLM-based fast inference
+- HuggingFace transformers-based inference
+- Multi-turn tool calling with automatic parsing
+- Full trajectory logging
+
+Usage:
+    runner = AgentRunner(
+        model_name_or_path="Qwen/Qwen2.5-VL-7B-Instruct",
+        backend="vllm",
+    )
+    results = runner.run_task(domain="clinical_diagnosis", task_id="dx_pneumonia_001")
+"""
+
+import json
+import os
+import re
+import time
+from copy import deepcopy
+from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Literal, Optional
+
+from loguru import logger
+
+from bioagents.evaluation.rewards import compute_composite_reward
+
+
+@dataclass
+class RunConfig:
+    """Configuration for an agent run."""
+    model_name_or_path: str
+    backend: Literal["vllm", "transformers"] = "transformers"
+    domain: str = "clinical_diagnosis"
+    task_ids: Optional[list[str]] = None       # None = run all tasks
+    task_split: Optional[str] = None
+    max_turns: int = 15
+    temperature: float = 0.1
+    top_p: float = 0.95
+    max_new_tokens: int = 1024
+    tensor_parallel_size: int = 1
+    gpu_memory_utilization: float = 0.85
+    log_dir: str = "logs/runs"
+    seed: int = 42
+
+
+@dataclass
+class TurnRecord:
+    """Record of a single turn in the agent-environment interaction."""
+    turn_idx: int
+    prompt: str = ""
+    raw_output: str = ""
+    parsed_tool_call: Optional[dict] = None
+    tool_response: Optional[str] = None
+    is_final_answer: bool = False
+    latency_seconds: float = 0.0
+
+
+@dataclass 
+class TaskResult:
+    """Result of running a single task."""
+    task_id: str
+    domain: str
+    model_name: str
+    turns: list[TurnRecord] = field(default_factory=list)
+    total_turns: int = 0
+    action_score: float = 0.0
+    final_reward: float = 0.0
+    completed: bool = False
+    error: Optional[str] = None
+    trajectory: dict = field(default_factory=dict)
+    start_time: str = ""
+    end_time: str = ""
+    total_latency: float = 0.0
+
+
+def build_system_prompt(policy: str, tools: list[dict], domain: str = "clinical_diagnosis") -> str:
+    """Build the system prompt with policy and tool definitions."""
+    tool_section = json.dumps(tools, indent=2, ensure_ascii=False)
+    
+    if domain == "medical_qa":
+        role = "You are a medical AI assistant that answers medical questions using evidence-based reasoning."
+        final_instruction = "When you are ready, use the submit_answer tool to submit your final answer."
+    else:
+        role = "You are a medical AI assistant operating in a clinical environment. Follow the policy below and use the available tools to help with patient care."
+        final_instruction = "When you have gathered enough information and want to give your final assessment, respond with your clinical analysis as plain text (no JSON)."
+    
+    return f"""{role}
+
+## Policy
+{policy}
+
+## Available Tools
+You have access to the following tools. To use a tool, respond with ONLY a JSON object in this exact format:
+```json
+{{"name": "tool_name", "arguments": {{"arg1": "value1", "arg2": "value2"}}}}
+```
+
+Do NOT include any other text when making a tool call. One tool call per response.
+
+{final_instruction}
+
+## Tool Definitions
+{tool_section}"""
+
+
+def parse_tool_call(text: str) -> Optional[dict]:
+    """Parse a tool call from model output.
+    
+    Supports formats:
+    1. Pure JSON: {"name": "...", "arguments": {...}}
+    2. JSON in code block: ```json\n{...}\n```
+    3. JSON embedded in text with markers
+    """
+    text = text.strip()
+    
+    # Try 1: Extract JSON from code blocks
+    code_block_match = re.search(r'```(?:json)?\s*\n?({.*?})\s*\n?```', text, re.DOTALL)
+    if code_block_match:
+        try:
+            parsed = json.loads(code_block_match.group(1))
+            if "name" in parsed:
+                return parsed
+        except json.JSONDecodeError:
+            pass
+    
+    # Try 2: Direct JSON parse
+    try:
+        parsed = json.loads(text)
+        if isinstance(parsed, dict) and "name" in parsed:
+            return parsed
+    except json.JSONDecodeError:
+        pass
+    
+    # Try 3: Find JSON-like pattern in text
+    json_match = re.search(r'(\{[^{}]*"name"\s*:\s*"[^"]+?"[^{}]*"arguments"\s*:\s*\{[^{}]*\}[^{}]*\})', text, re.DOTALL)
+    if json_match:
+        try:
+            parsed = json.loads(json_match.group(1))
+            if "name" in parsed:
+                return parsed
+        except json.JSONDecodeError:
+            pass
+    
+    # Try 4: More lenient nested JSON search
+    matches = list(re.finditer(r'\{', text))
+    for m in matches:
+        start = m.start()
+        depth = 0
+        for i in range(start, len(text)):
+            if text[i] == '{':
+                depth += 1
+            elif text[i] == '}':
+                depth -= 1
+                if depth == 0:
+                    candidate = text[start:i+1]
+                    try:
+                        parsed = json.loads(candidate)
+                        if isinstance(parsed, dict) and "name" in parsed:
+                            return parsed
+                    except json.JSONDecodeError:
+                        pass
+                    break
+    
+    return None
+
+
+class AgentRunner:
+    """Runs LLM agents in BIOAgents environments."""
+    
+    def __init__(self, config: RunConfig):
+        self.config = config
+        self.model = None
+        self.tokenizer = None
+        self._setup_logging()
+    
+    def _setup_logging(self):
+        """Set up logging directory."""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        model_short = Path(self.config.model_name_or_path).name
+        self.run_id = f"{model_short}_{self.config.domain}_{timestamp}"
+        self.log_path = Path(self.config.log_dir) / self.run_id
+        self.log_path.mkdir(parents=True, exist_ok=True)
+        
+        # Save config
+        config_dict = {
+            k: v for k, v in self.config.__dict__.items()
+        }
+        with open(self.log_path / "config.json", "w") as f:
+            json.dump(config_dict, f, indent=2, default=str)
+    
+    def load_model(self):
+        """Load the language model."""
+        if self.config.backend == "vllm":
+            self._load_vllm()
+        else:
+            self._load_transformers()
+    
+    def _load_vllm(self):
+        """Load model with vLLM."""
+        from vllm import LLM, SamplingParams
+        
+        logger.info(f"Loading {self.config.model_name_or_path} with vLLM (tp={self.config.tensor_parallel_size})")
+        self.model = LLM(
+            model=self.config.model_name_or_path,
+            tensor_parallel_size=self.config.tensor_parallel_size,
+            gpu_memory_utilization=self.config.gpu_memory_utilization,
+            trust_remote_code=True,
+            max_model_len=8192,
+            seed=self.config.seed,
+        )
+        self.sampling_params = SamplingParams(
+            temperature=self.config.temperature,
+            top_p=self.config.top_p,
+            max_tokens=self.config.max_new_tokens,
+            stop=["```\n\n", "\n\nUser:", "\n\nHuman:"],
+        )
+        logger.info("vLLM model loaded successfully")
+    
+    def _load_transformers(self):
+        """Load model with HuggingFace transformers."""
+        import torch
+        from transformers import (
+            AutoModelForCausalLM,
+            AutoTokenizer,
+            AutoProcessor,
+            AutoConfig,
+        )
+        
+        logger.info(f"Loading {self.config.model_name_or_path} with transformers")
+        
+        model_path = self.config.model_name_or_path
+        
+        # Detect model type from config
+        config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
+        model_type = getattr(config, "model_type", "")
+        architectures = getattr(config, "architectures", [])
+        
+        self._is_vl_model = any(
+            "vl" in a.lower() or "vision" in a.lower()
+            for a in (architectures or [])
+        ) or "vl" in model_type.lower()
+        
+        logger.info(f"Model type: {model_type}, VL: {self._is_vl_model}, Arch: {architectures}")
+        
+        # Load tokenizer / processor
+        if self._is_vl_model:
+            try:
+                self.processor = AutoProcessor.from_pretrained(
+                    model_path, trust_remote_code=True
+                )
+                self.tokenizer = (
+                    self.processor.tokenizer
+                    if hasattr(self.processor, "tokenizer")
+                    else self.processor
+                )
+            except Exception:
+                self.tokenizer = AutoTokenizer.from_pretrained(
+                    model_path, trust_remote_code=True
+                )
+                self.processor = None
+        else:
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                model_path, trust_remote_code=True
+            )
+            self.processor = None
+        
+        # Load model – choose the right Auto class
+        load_kwargs = dict(
+            torch_dtype=torch.bfloat16,
+            device_map="auto",
+            trust_remote_code=True,
+        )
+        
+        # Determine model class based on architecture
+        auto_map = getattr(config, "auto_map", {})
+        uses_custom_auto = "AutoModelForCausalLM" in auto_map
+        is_qwen_vl = model_type in ("qwen2_5_vl", "qwen2_vl")
+        
+        # Custom models (trust_remote_code) often break with attn_implementation
+        # so we skip it for them
+        if uses_custom_auto:
+            attn_options = [None]
+        else:
+            attn_options = ["sdpa", None]
+        
+        for attn_impl in attn_options:
+            try:
+                kw = {**load_kwargs}
+                if attn_impl:
+                    kw["attn_implementation"] = attn_impl
+                
+                if uses_custom_auto or not is_qwen_vl:
+                    # Custom model or standard CausalLM
+                    self.model = AutoModelForCausalLM.from_pretrained(
+                        model_path, **kw
+                    )
+                else:
+                    # Qwen VL models need specific class
+                    from transformers import Qwen2_5_VLForConditionalGeneration
+                    self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                        model_path, **kw
+                    )
+                break
+            except Exception as e:
+                logger.warning(f"Failed with attn_impl={attn_impl}: {e}")
+                if attn_impl is None:
+                    raise
+        
+        self.model.eval()
+        logger.info(f"Model loaded (VL={self._is_vl_model})")
+    
+    def generate(self, messages: list[dict]) -> str:
+        """Generate a response from the model."""
+        if self.config.backend == "vllm":
+            return self._generate_vllm(messages)
+        else:
+            return self._generate_transformers(messages)
+    
+    def _generate_vllm(self, messages: list[dict]) -> str:
+        """Generate with vLLM using chat template."""
+        from vllm import SamplingParams
+        
+        # Use the tokenizer from vLLM engine
+        tokenizer = self.model.get_tokenizer()
+        prompt = tokenizer.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True
+        )
+        
+        outputs = self.model.generate([prompt], self.sampling_params)
+        return outputs[0].outputs[0].text.strip()
+    
+    def _generate_transformers(self, messages: list[dict]) -> str:
+        """Generate with HuggingFace transformers."""
+        import torch
+        
+        # For VL models, use processor if available
+        if self._is_vl_model and self.processor is not None:
+            # Text-only input for VL model
+            text = self.processor.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
+            inputs = self.processor(
+                text=[text], padding=True, return_tensors="pt"
+            ).to(self.model.device)
+        else:
+            # Apply chat template
+            if hasattr(self.tokenizer, "apply_chat_template"):
+                text = self.tokenizer.apply_chat_template(
+                    messages, tokenize=False, add_generation_prompt=True
+                )
+            else:
+                text = ""
+                for msg in messages:
+                    role = msg["role"]
+                    content = msg["content"]
+                    text += f"<|{role}|>\n{content}\n"
+                text += "<|assistant|>\n"
+            
+            inputs = self.tokenizer(text, return_tensors="pt").to(self.model.device)
+        
+        with torch.no_grad():
+            outputs = self.model.generate(
+                **inputs,
+                max_new_tokens=self.config.max_new_tokens,
+                temperature=self.config.temperature if self.config.temperature > 0 else None,
+                top_p=self.config.top_p if self.config.temperature > 0 else None,
+                do_sample=self.config.temperature > 0,
+                pad_token_id=self.tokenizer.eos_token_id,
+            )
+        
+        # Decode only the generated tokens
+        input_len = inputs["input_ids"].shape[-1]
+        generated_ids = outputs[0][input_len:]
+        return self.tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
+    
+    def run_task(self, task: dict, env) -> TaskResult:
+        """Run a single task in the environment.
+        
+        Args:
+            task: Task dictionary from tasks.json
+            env: BioAgentGymEnv instance
+            
+        Returns:
+            TaskResult with full trajectory and scores
+        """
+        task_id = task["id"]
+        result = TaskResult(
+            task_id=task_id,
+            domain=self.config.domain,
+            model_name=Path(self.config.model_name_or_path).name,
+            start_time=datetime.now().isoformat(),
+        )
+        
+        logger.info(f"Starting task: {task_id}")
+        
+        # Reset environment
+        obs, info = env.reset(options={"task_id": task_id})
+        
+        # Build conversation
+        system_prompt = build_system_prompt(info["policy"], info["tools"], domain=self.config.domain)
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": obs},
+        ]
+        
+        try:
+            for turn_idx in range(self.config.max_turns):
+                turn = TurnRecord(turn_idx=turn_idx)
+                
+                # Generate
+                t0 = time.time()
+                raw_output = self.generate(messages)
+                turn.latency_seconds = time.time() - t0
+                turn.raw_output = raw_output
+                
+                logger.debug(f"Turn {turn_idx}: {raw_output[:200]}...")
+                
+                # Parse tool call
+                tool_call = parse_tool_call(raw_output)
+                
+                if tool_call is not None:
+                    turn.parsed_tool_call = tool_call
+                    tool_name = tool_call.get("name", "")
+                    
+                    # Check if this is a terminating tool (submit_answer)
+                    is_submit = tool_name == "submit_answer"
+                    
+                    # Detect repeated tool call (stuck model) — skip for submit_answer
+                    if not is_submit:
+                        recent_tool_calls = [
+                            t.parsed_tool_call.get("name", "") if t.parsed_tool_call else ""
+                            for t in result.turns[-3:]
+                        ]
+                        if recent_tool_calls.count(tool_name) >= 2:
+                            logger.warning(
+                                f"Tool '{tool_name}' called 3+ times in a row. "
+                                "Injecting nudge to move forward."
+                            )
+                            messages.append({"role": "assistant", "content": json.dumps(tool_call)})
+                            messages.append({
+                                "role": "user",
+                                "content": (
+                                    f"You have already called '{tool_name}' multiple times with similar arguments. "
+                                    "Please proceed with your analysis using the information gathered so far. "
+                                    "Use a DIFFERENT tool or provide your final answer."
+                                ),
+                            })
+                            result.turns.append(turn)
+                            continue
+                    
+                    # Execute tool via environment
+                    action = json.dumps(tool_call)
+                    observation, reward, terminated, truncated, step_info = env.step(action)
+                    
+                    turn.tool_response = observation
+                    
+                    # Add to messages
+                    messages.append({"role": "assistant", "content": json.dumps(tool_call)})
+                    messages.append({
+                        "role": "user",
+                        "content": f"Tool result for {tool_name}:\n{observation}"
+                    })
+                    
+                    result.turns.append(turn)
+                    
+                    # Force termination on submit_answer
+                    if is_submit:
+                        logger.info(f"submit_answer called with: {tool_call.get('arguments', {})}")
+                        break
+                    
+                    if terminated or truncated:
+                        break
+                else:
+                    # Final answer (no tool call)
+                    turn.is_final_answer = True
+                    messages.append({"role": "assistant", "content": raw_output})
+                    result.turns.append(turn)
+                    
+                    # Check for repetition (model stuck in a loop)
+                    if len(result.turns) >= 3:
+                        recent = [t.raw_output[:100] for t in result.turns[-3:]]
+                        if len(set(recent)) == 1:
+                            logger.warning(f"Repetition detected at turn {turn_idx}, stopping.")
+                            break
+                    
+                    # Agent gave final answer - break the loop
+                    break
+            
+            # Get final trajectory and reward
+            try:
+                trajectory = env.get_trajectory()
+                result.trajectory = trajectory
+                result.final_reward = trajectory["final_reward"]
+            except Exception:
+                result.trajectory = {}
+                result.final_reward = 0.0
+            
+            result.total_turns = len(result.turns)
+            result.action_score = self._compute_action_score(task, env._tool_call_log)
+            # For QA tasks, also compute accuracy
+            if "answer" in task or "correct_answer" in task:
+                qa_acc = self._compute_qa_accuracy(task, env._tool_call_log)
+                result.trajectory["qa_accuracy"] = qa_acc
+            
+            # Compute composite reward using the new reward module
+            final_answer_text = ""
+            for t in reversed(result.turns):
+                if t.is_final_answer and t.raw_output:
+                    final_answer_text = t.raw_output
+                    break
+                if t.parsed_tool_call and t.parsed_tool_call.get("name") == "submit_answer":
+                    final_answer_text = t.parsed_tool_call.get("arguments", {}).get("answer", "")
+                    break
+            
+            correct_answer = task.get("answer", task.get("correct_answer", ""))
+            expected_actions = task.get("evaluation_criteria", {}).get("actions", [])
+            
+            reward_details = compute_composite_reward(
+                response=final_answer_text,
+                correct_answer=correct_answer,
+                tool_call_log=env._tool_call_log,
+                expected_actions=expected_actions,
+                is_final=True,
+            )
+            result.trajectory["reward_details"] = reward_details
+            result.final_reward = reward_details["total"]
+            
+            result.completed = True
+            
+        except Exception as e:
+            logger.error(f"Error in task {task_id}: {e}")
+            result.error = str(e)
+            import traceback
+            result.error += "\n" + traceback.format_exc()
+        
+        result.end_time = datetime.now().isoformat()
+        result.total_latency = sum(t.latency_seconds for t in result.turns)
+        
+        logger.info(
+            f"Task {task_id}: turns={result.total_turns}, "
+            f"action_score={result.action_score:.3f}, "
+            f"reward={result.final_reward:.3f}, "
+            f"latency={result.total_latency:.1f}s"
+        )
+        
+        return result
+    
+    def _compute_qa_accuracy(self, task: dict, tool_call_log: list) -> float:
+        """Check if the agent submitted the correct answer (for QA domains)."""
+        correct_answer = task.get("answer", task.get("correct_answer", ""))
+        if not correct_answer:
+            return 0.0
+
+        # Find the submit_answer tool call
+        for tc in reversed(tool_call_log):
+            if tc["tool_name"] == "submit_answer":
+                submitted = tc["arguments"].get("answer", "").strip()
+                # For multiple-choice, compare first letter
+                if len(correct_answer.strip()) <= 2:
+                    if submitted.upper() == correct_answer.strip().upper():
+                        return 1.0
+                    # Also check if they submitted the full option text
+                    options = task.get("options", {})
+                    correct_text = options.get(correct_answer.strip(), "").lower()
+                    if correct_text and submitted.lower() == correct_text:
+                        return 1.0
+                    return 0.0
+                else:
+                    # Free text comparison
+                    if submitted.lower() == correct_answer.strip().lower():
+                        return 1.0
+                    if correct_answer.strip().lower() in submitted.lower():
+                        return 0.5
+                    return 0.0
+
+        # No answer submitted
+        return 0.0
+
+    def _compute_action_score(self, task: dict, tool_call_log: list) -> float:
+        """Compute action score based on expected vs actual tool calls."""
+        eval_criteria = task.get("evaluation_criteria", {})
+        expected_actions = eval_criteria.get("actions", [])
+        
+        if not expected_actions:
+            return 1.0
+        
+        matched = 0
+        for exp in expected_actions:
+            exp_name = exp.get("name", "")
+            compare_args = exp.get("compare_args", [])
+            exp_args = exp.get("arguments", {})
+            
+            for tc in tool_call_log:
+                if tc["tool_name"] == exp_name:
+                    if compare_args:
+                        all_match = all(
+                            str(tc["arguments"].get(k, "")).lower() == str(exp_args.get(k, "")).lower()
+                            for k in compare_args
+                            if k in exp_args
+                        )
+                        if all_match:
+                            matched += 1
+                            break
+                    else:
+                        matched += 1
+                        break
+        
+        return matched / len(expected_actions)
+    
+    def run_all_tasks(self) -> list[TaskResult]:
+        """Run all tasks (or specified task_ids) and return results."""
+        from bioagents.gym.agent_env import BioAgentGymEnv
+        
+        # Create environment
+        gym_env = BioAgentGymEnv(
+            domain=self.config.domain,
+            task_split=self.config.task_split,
+            max_turns=self.config.max_turns,
+        )
+        
+        # Get tasks
+        if self.config.task_ids:
+            task_ids = self.config.task_ids
+        else:
+            task_ids = [t["id"] for t in gym_env._tasks]
+        
+        logger.info(f"Running {len(task_ids)} tasks with {Path(self.config.model_name_or_path).name}")
+        
+        results = []
+        for task_id in task_ids:
+            task = gym_env._task_map[task_id]
+            result = self.run_task(task, gym_env)
+            results.append(result)
+            self._save_task_result(result)
+        
+        # Save summary
+        self._save_summary(results)
+        
+        return results
+    
+    def _save_task_result(self, result: TaskResult):
+        """Save individual task result."""
+        path = self.log_path / f"task_{result.task_id}.json"
+        data = {
+            "task_id": result.task_id,
+            "domain": result.domain,
+            "model_name": result.model_name,
+            "total_turns": result.total_turns,
+            "action_score": result.action_score,
+            "final_reward": result.final_reward,
+            "completed": result.completed,
+            "error": result.error,
+            "total_latency": result.total_latency,
+            "start_time": result.start_time,
+            "end_time": result.end_time,
+            "turns": [
+                {
+                    "turn_idx": t.turn_idx,
+                    "raw_output": t.raw_output,
+                    "parsed_tool_call": t.parsed_tool_call,
+                    "tool_response": t.tool_response[:500] if t.tool_response else None,
+                    "is_final_answer": t.is_final_answer,
+                    "latency_seconds": t.latency_seconds,
+                }
+                for t in result.turns
+            ],
+        }
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False, default=str)
+    
+    def _save_summary(self, results: list[TaskResult]):
+        """Save a summary of all task results."""
+        summary = {
+            "run_id": self.run_id,
+            "model": Path(self.config.model_name_or_path).name,
+            "domain": self.config.domain,
+            "backend": self.config.backend,
+            "num_tasks": len(results),
+            "num_completed": sum(1 for r in results if r.completed),
+            "num_errors": sum(1 for r in results if r.error),
+            "avg_action_score": sum(r.action_score for r in results) / max(len(results), 1),
+            "avg_reward": sum(r.final_reward for r in results) / max(len(results), 1),
+            "avg_turns": sum(r.total_turns for r in results) / max(len(results), 1),
+            "total_latency": sum(r.total_latency for r in results),
+            "per_task": [
+                {
+                    "task_id": r.task_id,
+                    "action_score": r.action_score,
+                    "final_reward": r.final_reward,
+                    "turns": r.total_turns,
+                    "latency": r.total_latency,
+                    "completed": r.completed,
+                    "error": r.error is not None,
+                }
+                for r in results
+            ],
+            "timestamp": datetime.now().isoformat(),
+        }
+        
+        path = self.log_path / "summary.json"
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(summary, f, indent=2, ensure_ascii=False)
+        
+        # Print summary table
+        print("\n" + "=" * 80)
+        print(f"  RUN SUMMARY: {self.run_id}")
+        print("=" * 80)
+        print(f"  Model: {summary['model']}")
+        print(f"  Domain: {summary['domain']}")
+        print(f"  Backend: {summary['backend']}")
+        print(f"  Tasks: {summary['num_completed']}/{summary['num_tasks']} completed")
+        print(f"  Avg Action Score: {summary['avg_action_score']:.3f}")
+        print(f"  Avg Reward: {summary['avg_reward']:.3f}")
+        print(f"  Avg Turns: {summary['avg_turns']:.1f}")
+        print(f"  Total Latency: {summary['total_latency']:.1f}s")
+        print("-" * 80)
+        print(f"  {'Task ID':<30} {'Score':>8} {'Reward':>8} {'Turns':>6} {'Time':>8}")
+        print("-" * 80)
+        for t in summary["per_task"]:
+            status = "✓" if t["completed"] else "✗"
+            print(f"  {status} {t['task_id']:<28} {t['action_score']:>8.3f} {t['final_reward']:>8.3f} {t['turns']:>6} {t['latency']:>7.1f}s")
+        print("=" * 80)
+        
+        logger.info(f"Results saved to {self.log_path}")

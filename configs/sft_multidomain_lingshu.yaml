@@ -1,0 +1,56 @@
+# BIOAgents Multi-Domain SFT Config for Lingshu-7B
+# Goal: Improve tool-calling accuracy while preserving medical knowledge
+#
+# Lingshu-7B Baseline: Action Score 0.455 (3rd), Reward 0.496 (1st)
+# Target: Action Score > 0.65 while maintaining Reward > 0.48
+#
+# Usage:
+#   python -m bioagents.training.sft_trainer --config configs/sft_multidomain_lingshu.yaml
+
+model:
+  name_or_path: "checkpoints/models/Lingshu-7B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"  # flash_attention_2 has GLIBC compat issues
+
+# LoRA — conservative to preserve medical knowledge
+peft:
+  enabled: true
+  r: 8                  # Lower rank to prevent catastrophic forgetting
+  lora_alpha: 16
+  lora_dropout: 0.05
+  target_modules: [q_proj, k_proj, v_proj, o_proj]  # Only attention, not MLP
+  # Intentionally NOT including gate_proj, up_proj, down_proj
+  # to preserve the model's medical knowledge in FFN layers
+
+dataset:
+  trajectory_dir: ""  # Not used — we use sft_path below
+  qa_tasks_path: ""   # Not used
+  instruction_path: ""  # Not used
+  sft_path: "datasets/sft/multidomain_sft.jsonl"
+  min_reward: 0.0      # Already filtered during generation
+  max_samples: 500
+  max_length: 4096
+  train_ratio: 0.9
+
+training:
+  output_dir: "checkpoints/sft_multidomain_lingshu"
+  num_train_epochs: 5          # More epochs since small dataset (118 examples)
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8  # Effective batch 16
+  learning_rate: 1.0e-5        # Conservative LR for 7B model
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 50
+  eval_steps: 25
+  save_total_limit: 3
+  seed: 42
+
+logging:
+  project: "bioagents-sft"
+  run_name: "sft_multidomain_lingshu7b"
+  use_wandb: false
+  log_dir: "logs/runs"

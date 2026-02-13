@@ -1,0 +1,932 @@
+[
+  {
+    "id": "vdx_CT_chest_solid_028",
+    "ticket": "A 59-year-old female presents for CT chest evaluation. Clinical concern: lung nodule. Image ID: IMG028. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "CT_chest",
+      "finding": "lung_nodule",
+      "condition": "solid"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG028"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lung nodule",
+        "Agent should characterize the condition as solid"
+      ]
+    }
+  },
+  {
+    "id": "vdx_chest_xray_simple_002",
+    "ticket": "A 24-year-old female presents for chest xray evaluation. Clinical concern: pneumothorax. Image ID: IMG002. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "chest_xray",
+      "finding": "pneumothorax",
+      "condition": "simple"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG002"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify pneumothorax",
+        "Agent should characterize the condition as simple"
+      ]
+    }
+  },
+  {
+    "id": "vdx_chest_xray_moderate_005",
+    "ticket": "A 23-year-old female presents for chest xray evaluation. Clinical concern: cardiomegaly. Image ID: IMG005. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "chest_xray",
+      "finding": "cardiomegaly",
+      "condition": "moderate"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG005"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify cardiomegaly",
+        "Agent should characterize the condition as moderate"
+      ]
+    }
+  },
+  {
+    "id": "vdx_fundoscopy_NPDR_mild_019",
+    "ticket": "A 85-year-old female presents for fundoscopy evaluation. Clinical concern: diabetic retinopathy. Image ID: IMG019. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "fundoscopy",
+      "finding": "diabetic_retinopathy",
+      "condition": "NPDR_mild"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG019"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify diabetic retinopathy",
+        "Agent should characterize the condition as NPDR mild"
+      ]
+    }
+  },
+  {
+    "id": "vdx_chest_xray_severe_006",
+    "ticket": "A 68-year-old male presents for chest xray evaluation. Clinical concern: cardiomegaly. Image ID: IMG006. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "chest_xray",
+      "finding": "cardiomegaly",
+      "condition": "severe"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG006"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify cardiomegaly",
+        "Agent should characterize the condition as severe"
+      ]
+    }
+  },
+  {
+    "id": "vdx_dermoscopy_melanoma_024",
+    "ticket": "A 43-year-old female presents for dermoscopy evaluation. Clinical concern: pigmented lesion. Image ID: IMG024. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "dermoscopy",
+      "finding": "pigmented_lesion",
+      "condition": "melanoma"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG024"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify pigmented lesion",
+        "Agent should characterize the condition as melanoma"
+      ]
+    }
+  },
+  {
+    "id": "vdx_MRI_brain_multiple_sclerosis_014",
+    "ticket": "A 36-year-old female presents for MRI brain evaluation. Clinical concern: demyelination. Image ID: IMG014. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "MRI_brain",
+      "finding": "demyelination",
+      "condition": "multiple_sclerosis"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG014"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify demyelination",
+        "Agent should characterize the condition as multiple sclerosis"
+      ]
+    }
+  },
+  {
+    "id": "vdx_MRI_brain_ADEM_015",
+    "ticket": "A 34-year-old female presents for MRI brain evaluation. Clinical concern: demyelination. Image ID: IMG015. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "MRI_brain",
+      "finding": "demyelination",
+      "condition": "ADEM"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG015"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify demyelination",
+        "Agent should characterize the condition as ADEM"
+      ]
+    }
+  },
+  {
+    "id": "vdx_CT_head_epidural_010",
+    "ticket": "A 48-year-old female presents for CT head evaluation. Clinical concern: intracranial hemorrhage. Image ID: IMG010. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "CT_head",
+      "finding": "intracranial_hemorrhage",
+      "condition": "epidural"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG010"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify intracranial hemorrhage",
+        "Agent should characterize the condition as epidural"
+      ]
+    }
+  },
+  {
+    "id": "vdx_CT_abdomen_complete_013",
+    "ticket": "A 82-year-old female presents for CT abdomen evaluation. Clinical concern: bowel obstruction. Image ID: IMG013. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "CT_abdomen",
+      "finding": "bowel_obstruction",
+      "condition": "complete"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG013"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify bowel obstruction",
+        "Agent should characterize the condition as complete"
+      ]
+    }
+  },
+  {
+    "id": "vdx_chest_xray_mild_004",
+    "ticket": "A 70-year-old female presents for chest xray evaluation. Clinical concern: cardiomegaly. Image ID: IMG004. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "chest_xray",
+      "finding": "cardiomegaly",
+      "condition": "mild"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG004"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify cardiomegaly",
+        "Agent should characterize the condition as mild"
+      ]
+    }
+  },
+  {
+    "id": "vdx_dermoscopy_benign_nevus_022",
+    "ticket": "A 84-year-old male presents for dermoscopy evaluation. Clinical concern: pigmented lesion. Image ID: IMG022. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "dermoscopy",
+      "finding": "pigmented_lesion",
+      "condition": "benign_nevus"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG022"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify pigmented lesion",
+        "Agent should characterize the condition as benign nevus"
+      ]
+    }
+  },
+  {
+    "id": "vdx_ultrasound_cholecystitis_031",
+    "ticket": "A 70-year-old female presents for ultrasound evaluation. Clinical concern: gallstones. Image ID: IMG031. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "ultrasound",
+      "finding": "gallstones",
+      "condition": "cholecystitis"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG031"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify gallstones",
+        "Agent should characterize the condition as cholecystitis"
+      ]
+    }
+  },
+  {
+    "id": "vdx_fundoscopy_PDR_021",
+    "ticket": "A 30-year-old female presents for fundoscopy evaluation. Clinical concern: diabetic retinopathy. Image ID: IMG021. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "fundoscopy",
+      "finding": "diabetic_retinopathy",
+      "condition": "PDR"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG021"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify diabetic retinopathy",
+        "Agent should characterize the condition as PDR"
+      ]
+    }
+  },
+  {
+    "id": "vdx_CT_chest_part_solid_029",
+    "ticket": "A 35-year-old female presents for CT chest evaluation. Clinical concern: lung nodule. Image ID: IMG029. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "CT_chest",
+      "finding": "lung_nodule",
+      "condition": "part_solid"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG029"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lung nodule",
+        "Agent should characterize the condition as part solid"
+      ]
+    }
+  },
+  {
+    "id": "vdx_chest_xray_bilateral_008",
+    "ticket": "A 37-year-old female presents for chest xray evaluation. Clinical concern: pleural effusion. Image ID: IMG008. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "chest_xray",
+      "finding": "pleural_effusion",
+      "condition": "bilateral"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG008"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify pleural effusion",
+        "Agent should characterize the condition as bilateral"
+      ]
+    }
+  },
+  {
+    "id": "vdx_chest_xray_small_003",
+    "ticket": "A 6-year-old male presents for chest xray evaluation. Clinical concern: pneumothorax. Image ID: IMG003. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "chest_xray",
+      "finding": "pneumothorax",
+      "condition": "small"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG003"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify pneumothorax",
+        "Agent should characterize the condition as small"
+      ]
+    }
+  },
+  {
+    "id": "vdx_ultrasound_asymptomatic_030",
+    "ticket": "A 33-year-old male presents for ultrasound evaluation. Clinical concern: gallstones. Image ID: IMG030. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "ultrasound",
+      "finding": "gallstones",
+      "condition": "asymptomatic"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG030"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify gallstones",
+        "Agent should characterize the condition as asymptomatic"
+      ]
+    }
+  },
+  {
+    "id": "vdx_mammography_suspicious_017",
+    "ticket": "A 40-year-old female presents for mammography evaluation. Clinical concern: breast mass. Image ID: IMG017. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "mammography",
+      "finding": "breast_mass",
+      "condition": "suspicious"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG017"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify breast mass",
+        "Agent should characterize the condition as suspicious"
+      ]
+    }
+  },
+  {
+    "id": "vdx_chest_xray_tension_001",
+    "ticket": "A 12-year-old male presents for chest xray evaluation. Clinical concern: pneumothorax. Image ID: IMG001. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "chest_xray",
+      "finding": "pneumothorax",
+      "condition": "tension"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG001"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify pneumothorax",
+        "Agent should characterize the condition as tension"
+      ]
+    }
+  },
+  {
+    "id": "vdx_mammography_malignant_018",
+    "ticket": "A 31-year-old female presents for mammography evaluation. Clinical concern: breast mass. Image ID: IMG018. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "mammography",
+      "finding": "breast_mass",
+      "condition": "malignant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG018"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify breast mass",
+        "Agent should characterize the condition as malignant"
+      ]
+    }
+  },
+  {
+    "id": "vdx_echocardiogram_mitral_regurgitation_025",
+    "ticket": "A 75-year-old male presents for echocardiogram evaluation. Clinical concern: valvular disease. Image ID: IMG025. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "echocardiogram",
+      "finding": "valvular_disease",
+      "condition": "mitral_regurgitation"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG025"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify valvular disease",
+        "Agent should characterize the condition as mitral regurgitation"
+      ]
+    }
+  },
+  {
+    "id": "vdx_dermoscopy_atypical_023",
+    "ticket": "A 9-year-old male presents for dermoscopy evaluation. Clinical concern: pigmented lesion. Image ID: IMG023. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "dermoscopy",
+      "finding": "pigmented_lesion",
+      "condition": "atypical"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG023"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify pigmented lesion",
+        "Agent should characterize the condition as atypical"
+      ]
+    }
+  },
+  {
+    "id": "vdx_fundoscopy_NPDR_moderate_020",
+    "ticket": "A 4-year-old male presents for fundoscopy evaluation. Clinical concern: diabetic retinopathy. Image ID: IMG020. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "fundoscopy",
+      "finding": "diabetic_retinopathy",
+      "condition": "NPDR_moderate"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG020"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify diabetic retinopathy",
+        "Agent should characterize the condition as NPDR moderate"
+      ]
+    }
+  },
+  {
+    "id": "vdx_CT_chest_ground_glass_027",
+    "ticket": "A 79-year-old male presents for CT chest evaluation. Clinical concern: lung nodule. Image ID: IMG027. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "CT_chest",
+      "finding": "lung_nodule",
+      "condition": "ground_glass"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG027"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lung nodule",
+        "Agent should characterize the condition as ground glass"
+      ]
+    }
+  },
+  {
+    "id": "vdx_CT_head_subarachnoid_011",
+    "ticket": "A 84-year-old male presents for CT head evaluation. Clinical concern: intracranial hemorrhage. Image ID: IMG011. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "CT_head",
+      "finding": "intracranial_hemorrhage",
+      "condition": "subarachnoid"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG011"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify intracranial hemorrhage",
+        "Agent should characterize the condition as subarachnoid"
+      ]
+    }
+  },
+  {
+    "id": "vdx_CT_head_subdural_009",
+    "ticket": "A 47-year-old female presents for CT head evaluation. Clinical concern: intracranial hemorrhage. Image ID: IMG009. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "CT_head",
+      "finding": "intracranial_hemorrhage",
+      "condition": "subdural"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG009"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify intracranial hemorrhage",
+        "Agent should characterize the condition as subdural"
+      ]
+    }
+  },
+  {
+    "id": "vdx_echocardiogram_aortic_stenosis_026",
+    "ticket": "A 47-year-old female presents for echocardiogram evaluation. Clinical concern: valvular disease. Image ID: IMG026. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "echocardiogram",
+      "finding": "valvular_disease",
+      "condition": "aortic_stenosis"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG026"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify valvular disease",
+        "Agent should characterize the condition as aortic stenosis"
+      ]
+    }
+  },
+  {
+    "id": "vdx_CT_abdomen_partial_012",
+    "ticket": "A 19-year-old female presents for CT abdomen evaluation. Clinical concern: bowel obstruction. Image ID: IMG012. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "CT_abdomen",
+      "finding": "bowel_obstruction",
+      "condition": "partial"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG012"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify bowel obstruction",
+        "Agent should characterize the condition as partial"
+      ]
+    }
+  },
+  {
+    "id": "vdx_chest_xray_unilateral_007",
+    "ticket": "A 27-year-old male presents for chest xray evaluation. Clinical concern: pleural effusion. Image ID: IMG007. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "chest_xray",
+      "finding": "pleural_effusion",
+      "condition": "unilateral"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG007"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify pleural effusion",
+        "Agent should characterize the condition as unilateral"
+      ]
+    }
+  },
+  {
+    "id": "vdx_mammography_benign_016",
+    "ticket": "A 65-year-old female presents for mammography evaluation. Clinical concern: breast mass. Image ID: IMG016. Please analyze the image and provide your diagnostic assessment.",
+    "description": {
+      "modality": "mammography",
+      "finding": "breast_mass",
+      "condition": "benign"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "analyze_medical_image",
+          "arguments": {
+            "image_id": "IMG016"
+          },
+          "compare_args": [
+            "image_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify breast mass",
+        "Agent should characterize the condition as benign"
+      ]
+    }
+  }
+]

@@ -1,0 +1,2102 @@
+[
+  {
+    "id": "di_lactic_acidosis_008",
+    "ticket": "A 77-year-old male is currently taking: metformin, contrast_dye, lisinopril, amlodipine. The physician wants to add contrast_dye to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "lactic_acidosis",
+      "severity": "high",
+      "drugs": [
+        "metformin",
+        "contrast_dye"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lactic_acidosis interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_hyperkalemia_021",
+    "ticket": "A 25-year-old male is currently taking: lisinopril, spironolactone. The physician wants to add spironolactone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "hyperkalemia",
+      "severity": "moderate",
+      "drugs": [
+        "lisinopril",
+        "spironolactone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify hyperkalemia interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_methotrexate_toxicity_039",
+    "ticket": "A 72-year-old male is currently taking: methotrexate, NSAIDs, levothyroxine. The physician wants to add NSAIDs to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "methotrexate_toxicity",
+      "severity": "high",
+      "drugs": [
+        "methotrexate",
+        "NSAIDs"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify methotrexate_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_theophylline_toxicity_053",
+    "ticket": "A 8-year-old male is currently taking: ciprofloxacin, theophylline, lisinopril, amlodipine. The physician wants to add theophylline to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "theophylline_toxicity",
+      "severity": "moderate",
+      "drugs": [
+        "ciprofloxacin",
+        "theophylline"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify theophylline_toxicity interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_bleeding_risk_005",
+    "ticket": "A 51-year-old male is currently taking: warfarin, aspirin, atorvastatin, metoprolol. The physician wants to add aspirin to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "bleeding_risk",
+      "severity": "high",
+      "drugs": [
+        "warfarin",
+        "aspirin"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify bleeding_risk interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_lactic_acidosis_010",
+    "ticket": "A 71-year-old male is currently taking: metformin, contrast_dye, atorvastatin, metoprolol. The physician wants to add contrast_dye to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "lactic_acidosis",
+      "severity": "high",
+      "drugs": [
+        "metformin",
+        "contrast_dye"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lactic_acidosis interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_methotrexate_toxicity_036",
+    "ticket": "A 42-year-old female is currently taking: methotrexate, NSAIDs. The physician wants to add NSAIDs to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "methotrexate_toxicity",
+      "severity": "high",
+      "drugs": [
+        "methotrexate",
+        "NSAIDs"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify methotrexate_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_theophylline_toxicity_054",
+    "ticket": "A 24-year-old male is currently taking: ciprofloxacin, theophylline, levothyroxine. The physician wants to add theophylline to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "theophylline_toxicity",
+      "severity": "moderate",
+      "drugs": [
+        "ciprofloxacin",
+        "theophylline"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify theophylline_toxicity interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_reduced_efficacy_029",
+    "ticket": "A 32-year-old female is currently taking: clopidogrel, omeprazole, levothyroxine. The physician wants to add omeprazole to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "reduced_efficacy",
+      "severity": "moderate",
+      "drugs": [
+        "clopidogrel",
+        "omeprazole"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify reduced_efficacy interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_myopathy_risk_020",
+    "ticket": "A 45-year-old male is currently taking: simvastatin, amiodarone, atorvastatin, metoprolol. The physician wants to add amiodarone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "myopathy_risk",
+      "severity": "moderate",
+      "drugs": [
+        "simvastatin",
+        "amiodarone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify myopathy_risk interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_myopathy_risk_019",
+    "ticket": "A 51-year-old female is currently taking: simvastatin, amiodarone, levothyroxine. The physician wants to add amiodarone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "myopathy_risk",
+      "severity": "moderate",
+      "drugs": [
+        "simvastatin",
+        "amiodarone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify myopathy_risk interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_hyperkalemia_023",
+    "ticket": "A 32-year-old female is currently taking: lisinopril, spironolactone, lisinopril, amlodipine. The physician wants to add spironolactone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "hyperkalemia",
+      "severity": "moderate",
+      "drugs": [
+        "lisinopril",
+        "spironolactone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify hyperkalemia interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_variable_anticoagulation_033",
+    "ticket": "A 4-year-old male is currently taking: phenytoin, warfarin, lisinopril, amlodipine. The physician wants to add warfarin to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "variable_anticoagulation",
+      "severity": "high",
+      "drugs": [
+        "phenytoin",
+        "warfarin"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify variable_anticoagulation interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_reduced_efficacy_027",
+    "ticket": "A 49-year-old female is currently taking: clopidogrel, omeprazole, metformin. The physician wants to add omeprazole to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "reduced_efficacy",
+      "severity": "moderate",
+      "drugs": [
+        "clopidogrel",
+        "omeprazole"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify reduced_efficacy interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_variable_anticoagulation_034",
+    "ticket": "A 12-year-old male is currently taking: phenytoin, warfarin, levothyroxine. The physician wants to add warfarin to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "variable_anticoagulation",
+      "severity": "high",
+      "drugs": [
+        "phenytoin",
+        "warfarin"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify variable_anticoagulation interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_digoxin_toxicity_045",
+    "ticket": "A 75-year-old male is currently taking: digoxin, amiodarone, atorvastatin, metoprolol. The physician wants to add amiodarone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "digoxin_toxicity",
+      "severity": "high",
+      "drugs": [
+        "digoxin",
+        "amiodarone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify digoxin_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_lithium_toxicity_046",
+    "ticket": "A 82-year-old female is currently taking: lithium, NSAIDs. The physician wants to add NSAIDs to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "lithium_toxicity",
+      "severity": "high",
+      "drugs": [
+        "lithium",
+        "NSAIDs"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lithium_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_reduced_efficacy_059",
+    "ticket": "A 38-year-old female is currently taking: rifampin, oral_contraceptives, levothyroxine. The physician wants to add oral_contraceptives to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "reduced_efficacy",
+      "severity": "moderate",
+      "drugs": [
+        "rifampin",
+        "oral_contraceptives"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify reduced_efficacy interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_bleeding_risk_001",
+    "ticket": "A 81-year-old male is currently taking: warfarin, aspirin. The physician wants to add aspirin to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "bleeding_risk",
+      "severity": "high",
+      "drugs": [
+        "warfarin",
+        "aspirin"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify bleeding_risk interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_myopathy_risk_016",
+    "ticket": "A 27-year-old female is currently taking: simvastatin, amiodarone. The physician wants to add amiodarone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "myopathy_risk",
+      "severity": "moderate",
+      "drugs": [
+        "simvastatin",
+        "amiodarone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify myopathy_risk interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_bleeding_risk_003",
+    "ticket": "A 77-year-old female is currently taking: warfarin, aspirin, lisinopril, amlodipine. The physician wants to add aspirin to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "bleeding_risk",
+      "severity": "high",
+      "drugs": [
+        "warfarin",
+        "aspirin"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify bleeding_risk interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_hyperkalemia_024",
+    "ticket": "A 45-year-old female is currently taking: lisinopril, spironolactone, levothyroxine. The physician wants to add spironolactone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "hyperkalemia",
+      "severity": "moderate",
+      "drugs": [
+        "lisinopril",
+        "spironolactone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify hyperkalemia interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_serotonin_syndrome_014",
+    "ticket": "A 61-year-old female is currently taking: fluoxetine, tramadol, levothyroxine. The physician wants to add tramadol to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "serotonin_syndrome",
+      "severity": "high",
+      "drugs": [
+        "fluoxetine",
+        "tramadol"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify serotonin_syndrome interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_digoxin_toxicity_041",
+    "ticket": "A 12-year-old male is currently taking: digoxin, amiodarone. The physician wants to add amiodarone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "digoxin_toxicity",
+      "severity": "high",
+      "drugs": [
+        "digoxin",
+        "amiodarone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify digoxin_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_serotonin_syndrome_013",
+    "ticket": "A 9-year-old male is currently taking: fluoxetine, tramadol, lisinopril, amlodipine. The physician wants to add tramadol to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "serotonin_syndrome",
+      "severity": "high",
+      "drugs": [
+        "fluoxetine",
+        "tramadol"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify serotonin_syndrome interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_reduced_efficacy_057",
+    "ticket": "A 2-year-old male is currently taking: rifampin, oral_contraceptives, metformin. The physician wants to add oral_contraceptives to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "reduced_efficacy",
+      "severity": "moderate",
+      "drugs": [
+        "rifampin",
+        "oral_contraceptives"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify reduced_efficacy interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_digoxin_toxicity_042",
+    "ticket": "A 53-year-old female is currently taking: digoxin, amiodarone, metformin. The physician wants to add amiodarone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "digoxin_toxicity",
+      "severity": "high",
+      "drugs": [
+        "digoxin",
+        "amiodarone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify digoxin_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_variable_anticoagulation_031",
+    "ticket": "A 2-year-old male is currently taking: phenytoin, warfarin. The physician wants to add warfarin to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "variable_anticoagulation",
+      "severity": "high",
+      "drugs": [
+        "phenytoin",
+        "warfarin"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify variable_anticoagulation interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_reduced_efficacy_060",
+    "ticket": "A 60-year-old female is currently taking: rifampin, oral_contraceptives, atorvastatin, metoprolol. The physician wants to add oral_contraceptives to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "reduced_efficacy",
+      "severity": "moderate",
+      "drugs": [
+        "rifampin",
+        "oral_contraceptives"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify reduced_efficacy interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_lactic_acidosis_007",
+    "ticket": "A 64-year-old male is currently taking: metformin, contrast_dye, metformin. The physician wants to add contrast_dye to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "lactic_acidosis",
+      "severity": "high",
+      "drugs": [
+        "metformin",
+        "contrast_dye"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lactic_acidosis interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_lithium_toxicity_049",
+    "ticket": "A 29-year-old female is currently taking: lithium, NSAIDs, levothyroxine. The physician wants to add NSAIDs to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "lithium_toxicity",
+      "severity": "high",
+      "drugs": [
+        "lithium",
+        "NSAIDs"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lithium_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_theophylline_toxicity_055",
+    "ticket": "A 37-year-old female is currently taking: ciprofloxacin, theophylline, atorvastatin, metoprolol. The physician wants to add theophylline to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "theophylline_toxicity",
+      "severity": "moderate",
+      "drugs": [
+        "ciprofloxacin",
+        "theophylline"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify theophylline_toxicity interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_myopathy_risk_017",
+    "ticket": "A 67-year-old female is currently taking: simvastatin, amiodarone, metformin. The physician wants to add amiodarone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "myopathy_risk",
+      "severity": "moderate",
+      "drugs": [
+        "simvastatin",
+        "amiodarone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify myopathy_risk interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_bleeding_risk_004",
+    "ticket": "A 82-year-old male is currently taking: warfarin, aspirin, levothyroxine. The physician wants to add aspirin to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "bleeding_risk",
+      "severity": "high",
+      "drugs": [
+        "warfarin",
+        "aspirin"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify bleeding_risk interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_serotonin_syndrome_012",
+    "ticket": "A 79-year-old female is currently taking: fluoxetine, tramadol, metformin. The physician wants to add tramadol to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "serotonin_syndrome",
+      "severity": "high",
+      "drugs": [
+        "fluoxetine",
+        "tramadol"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify serotonin_syndrome interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_lithium_toxicity_048",
+    "ticket": "A 52-year-old male is currently taking: lithium, NSAIDs, lisinopril, amlodipine. The physician wants to add NSAIDs to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "lithium_toxicity",
+      "severity": "high",
+      "drugs": [
+        "lithium",
+        "NSAIDs"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lithium_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_lithium_toxicity_050",
+    "ticket": "A 47-year-old female is currently taking: lithium, NSAIDs, atorvastatin, metoprolol. The physician wants to add NSAIDs to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "lithium_toxicity",
+      "severity": "high",
+      "drugs": [
+        "lithium",
+        "NSAIDs"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lithium_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_reduced_efficacy_058",
+    "ticket": "A 74-year-old female is currently taking: rifampin, oral_contraceptives, lisinopril, amlodipine. The physician wants to add oral_contraceptives to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "reduced_efficacy",
+      "severity": "moderate",
+      "drugs": [
+        "rifampin",
+        "oral_contraceptives"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify reduced_efficacy interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_lactic_acidosis_006",
+    "ticket": "A 37-year-old female is currently taking: metformin, contrast_dye. The physician wants to add contrast_dye to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "lactic_acidosis",
+      "severity": "high",
+      "drugs": [
+        "metformin",
+        "contrast_dye"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lactic_acidosis interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_theophylline_toxicity_052",
+    "ticket": "A 82-year-old female is currently taking: ciprofloxacin, theophylline, metformin. The physician wants to add theophylline to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "theophylline_toxicity",
+      "severity": "moderate",
+      "drugs": [
+        "ciprofloxacin",
+        "theophylline"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify theophylline_toxicity interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_methotrexate_toxicity_037",
+    "ticket": "A 4-year-old male is currently taking: methotrexate, NSAIDs, metformin. The physician wants to add NSAIDs to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "methotrexate_toxicity",
+      "severity": "high",
+      "drugs": [
+        "methotrexate",
+        "NSAIDs"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify methotrexate_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_methotrexate_toxicity_038",
+    "ticket": "A 9-year-old male is currently taking: methotrexate, NSAIDs, lisinopril, amlodipine. The physician wants to add NSAIDs to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "methotrexate_toxicity",
+      "severity": "high",
+      "drugs": [
+        "methotrexate",
+        "NSAIDs"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify methotrexate_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_theophylline_toxicity_051",
+    "ticket": "A 38-year-old female is currently taking: ciprofloxacin, theophylline. The physician wants to add theophylline to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "theophylline_toxicity",
+      "severity": "moderate",
+      "drugs": [
+        "ciprofloxacin",
+        "theophylline"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify theophylline_toxicity interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_reduced_efficacy_056",
+    "ticket": "A 30-year-old male is currently taking: rifampin, oral_contraceptives. The physician wants to add oral_contraceptives to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "reduced_efficacy",
+      "severity": "moderate",
+      "drugs": [
+        "rifampin",
+        "oral_contraceptives"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify reduced_efficacy interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_variable_anticoagulation_035",
+    "ticket": "A 79-year-old female is currently taking: phenytoin, warfarin, atorvastatin, metoprolol. The physician wants to add warfarin to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "variable_anticoagulation",
+      "severity": "high",
+      "drugs": [
+        "phenytoin",
+        "warfarin"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify variable_anticoagulation interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_methotrexate_toxicity_040",
+    "ticket": "A 81-year-old male is currently taking: methotrexate, NSAIDs, atorvastatin, metoprolol. The physician wants to add NSAIDs to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "methotrexate_toxicity",
+      "severity": "high",
+      "drugs": [
+        "methotrexate",
+        "NSAIDs"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify methotrexate_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_lactic_acidosis_009",
+    "ticket": "A 27-year-old male is currently taking: metformin, contrast_dye, levothyroxine. The physician wants to add contrast_dye to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "lactic_acidosis",
+      "severity": "high",
+      "drugs": [
+        "metformin",
+        "contrast_dye"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lactic_acidosis interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_reduced_efficacy_030",
+    "ticket": "A 61-year-old male is currently taking: clopidogrel, omeprazole, atorvastatin, metoprolol. The physician wants to add omeprazole to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "reduced_efficacy",
+      "severity": "moderate",
+      "drugs": [
+        "clopidogrel",
+        "omeprazole"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify reduced_efficacy interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_serotonin_syndrome_011",
+    "ticket": "A 43-year-old female is currently taking: fluoxetine, tramadol. The physician wants to add tramadol to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "serotonin_syndrome",
+      "severity": "high",
+      "drugs": [
+        "fluoxetine",
+        "tramadol"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify serotonin_syndrome interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_lithium_toxicity_047",
+    "ticket": "A 22-year-old female is currently taking: lithium, NSAIDs, metformin. The physician wants to add NSAIDs to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "lithium_toxicity",
+      "severity": "high",
+      "drugs": [
+        "lithium",
+        "NSAIDs"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify lithium_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_reduced_efficacy_026",
+    "ticket": "A 8-year-old male is currently taking: clopidogrel, omeprazole. The physician wants to add omeprazole to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "reduced_efficacy",
+      "severity": "moderate",
+      "drugs": [
+        "clopidogrel",
+        "omeprazole"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify reduced_efficacy interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_digoxin_toxicity_044",
+    "ticket": "A 72-year-old male is currently taking: digoxin, amiodarone, levothyroxine. The physician wants to add amiodarone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "digoxin_toxicity",
+      "severity": "high",
+      "drugs": [
+        "digoxin",
+        "amiodarone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify digoxin_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_digoxin_toxicity_043",
+    "ticket": "A 3-year-old male is currently taking: digoxin, amiodarone, lisinopril, amlodipine. The physician wants to add amiodarone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "digoxin_toxicity",
+      "severity": "high",
+      "drugs": [
+        "digoxin",
+        "amiodarone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify digoxin_toxicity interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_hyperkalemia_022",
+    "ticket": "A 11-year-old male is currently taking: lisinopril, spironolactone, metformin. The physician wants to add spironolactone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "hyperkalemia",
+      "severity": "moderate",
+      "drugs": [
+        "lisinopril",
+        "spironolactone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify hyperkalemia interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_hyperkalemia_025",
+    "ticket": "A 57-year-old female is currently taking: lisinopril, spironolactone, atorvastatin, metoprolol. The physician wants to add spironolactone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "hyperkalemia",
+      "severity": "moderate",
+      "drugs": [
+        "lisinopril",
+        "spironolactone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify hyperkalemia interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_bleeding_risk_002",
+    "ticket": "A 78-year-old male is currently taking: warfarin, aspirin, metformin. The physician wants to add aspirin to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "bleeding_risk",
+      "severity": "high",
+      "drugs": [
+        "warfarin",
+        "aspirin"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify bleeding_risk interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_variable_anticoagulation_032",
+    "ticket": "A 48-year-old female is currently taking: phenytoin, warfarin, metformin. The physician wants to add warfarin to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "variable_anticoagulation",
+      "severity": "high",
+      "drugs": [
+        "phenytoin",
+        "warfarin"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify variable_anticoagulation interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_reduced_efficacy_028",
+    "ticket": "A 21-year-old male is currently taking: clopidogrel, omeprazole, lisinopril, amlodipine. The physician wants to add omeprazole to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "reduced_efficacy",
+      "severity": "moderate",
+      "drugs": [
+        "clopidogrel",
+        "omeprazole"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify reduced_efficacy interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_myopathy_risk_018",
+    "ticket": "A 54-year-old female is currently taking: simvastatin, amiodarone, lisinopril, amlodipine. The physician wants to add amiodarone to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "myopathy_risk",
+      "severity": "moderate",
+      "drugs": [
+        "simvastatin",
+        "amiodarone"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify myopathy_risk interaction",
+        "Agent should assess severity as moderate",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  },
+  {
+    "id": "di_serotonin_syndrome_015",
+    "ticket": "A 4-year-old male is currently taking: fluoxetine, tramadol, atorvastatin, metoprolol. The physician wants to add tramadol to the regimen. Please review for potential drug-drug interactions and provide recommendations.",
+    "description": {
+      "interaction_type": "serotonin_syndrome",
+      "severity": "high",
+      "drugs": [
+        "fluoxetine",
+        "tramadol"
+      ]
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should identify serotonin_syndrome interaction",
+        "Agent should assess severity as high",
+        "Agent should provide alternative recommendations"
+      ]
+    }
+  }
+]

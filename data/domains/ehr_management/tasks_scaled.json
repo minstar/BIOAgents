@@ -1,0 +1,1502 @@
+[
+  {
+    "id": "ehr_clinical_scoring_SOFA_032",
+    "ticket": "Calculate and interpret the SOFA score for HADM_10003. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "SOFA",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_GRACE_037",
+    "ticket": "Calculate and interpret the GRACE score for HADM_10001. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "GRACE",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_readmission_risk_30_day_027",
+    "ticket": "Perform readmission risk for HADM_10002. Focus area: 30 day.",
+    "description": {
+      "task_type": "readmission_risk",
+      "focus": "30_day",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_NEWS2_033",
+    "ticket": "Calculate and interpret the NEWS2 score for HADM_10001. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "NEWS2",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_antibiotic_stewardship_de_escalation_047",
+    "ticket": "Perform antibiotic stewardship for HADM_10002. Focus area: de escalation.",
+    "description": {
+      "task_type": "antibiotic_stewardship",
+      "focus": "de_escalation",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_chart_review_admission_assessment_002",
+    "ticket": "Please perform a comprehensive chart review for admission HADM_9001. Focus: admission assessment. Review labs, vitals, medications, and clinical scores.",
+    "description": {
+      "task_type": "chart_review",
+      "focus": "admission_assessment",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_readmission_risk_30_day_026",
+    "ticket": "Perform readmission risk for HADM_9001. Focus area: 30 day.",
+    "description": {
+      "task_type": "readmission_risk",
+      "focus": "30_day",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_medication_reconciliation_admission_011",
+    "ticket": "Perform medication reconciliation for HADM_10002 at admission. Check for drug interactions, appropriate dosing, and missing medications.",
+    "description": {
+      "task_type": "medication_reconciliation",
+      "focus": "admission",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_discharge_planning_complex_044",
+    "ticket": "Perform discharge planning for HADM_10003. Focus area: complex.",
+    "description": {
+      "task_type": "discharge_planning",
+      "focus": "complex",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_GRACE_040",
+    "ticket": "Calculate and interpret the GRACE score for HADM_10003. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "GRACE",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_chart_review_pre_operative_005",
+    "ticket": "Please perform a comprehensive chart review for admission HADM_10001. Focus: pre operative. Review labs, vitals, medications, and clinical scores.",
+    "description": {
+      "task_type": "chart_review",
+      "focus": "pre_operative",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_chart_review_admission_assessment_003",
+    "ticket": "Please perform a comprehensive chart review for admission HADM_10002. Focus: admission assessment. Review labs, vitals, medications, and clinical scores.",
+    "description": {
+      "task_type": "chart_review",
+      "focus": "admission_assessment",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_SOFA_029",
+    "ticket": "Calculate and interpret the SOFA score for HADM_10001. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "SOFA",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_longitudinal_analysis_trend_review_057",
+    "ticket": "Perform longitudinal analysis for HADM_10001. Focus area: trend review.",
+    "description": {
+      "task_type": "longitudinal_analysis",
+      "focus": "trend_review",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_chart_review_admission_assessment_001",
+    "ticket": "Please perform a comprehensive chart review for admission HADM_10001. Focus: admission assessment. Review labs, vitals, medications, and clinical scores.",
+    "description": {
+      "task_type": "chart_review",
+      "focus": "admission_assessment",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_icu_assessment_daily_rounds_050",
+    "ticket": "Perform icu assessment for HADM_9001. Focus area: daily rounds.",
+    "description": {
+      "task_type": "icu_assessment",
+      "focus": "daily_rounds",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_chart_review_pre_operative_006",
+    "ticket": "Please perform a comprehensive chart review for admission HADM_9001. Focus: pre operative. Review labs, vitals, medications, and clinical scores.",
+    "description": {
+      "task_type": "chart_review",
+      "focus": "pre_operative",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_icu_assessment_daily_rounds_052",
+    "ticket": "Perform icu assessment for HADM_10003. Focus area: daily rounds.",
+    "description": {
+      "task_type": "icu_assessment",
+      "focus": "daily_rounds",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_icu_assessment_daily_rounds_049",
+    "ticket": "Perform icu assessment for HADM_10001. Focus area: daily rounds.",
+    "description": {
+      "task_type": "icu_assessment",
+      "focus": "daily_rounds",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_antibiotic_stewardship_de_escalation_046",
+    "ticket": "Perform antibiotic stewardship for HADM_9001. Focus area: de escalation.",
+    "description": {
+      "task_type": "antibiotic_stewardship",
+      "focus": "de_escalation",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_chart_review_pre_operative_007",
+    "ticket": "Please perform a comprehensive chart review for admission HADM_10002. Focus: pre operative. Review labs, vitals, medications, and clinical scores.",
+    "description": {
+      "task_type": "chart_review",
+      "focus": "pre_operative",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_chart_review_admission_assessment_004",
+    "ticket": "Please perform a comprehensive chart review for admission HADM_10003. Focus: admission assessment. Review labs, vitals, medications, and clinical scores.",
+    "description": {
+      "task_type": "chart_review",
+      "focus": "admission_assessment",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_medication_reconciliation_admission_010",
+    "ticket": "Perform medication reconciliation for HADM_9001 at admission. Check for drug interactions, appropriate dosing, and missing medications.",
+    "description": {
+      "task_type": "medication_reconciliation",
+      "focus": "admission",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_discharge_planning_complex_042",
+    "ticket": "Perform discharge planning for HADM_9001. Focus area: complex.",
+    "description": {
+      "task_type": "discharge_planning",
+      "focus": "complex",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_discharge_planning_complex_041",
+    "ticket": "Perform discharge planning for HADM_10001. Focus area: complex.",
+    "description": {
+      "task_type": "discharge_planning",
+      "focus": "complex",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_readmission_risk_30_day_025",
+    "ticket": "Perform readmission risk for HADM_10001. Focus area: 30 day.",
+    "description": {
+      "task_type": "readmission_risk",
+      "focus": "30_day",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_critical_value_lab_alert_019",
+    "ticket": "Review HADM_10002 for critical values (lab alert). Identify any concerning trends and recommend immediate actions.",
+    "description": {
+      "task_type": "critical_value",
+      "focus": "lab_alert",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_quality_measure_core_measures_054",
+    "ticket": "Perform quality measure for HADM_9001. Focus area: core measures.",
+    "description": {
+      "task_type": "quality_measure",
+      "focus": "core_measures",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_medication_reconciliation_admission_009",
+    "ticket": "Perform medication reconciliation for HADM_10001 at admission. Check for drug interactions, appropriate dosing, and missing medications.",
+    "description": {
+      "task_type": "medication_reconciliation",
+      "focus": "admission",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_longitudinal_analysis_trend_review_059",
+    "ticket": "Perform longitudinal analysis for HADM_10002. Focus area: trend review.",
+    "description": {
+      "task_type": "longitudinal_analysis",
+      "focus": "trend_review",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_quality_measure_core_measures_055",
+    "ticket": "Perform quality measure for HADM_10002. Focus area: core measures.",
+    "description": {
+      "task_type": "quality_measure",
+      "focus": "core_measures",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_medication_reconciliation_discharge_014",
+    "ticket": "Perform medication reconciliation for HADM_9001 at discharge. Check for drug interactions, appropriate dosing, and missing medications.",
+    "description": {
+      "task_type": "medication_reconciliation",
+      "focus": "discharge",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_quality_measure_core_measures_056",
+    "ticket": "Perform quality measure for HADM_10003. Focus area: core measures.",
+    "description": {
+      "task_type": "quality_measure",
+      "focus": "core_measures",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_medication_reconciliation_admission_012",
+    "ticket": "Perform medication reconciliation for HADM_10003 at admission. Check for drug interactions, appropriate dosing, and missing medications.",
+    "description": {
+      "task_type": "medication_reconciliation",
+      "focus": "admission",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_NEWS2_035",
+    "ticket": "Calculate and interpret the NEWS2 score for HADM_10002. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "NEWS2",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_GRACE_039",
+    "ticket": "Calculate and interpret the GRACE score for HADM_10002. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "GRACE",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_critical_value_vital_alert_021",
+    "ticket": "Review HADM_10001 for critical values (vital alert). Identify any concerning trends and recommend immediate actions.",
+    "description": {
+      "task_type": "critical_value",
+      "focus": "vital_alert",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_medication_reconciliation_discharge_013",
+    "ticket": "Perform medication reconciliation for HADM_10001 at discharge. Check for drug interactions, appropriate dosing, and missing medications.",
+    "description": {
+      "task_type": "medication_reconciliation",
+      "focus": "discharge",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_chart_review_pre_operative_008",
+    "ticket": "Please perform a comprehensive chart review for admission HADM_10003. Focus: pre operative. Review labs, vitals, medications, and clinical scores.",
+    "description": {
+      "task_type": "chart_review",
+      "focus": "pre_operative",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_medication_reconciliation_discharge_015",
+    "ticket": "Perform medication reconciliation for HADM_10002 at discharge. Check for drug interactions, appropriate dosing, and missing medications.",
+    "description": {
+      "task_type": "medication_reconciliation",
+      "focus": "discharge",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_critical_value_lab_alert_017",
+    "ticket": "Review HADM_10001 for critical values (lab alert). Identify any concerning trends and recommend immediate actions.",
+    "description": {
+      "task_type": "critical_value",
+      "focus": "lab_alert",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_longitudinal_analysis_trend_review_058",
+    "ticket": "Perform longitudinal analysis for HADM_9001. Focus area: trend review.",
+    "description": {
+      "task_type": "longitudinal_analysis",
+      "focus": "trend_review",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_critical_value_lab_alert_018",
+    "ticket": "Review HADM_9001 for critical values (lab alert). Identify any concerning trends and recommend immediate actions.",
+    "description": {
+      "task_type": "critical_value",
+      "focus": "lab_alert",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_SOFA_030",
+    "ticket": "Calculate and interpret the SOFA score for HADM_9001. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "SOFA",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_longitudinal_analysis_trend_review_060",
+    "ticket": "Perform longitudinal analysis for HADM_10003. Focus area: trend review.",
+    "description": {
+      "task_type": "longitudinal_analysis",
+      "focus": "trend_review",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_icu_assessment_daily_rounds_051",
+    "ticket": "Perform icu assessment for HADM_10002. Focus area: daily rounds.",
+    "description": {
+      "task_type": "icu_assessment",
+      "focus": "daily_rounds",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_critical_value_vital_alert_022",
+    "ticket": "Review HADM_9001 for critical values (vital alert). Identify any concerning trends and recommend immediate actions.",
+    "description": {
+      "task_type": "critical_value",
+      "focus": "vital_alert",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_quality_measure_core_measures_053",
+    "ticket": "Perform quality measure for HADM_10001. Focus area: core measures.",
+    "description": {
+      "task_type": "quality_measure",
+      "focus": "core_measures",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_antibiotic_stewardship_de_escalation_048",
+    "ticket": "Perform antibiotic stewardship for HADM_10003. Focus area: de escalation.",
+    "description": {
+      "task_type": "antibiotic_stewardship",
+      "focus": "de_escalation",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_readmission_risk_30_day_028",
+    "ticket": "Perform readmission risk for HADM_10003. Focus area: 30 day.",
+    "description": {
+      "task_type": "readmission_risk",
+      "focus": "30_day",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_critical_value_vital_alert_023",
+    "ticket": "Review HADM_10002 for critical values (vital alert). Identify any concerning trends and recommend immediate actions.",
+    "description": {
+      "task_type": "critical_value",
+      "focus": "vital_alert",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_NEWS2_034",
+    "ticket": "Calculate and interpret the NEWS2 score for HADM_9001. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "NEWS2",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_NEWS2_036",
+    "ticket": "Calculate and interpret the NEWS2 score for HADM_10003. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "NEWS2",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_SOFA_031",
+    "ticket": "Calculate and interpret the SOFA score for HADM_10002. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "SOFA",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_critical_value_vital_alert_024",
+    "ticket": "Review HADM_10003 for critical values (vital alert). Identify any concerning trends and recommend immediate actions.",
+    "description": {
+      "task_type": "critical_value",
+      "focus": "vital_alert",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_clinical_scoring_GRACE_038",
+    "ticket": "Calculate and interpret the GRACE score for HADM_9001. Provide recommendations based on the score.",
+    "description": {
+      "task_type": "clinical_scoring",
+      "focus": "GRACE",
+      "hadm_id": "HADM_9001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_9001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_discharge_planning_complex_043",
+    "ticket": "Perform discharge planning for HADM_10002. Focus area: complex.",
+    "description": {
+      "task_type": "discharge_planning",
+      "focus": "complex",
+      "hadm_id": "HADM_10002"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10002"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_critical_value_lab_alert_020",
+    "ticket": "Review HADM_10003 for critical values (lab alert). Identify any concerning trends and recommend immediate actions.",
+    "description": {
+      "task_type": "critical_value",
+      "focus": "lab_alert",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_medication_reconciliation_discharge_016",
+    "ticket": "Perform medication reconciliation for HADM_10003 at discharge. Check for drug interactions, appropriate dosing, and missing medications.",
+    "description": {
+      "task_type": "medication_reconciliation",
+      "focus": "discharge",
+      "hadm_id": "HADM_10003"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10003"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  },
+  {
+    "id": "ehr_antibiotic_stewardship_de_escalation_045",
+    "ticket": "Perform antibiotic stewardship for HADM_10001. Focus area: de escalation.",
+    "description": {
+      "task_type": "antibiotic_stewardship",
+      "focus": "de_escalation",
+      "hadm_id": "HADM_10001"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_summary",
+          "arguments": {
+            "hadm_id": "HADM_10001"
+          },
+          "compare_args": [
+            "hadm_id"
+          ]
+        }
+      ],
+      "reward_basis": [
+        "ACTION"
+      ]
+    }
+  }
+]

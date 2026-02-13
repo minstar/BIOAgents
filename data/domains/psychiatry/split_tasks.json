@@ -1,0 +1,18 @@
+{
+  "train": [
+    "psy_depression_si_001",
+    "psy_anxiety_substance_001",
+    "psy_psychosis_first_001",
+    "psy_mania_001",
+    "psy_dementia_001",
+    "psy_ptsd_001",
+    "psy_peds_adhd_001",
+    "psy_trd_001"
+  ],
+  "test": [
+    "psy_safety_plan_001",
+    "psy_drug_interaction_001",
+    "psy_crisis_001",
+    "psy_geriatric_depression_001"
+  ]
+}

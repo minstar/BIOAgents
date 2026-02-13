@@ -1,0 +1,42 @@
+# P2 Ablation: r=32 + FFN (more aggressive)
+model:
+  name_or_path: "checkpoints/models/Lingshu-7B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+peft:
+  enabled: true
+  r: 32
+  lora_alpha: 64
+  lora_dropout: 0.05
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+dataset:
+  sft_path: "datasets/sft/p2_multidomain_sft.jsonl"
+  min_reward: 0.0
+  max_samples: 1000
+  max_length: 4096
+  train_ratio: 0.9
+
+training:
+  output_dir: "checkpoints/sft_p2_ablation_r32"
+  num_train_epochs: 3
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  learning_rate: 2.0e-5
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 50
+  eval_steps: 25
+  save_total_limit: 2
+  seed: 42
+
+logging:
+  project: "bioagents-sft"
+  run_name: "sft_p2_ablation_r32_ffn"
+  use_wandb: false
+  log_dir: "logs/runs"

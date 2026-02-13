@@ -1,0 +1,18 @@
+{
+  "train": [
+    "ob_active_labor_001",
+    "ob_preeclampsia_001",
+    "ob_postdates_induction_001",
+    "ob_gdm_management_001",
+    "ob_first_prenatal_001",
+    "ob_aub_workup_001",
+    "ob_pph_001",
+    "ob_ectopic_001"
+  ],
+  "test": [
+    "ob_vbac_counseling_001",
+    "ob_abruption_001",
+    "ob_shoulder_dystocia_001",
+    "ob_medication_safety_001"
+  ]
+}

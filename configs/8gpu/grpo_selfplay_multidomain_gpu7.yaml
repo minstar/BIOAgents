@@ -1,0 +1,69 @@
+# =============================================================================
+# GPU 7: GRPO — Self-Play Iter 3 Model on Medical QA
+# =============================================================================
+# Most trained model (3 iterations of self-play) → GRPO on medical QA.
+# Tests whether the strongest available checkpoint benefits from further
+# GRPO fine-tuning on general medical question answering. Higher accuracy
+# weight (0.5) emphasizes correctness over process for QA tasks.
+# =============================================================================
+# Trainer: python -m bioagents.training.grpo_trainer --config CONFIG.yaml
+# =============================================================================
+
+model:
+  name_or_path: "checkpoints/self_play_3iter/iter_3_sft/merged"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+peft:
+  enabled: true
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+
+dataset:
+  domain: "medical_qa"
+  tasks_path: "data/domains/medical_qa/tasks.json"
+  split_tasks_path: "data/domains/medical_qa/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 2048
+  max_completion_length: 1024
+
+training:
+  output_dir: "checkpoints/8gpu/grpo_selfplay_multidomain"
+  num_train_epochs: 3
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  learning_rate: 0.000003
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 10
+  save_steps: 100
+  eval_steps: 50
+  save_total_limit: 3
+  seed: 49
+  num_generations: 4
+  beta: 0.04
+  temperature: 0.7
+  top_p: 0.95
+  top_k: 50
+
+rewards:
+  functions:
+    - {name: "accuracy", weight: 0.5}
+    - {name: "format", weight: 0.2}
+    - {name: "process", weight: 0.3}
+
+environment:
+  max_turns: 10
+  use_gym_env: true
+
+logging:
+  project: "bioagents-grpo"
+  run_name: "grpo_selfplay_multidomain_gpu7"
+  use_wandb: false
+  log_dir: "logs/8gpu/grpo_selfplay_multidomain"

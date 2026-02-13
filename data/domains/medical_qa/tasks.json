@@ -1,0 +1,2652 @@
+[
+  {
+    "id": "medqa_00000",
+    "description": {
+      "purpose": "Answer a MedQA medical question on dermatology",
+      "difficulty": "medium",
+      "source": "MedQA",
+      "category": "dermatology",
+      "key_challenges": [
+        "Requires dermatology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 48-year-old Caucasian female presents to her primary care physician for evaluation of progressive weakness and shortness of breath. She has had progressive shortness of breath over the last year with an intermittent non-productive cough. In addition, she complains of difficulty raising her arms to brush her hair. Her temperature is 99.6°F (37.6°C), pulse is 80/min, blood pressure is 130/85 mmHg, respirations are 18/min, and oxygen saturation is 95% on room air. Neurologic exam shows 4/5 strength in the deltoid muscles bilaterally. Diffuse dry crackles are heard on lung auscultation. A faint erythematous rash is noted on the malar cheeks, periorbital areas, lateral proximal thighs, and the elbows. Which of the following tests is most likely to confirm the diagnosis?\n\nOption A: Muscle biopsy\nOption B: CT scan\nOption C: Serum ANA titer\nOption D: Skin biopsy",
+    "correct_answer": "A",
+    "options": {
+      "A": "Muscle biopsy",
+      "B": "CT scan",
+      "C": "Serum ANA titer",
+      "D": "Skin biopsy"
+    },
+    "raw_question": "A 48-year-old Caucasian female presents to her primary care physician for evaluation of progressive weakness and shortness of breath. She has had progressive shortness of breath over the last year with an intermittent non-productive cough. In addition, she complains of difficulty raising her arms to brush her hair. Her temperature is 99.6°F (37.6°C), pulse is 80/min, blood pressure is 130/85 mmHg, respirations are 18/min, and oxygen saturation is 95% on room air. Neurologic exam shows 4/5 strength in the deltoid muscles bilaterally. Diffuse dry crackles are heard on lung auscultation. A faint erythematous rash is noted on the malar cheeks, periorbital areas, lateral proximal thighs, and the elbows. Which of the following tests is most likely to confirm the diagnosis?",
+    "raw_answer": "Muscle biopsy",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to dermatology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "A"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: A"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option A as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated dermatology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00001",
+    "description": {
+      "purpose": "Answer a MMLU medical question on pharmacology",
+      "difficulty": "hard",
+      "source": "MMLU",
+      "category": "pharmacology",
+      "key_challenges": [
+        "Requires pharmacology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 25-year-old man comes to the emergency department because he developed chest pain and shortness of breath 1 hour ago, shortly after snorting cocaine for the first time. He rates the chest pain as a 7 on a 10-point scale and notes that the pain is radiating down his left arm. Medical history is unremarkable and the patient takes no medications or any other illicit drugs. He is 178 cm (5 ft 10 in) tall and weighs 70 kg (154 lb); BMI is 22 kg/m2 . The patient is diaphoretic. Vital signs are temperature 37.5°C (99.5°F), pulse 110/min, respirations 16/min, and blood pressure 200/100 mm Hg. Pulse oximetry on room air shows an oxygen saturation of 95%. Pupils are equal, round, and reactive to light and accommodation. Lungs are clear to auscultation and percussion. Auscultation of the heart discloses an audible S1 and S2. There is no edema, cyanosis, or clubbing of the digits. The patient is fully oriented. He is treated with supplemental oxygen, a 325-mg aspirin tablet, and intravenous nitroglycerin and lorazepam. Despite therapy, he continues to have chest pain and shortness of breath. ECG shows sinus tachycardia with no ST-segment or T-wave abnormalities. Which of the following is the most appropriate additional pharmacotherapy to initiate at this time?\n\nOption A: Carvedilol\nOption B: Furosemide\nOption C: Metoprolol\nOption D: Phentolamine\nOption:",
+    "correct_answer": "D",
+    "options": {
+      "A": "Carvedilol",
+      "B": "Furosemide",
+      "C": "Metoprolol",
+      "D": "Phentolamine\nOption:"
+    },
+    "raw_question": "A 25-year-old man comes to the emergency department because he developed chest pain and shortness of breath 1 hour ago, shortly after snorting cocaine for the first time. He rates the chest pain as a 7 on a 10-point scale and notes that the pain is radiating down his left arm. Medical history is unremarkable and the patient takes no medications or any other illicit drugs. He is 178 cm (5 ft 10 in) tall and weighs 70 kg (154 lb); BMI is 22 kg/m2 . The patient is diaphoretic. Vital signs are temperature 37.5°C (99.5°F), pulse 110/min, respirations 16/min, and blood pressure 200/100 mm Hg. Pulse oximetry on room air shows an oxygen saturation of 95%. Pupils are equal, round, and reactive to light and accommodation. Lungs are clear to auscultation and percussion. Auscultation of the heart discloses an audible S1 and S2. There is no edema, cyanosis, or clubbing of the digits. The patient is fully oriented. He is treated with supplemental oxygen, a 325-mg aspirin tablet, and intravenous nitroglycerin and lorazepam. Despite therapy, he continues to have chest pain and shortness of breath. ECG shows sinus tachycardia with no ST-segment or T-wave abnormalities. Which of the following is the most appropriate additional pharmacotherapy to initiate at this time?",
+    "raw_answer": "Phentolamine",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to pharmacology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated pharmacology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00002",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on pediatrics",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "pediatrics",
+      "key_challenges": [
+        "Requires pediatrics knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: All are signs of hydrocephalus in a neonate except –a)  Enlarged headb)  Sunset signc) Crack post signd) Depressed fontanelle\n\nOption A: ab\nOption B: cd\nOption C: bd\nOption D: ac\nOption:",
+    "correct_answer": "B",
+    "options": {
+      "A": "ab",
+      "B": "cd",
+      "C": "bd",
+      "D": "ac\nOption:"
+    },
+    "raw_question": "All are signs of hydrocephalus in a neonate except –a)  Enlarged headb)  Sunset signc) Crack post signd) Depressed fontanelle",
+    "raw_answer": "cd",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to pediatrics"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated pediatrics reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00003",
+    "description": {
+      "purpose": "Answer a MMLU medical question on pathology",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "pathology",
+      "key_challenges": [
+        "Requires pathology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: The pattern of inheritance shown by malignant hyperthermia (hyperpyrexia) is:\n\nOption A: autosomal dominant.\nOption B: autosomal recessive.\nOption C: X-linked dominant.\nOption D: X-linked recessive.\nOption:",
+    "correct_answer": "A",
+    "options": {
+      "A": "autosomal dominant.",
+      "B": "autosomal recessive.",
+      "C": "X-linked dominant.",
+      "D": "X-linked recessive.\nOption:"
+    },
+    "raw_question": "The pattern of inheritance shown by malignant hyperthermia (hyperpyrexia) is:",
+    "raw_answer": "autosomal dominant.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to pathology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "A"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: A"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option A as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated pathology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00004",
+    "description": {
+      "purpose": "Answer a MedQA medical question on cardiology",
+      "difficulty": "medium",
+      "source": "MedQA",
+      "category": "cardiology",
+      "key_challenges": [
+        "Requires cardiology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 66-year-old male presents to his primary care physician to discuss his increasing shortness of breathover the last 3 months. He notes that this is particularly obvious when he is mowing his lawn or climbing the stairs in his home. His past medical history is significant for hypertension that is well-controlled with lisinopril. His vital signs are as follows: T 37.6 C, HR 88, BP 136/58, RR 18, SpO2 97% RA. Physical examination is significant for an early diastolic blowing, decrescendo murmur heard best at the left sternal border, a midsystolic murmur heard best at the right upper sternal border, and a late diastolic rumbling murmur heard best at the apex on auscultation. In addition, an S3 heart sound is also present. Bounding pulses are palpated at the radial arteries bilaterally. Which of the following diagnoses is most likely in this patient?\n\nOption A: Mitral regurgitation\nOption B: Aortic regurgitation\nOption C: Aortic stenosis\nOption D: Mitral prolapse",
+    "correct_answer": "B",
+    "options": {
+      "A": "Mitral regurgitation",
+      "B": "Aortic regurgitation",
+      "C": "Aortic stenosis",
+      "D": "Mitral prolapse"
+    },
+    "raw_question": "A 66-year-old male presents to his primary care physician to discuss his increasing shortness of breathover the last 3 months. He notes that this is particularly obvious when he is mowing his lawn or climbing the stairs in his home. His past medical history is significant for hypertension that is well-controlled with lisinopril. His vital signs are as follows: T 37.6 C, HR 88, BP 136/58, RR 18, SpO2 97% RA. Physical examination is significant for an early diastolic blowing, decrescendo murmur heard best at the left sternal border, a midsystolic murmur heard best at the right upper sternal border, and a late diastolic rumbling murmur heard best at the apex on auscultation. In addition, an S3 heart sound is also present. Bounding pulses are palpated at the radial arteries bilaterally. Which of the following diagnoses is most likely in this patient?",
+    "raw_answer": "Aortic regurgitation",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to cardiology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated cardiology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00005",
+    "description": {
+      "purpose": "Answer a MedQA medical question on ethics",
+      "difficulty": "medium",
+      "source": "MedQA",
+      "category": "ethics",
+      "key_challenges": [
+        "Requires ethics knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 56-year-old man is brought to the emergency room after a motor vehicle accident. The patient’s vitals are as follows: blood pressure 80/40 mm Hg, heart rate 111/min, respiratory rate 39/min, and temperature 37.1°C (98.8℉). On physical examination, the patient is unconscious with a GCS of 9/15 and is cyanotic. There are open fractures of the left femur and left tibia, a likely shoulder dislocation, multiple contusions on the limbs and thorax, and a puncture wound on the left side of his chest. There are no breath sounds on the left side and there is hyperresonance to percussion on the left. Preparations are made for an emergency needle thoracostomy to be performed to treat this patient’s likely tension pneumothorax. Which one of the following is the best choice to provide informed consent for this procedure?\n\nOption A: The patient’s closest relatives (spouse, child or parent), who must be brought to the hospital as fast as possible\nOption B: One of the witnesses at the scene of the car accident, who should be brought to the hospital as fast as possible\nOption C: The hospital ethics committee\nOption D: Informed consent is not needed in this case",
+    "correct_answer": "D",
+    "options": {
+      "A": "The patient’s closest relatives (spouse, child or parent), who must be brought to the hospital as fast as possible",
+      "B": "One of the witnesses at the scene of the car accident, who should be brought to the hospital as fast as possible",
+      "C": "The hospital ethics committee",
+      "D": "Informed consent is not needed in this case"
+    },
+    "raw_question": "A 56-year-old man is brought to the emergency room after a motor vehicle accident. The patient’s vitals are as follows: blood pressure 80/40 mm Hg, heart rate 111/min, respiratory rate 39/min, and temperature 37.1°C (98.8℉). On physical examination, the patient is unconscious with a GCS of 9/15 and is cyanotic. There are open fractures of the left femur and left tibia, a likely shoulder dislocation, multiple contusions on the limbs and thorax, and a puncture wound on the left side of his chest. There are no breath sounds on the left side and there is hyperresonance to percussion on the left. Preparations are made for an emergency needle thoracostomy to be performed to treat this patient’s likely tension pneumothorax. Which one of the following is the best choice to provide informed consent for this procedure?",
+    "raw_answer": "Informed consent is not needed in this case",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to ethics"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated ethics reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00006",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on pathology",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "pathology",
+      "key_challenges": [
+        "Requires pathology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A 20 years old boy presented with persistent cervical lymphadenopathy for the past 1 year. Histopathology of lymph node shows Reed-Sternberg cells with focal nodularity and background of T reactive lymphocytes. The cells were positive for CD20, LCA, EMA and negative for CD15 and CD30 and EBV negative. Diagnosis is:\n\nOption A: Nodular lymphocyte predominant Hodgkin's lymphoma\nOption B: Lymphocyte rich Hodgkin's lymphoma\nOption C: Diffuse large B-cell lymphoma\nOption D: Small cell lymphoma\nOption:",
+    "correct_answer": "A",
+    "options": {
+      "A": "Nodular lymphocyte predominant Hodgkin's lymphoma",
+      "B": "Lymphocyte rich Hodgkin's lymphoma",
+      "C": "Diffuse large B-cell lymphoma",
+      "D": "Small cell lymphoma\nOption:"
+    },
+    "raw_question": "A 20 years old boy presented with persistent cervical lymphadenopathy for the past 1 year. Histopathology of lymph node shows Reed-Sternberg cells with focal nodularity and background of T reactive lymphocytes. The cells were positive for CD20, LCA, EMA and negative for CD15 and CD30 and EBV negative. Diagnosis is:",
+    "raw_answer": "Nodular lymphocyte predominant Hodgkin's lymphoma",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to pathology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "A"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: A"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option A as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated pathology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00007",
+    "description": {
+      "purpose": "Answer a MedQA medical question on nephrology",
+      "difficulty": "medium",
+      "source": "MedQA",
+      "category": "nephrology",
+      "key_challenges": [
+        "Requires nephrology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 31-year-old woman comes to the physician because of a 5-month history of intermittent flank pain. Over the past 2 years, she has had five urinary tract infections. Her blood pressure is 150/88 mm Hg. Physical examination shows bilateral, nontender upper abdominal masses. Serum studies show a urea nitrogen concentration of 29 mg/dL and a creatinine concentration of 1.4 mg/dL. Renal ultrasonography shows bilaterally enlarged kidneys with multiple parenchymal anechoic masses. Which of the following is the most likely diagnosis?\n\nOption A: Medullary sponge kidney\nOption B: Autosomal dominant polycystic kidney disease\nOption C: Autosomal recessive polycystic kidney disease\nOption D: Obstructive cystic dysplasia",
+    "correct_answer": "B",
+    "options": {
+      "A": "Medullary sponge kidney",
+      "B": "Autosomal dominant polycystic kidney disease",
+      "C": "Autosomal recessive polycystic kidney disease",
+      "D": "Obstructive cystic dysplasia"
+    },
+    "raw_question": "A 31-year-old woman comes to the physician because of a 5-month history of intermittent flank pain. Over the past 2 years, she has had five urinary tract infections. Her blood pressure is 150/88 mm Hg. Physical examination shows bilateral, nontender upper abdominal masses. Serum studies show a urea nitrogen concentration of 29 mg/dL and a creatinine concentration of 1.4 mg/dL. Renal ultrasonography shows bilaterally enlarged kidneys with multiple parenchymal anechoic masses. Which of the following is the most likely diagnosis?",
+    "raw_answer": "Autosomal dominant polycystic kidney disease",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to nephrology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated nephrology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00008",
+    "description": {
+      "purpose": "Answer a MedQA medical question on psychiatry",
+      "difficulty": "easy",
+      "source": "MedQA",
+      "category": "psychiatry",
+      "key_challenges": [
+        "Requires psychiatry knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A 26-year-old female complains of frequent, large volume urination. This negatively affects her sleep, as she has to frequently wake up at night to urinate. She also complains of increased thirst. Her past medical history is significant for bipolar disorder that is treated with lithium for 3 years. Serum osmolality is 425 mOsm/kg, and urine osmolality is 176 mOsm/kg. Which of the following best explains this patient’s serum and urine osmolality?\n\nOption A: Hypothalamic over-production of antidiuretic hormone (ADH)\nOption B: Decreased production of ADH\nOption C: ADH resistance in the renal collecting ducts\nOption D: Increased sodium reabsorption and potassium excretion",
+    "correct_answer": "C",
+    "options": {
+      "A": "Hypothalamic over-production of antidiuretic hormone (ADH)",
+      "B": "Decreased production of ADH",
+      "C": "ADH resistance in the renal collecting ducts",
+      "D": "Increased sodium reabsorption and potassium excretion"
+    },
+    "raw_question": "A 26-year-old female complains of frequent, large volume urination. This negatively affects her sleep, as she has to frequently wake up at night to urinate. She also complains of increased thirst. Her past medical history is significant for bipolar disorder that is treated with lithium for 3 years. Serum osmolality is 425 mOsm/kg, and urine osmolality is 176 mOsm/kg. Which of the following best explains this patient’s serum and urine osmolality?",
+    "raw_answer": "ADH resistance in the renal collecting ducts",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to psychiatry"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated psychiatry reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00009",
+    "description": {
+      "purpose": "Answer a MMLU medical question on physiology",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "physiology",
+      "key_challenges": [
+        "Requires physiology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: Living cells require constant interaction with the outside environment in order to attain the materials they need for survival, as well as to rid themselves of waste. Of the following processes, which uses only the gradient of material to control the direction in which the material moves across the cell membrane?\n\nOption A: Osmosis\nOption B: Passive Transport\nOption C: Active Transport\nOption D: Endocytosis\nOption:",
+    "correct_answer": "A",
+    "options": {
+      "A": "Osmosis",
+      "B": "Passive Transport",
+      "C": "Active Transport",
+      "D": "Endocytosis\nOption:"
+    },
+    "raw_question": "Living cells require constant interaction with the outside environment in order to attain the materials they need for survival, as well as to rid themselves of waste. Of the following processes, which uses only the gradient of material to control the direction in which the material moves across the cell membrane?",
+    "raw_answer": "Osmosis",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to physiology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "A"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: A"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option A as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated physiology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00010",
+    "description": {
+      "purpose": "Answer a MMLU medical question on pediatrics",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "pediatrics",
+      "key_challenges": [
+        "Requires pediatrics knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A 6-month-old male Hispanic infant is brought to the office by his parents because of intermittent swelling of his right scrotum that is more pronounced when he cries. The swelling has never been red or \"stuck.\" Vital signs are normal. A right inguinal hernia is confirmed on physical examination. In discussing repair of the hernia with the parents, it is most appropriate to inform them of which of the following?\n\nOption A: Herniorrhaphy can be postponed until age 2 years because many hernias close spontaneously\nOption B: Herniorrhaphy can be postponed until age 12 years because oligospermia does not develop before age 12\nOption C: Herniorrhaphy should be scheduled at the earliest convenient time\nOption D: Herniorrhaphy should be scheduled as an emergency operation\nOption:",
+    "correct_answer": "C",
+    "options": {
+      "A": "Herniorrhaphy can be postponed until age 2 years because many hernias close spontaneously",
+      "B": "Herniorrhaphy can be postponed until age 12 years because oligospermia does not develop before age 12",
+      "C": "Herniorrhaphy should be scheduled at the earliest convenient time",
+      "D": "Herniorrhaphy should be scheduled as an emergency operation\nOption:"
+    },
+    "raw_question": "A 6-month-old male Hispanic infant is brought to the office by his parents because of intermittent swelling of his right scrotum that is more pronounced when he cries. The swelling has never been red or \"stuck.\" Vital signs are normal. A right inguinal hernia is confirmed on physical examination. In discussing repair of the hernia with the parents, it is most appropriate to inform them of which of the following?",
+    "raw_answer": "Herniorrhaphy should be scheduled at the earliest convenient time",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to pediatrics"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated pediatrics reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00011",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on ophthalmology",
+      "difficulty": "medium",
+      "source": "MedMCQA",
+      "category": "ophthalmology",
+      "key_challenges": [
+        "Requires ophthalmology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A patient requires 180 mg ceftriaxone. The l contains 500 mg/5ml of ceftriaxone. You have a 2 ml syringe with l0 divisions per ml. How many divisions in the 2 ml syringe will you fill to give 180 mg ceftriaxone?\n\nOption A: 9\nOption B: 18\nOption C: l0\nOption D: 12\nOption:",
+    "correct_answer": "B",
+    "options": {
+      "A": "9",
+      "B": "18",
+      "C": "l0",
+      "D": "12\nOption:"
+    },
+    "raw_question": "A patient requires 180 mg ceftriaxone. The l contains 500 mg/5ml of ceftriaxone. You have a 2 ml syringe with l0 divisions per ml. How many divisions in the 2 ml syringe will you fill to give 180 mg ceftriaxone?",
+    "raw_answer": "18",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to ophthalmology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated ophthalmology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00012",
+    "description": {
+      "purpose": "Answer a MedQA medical question on gastroenterology",
+      "difficulty": "medium",
+      "source": "MedQA",
+      "category": "gastroenterology",
+      "key_challenges": [
+        "Requires gastroenterology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 34-year-old woman with poorly controlled Crohn disease comes to the physician because of a 2-week history of hair loss and a rash on her face. She has also noticed that food has recently tasted bland to her. She had to undergo segmental small bowel resection several times because of intestinal obstruction and fistula formation. Examination shows several bullous, erythematous perioral plaques. There are two well-circumscribed circular patches of hair loss on the scalp. A deficiency of which of the following is the most likely cause of this patient's condition?\n\nOption A: Niacin\nOption B: Cobalamin\nOption C: Iron\nOption D: Zinc",
+    "correct_answer": "D",
+    "options": {
+      "A": "Niacin",
+      "B": "Cobalamin",
+      "C": "Iron",
+      "D": "Zinc"
+    },
+    "raw_question": "A 34-year-old woman with poorly controlled Crohn disease comes to the physician because of a 2-week history of hair loss and a rash on her face. She has also noticed that food has recently tasted bland to her. She had to undergo segmental small bowel resection several times because of intestinal obstruction and fistula formation. Examination shows several bullous, erythematous perioral plaques. There are two well-circumscribed circular patches of hair loss on the scalp. A deficiency of which of the following is the most likely cause of this patient's condition?",
+    "raw_answer": "Zinc",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to gastroenterology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated gastroenterology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00013",
+    "description": {
+      "purpose": "Answer a MedQA medical question on immunology",
+      "difficulty": "easy",
+      "source": "MedQA",
+      "category": "immunology",
+      "key_challenges": [
+        "Requires immunology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A 30-year-old woman presents to your office with decreased appetite, malaise, and fever. Serologic tests reveal positive Anti-HBsAg and Anti-HAV IgM antibodies. Which of the following is most likely responsible for this patient's presentation?\n\nOption A: Needlestick\nOption B: Unprotected sex\nOption C: Shellfish\nOption D: Acetaminophen overdose",
+    "correct_answer": "C",
+    "options": {
+      "A": "Needlestick",
+      "B": "Unprotected sex",
+      "C": "Shellfish",
+      "D": "Acetaminophen overdose"
+    },
+    "raw_question": "A 30-year-old woman presents to your office with decreased appetite, malaise, and fever. Serologic tests reveal positive Anti-HBsAg and Anti-HAV IgM antibodies. Which of the following is most likely responsible for this patient's presentation?",
+    "raw_answer": "Shellfish",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to immunology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated immunology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00014",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on pharmacology",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "pharmacology",
+      "key_challenges": [
+        "Requires pharmacology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: Methacholine acts at which receptor?\n\nOption A: M1\nOption B: M2\nOption C: M3\nOption D: M4\nOption:",
+    "correct_answer": "B",
+    "options": {
+      "A": "M1",
+      "B": "M2",
+      "C": "M3",
+      "D": "M4\nOption:"
+    },
+    "raw_question": "Methacholine acts at which receptor?",
+    "raw_answer": "M2",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to pharmacology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated pharmacology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00015",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on obstetrics_gynecology",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "obstetrics_gynecology",
+      "key_challenges": [
+        "Requires obstetrics_gynecology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: The high cou has the power to stay the execution of a pregnant woman according to which section of Criminal Procedure Code?\n\nOption A: 416 CrPC\nOption B: 417 CrPC\nOption C: 418 CrPC\nOption D: 419 CrPC\nOption:",
+    "correct_answer": "A",
+    "options": {
+      "A": "416 CrPC",
+      "B": "417 CrPC",
+      "C": "418 CrPC",
+      "D": "419 CrPC\nOption:"
+    },
+    "raw_question": "The high cou has the power to stay the execution of a pregnant woman according to which section of Criminal Procedure Code?",
+    "raw_answer": "416 CrPC",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to obstetrics_gynecology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "A"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: A"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option A as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated obstetrics_gynecology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00016",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on pulmonology",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "pulmonology",
+      "key_challenges": [
+        "Requires pulmonology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: Staging of GTN with lung metastasis.\n\nOption A: Stage 1\nOption B: Stage 2\nOption C: Stage 3\nOption D: Stage 4\nOption:",
+    "correct_answer": "C",
+    "options": {
+      "A": "Stage 1",
+      "B": "Stage 2",
+      "C": "Stage 3",
+      "D": "Stage 4\nOption:"
+    },
+    "raw_question": "Staging of GTN with lung metastasis.",
+    "raw_answer": "Stage 3",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to pulmonology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated pulmonology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00017",
+    "description": {
+      "purpose": "Answer a MMLU medical question on nephrology",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "nephrology",
+      "key_challenges": [
+        "Requires nephrology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: Which of the following describes the cluster of blood capillaries found in each nephron in the kidney?\n\nOption A: Afferent arteriole\nOption B: Glomerulus\nOption C: Loop of Henle\nOption D: Renal pelvis\nOption:",
+    "correct_answer": "B",
+    "options": {
+      "A": "Afferent arteriole",
+      "B": "Glomerulus",
+      "C": "Loop of Henle",
+      "D": "Renal pelvis\nOption:"
+    },
+    "raw_question": "Which of the following describes the cluster of blood capillaries found in each nephron in the kidney?",
+    "raw_answer": "Glomerulus",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to nephrology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated nephrology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00018",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on orthopedics",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "orthopedics",
+      "key_challenges": [
+        "Requires orthopedics knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: When it is made up of same steel, size 55, which will be more prone to fracture:\n\nOption A: Triangular reamer\nOption B: Rhomboid cross section file\nOption C: Square cross section file\nOption D: Headstrom file\nOption:",
+    "correct_answer": "D",
+    "options": {
+      "A": "Triangular reamer",
+      "B": "Rhomboid cross section file",
+      "C": "Square cross section file",
+      "D": "Headstrom file\nOption:"
+    },
+    "raw_question": "When it is made up of same steel, size 55, which will be more prone to fracture:",
+    "raw_answer": "Headstrom file",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to orthopedics"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated orthopedics reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00019",
+    "description": {
+      "purpose": "Answer a MMLU medical question on anatomy",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "anatomy",
+      "key_challenges": [
+        "Requires anatomy knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A 50-year-old female presents to the office with the complaints of chronic achiness, stiffness, and fatigue. Physical examination reveals multiple bilateral tender points in the trapezius, gluteal, and suboccipital muscle groups. Radiograph findings and laboratory study results are normal. The most likely diagnosis is\n\nOption A: ankylosing spondylitis\nOption B: fibromyalgia\nOption C: myofascial pain syndrome\nOption D: osteoarthritis\nOption:",
+    "correct_answer": "B",
+    "options": {
+      "A": "ankylosing spondylitis",
+      "B": "fibromyalgia",
+      "C": "myofascial pain syndrome",
+      "D": "osteoarthritis\nOption:"
+    },
+    "raw_question": "A 50-year-old female presents to the office with the complaints of chronic achiness, stiffness, and fatigue. Physical examination reveals multiple bilateral tender points in the trapezius, gluteal, and suboccipital muscle groups. Radiograph findings and laboratory study results are normal. The most likely diagnosis is",
+    "raw_answer": "fibromyalgia",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to anatomy"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated anatomy reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00020",
+    "description": {
+      "purpose": "Answer a MedQA medical question on microbiology",
+      "difficulty": "easy",
+      "source": "MedQA",
+      "category": "microbiology",
+      "key_challenges": [
+        "Requires microbiology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A previously healthy 17-year-old female college student comes to the emergency department because of a 1-day history of fever, chills, and severe headache. Her temperature is 39.4°C (103°F). Physical examination shows nuchal rigidity and photophobia. Blood cultures are obtained and a lumbar puncture is performed. A Gram stain of cerebrospinal fluid shows gram-negative cocci in pairs. Which of the following virulence factors was most likely involved in the initial step of this patient's infection?\n\nOption A: Protein A\nOption B: Lipooligosaccharides\nOption C: Adhesive pili\nOption D: Biofilm formation",
+    "correct_answer": "C",
+    "options": {
+      "A": "Protein A",
+      "B": "Lipooligosaccharides",
+      "C": "Adhesive pili",
+      "D": "Biofilm formation"
+    },
+    "raw_question": "A previously healthy 17-year-old female college student comes to the emergency department because of a 1-day history of fever, chills, and severe headache. Her temperature is 39.4°C (103°F). Physical examination shows nuchal rigidity and photophobia. Blood cultures are obtained and a lumbar puncture is performed. A Gram stain of cerebrospinal fluid shows gram-negative cocci in pairs. Which of the following virulence factors was most likely involved in the initial step of this patient's infection?",
+    "raw_answer": "Adhesive pili",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to microbiology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated microbiology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00021",
+    "description": {
+      "purpose": "Answer a MedQA medical question on physiology",
+      "difficulty": "medium",
+      "source": "MedQA",
+      "category": "physiology",
+      "key_challenges": [
+        "Requires physiology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 32-year-old man arrives to his primary care physician to discuss his fear of flying. The patient reports that he has had a fear of flying since being a teenager. He went on a family vacation 15 years ago, and during the flight there was turbulence and a “rough landing”. Since then he has avoided flying. He did not go to his cousin’s wedding because it was out of the country. He also was unable to visit his grandmother for her 80th birthday. The last time his job asked him to meet a client out of state, he drove 18 hours instead of flying. Two years ago he promised his fiancé they could fly to Florida. Upon arrival at the airport, he began to feel dizzy, lightheaded, and refused to go through security. During the clinic visit, the patient appears anxious and distressed. He recognizes that his fear is irrational. He is upset that it is affecting his relationship with his wife. Additionally, his current job may soon require employees in his sales position to fly to meet potential clients. He is embarrassed to have a conversation with his manager about his fear of flying. Which of the following is the best therapy for the patient’s condition?\n\nOption A: Alprazolam\nOption B: Cognitive behavioral therapy\nOption C: Fluoxetine\nOption D: Psychodynamic psychotherapy",
+    "correct_answer": "B",
+    "options": {
+      "A": "Alprazolam",
+      "B": "Cognitive behavioral therapy",
+      "C": "Fluoxetine",
+      "D": "Psychodynamic psychotherapy"
+    },
+    "raw_question": "A 32-year-old man arrives to his primary care physician to discuss his fear of flying. The patient reports that he has had a fear of flying since being a teenager. He went on a family vacation 15 years ago, and during the flight there was turbulence and a “rough landing”. Since then he has avoided flying. He did not go to his cousin’s wedding because it was out of the country. He also was unable to visit his grandmother for her 80th birthday. The last time his job asked him to meet a client out of state, he drove 18 hours instead of flying. Two years ago he promised his fiancé they could fly to Florida. Upon arrival at the airport, he began to feel dizzy, lightheaded, and refused to go through security. During the clinic visit, the patient appears anxious and distressed. He recognizes that his fear is irrational. He is upset that it is affecting his relationship with his wife. Additionally, his current job may soon require employees in his sales position to fly to meet potential clients. He is embarrassed to have a conversation with his manager about his fear of flying. Which of the following is the best therapy for the patient’s condition?",
+    "raw_answer": "Cognitive behavioral therapy",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to physiology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated physiology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00022",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on anatomy",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "anatomy",
+      "key_challenges": [
+        "Requires anatomy knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: In an inferior alveolar nerve block given to a child, the\nposition of the needle as compared to that in an adult is more\n\nOption A: Superior\nOption B: Inferior\nOption C: Buccal\nOption D: Lingual\nOption:",
+    "correct_answer": "B",
+    "options": {
+      "A": "Superior",
+      "B": "Inferior",
+      "C": "Buccal",
+      "D": "Lingual\nOption:"
+    },
+    "raw_question": "In an inferior alveolar nerve block given to a child, the\nposition of the needle as compared to that in an adult is more",
+    "raw_answer": "Inferior",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to anatomy"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated anatomy reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00023",
+    "description": {
+      "purpose": "Answer a MedQA medical question on pulmonology",
+      "difficulty": "medium",
+      "source": "MedQA",
+      "category": "pulmonology",
+      "key_challenges": [
+        "Requires pulmonology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 42-year-old man comes to the physician because of progressive fatigue and shortness of breath for 1 month. He has been unable to practice with his recreational soccer team and has had to rest frequently when walking to work. His only medication is ibuprofen for joint pain. Physical examination shows tanned skin. There is tenderness to palpation and stiffness of the metacarpophalangeal joints of both hands. Pulmonary examination shows coarse crackles in both lung fields. The liver is palpated 4 cm below the right costal margin. Human leukocyte antigen (HLA) testing is most likely to be positive for which of the following?\n\nOption A: HLA-DR3\nOption B: HLA-DR4\nOption C: HLA-B8\nOption D: HLA-A3",
+    "correct_answer": "D",
+    "options": {
+      "A": "HLA-DR3",
+      "B": "HLA-DR4",
+      "C": "HLA-B8",
+      "D": "HLA-A3"
+    },
+    "raw_question": "A 42-year-old man comes to the physician because of progressive fatigue and shortness of breath for 1 month. He has been unable to practice with his recreational soccer team and has had to rest frequently when walking to work. His only medication is ibuprofen for joint pain. Physical examination shows tanned skin. There is tenderness to palpation and stiffness of the metacarpophalangeal joints of both hands. Pulmonary examination shows coarse crackles in both lung fields. The liver is palpated 4 cm below the right costal margin. Human leukocyte antigen (HLA) testing is most likely to be positive for which of the following?",
+    "raw_answer": "HLA-A3",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to pulmonology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated pulmonology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00024",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on dermatology",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "dermatology",
+      "key_challenges": [
+        "Requires dermatology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A neonate develops encephalitis without any skin lesions. Most probable causative organisms is –\n\nOption A: HSV I\nOption B: HSV II\nOption C: Meningococci\nOption D: Streptococci\nOption:",
+    "correct_answer": "B",
+    "options": {
+      "A": "HSV I",
+      "B": "HSV II",
+      "C": "Meningococci",
+      "D": "Streptococci\nOption:"
+    },
+    "raw_question": "A neonate develops encephalitis without any skin lesions. Most probable causative organisms is –",
+    "raw_answer": "HSV II",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to dermatology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated dermatology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00025",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on psychiatry",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "psychiatry",
+      "key_challenges": [
+        "Requires psychiatry knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: Depression of mandible is achieved by:\n\nOption A: Digastric\nOption B: Lateral pterygoid\nOption C: Geniohyoid\nOption D: All of the above\nOption:",
+    "correct_answer": "D",
+    "options": {
+      "A": "Digastric",
+      "B": "Lateral pterygoid",
+      "C": "Geniohyoid",
+      "D": "All of the above\nOption:"
+    },
+    "raw_question": "Depression of mandible is achieved by:",
+    "raw_answer": "All of the above",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to psychiatry"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated psychiatry reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00026",
+    "description": {
+      "purpose": "Answer a MMLU medical question on cardiology",
+      "difficulty": "medium",
+      "source": "MMLU",
+      "category": "cardiology",
+      "key_challenges": [
+        "Requires cardiology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 72-year-old woman comes to the physician because of a 2-month history of painless swelling of both ankles. She also reports shortness of breath with exertion and when lying down. She has been awakened from sleep by shortness of breath. She has not had chest pain. Her pulse is 96/min and regular, respirations are 24/min, and blood pressure is 128/76 mm Hg. Jugular venous pressure is 15 cm H2O. Pulmonary examination shows crackles at both lung bases. Cardiac examination shows a regular rhythm and a soft S3. A grade 3/6 holosystolic murmur is heard best at the apex, radiating to the axilla. There is 2+ pitting edema of the lower legs and ankles. Which of the following is most likely to confirm the diagnosis?\n\nOption A: Measurement of serum troponin I concentration\nOption B: ECG\nOption C: Exercise stress test\nOption D: Echocardiography\nOption:",
+    "correct_answer": "D",
+    "options": {
+      "A": "Measurement of serum troponin I concentration",
+      "B": "ECG",
+      "C": "Exercise stress test",
+      "D": "Echocardiography\nOption:"
+    },
+    "raw_question": "A 72-year-old woman comes to the physician because of a 2-month history of painless swelling of both ankles. She also reports shortness of breath with exertion and when lying down. She has been awakened from sleep by shortness of breath. She has not had chest pain. Her pulse is 96/min and regular, respirations are 24/min, and blood pressure is 128/76 mm Hg. Jugular venous pressure is 15 cm H2O. Pulmonary examination shows crackles at both lung bases. Cardiac examination shows a regular rhythm and a soft S3. A grade 3/6 holosystolic murmur is heard best at the apex, radiating to the axilla. There is 2+ pitting edema of the lower legs and ankles. Which of the following is most likely to confirm the diagnosis?",
+    "raw_answer": "Echocardiography",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to cardiology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated cardiology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00027",
+    "description": {
+      "purpose": "Answer a MMLU medical question on immunology",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "immunology",
+      "key_challenges": [
+        "Requires immunology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A patient comes into the hospital after being bit by a dog who he stated was “acting crazy”. The wound is open and bleeding. Animal control captured the dog and said that it was foaming at the mouth and extremely aggressive. Suspecting a rabies infection, the patient is given a serum that contains rabies antibodies that were grown inside a horse. This is an example of what kind of immunity?\n\nOption A: Passive\nOption B: Active\nOption C: Natural\nOption D: Artificial\nOption:",
+    "correct_answer": "A",
+    "options": {
+      "A": "Passive",
+      "B": "Active",
+      "C": "Natural",
+      "D": "Artificial\nOption:"
+    },
+    "raw_question": "A patient comes into the hospital after being bit by a dog who he stated was “acting crazy”. The wound is open and bleeding. Animal control captured the dog and said that it was foaming at the mouth and extremely aggressive. Suspecting a rabies infection, the patient is given a serum that contains rabies antibodies that were grown inside a horse. This is an example of what kind of immunity?",
+    "raw_answer": "Passive",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to immunology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "A"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: A"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option A as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated immunology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00028",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on ethics",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "ethics",
+      "key_challenges": [
+        "Requires ethics knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: IPC section dealing with illegal aboion with woman consent?\n\nOption A: 310\nOption B: 312\nOption C: 313\nOption D: 314\nOption:",
+    "correct_answer": "B",
+    "options": {
+      "A": "310",
+      "B": "312",
+      "C": "313",
+      "D": "314\nOption:"
+    },
+    "raw_question": "IPC section dealing with illegal aboion with woman consent?",
+    "raw_answer": "312",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to ethics"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated ethics reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00029",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on nephrology",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "nephrology",
+      "key_challenges": [
+        "Requires nephrology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: Which of the following is the diluting segment of kidney?\n\nOption A: PCT\nOption B: Collecting duct\nOption C: Ascending thick loop Henle\nOption D: Descending loop of Henle\nOption:",
+    "correct_answer": "C",
+    "options": {
+      "A": "PCT",
+      "B": "Collecting duct",
+      "C": "Ascending thick loop Henle",
+      "D": "Descending loop of Henle\nOption:"
+    },
+    "raw_question": "Which of the following is the diluting segment of kidney?",
+    "raw_answer": "Ascending thick loop Henle",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to nephrology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated nephrology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00030",
+    "description": {
+      "purpose": "Answer a MMLU medical question on obstetrics_gynecology",
+      "difficulty": "medium",
+      "source": "MMLU",
+      "category": "obstetrics_gynecology",
+      "key_challenges": [
+        "Requires obstetrics_gynecology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 78-year-old male presents to the office with the complaint of severe neck pain. He rates the pain as a 7 on a scale of 0 to 10 scale. He denies any trauma but reports that he had been doing a lot of painting over the past week. He denies any radicular pain or numbness. Cervical range of motion is moderately limited in all fields. He is treated with articulatory springing technique. Four hours later the physician receives a call from the local emergency department, where the patient presented confused, nauseated, and vertiginous. The physician may be found liable if\n\nOption A: the motion barrier was articulated more than 3 times\nOption B: the motion barrier was met with a vectored force from the direction of ease\nOption C: the neck was treated in simultaneous hyperrotation and extension\nOption D: the patient was previously treated for osteoarthritis of the cervical spine\nOption:",
+    "correct_answer": "C",
+    "options": {
+      "A": "the motion barrier was articulated more than 3 times",
+      "B": "the motion barrier was met with a vectored force from the direction of ease",
+      "C": "the neck was treated in simultaneous hyperrotation and extension",
+      "D": "the patient was previously treated for osteoarthritis of the cervical spine\nOption:"
+    },
+    "raw_question": "A 78-year-old male presents to the office with the complaint of severe neck pain. He rates the pain as a 7 on a scale of 0 to 10 scale. He denies any trauma but reports that he had been doing a lot of painting over the past week. He denies any radicular pain or numbness. Cervical range of motion is moderately limited in all fields. He is treated with articulatory springing technique. Four hours later the physician receives a call from the local emergency department, where the patient presented confused, nauseated, and vertiginous. The physician may be found liable if",
+    "raw_answer": "the neck was treated in simultaneous hyperrotation and extension",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to obstetrics_gynecology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated obstetrics_gynecology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00031",
+    "description": {
+      "purpose": "Answer a MedQA medical question on pediatrics",
+      "difficulty": "medium",
+      "source": "MedQA",
+      "category": "pediatrics",
+      "key_challenges": [
+        "Requires pediatrics knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 17-year-old girl is referred by her dentist for a suspected eating disorder. She has been visiting the same dentist since childhood and for the past 2 years has had at least 2 visits for dental caries. She eventually admitted to him that she regularly induces vomiting by putting her fingers down her throat. She says she has been doing this for the last few years and purging at least once a week. More recently, she has been inducing emesis more often and even looked into diuretics as she feels that she is gaining more and more weight compared to her ‘skinny friends’. Her BMI is at the 50th percentile for her age and sex. Which of the following features is most consistent with this patient’s condition?\n\nOption A: Patients with this disorder are not further sub-typed\nOption B: Patients do not usually initiate treatment\nOption C: Patients can have a history of both anorexia and bulimia\nOption D: Patients will typically have a BMI between 17–18.5 kg/m2",
+    "correct_answer": "A",
+    "options": {
+      "A": "Patients with this disorder are not further sub-typed",
+      "B": "Patients do not usually initiate treatment",
+      "C": "Patients can have a history of both anorexia and bulimia",
+      "D": "Patients will typically have a BMI between 17–18.5 kg/m2"
+    },
+    "raw_question": "A 17-year-old girl is referred by her dentist for a suspected eating disorder. She has been visiting the same dentist since childhood and for the past 2 years has had at least 2 visits for dental caries. She eventually admitted to him that she regularly induces vomiting by putting her fingers down her throat. She says she has been doing this for the last few years and purging at least once a week. More recently, she has been inducing emesis more often and even looked into diuretics as she feels that she is gaining more and more weight compared to her ‘skinny friends’. Her BMI is at the 50th percentile for her age and sex. Which of the following features is most consistent with this patient’s condition?",
+    "raw_answer": "Patients with this disorder are not further sub-typed",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to pediatrics"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "A"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: A"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option A as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated pediatrics reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00032",
+    "description": {
+      "purpose": "Answer a MMLU medical question on gastroenterology",
+      "difficulty": "medium",
+      "source": "MMLU",
+      "category": "gastroenterology",
+      "key_challenges": [
+        "Requires gastroenterology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 30-year-old woman comes to the physician because of a 2-day history of abdominal pain. She has a history of recurrent upper respiratory tract infections, sinusitis, and pancreatitis. She has thick nasal secretions. She says that her sweat is salty and crystallizes on her skin. Her vital signs are within normal limits. Physical examination shows epigastric tenderness. Genetic testing for the 36 most common mutations shows a detectable mutation (G551D) in one allele of the CFTR gene. Which of the following best explains this patient's clinical phenotype?\n\nOption A: Only one G551D allele is needed in CFTR\nOption B: The patient is a CFTR obligate carrier\nOption C: The patient's CFTR mutation is unrelated to her clinical phenotype\nOption D: The second CFTR mutation was not detected by the testing obtained\nOption:",
+    "correct_answer": "D",
+    "options": {
+      "A": "Only one G551D allele is needed in CFTR",
+      "B": "The patient is a CFTR obligate carrier",
+      "C": "The patient's CFTR mutation is unrelated to her clinical phenotype",
+      "D": "The second CFTR mutation was not detected by the testing obtained\nOption:"
+    },
+    "raw_question": "A 30-year-old woman comes to the physician because of a 2-day history of abdominal pain. She has a history of recurrent upper respiratory tract infections, sinusitis, and pancreatitis. She has thick nasal secretions. She says that her sweat is salty and crystallizes on her skin. Her vital signs are within normal limits. Physical examination shows epigastric tenderness. Genetic testing for the 36 most common mutations shows a detectable mutation (G551D) in one allele of the CFTR gene. Which of the following best explains this patient's clinical phenotype?",
+    "raw_answer": "The second CFTR mutation was not detected by the testing obtained",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to gastroenterology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated gastroenterology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00033",
+    "description": {
+      "purpose": "Answer a MedQA medical question on endocrinology",
+      "difficulty": "hard",
+      "source": "MedQA",
+      "category": "endocrinology",
+      "key_challenges": [
+        "Requires endocrinology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 39-year-old woman comes to the physician because of fever, generalized fatigue, and chills for 1 week. She has been having dull right-side abdominal pain during this period. She has nausea. She has no history of travel outside the United States. She has type 1 diabetes mellitus. Current medications include insulin and an oral contraceptive. She appears ill. Her temperature is 40°C (104°F), pulse is 118/min, and blood pressure is 106/70 mm Hg. On examination, the liver is palpated 2–3 cm below the right costal margin and is tender. There are decreased breath sounds over the right lung base. The remainder of the examination shows no abnormalities. Laboratory studies show:\nHemoglobin 14.1 g/dL\nLeukocyte count 17,100/mm3\nSegmented neutrophils 74%\nEosinophils 1%\nLymphocytes 20%\nMonocytes 5%\nSerum\nGlucose 79 mg/dL\nCreatinine 1.1 mg/dL\nTotal bilirubin 0.9 mg/dL\nAlkaline phosphatase 180 U/L\nAST 69 U/L\nALT 100 U/L\nA right upper quadrant ultrasound is shown. Which of the following is the most appropriate next step in management?\"\n\nOption A: Discontinue the oral contraceptive\nOption B: Obtain hepatoiminodiacetic acid scan\nOption C: Perform endoscopic retrograde cholangiopancreatography\nOption D: Perform percutaneous drainage\n\"",
+    "correct_answer": "D",
+    "options": {
+      "A": "Discontinue the oral contraceptive",
+      "B": "Obtain hepatoiminodiacetic acid scan",
+      "C": "Perform endoscopic retrograde cholangiopancreatography",
+      "D": "Perform percutaneous drainage\n\""
+    },
+    "raw_question": "A 39-year-old woman comes to the physician because of fever, generalized fatigue, and chills for 1 week. She has been having dull right-side abdominal pain during this period. She has nausea. She has no history of travel outside the United States. She has type 1 diabetes mellitus. Current medications include insulin and an oral contraceptive. She appears ill. Her temperature is 40°C (104°F), pulse is 118/min, and blood pressure is 106/70 mm Hg. On examination, the liver is palpated 2–3 cm below the right costal margin and is tender. There are decreased breath sounds over the right lung base. The remainder of the examination shows no abnormalities. Laboratory studies show:\nHemoglobin 14.1 g/dL\nLeukocyte count 17,100/mm3\nSegmented neutrophils 74%\nEosinophils 1%\nLymphocytes 20%\nMonocytes 5%\nSerum\nGlucose 79 mg/dL\nCreatinine 1.1 mg/dL\nTotal bilirubin 0.9 mg/dL\nAlkaline phosphatase 180 U/L\nAST 69 U/L\nALT 100 U/L\nA right upper quadrant ultrasound is shown. Which of the following is the most appropriate next step in management?\"",
+    "raw_answer": "Perform percutaneous drainage\n\"",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to endocrinology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated endocrinology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00034",
+    "description": {
+      "purpose": "Answer a MMLU medical question on pulmonology",
+      "difficulty": "medium",
+      "source": "MMLU",
+      "category": "pulmonology",
+      "key_challenges": [
+        "Requires pulmonology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 20-year-old man has had frequent upper respiratory tract infections over the past 4 years. He has daily purulent sputum and has noted decreased exercise tolerance over the past 2 years. He and his wife have been unable to conceive because of his low sperm count. Scattered expiratory wheezing and rhonchi are heard throughout both lung fields. An x-ray of the chest shows hyperinflation. Spirometry shows a decreased FEV1:FVC ratio. Which of the following is most likely to confirm the diagnosis?\n\nOption A: Arterial blood gas analysis\nOption B: Examination of sputum for eosinophils\nOption C: Sweat chloride test\nOption D: Sputum cytology\nOption:",
+    "correct_answer": "C",
+    "options": {
+      "A": "Arterial blood gas analysis",
+      "B": "Examination of sputum for eosinophils",
+      "C": "Sweat chloride test",
+      "D": "Sputum cytology\nOption:"
+    },
+    "raw_question": "A 20-year-old man has had frequent upper respiratory tract infections over the past 4 years. He has daily purulent sputum and has noted decreased exercise tolerance over the past 2 years. He and his wife have been unable to conceive because of his low sperm count. Scattered expiratory wheezing and rhonchi are heard throughout both lung fields. An x-ray of the chest shows hyperinflation. Spirometry shows a decreased FEV1:FVC ratio. Which of the following is most likely to confirm the diagnosis?",
+    "raw_answer": "Sweat chloride test",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to pulmonology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated pulmonology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00035",
+    "description": {
+      "purpose": "Answer a MedQA medical question on neurology",
+      "difficulty": "medium",
+      "source": "MedQA",
+      "category": "neurology",
+      "key_challenges": [
+        "Requires neurology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 58-year-old man is brought to the emergency department because of sudden-onset right-sided body numbness for 1 hour. He reports that he has a 15-year history of hypertension treated with hydrochlorothiazide. He is alert and oriented to time, place, and person. Neurological examination shows decreased sensation to light pinprick and temperature on the right side of the face and body. Motor strength is 5/5 and deep tendon reflexes are 2+ bilaterally. Perfusion of which of the following structures of the brain is most likely impaired in this patient?\n\nOption A: Posterior limb of the internal capsule\nOption B: Lateral medulla\nOption C: Basal pons\nOption D: Ventral thalamus",
+    "correct_answer": "D",
+    "options": {
+      "A": "Posterior limb of the internal capsule",
+      "B": "Lateral medulla",
+      "C": "Basal pons",
+      "D": "Ventral thalamus"
+    },
+    "raw_question": "A 58-year-old man is brought to the emergency department because of sudden-onset right-sided body numbness for 1 hour. He reports that he has a 15-year history of hypertension treated with hydrochlorothiazide. He is alert and oriented to time, place, and person. Neurological examination shows decreased sensation to light pinprick and temperature on the right side of the face and body. Motor strength is 5/5 and deep tendon reflexes are 2+ bilaterally. Perfusion of which of the following structures of the brain is most likely impaired in this patient?",
+    "raw_answer": "Ventral thalamus",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to neurology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated neurology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00036",
+    "description": {
+      "purpose": "Answer a MedQA medical question on surgery",
+      "difficulty": "medium",
+      "source": "MedQA",
+      "category": "surgery",
+      "key_challenges": [
+        "Requires surgery knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: Three days after undergoing an open cholecystectomy, an obese 57-year-old woman has fever, chills, and a headache. She has right-sided chest pain that increases on inspiration and has had a productive cough for the last 12 hours. She had an episode of hypotension after the operation that resolved with intravenous fluid therapy. She underwent an abdominal hysterectomy 16 years ago for multiple fibroids of the uterus. She has smoked one pack of cigarettes daily for 17 years. She appears uncomfortable. Her temperature is 39°C (102.2°F), pulse is 98/min, respirations are 18/min, and blood pressure is 128/82 mm Hg. Inspiratory crackles are heard at the right lung base. The abdomen is soft and nontender. There is a healing surgical incision below the right ribcage. The remainder of the examination shows no abnormalities. Which of the following is the most likely diagnosis?\n\nOption A: Pulmonary embolism\nOption B: Subphrenic abscess\nOption C: Pneumonia\nOption D: Pneumothorax",
+    "correct_answer": "C",
+    "options": {
+      "A": "Pulmonary embolism",
+      "B": "Subphrenic abscess",
+      "C": "Pneumonia",
+      "D": "Pneumothorax"
+    },
+    "raw_question": "Three days after undergoing an open cholecystectomy, an obese 57-year-old woman has fever, chills, and a headache. She has right-sided chest pain that increases on inspiration and has had a productive cough for the last 12 hours. She had an episode of hypotension after the operation that resolved with intravenous fluid therapy. She underwent an abdominal hysterectomy 16 years ago for multiple fibroids of the uterus. She has smoked one pack of cigarettes daily for 17 years. She appears uncomfortable. Her temperature is 39°C (102.2°F), pulse is 98/min, respirations are 18/min, and blood pressure is 128/82 mm Hg. Inspiratory crackles are heard at the right lung base. The abdomen is soft and nontender. There is a healing surgical incision below the right ribcage. The remainder of the examination shows no abnormalities. Which of the following is the most likely diagnosis?",
+    "raw_answer": "Pneumonia",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to surgery"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated surgery reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00037",
+    "description": {
+      "purpose": "Answer a MMLU medical question on endocrinology",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "endocrinology",
+      "key_challenges": [
+        "Requires endocrinology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: Your patient has diabetes. Why is this important?\n\nOption A: These patients are more likely to bleed.\nOption B: These patients are more likely to get urinary tract infections if their blood sugar is unstable.\nOption C: These patients are more likely to have clear urine.\nOption D: These patients are less likely to have catheter encrustation.\nOption:",
+    "correct_answer": "B",
+    "options": {
+      "A": "These patients are more likely to bleed.",
+      "B": "These patients are more likely to get urinary tract infections if their blood sugar is unstable.",
+      "C": "These patients are more likely to have clear urine.",
+      "D": "These patients are less likely to have catheter encrustation.\nOption:"
+    },
+    "raw_question": "Your patient has diabetes. Why is this important?",
+    "raw_answer": "These patients are more likely to get urinary tract infections if their blood sugar is unstable.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to endocrinology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "B"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: B"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option B as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated endocrinology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00038",
+    "description": {
+      "purpose": "Answer a MMLU medical question on microbiology",
+      "difficulty": "medium",
+      "source": "MMLU",
+      "category": "microbiology",
+      "key_challenges": [
+        "Requires microbiology knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 68-year-old female presents to the emergency department with a 3-day history of worsening fever and headache. Today the patient is nauseated and less responsive. Lumbar puncture reveals a protein level of 89 mg/dL (reference range: 15-45 mg/dL) with pleocytosis. The most likely etiologic organism is\n\nOption A: Clostridium perfringens\nOption B: Haemophilus influenzae\nOption C: rhinovirus\nOption D: Streptococcus pneumoniae\nOption:",
+    "correct_answer": "D",
+    "options": {
+      "A": "Clostridium perfringens",
+      "B": "Haemophilus influenzae",
+      "C": "rhinovirus",
+      "D": "Streptococcus pneumoniae\nOption:"
+    },
+    "raw_question": "A 68-year-old female presents to the emergency department with a 3-day history of worsening fever and headache. Today the patient is nauseated and less responsive. Lumbar puncture reveals a protein level of 89 mg/dL (reference range: 15-45 mg/dL) with pleocytosis. The most likely etiologic organism is",
+    "raw_answer": "Streptococcus pneumoniae",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to microbiology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated microbiology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00039",
+    "description": {
+      "purpose": "Answer a MMLU medical question on surgery",
+      "difficulty": "hard",
+      "source": "MMLU",
+      "category": "surgery",
+      "key_challenges": [
+        "Requires surgery knowledge",
+        "Evidence-based reasoning needed"
+      ]
+    },
+    "ticket": "QUESTION: A 63-year-old woman is in the hospital recovery room 4 hours after elective left hemicolectomy for colon carcinoma at the splenic flexure. She has a preoperative written directive for no blood products through transfusion for religious reasons. Medical history is significant for hypertension and coronary artery disease. The nurse tells you the patient's blood pressure has progressively declined since the operation. Vital signs now are temperature 35.8°C (96.4°F), pulse 130/min, respirations 20/min, and blood pressure 80/50 mm Hg. Physical examination discloses a slightly distended abdomen with an intact incision. ECG shows sinus tachycardia. Urine output has been 10 mL during the past 2 hours. Hematocrit is 30%; preoperative hematocrit was 41%. The patient has received 4 L of intravenous crystalloid in the recovery room. Reported operative blood loss was 200 mL. Drainage from the nasogastric tube is clear. Damage to which of the following structures is most likely responsible for these findings?\n\nOption A: Epigastric artery\nOption B: Liver\nOption C: Middle colic artery\nOption D: Spleen\nOption:",
+    "correct_answer": "D",
+    "options": {
+      "A": "Epigastric artery",
+      "B": "Liver",
+      "C": "Middle colic artery",
+      "D": "Spleen\nOption:"
+    },
+    "raw_question": "A 63-year-old woman is in the hospital recovery room 4 hours after elective left hemicolectomy for colon carcinoma at the splenic flexure. She has a preoperative written directive for no blood products through transfusion for religious reasons. Medical history is significant for hypertension and coronary artery disease. The nurse tells you the patient's blood pressure has progressively declined since the operation. Vital signs now are temperature 35.8°C (96.4°F), pulse 130/min, respirations 20/min, and blood pressure 80/50 mm Hg. Physical examination discloses a slightly distended abdomen with an intact incision. ECG shows sinus tachycardia. Urine output has been 10 mL during the past 2 hours. Hematocrit is 30%; preoperative hematocrit was 41%. The patient has received 4 L of intravenous crystalloid in the recovery room. Reported operative blood loss was 200 mL. Drainage from the nasogastric tube is clear. Damage to which of the following structures is most likely responsible for these findings?",
+    "raw_answer": "Spleen",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "search_pubmed",
+          "arguments": {},
+          "info": "Search for evidence relevant to surgery"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated surgery reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00040",
+    "description": {
+      "purpose": "Answer a MMLU medical question on neurology",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "neurology",
+      "key_challenges": [
+        "Requires neurology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: Cerebrospinal fluid circulates around the brain between the\n\nOption A: skull and dura mater.\nOption B: dura mater and arachnoid mater.\nOption C: arachnoid and pia maters.\nOption D: pia mater and brain surface.\nOption:",
+    "correct_answer": "C",
+    "options": {
+      "A": "skull and dura mater.",
+      "B": "dura mater and arachnoid mater.",
+      "C": "arachnoid and pia maters.",
+      "D": "pia mater and brain surface.\nOption:"
+    },
+    "raw_question": "Cerebrospinal fluid circulates around the brain between the",
+    "raw_answer": "arachnoid and pia maters.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to neurology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated neurology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00041",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on general",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "general",
+      "key_challenges": [
+        "Requires general knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: Purkinje fibers project to which of the following\n\nOption A: Caudate nucleus\nOption B: Red nucleus\nOption C: Dentate nucleus\nOption D: Ventero lateral nucleus of thalamus\nOption:",
+    "correct_answer": "C",
+    "options": {
+      "A": "Caudate nucleus",
+      "B": "Red nucleus",
+      "C": "Dentate nucleus",
+      "D": "Ventero lateral nucleus of thalamus\nOption:"
+    },
+    "raw_question": "Purkinje fibers project to which of the following",
+    "raw_answer": "Dentate nucleus",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to general"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated general reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00042",
+    "description": {
+      "purpose": "Answer a MMLU medical question on hematology",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "hematology",
+      "key_challenges": [
+        "Requires hematology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: What size of cannula would you use in a patient who needed a rapid blood transfusion (as of 2020 medical knowledge)?\n\nOption A: 18 gauge.\nOption B: 20 gauge.\nOption C: 22 gauge.\nOption D: 24 gauge.\nOption:",
+    "correct_answer": "A",
+    "options": {
+      "A": "18 gauge.",
+      "B": "20 gauge.",
+      "C": "22 gauge.",
+      "D": "24 gauge.\nOption:"
+    },
+    "raw_question": "What size of cannula would you use in a patient who needed a rapid blood transfusion (as of 2020 medical knowledge)?",
+    "raw_answer": "18 gauge.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to hematology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "A"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: A"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option A as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated hematology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00043",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on neurology",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "neurology",
+      "key_challenges": [
+        "Requires neurology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A 23-year-old lady taking antiepileptics for a seizure disorder gets married. When should folic acid supplementation advised to the patient?\n\nOption A: Any time as soon as she presents to the clinic irrespective of pregnancy\nOption B: Three months before becoming pregnant\nOption C: 1st trimester\nOption D: As soon as pregnancy is confirmed\nOption:",
+    "correct_answer": "A",
+    "options": {
+      "A": "Any time as soon as she presents to the clinic irrespective of pregnancy",
+      "B": "Three months before becoming pregnant",
+      "C": "1st trimester",
+      "D": "As soon as pregnancy is confirmed\nOption:"
+    },
+    "raw_question": "A 23-year-old lady taking antiepileptics for a seizure disorder gets married. When should folic acid supplementation advised to the patient?",
+    "raw_answer": "Any time as soon as she presents to the clinic irrespective of pregnancy",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to neurology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "A"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: A"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option A as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated neurology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medqa_00044",
+    "description": {
+      "purpose": "Answer a MedQA medical question on general",
+      "difficulty": "easy",
+      "source": "MedQA",
+      "category": "general",
+      "key_challenges": [
+        "Requires general knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A research group has created a novel screening test for a rare disorder. A robust clinical trial is performed in a group of 100 subjects comparing the new screening test against the gold standard. The results are given in the table below:\nScreening test\\gold standard Disease present Disease absent\nPositive 45 15\nNegative 5 35\nWhich of the following is most correct regarding the statistical power of this new screening test?\n\nOption A: Repeating the study would have no effect on the statistical power of the screening test.\nOption B: The power of the test is 0.8.\nOption C: If the specificity of this screening test were increased, the statistical power would increase.\nOption D: If the sensitivity of this screening test were decreased, the statistical power would decrease.",
+    "correct_answer": "D",
+    "options": {
+      "A": "Repeating the study would have no effect on the statistical power of the screening test.",
+      "B": "The power of the test is 0.8.",
+      "C": "If the specificity of this screening test were increased, the statistical power would increase.",
+      "D": "If the sensitivity of this screening test were decreased, the statistical power would decrease."
+    },
+    "raw_question": "A research group has created a novel screening test for a rare disorder. A robust clinical trial is performed in a group of 100 subjects comparing the new screening test against the gold standard. The results are given in the table below:\nScreening test\\gold standard Disease present Disease absent\nPositive 45 15\nNegative 5 35\nWhich of the following is most correct regarding the statistical power of this new screening test?",
+    "raw_answer": "If the sensitivity of this screening test were decreased, the statistical power would decrease.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to general"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated general reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00045",
+    "description": {
+      "purpose": "Answer a MMLU medical question on ophthalmology",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "ophthalmology",
+      "key_challenges": [
+        "Requires ophthalmology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A 72-year-old woman who has smoked 20 cigarettes daily for the past 38 years begins using eyedrops for glaucoma. Three days later, she has a marked increase in shortness of breath while walking up a flight of stairs. Which of the following drugs is the most likely cause of the development of shortness of breath in this patient?\n\nOption A: Apraclonidine\nOption B: Epinephrine\nOption C: Latanoprost\nOption D: Timolol\nOption:",
+    "correct_answer": "D",
+    "options": {
+      "A": "Apraclonidine",
+      "B": "Epinephrine",
+      "C": "Latanoprost",
+      "D": "Timolol\nOption:"
+    },
+    "raw_question": "A 72-year-old woman who has smoked 20 cigarettes daily for the past 38 years begins using eyedrops for glaucoma. Three days later, she has a marked increase in shortness of breath while walking up a flight of stairs. Which of the following drugs is the most likely cause of the development of shortness of breath in this patient?",
+    "raw_answer": "Timolol",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to ophthalmology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated ophthalmology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00046",
+    "description": {
+      "purpose": "Answer a MMLU medical question on orthopedics",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "orthopedics",
+      "key_challenges": [
+        "Requires orthopedics knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: When you examine a patient who has suffered an unfavourable fracture of the body of the mandible, you would expect the\n\nOption A: anterior fragment to be displaced downwards by the action of the digastric muscle.\nOption B: posterior fragment to be displaced anteriorly by the action of the lateral pterygoid muscle.\nOption C: anterior fragment to be displaced backwards by action of the temporalis muscle.\nOption D: posterior fragment to be displaced medially by action of the medial pterygoid muscle.\nOption:",
+    "correct_answer": "A",
+    "options": {
+      "A": "anterior fragment to be displaced downwards by the action of the digastric muscle.",
+      "B": "posterior fragment to be displaced anteriorly by the action of the lateral pterygoid muscle.",
+      "C": "anterior fragment to be displaced backwards by action of the temporalis muscle.",
+      "D": "posterior fragment to be displaced medially by action of the medial pterygoid muscle.\nOption:"
+    },
+    "raw_question": "When you examine a patient who has suffered an unfavourable fracture of the body of the mandible, you would expect the",
+    "raw_answer": "anterior fragment to be displaced downwards by the action of the digastric muscle.",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to orthopedics"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "A"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: A"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option A as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated orthopedics reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00047",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on biochemistry",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "biochemistry",
+      "key_challenges": [
+        "Requires biochemistry knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: Amyloid protein in Hemodialysis associated with amyloidosis is-\n\nOption A: AA\nOption B: A b\nOption C: b- 2 microglobulin\nOption D: Transthyretin\nOption:",
+    "correct_answer": "C",
+    "options": {
+      "A": "AA",
+      "B": "A b",
+      "C": "b- 2 microglobulin",
+      "D": "Transthyretin\nOption:"
+    },
+    "raw_question": "Amyloid protein in Hemodialysis associated with amyloidosis is-",
+    "raw_answer": "b- 2 microglobulin",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to biochemistry"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated biochemistry reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "medmcqa_00048",
+    "description": {
+      "purpose": "Answer a MedMCQA medical question on gastroenterology",
+      "difficulty": "easy",
+      "source": "MedMCQA",
+      "category": "gastroenterology",
+      "key_challenges": [
+        "Requires gastroenterology knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: While doing emergency laparotomy for an intestinal obstruction, which organ will you first visualize to say whether it is small bowel or large bowel obstruction?\n\nOption A: Ileum\nOption B: Sigmoid colon\nOption C: Cecum\nOption D: Rectum\nOption:",
+    "correct_answer": "C",
+    "options": {
+      "A": "Ileum",
+      "B": "Sigmoid colon",
+      "C": "Cecum",
+      "D": "Rectum\nOption:"
+    },
+    "raw_question": "While doing emergency laparotomy for an intestinal obstruction, which organ will you first visualize to say whether it is small bowel or large bowel obstruction?",
+    "raw_answer": "Cecum",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to gastroenterology"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "C"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: C"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option C as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated gastroenterology reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "mmlu_00049",
+    "description": {
+      "purpose": "Answer a MMLU medical question on psychiatry",
+      "difficulty": "easy",
+      "source": "MMLU",
+      "category": "psychiatry",
+      "key_challenges": [
+        "Requires psychiatry knowledge",
+        "Basic recall question"
+      ]
+    },
+    "ticket": "QUESTION: A 45-year-old female presents to the office for evaluation of unexplained elevations of her blood pressure. Paroxysmal episodes of headache, sweating, anxiety, nausea, and vomiting occur frequently. A CT scan reveals a left adrenal mass. Which of the following urinary assays will be most helpful in establishing this patient's diagnosis?\n\nOption A: cortisol\nOption B: glucose\nOption C: sodium\nOption D: vanillylmandelic acid\nOption:",
+    "correct_answer": "D",
+    "options": {
+      "A": "cortisol",
+      "B": "glucose",
+      "C": "sodium",
+      "D": "vanillylmandelic acid\nOption:"
+    },
+    "raw_question": "A 45-year-old female presents to the office for evaluation of unexplained elevations of her blood pressure. Paroxysmal episodes of headache, sweating, anxiety, nausea, and vomiting occur frequently. A CT scan reveals a left adrenal mass. Which of the following urinary assays will be most helpful in establishing this patient's diagnosis?",
+    "raw_answer": "vanillylmandelic acid",
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "action_id": "search_evidence",
+          "name": "retrieve_evidence",
+          "arguments": {},
+          "info": "Search for evidence relevant to psychiatry"
+        },
+        {
+          "action_id": "submit",
+          "name": "submit_answer",
+          "arguments": {
+            "answer": "D"
+          },
+          "compare_args": [
+            "answer"
+          ],
+          "info": "Submit the correct answer: D"
+        }
+      ],
+      "nl_assertions": [
+        "The agent selected option D as the correct answer",
+        "The agent used evidence search tools before answering",
+        "The agent demonstrated psychiatry reasoning"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  }
+]

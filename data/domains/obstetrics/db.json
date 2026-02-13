@@ -1,0 +1,1010 @@
+{
+  "patients": {
+    "OB-001": {
+      "patient_id": "OB-001",
+      "name": "Maria Gonzalez",
+      "age": 32,
+      "sex": "F",
+      "gravida": 2,
+      "para": 1,
+      "gestational_age_weeks": 39,
+      "gestational_age_days": 0,
+      "chief_complaint": "Active labor, regular contractions every 3 minutes",
+      "vitals": {
+        "heart_rate": 88,
+        "systolic_bp": 122,
+        "diastolic_bp": 74,
+        "respiratory_rate": 18,
+        "spo2": 99,
+        "temperature": 37.0
+      },
+      "blood_type": "O+",
+      "gbs_status": "positive",
+      "allergies": [],
+      "medications": [
+        {
+          "name": "prenatal vitamins",
+          "dose": "1 tablet daily",
+          "pregnancy_category": "A"
+        },
+        {
+          "name": "penicillin G",
+          "dose": "5 million units IV loading, then 2.5 million units q4h",
+          "pregnancy_category": "B",
+          "indication": "GBS prophylaxis"
+        }
+      ],
+      "medical_history": [
+        "seasonal allergies"
+      ],
+      "ob_history": {
+        "G": 2,
+        "P": 1,
+        "A": 0,
+        "L": 1,
+        "prior_deliveries": [
+          {
+            "year": 2023,
+            "type": "SVD",
+            "gestational_age": "39w3d",
+            "birth_weight_g": 3250,
+            "complications": "none"
+          }
+        ]
+      },
+      "prenatal_labs": {
+        "trimester": "third",
+        "blood_type": "O+",
+        "antibody_screen": "negative",
+        "hemoglobin": 11.8,
+        "hematocrit": 35.2,
+        "platelet_count": 220000,
+        "rubella_immune": true,
+        "hbsag": "negative",
+        "hiv": "negative",
+        "rpr": "nonreactive",
+        "chlamydia": "negative",
+        "gonorrhea": "negative",
+        "gbs_culture": "positive",
+        "glucose_challenge_1hr": 118,
+        "urinalysis": "normal"
+      },
+      "fetal_monitoring": {
+        "baseline_fhr": 140,
+        "variability": "moderate",
+        "accelerations": "present",
+        "decelerations": "none",
+        "contractions": "every 3 minutes, regular",
+        "category": "I",
+        "interpretation": "Normal Category I tracing, reassuring fetal status"
+      },
+      "labor_progress": {
+        "dilation_cm": 6,
+        "effacement_percent": 80,
+        "station": -1,
+        "membrane_status": "ruptured",
+        "rupture_time": "2 hours ago",
+        "fluid_character": "clear",
+        "phase": "active",
+        "contraction_frequency": "every 3 minutes",
+        "contraction_duration_sec": 60
+      },
+      "risk_factors": [
+        "GBS positive"
+      ],
+      "correct_diagnosis": "Active labor at term, GBS positive requiring intrapartum antibiotic prophylaxis",
+      "correct_management": "Continue labor management with continuous fetal monitoring, administer penicillin G for GBS prophylaxis (5 million units IV loading then 2.5 million units q4h until delivery), monitor labor progress, pain management per patient preference, anticipate normal spontaneous vaginal delivery"
+    },
+    "OB-002": {
+      "patient_id": "OB-002",
+      "name": "Jessica Park",
+      "age": 28,
+      "sex": "F",
+      "gravida": 1,
+      "para": 0,
+      "gestational_age_weeks": 34,
+      "gestational_age_days": 0,
+      "chief_complaint": "Severe headache, epigastric pain, elevated blood pressure",
+      "vitals": {
+        "heart_rate": 96,
+        "systolic_bp": 168,
+        "diastolic_bp": 110,
+        "respiratory_rate": 20,
+        "spo2": 98,
+        "temperature": 37.1
+      },
+      "blood_type": "A+",
+      "gbs_status": "unknown",
+      "allergies": [
+        "sulfa drugs"
+      ],
+      "medications": [
+        {
+          "name": "prenatal vitamins",
+          "dose": "1 tablet daily",
+          "pregnancy_category": "A"
+        },
+        {
+          "name": "magnesium sulfate",
+          "dose": "4g IV loading then 2g/hr maintenance",
+          "pregnancy_category": "B",
+          "indication": "seizure prophylaxis for preeclampsia with severe features"
+        },
+        {
+          "name": "labetalol",
+          "dose": "20mg IV",
+          "pregnancy_category": "C",
+          "indication": "acute hypertension management"
+        },
+        {
+          "name": "betamethasone",
+          "dose": "12mg IM x2 doses 24h apart",
+          "pregnancy_category": "C",
+          "indication": "fetal lung maturation at 34 weeks"
+        }
+      ],
+      "medical_history": [
+        "migraine without aura"
+      ],
+      "ob_history": {
+        "G": 1,
+        "P": 0,
+        "A": 0,
+        "L": 0,
+        "prior_deliveries": []
+      },
+      "prenatal_labs": {
+        "trimester": "third",
+        "blood_type": "A+",
+        "antibody_screen": "negative",
+        "hemoglobin": 12.4,
+        "hematocrit": 37.0,
+        "platelet_count": 89000,
+        "rubella_immune": true,
+        "hbsag": "negative",
+        "hiv": "negative",
+        "rpr": "nonreactive",
+        "chlamydia": "negative",
+        "gonorrhea": "negative",
+        "urinalysis": "proteinuria 3+",
+        "protein_creatinine_ratio": 4.2,
+        "AST": 186,
+        "ALT": 210,
+        "LDH": 680,
+        "creatinine": 0.9,
+        "uric_acid": 7.8,
+        "fibrinogen": 280,
+        "peripheral_smear": "schistocytes present"
+      },
+      "fetal_monitoring": {
+        "baseline_fhr": 155,
+        "variability": "minimal",
+        "accelerations": "absent",
+        "decelerations": "variable, intermittent",
+        "contractions": "irregular, mild",
+        "category": "II",
+        "interpretation": "Category II tracing with variable decelerations and minimal variability, requires close monitoring"
+      },
+      "labor_progress": null,
+      "risk_factors": [
+        "nulliparity",
+        "preeclampsia with severe features",
+        "possible HELLP syndrome"
+      ],
+      "presenting_symptoms": [
+        "severe headache",
+        "epigastric pain",
+        "visual changes (scotomata)",
+        "proteinuria 3+",
+        "right upper quadrant tenderness"
+      ],
+      "correct_diagnosis": "Preeclampsia with severe features, concern for HELLP syndrome (hemolysis, elevated liver enzymes, low platelets)",
+      "correct_management": "Magnesium sulfate 4g IV bolus then 2g/hr for seizure prophylaxis, labetalol IV for acute BP management (target <160/110), administer betamethasone for fetal lung maturation, continuous fetal monitoring, serial labs q6h (CBC, CMP, LDH, coagulation studies), consult MFM, plan delivery within 24-48 hours if no improvement or sooner if maternal/fetal decompensation"
+    },
+    "OB-003": {
+      "patient_id": "OB-003",
+      "name": "Ashley Williams",
+      "age": 25,
+      "sex": "F",
+      "gravida": 3,
+      "para": 2,
+      "gestational_age_weeks": 41,
+      "gestational_age_days": 2,
+      "chief_complaint": "Post-dates pregnancy, here for evaluation for induction of labor",
+      "vitals": {
+        "heart_rate": 78,
+        "systolic_bp": 118,
+        "diastolic_bp": 68,
+        "respiratory_rate": 16,
+        "spo2": 99,
+        "temperature": 36.9
+      },
+      "blood_type": "B+",
+      "gbs_status": "negative",
+      "allergies": [
+        "latex"
+      ],
+      "medications": [
+        {
+          "name": "prenatal vitamins",
+          "dose": "1 tablet daily",
+          "pregnancy_category": "A"
+        }
+      ],
+      "medical_history": [],
+      "ob_history": {
+        "G": 3,
+        "P": 2,
+        "A": 0,
+        "L": 2,
+        "prior_deliveries": [
+          {
+            "year": 2021,
+            "type": "SVD",
+            "gestational_age": "40w1d",
+            "birth_weight_g": 3100,
+            "complications": "none"
+          },
+          {
+            "year": 2023,
+            "type": "SVD",
+            "gestational_age": "39w5d",
+            "birth_weight_g": 3400,
+            "complications": "none"
+          }
+        ]
+      },
+      "prenatal_labs": {
+        "trimester": "third",
+        "blood_type": "B+",
+        "antibody_screen": "negative",
+        "hemoglobin": 12.0,
+        "hematocrit": 36.0,
+        "platelet_count": 245000,
+        "rubella_immune": true,
+        "hbsag": "negative",
+        "hiv": "negative",
+        "rpr": "nonreactive",
+        "chlamydia": "negative",
+        "gonorrhea": "negative",
+        "gbs_culture": "negative",
+        "glucose_challenge_1hr": 105,
+        "urinalysis": "normal"
+      },
+      "fetal_monitoring": {
+        "baseline_fhr": 135,
+        "variability": "moderate",
+        "accelerations": "present (reactive NST)",
+        "decelerations": "none",
+        "contractions": "occasional Braxton-Hicks",
+        "category": "I",
+        "interpretation": "Reactive NST, Category I tracing, reassuring fetal status"
+      },
+      "labor_progress": null,
+      "bishop_score": {
+        "dilation": 1,
+        "effacement": 1,
+        "station": 0,
+        "cervical_consistency": 1,
+        "cervical_position": 1,
+        "total": 4
+      },
+      "amniotic_fluid_index": 5.2,
+      "bpp": {
+        "fetal_breathing": 2,
+        "fetal_movement": 2,
+        "fetal_tone": 2,
+        "amniotic_fluid": 2,
+        "nst": 2,
+        "total": 10,
+        "interpretation": "Normal BPP 10/10"
+      },
+      "risk_factors": [
+        "post-dates pregnancy",
+        "low-normal AFI"
+      ],
+      "correct_diagnosis": "Post-dates pregnancy at 41w2d with low Bishop score and low-normal amniotic fluid",
+      "correct_management": "Given post-dates status beyond 41 weeks, induction of labor is indicated. Low Bishop score (4) favors cervical ripening prior to oxytocin. Options: misoprostol 25mcg PV q4h or mechanical (Foley catheter balloon). Monitor AFI closely given borderline low value. Continuous fetal monitoring during induction. Prior SVDs are favorable for successful induction."
+    },
+    "OB-004": {
+      "patient_id": "OB-004",
+      "name": "Catherine Chen",
+      "age": 38,
+      "sex": "F",
+      "gravida": 1,
+      "para": 0,
+      "gestational_age_weeks": 28,
+      "gestational_age_days": 0,
+      "chief_complaint": "Gestational diabetes follow-up, on insulin therapy",
+      "vitals": {
+        "heart_rate": 82,
+        "systolic_bp": 128,
+        "diastolic_bp": 78,
+        "respiratory_rate": 16,
+        "spo2": 99,
+        "temperature": 36.8
+      },
+      "blood_type": "AB+",
+      "gbs_status": "pending",
+      "allergies": [],
+      "medications": [
+        {
+          "name": "prenatal vitamins",
+          "dose": "1 tablet daily",
+          "pregnancy_category": "A"
+        },
+        {
+          "name": "insulin glargine",
+          "dose": "18 units SC at bedtime",
+          "pregnancy_category": "B",
+          "indication": "basal insulin for GDM"
+        },
+        {
+          "name": "insulin lispro",
+          "dose": "4-8 units SC before meals per sliding scale",
+          "pregnancy_category": "B",
+          "indication": "prandial insulin for GDM"
+        },
+        {
+          "name": "baby aspirin",
+          "dose": "81mg daily",
+          "pregnancy_category": "C",
+          "indication": "preeclampsia prophylaxis (AMA + IVF)"
+        }
+      ],
+      "medical_history": [
+        "infertility (IVF conception)",
+        "PCOS",
+        "hypothyroidism"
+      ],
+      "ob_history": {
+        "G": 1,
+        "P": 0,
+        "A": 0,
+        "L": 0,
+        "prior_deliveries": [],
+        "conception": "IVF",
+        "ivf_details": "Fresh single embryo transfer, cycle 2"
+      },
+      "prenatal_labs": {
+        "trimester": "second_to_third",
+        "blood_type": "AB+",
+        "antibody_screen": "negative",
+        "hemoglobin": 11.5,
+        "hematocrit": 34.5,
+        "platelet_count": 198000,
+        "rubella_immune": true,
+        "hbsag": "negative",
+        "hiv": "negative",
+        "rpr": "nonreactive",
+        "chlamydia": "negative",
+        "gonorrhea": "negative",
+        "glucose_challenge_1hr": 198,
+        "glucose_tolerance_3hr": {
+          "fasting": 102,
+          "1hr": 210,
+          "2hr": 178,
+          "3hr": 155
+        },
+        "HbA1c": 6.8,
+        "TSH": 2.1,
+        "free_T4": 1.1,
+        "urinalysis": "glucosuria 1+"
+      },
+      "fetal_monitoring": {
+        "baseline_fhr": 145,
+        "variability": "moderate",
+        "accelerations": "present",
+        "decelerations": "none",
+        "contractions": "none",
+        "category": "I",
+        "interpretation": "Reassuring Category I tracing"
+      },
+      "labor_progress": null,
+      "ultrasound": {
+        "estimated_fetal_weight_g": 1250,
+        "percentile": 75,
+        "amniotic_fluid_index": 28.5,
+        "polyhydramnios": true,
+        "placenta_location": "posterior, grade I",
+        "fetal_anatomy": "normal"
+      },
+      "glucose_log_7day_avg": {
+        "fasting": 98,
+        "pre_lunch": 105,
+        "pre_dinner": 110,
+        "post_breakfast_2hr": 135,
+        "post_lunch_2hr": 128,
+        "post_dinner_2hr": 140
+      },
+      "risk_factors": [
+        "advanced maternal age (38)",
+        "IVF pregnancy",
+        "gestational diabetes on insulin",
+        "PCOS",
+        "polyhydramnios"
+      ],
+      "correct_diagnosis": "Gestational diabetes mellitus requiring insulin therapy with suboptimal glycemic control (A1c 6.8%), polyhydramnios, advanced maternal age IVF pregnancy",
+      "correct_management": "Optimize insulin regimen (adjust lispro for post-meal excursions, target fasting <95, 2hr post-prandial <120), continue low-dose aspirin for preeclampsia prophylaxis, serial growth ultrasounds q3-4 weeks for macrosomia surveillance, monitor AFI for worsening polyhydramnios, antenatal testing (NST/BPP) starting 32 weeks, plan delivery at 39 weeks if well-controlled (37-39 if poorly controlled), TSH monitoring per trimester"
+    },
+    "OB-005": {
+      "patient_id": "OB-005",
+      "name": "Brittany Johnson",
+      "age": 22,
+      "sex": "F",
+      "gravida": 1,
+      "para": 0,
+      "gestational_age_weeks": 8,
+      "gestational_age_days": 0,
+      "chief_complaint": "First prenatal visit, positive home pregnancy test",
+      "vitals": {
+        "heart_rate": 76,
+        "systolic_bp": 112,
+        "diastolic_bp": 66,
+        "respiratory_rate": 14,
+        "spo2": 99,
+        "temperature": 36.7
+      },
+      "blood_type": "pending",
+      "gbs_status": "not_applicable_first_trimester",
+      "allergies": [
+        "amoxicillin (rash)"
+      ],
+      "medications": [
+        {
+          "name": "sertraline",
+          "dose": "100mg daily",
+          "pregnancy_category": "C",
+          "indication": "major depressive disorder",
+          "safety_notes": "Generally considered compatible with pregnancy; discuss risks/benefits with patient; monitor newborn for neonatal adaptation syndrome"
+        },
+        {
+          "name": "prenatal vitamins with folic acid",
+          "dose": "1 tablet daily",
+          "pregnancy_category": "A"
+        }
+      ],
+      "medical_history": [
+        "major depressive disorder (diagnosed age 18)",
+        "anxiety disorder"
+      ],
+      "social_history": {
+        "smoking": "5 cigarettes per day",
+        "alcohol": "stopped when learned of pregnancy",
+        "drugs": "denies",
+        "occupation": "retail associate",
+        "support_system": "lives with partner"
+      },
+      "ob_history": {
+        "G": 1,
+        "P": 0,
+        "A": 0,
+        "L": 0,
+        "prior_deliveries": [],
+        "LMP": "6 weeks ago by dates, consistent with 8 weeks by early ultrasound"
+      },
+      "prenatal_labs": {
+        "trimester": "first",
+        "status": "to_be_ordered",
+        "needed_labs": [
+          "CBC",
+          "blood type and Rh",
+          "antibody screen",
+          "rubella titer",
+          "hepatitis B surface antigen",
+          "HIV",
+          "RPR/VDRL",
+          "urinalysis and culture",
+          "chlamydia/gonorrhea NAAT",
+          "Pap smear if due",
+          "first trimester screening (NT + serum markers)",
+          "TSH",
+          "hemoglobin electrophoresis if indicated",
+          "varicella titer if unsure of immunity"
+        ]
+      },
+      "fetal_monitoring": {
+        "baseline_fhr": null,
+        "note": "Transvaginal ultrasound: intrauterine pregnancy with fetal pole measuring 8w0d, fetal heart rate 165 bpm by M-mode"
+      },
+      "labor_progress": null,
+      "screening_needed": {
+        "depression_screening": "PHQ-9 to be administered",
+        "smoking_cessation": "5 As counseling needed (Ask, Advise, Assess, Assist, Arrange)",
+        "genetic_screening": "first trimester screening offered (NT + PAPP-A + free beta-hCG)",
+        "dating_ultrasound": "completed, concordant with LMP"
+      },
+      "risk_factors": [
+        "smoking",
+        "depression on sertraline",
+        "nulliparity"
+      ],
+      "correct_diagnosis": "Intrauterine pregnancy at 8 weeks, first prenatal visit requiring comprehensive screening. Active tobacco use and depression on sertraline require counseling.",
+      "correct_management": "Order routine first prenatal labs (CBC, type and screen, rubella, HBsAg, HIV, RPR, UA/culture, GC/CT NAAT), offer first trimester genetic screening, administer PHQ-9 for depression screening, discuss sertraline risk-benefit in pregnancy (generally safe, continue with monitoring), provide smoking cessation counseling using 5 As approach, discuss nutrition and weight gain goals, schedule follow-up visits per ACOG guidelines, offer influenza and Tdap vaccines at appropriate gestational ages"
+    },
+    "OB-006": {
+      "patient_id": "OB-006",
+      "name": "Danielle Thompson",
+      "age": 30,
+      "sex": "F",
+      "gravida": 4,
+      "para": 3,
+      "gestational_age_weeks": 37,
+      "gestational_age_days": 0,
+      "chief_complaint": "Desires VBAC, here for counseling and birth plan discussion",
+      "vitals": {
+        "heart_rate": 80,
+        "systolic_bp": 120,
+        "diastolic_bp": 72,
+        "respiratory_rate": 16,
+        "spo2": 99,
+        "temperature": 36.8
+      },
+      "blood_type": "O-",
+      "gbs_status": "pending",
+      "rh_status": "Rh negative, RhoGAM administered at 28 weeks",
+      "allergies": [],
+      "medications": [
+        {
+          "name": "prenatal vitamins",
+          "dose": "1 tablet daily",
+          "pregnancy_category": "A"
+        }
+      ],
+      "medical_history": [],
+      "ob_history": {
+        "G": 4,
+        "P": 3,
+        "A": 0,
+        "L": 3,
+        "prior_deliveries": [
+          {
+            "year": 2019,
+            "type": "SVD",
+            "gestational_age": "40w0d",
+            "birth_weight_g": 3050,
+            "complications": "none"
+          },
+          {
+            "year": 2021,
+            "type": "cesarean",
+            "gestational_age": "39w2d",
+            "birth_weight_g": 3600,
+            "indication": "non-reassuring fetal heart tracing",
+            "uterine_incision": "low_transverse",
+            "complications": "none"
+          },
+          {
+            "year": 2023,
+            "type": "cesarean",
+            "gestational_age": "39w0d",
+            "birth_weight_g": 3450,
+            "indication": "repeat cesarean (patient elected)",
+            "uterine_incision": "low_transverse",
+            "complications": "none"
+          }
+        ]
+      },
+      "prenatal_labs": {
+        "trimester": "third",
+        "blood_type": "O-",
+        "antibody_screen": "negative",
+        "hemoglobin": 11.6,
+        "hematocrit": 34.8,
+        "platelet_count": 230000,
+        "rubella_immune": true,
+        "hbsag": "negative",
+        "hiv": "negative",
+        "rpr": "nonreactive",
+        "chlamydia": "negative",
+        "gonorrhea": "negative",
+        "glucose_challenge_1hr": 112,
+        "urinalysis": "normal"
+      },
+      "fetal_monitoring": {
+        "baseline_fhr": 140,
+        "variability": "moderate",
+        "accelerations": "present",
+        "decelerations": "none",
+        "contractions": "none",
+        "category": "I",
+        "interpretation": "Reassuring Category I tracing"
+      },
+      "labor_progress": null,
+      "ultrasound": {
+        "estimated_fetal_weight_g": 3200,
+        "percentile": 55,
+        "amniotic_fluid_index": 14.0,
+        "placenta_location": "fundal, grade II",
+        "fetal_presentation": "cephalic"
+      },
+      "vbac_assessment": {
+        "prior_vaginal_delivery": true,
+        "prior_cesareans": 2,
+        "uterine_incision_types": [
+          "low_transverse",
+          "low_transverse"
+        ],
+        "prior_uterine_rupture": false,
+        "interdelivery_interval_months": 24,
+        "estimated_success_rate": "lower than standard TOLAC due to 2 prior cesareans",
+        "uterine_rupture_risk": "approximately 0.9-1.8% with two prior low-transverse cesareans",
+        "contraindications": "relative - two prior cesareans; many institutions may decline TOLAC after 2 cesareans"
+      },
+      "risk_factors": [
+        "prior cesarean x2",
+        "Rh negative"
+      ],
+      "correct_diagnosis": "Term pregnancy with two prior cesarean deliveries (both low transverse), patient desires trial of labor after cesarean (TOLAC/VBAC)",
+      "correct_management": "Shared decision-making discussion: risks of TOLAC after 2 cesareans include uterine rupture (0.9-1.8%), vs risks of repeat cesarean (surgical complications, adhesions, placenta accreta spectrum in future pregnancies). Prior vaginal delivery is favorable prognostic factor. If TOLAC pursued: requires continuous fetal monitoring, immediate availability of OR and anesthesia, informed consent documenting counseling. If repeat cesarean chosen: schedule at 39 weeks. Either approach reasonable depending on institutional capabilities and patient preference."
+    },
+    "OB-007": {
+      "patient_id": "OB-007",
+      "name": "Kayla Robinson",
+      "age": 19,
+      "sex": "F",
+      "gravida": 0,
+      "para": 0,
+      "gestational_age_weeks": null,
+      "chief_complaint": "Irregular heavy periods for 6 months, fatigue",
+      "pregnant": false,
+      "vitals": {
+        "heart_rate": 92,
+        "systolic_bp": 108,
+        "diastolic_bp": 62,
+        "respiratory_rate": 16,
+        "spo2": 99,
+        "temperature": 36.9
+      },
+      "blood_type": "A+",
+      "allergies": [],
+      "medications": [
+        {
+          "name": "ibuprofen",
+          "dose": "600mg PRN for cramps",
+          "safety_notes": "OTC use"
+        }
+      ],
+      "medical_history": [
+        "iron deficiency anemia (new diagnosis)"
+      ],
+      "gyn_complaint": {
+        "type": "abnormal_uterine_bleeding",
+        "subtype": "menorrhagia",
+        "duration": "6 months",
+        "severity": "heavy - soaking through pad every 1-2 hours on heaviest days, passing clots",
+        "associated_symptoms": [
+          "fatigue",
+          "dizziness on standing",
+          "exercise intolerance"
+        ],
+        "intermenstrual_bleeding": false,
+        "postcoital_bleeding": false
+      },
+      "menstrual_history": {
+        "menarche_age": 12,
+        "cycle_length_days": "21-45 (irregular)",
+        "duration_days": "7-10",
+        "flow": "heavy with clots",
+        "dysmenorrhea": "moderate",
+        "LMP": "12 days ago"
+      },
+      "sexual_history": {
+        "sexually_active": true,
+        "partners": "1 male partner",
+        "contraception": "none",
+        "STI_history": "none known",
+        "pap_smear": {
+          "last_pap": "never",
+          "due": true,
+          "note": "Per ASCCP guidelines, initial Pap smear at age 21"
+        }
+      },
+      "labs": {
+        "hemoglobin": 9.2,
+        "hematocrit": 28.1,
+        "MCV": 72,
+        "ferritin": 8,
+        "iron": 25,
+        "TIBC": 420,
+        "reticulocyte_count": 2.1,
+        "TSH": 2.8,
+        "prolactin": 14,
+        "pregnancy_test": "negative",
+        "coagulation_screen": {
+          "PT": 12.5,
+          "INR": 1.0,
+          "aPTT": 28,
+          "VWF_antigen": "pending",
+          "VWF_activity": "pending"
+        }
+      },
+      "imaging": {
+        "pelvic_ultrasound": "to be ordered"
+      },
+      "risk_factors": [
+        "no contraception while sexually active",
+        "iron deficiency anemia from menorrhagia",
+        "never had Pap smear"
+      ],
+      "correct_diagnosis": "Abnormal uterine bleeding (menorrhagia) with iron deficiency anemia. Differential includes anovulatory bleeding (most common at age 19), coagulopathy (von Willebrand disease), structural causes (polyp, fibroid). PALM-COEIN classification evaluation needed.",
+      "correct_management": "Complete AUB workup per PALM-COEIN: pregnancy test (done, negative), CBC (anemia confirmed), coagulation studies including VWF panel (rule out von Willebrand), TSH and prolactin (normal), pelvic ultrasound to evaluate structural causes. Treat iron deficiency with oral ferrous sulfate 325mg BID. Offer combined OCP for cycle regulation and bleeding reduction. Pap smear at age 21 per guidelines (patient is 19). Counsel on contraception options. If bleeding refractory, consider tranexamic acid or endometrial biopsy."
+    },
+    "OB-008": {
+      "patient_id": "OB-008",
+      "name": "Tamara Jackson",
+      "age": 35,
+      "sex": "F",
+      "gravida": 2,
+      "para": 1,
+      "gestational_age_weeks": 32,
+      "gestational_age_days": 0,
+      "chief_complaint": "Acute onset severe abdominal pain and vaginal bleeding",
+      "vitals": {
+        "heart_rate": 118,
+        "systolic_bp": 92,
+        "diastolic_bp": 58,
+        "respiratory_rate": 24,
+        "spo2": 96,
+        "temperature": 36.5
+      },
+      "blood_type": "B-",
+      "gbs_status": "unknown",
+      "allergies": [
+        "codeine"
+      ],
+      "medications": [
+        {
+          "name": "prenatal vitamins",
+          "dose": "1 tablet daily",
+          "pregnancy_category": "A"
+        },
+        {
+          "name": "labetalol",
+          "dose": "200mg BID",
+          "pregnancy_category": "C",
+          "indication": "chronic hypertension"
+        }
+      ],
+      "medical_history": [
+        "chronic hypertension",
+        "prior cocaine use (denies current use)"
+      ],
+      "social_history": {
+        "smoking": "quit 1 year ago",
+        "alcohol": "denies",
+        "drugs": "history of cocaine use, denies current use",
+        "occupation": "office manager"
+      },
+      "ob_history": {
+        "G": 2,
+        "P": 1,
+        "A": 0,
+        "L": 1,
+        "prior_deliveries": [
+          {
+            "year": 2022,
+            "type": "SVD",
+            "gestational_age": "38w0d",
+            "birth_weight_g": 2800,
+            "complications": "gestational hypertension"
+          }
+        ]
+      },
+      "prenatal_labs": {
+        "trimester": "third",
+        "blood_type": "B-",
+        "antibody_screen": "negative",
+        "hemoglobin": 10.2,
+        "hematocrit": 30.6,
+        "platelet_count": 175000,
+        "rubella_immune": true,
+        "hbsag": "negative",
+        "hiv": "negative",
+        "rpr": "nonreactive",
+        "chlamydia": "negative",
+        "gonorrhea": "negative",
+        "urinalysis": "normal",
+        "fibrinogen": 195,
+        "PT": 13.2,
+        "aPTT": 30,
+        "type_and_crossmatch": "2 units pRBCs ordered"
+      },
+      "fetal_monitoring": {
+        "baseline_fhr": 170,
+        "variability": "absent",
+        "accelerations": "absent",
+        "decelerations": "recurrent late decelerations",
+        "contractions": "uterine hypertonus, tachysystole",
+        "category": "III",
+        "interpretation": "Category III tracing: absent variability with recurrent late decelerations, consistent with significant fetal compromise"
+      },
+      "labor_progress": null,
+      "physical_exam": {
+        "abdomen": "rigid, tender, uterine hypertonus, fundal height greater than dates",
+        "vaginal_bleeding": "moderate dark blood",
+        "cervix": "closed, no placenta previa on prior ultrasound"
+      },
+      "urgency": "emergent",
+      "risk_factors": [
+        "chronic hypertension",
+        "prior cocaine use",
+        "prior gestational hypertension",
+        "placental abruption"
+      ],
+      "correct_diagnosis": "Placental abruption with fetal compromise (Category III fetal heart tracing)",
+      "correct_management": "EMERGENT: Activate massive transfusion protocol, two large-bore IVs with fluid resuscitation, type and crossmatch (blood products available), emergent cesarean delivery given Category III tracing (absent variability + recurrent late decelerations). Administer RhoGAM (Rh negative). Betamethasone if any time permits (32 weeks). Notify NICU team for preterm delivery. Continuous maternal hemodynamic monitoring. Monitor for DIC (serial fibrinogen, coags). Urine drug screen. Post-delivery: monitor for postpartum hemorrhage and coagulopathy."
+    }
+  },
+  "protocols": {
+    "shoulder_dystocia": {
+      "name": "Shoulder Dystocia Management Protocol",
+      "mnemonic": "HELPERR",
+      "steps": [
+        {
+          "step": 1,
+          "action": "H - Call for Help",
+          "details": "Call for additional nursing, obstetrician, anesthesia, pediatrics/NICU"
+        },
+        {
+          "step": 2,
+          "action": "E - Evaluate for Episiotomy",
+          "details": "Consider episiotomy to provide more room for maneuvers (does not relieve bony obstruction but allows access)"
+        },
+        {
+          "step": 3,
+          "action": "L - Legs (McRoberts maneuver)",
+          "details": "Hyperflexion of maternal hips, thighs to abdomen. Flattens sacral promontory, increases AP diameter of pelvis. Most effective single maneuver."
+        },
+        {
+          "step": 4,
+          "action": "P - Suprapubic Pressure",
+          "details": "Apply pressure to suprapubic area to adduct and rotate anterior shoulder under symphysis. Use with McRoberts."
+        },
+        {
+          "step": 5,
+          "action": "E - Enter (Rotational maneuvers)",
+          "details": "Rubin II: pressure on posterior aspect of anterior shoulder to adduct and rotate. Woods corkscrew: pressure on anterior aspect of posterior shoulder to rotate 180 degrees."
+        },
+        {
+          "step": 6,
+          "action": "R - Remove posterior arm",
+          "details": "Sweep posterior arm across fetal chest, grasp hand and deliver posterior arm. Reduces shoulder diameter by ~2cm."
+        },
+        {
+          "step": 7,
+          "action": "R - Roll patient (Gaskin maneuver)",
+          "details": "Roll patient to all-fours position. Changes pelvic dimensions and may allow disimpaction."
+        }
+      ],
+      "time_limit": "Document time from delivery of head to delivery of body",
+      "complications": [
+        "brachial plexus injury (Erb palsy)",
+        "clavicle fracture",
+        "humerus fracture",
+        "hypoxic ischemic encephalopathy"
+      ],
+      "documentation": "Document time of delivery of head and body, maneuvers used in order, personnel present, neonatal outcome"
+    },
+    "pph": {
+      "name": "Postpartum Hemorrhage Management Protocol",
+      "definition": "Blood loss >= 1000mL or signs/symptoms of hypovolemia within 24 hours of delivery",
+      "stages": [
+        {
+          "stage": 1,
+          "name": "Recognition and Initial Management",
+          "ebl_ml": "500-1000",
+          "actions": [
+            "Quantitative blood loss measurement",
+            "Fundal massage",
+            "Oxytocin 20-40 units in 1L NS IV",
+            "Establish two large-bore IVs",
+            "Type and crossmatch",
+            "Labs: CBC, coagulation panel, fibrinogen"
+          ]
+        },
+        {
+          "stage": 2,
+          "name": "Escalation",
+          "ebl_ml": "1000-1500",
+          "actions": [
+            "Activate PPH protocol / call for help",
+            "Methylergonovine 0.2mg IM (avoid if hypertensive)",
+            "Carboprost (Hemabate) 250mcg IM q15min (avoid if asthmatic), max 8 doses",
+            "Misoprostol 800-1000mcg PR/SL",
+            "Tranexamic acid 1g IV over 10 min (within 3 hours of delivery)",
+            "Uterine tamponade balloon (Bakri)",
+            "Warm IV fluids, consider blood products"
+          ]
+        },
+        {
+          "stage": 3,
+          "name": "Massive Hemorrhage",
+          "ebl_ml": ">1500",
+          "actions": [
+            "Activate massive transfusion protocol",
+            "Transfuse pRBCs, FFP, platelets (1:1:1 ratio)",
+            "Cryoprecipitate if fibrinogen <200",
+            "Surgical interventions: B-Lynch suture, uterine artery ligation, hysterectomy",
+            "Interventional radiology: uterine artery embolization if available and stable",
+            "ICU admission"
+          ]
+        }
+      ],
+      "causes_mnemonic": "4 Ts: Tone (atony), Trauma (lacerations), Tissue (retained products), Thrombin (coagulopathy)"
+    },
+    "eclampsia": {
+      "name": "Eclampsia Management Protocol",
+      "definition": "New-onset seizures in a patient with preeclampsia, not attributable to other causes",
+      "immediate_actions": [
+        "Protect airway - position on left side, suction available",
+        "Call for help - obstetrics, anesthesia, nursing",
+        "Do NOT attempt to restrain or insert oral airway during seizure",
+        "Continuous pulse oximetry, supplemental O2 if SpO2 <95%"
+      ],
+      "magnesium_protocol": {
+        "loading_dose": "4-6g IV over 15-20 minutes",
+        "maintenance_dose": "1-2g/hr IV continuous infusion",
+        "recurrent_seizure_dose": "Additional 2g IV bolus over 5 minutes",
+        "therapeutic_level": "4.8-8.4 mg/dL",
+        "monitoring": [
+          "deep tendon reflexes (hourly)",
+          "respiratory rate (>12/min)",
+          "urine output (>30mL/hr)",
+          "serum magnesium levels q4-6h"
+        ],
+        "toxicity_antidote": "Calcium gluconate 1g IV over 5-10 minutes"
+      },
+      "blood_pressure_management": {
+        "target": "systolic <160, diastolic <110",
+        "first_line": "Labetalol 20mg IV, then 40mg, then 80mg q10min (max 300mg total)",
+        "second_line": "Hydralazine 5-10mg IV q20min",
+        "third_line": "Nicardipine drip 5mg/hr, titrate q5min up to 15mg/hr"
+      },
+      "delivery_planning": "Delivery is definitive treatment. Stabilize mother first, then plan delivery. Mode depends on gestational age, fetal status, and cervical exam."
+    },
+    "cord_prolapse": {
+      "name": "Umbilical Cord Prolapse Management Protocol",
+      "definition": "Descent of the umbilical cord through the cervix alongside or past the presenting part",
+      "immediate_actions": [
+        {
+          "step": 1,
+          "action": "Call for emergency assistance",
+          "details": "Notify obstetrics, anesthesia, OR staff, NICU"
+        },
+        {
+          "step": 2,
+          "action": "Elevate presenting part",
+          "details": "Insert gloved hand into vagina and manually elevate the presenting part off the cord. Do NOT attempt to replace cord."
+        },
+        {
+          "step": 3,
+          "action": "Position change",
+          "details": "Steep Trendelenburg or knee-chest position to reduce cord compression"
+        },
+        {
+          "step": 4,
+          "action": "Fill bladder (if delivery not imminent)",
+          "details": "Instill 500-700mL sterile NS via Foley catheter to elevate presenting part"
+        },
+        {
+          "step": 5,
+          "action": "Emergent cesarean delivery",
+          "details": "Goal: delivery within 10-15 minutes of diagnosis"
+        },
+        {
+          "step": 6,
+          "action": "Monitor fetal heart rate continuously",
+          "details": "If FHR recovers with elevation, continue monitoring en route to OR"
+        }
+      ],
+      "do_not": [
+        "Do NOT attempt to push cord back into uterus",
+        "Do NOT remove hand elevating presenting part until delivery",
+        "Do NOT delay for betamethasone at viable gestational ages"
+      ]
+    }
+  },
+  "medication_formulary": {},
+  "reference_ranges": {}
+}

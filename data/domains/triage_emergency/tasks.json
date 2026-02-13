@@ -1,0 +1,280 @@
+[
+  {
+    "id": "triage_stemi_001",
+    "description": {
+      "purpose": "Triage a patient with acute STEMI presentation",
+      "difficulty": "hard",
+      "category": "cardiac_emergency",
+      "key_challenges": ["Recognize STEMI presentation", "Immediate ESI-1 assignment", "Activate cath lab protocol"]
+    },
+    "ticket": "Patient ED001 (62M) arrives by ambulance with crushing chest pain radiating to left arm. Diaphoretic and hypotensive. Perform triage assessment, determine ESI level, and initiate appropriate emergency protocols.",
+    "patient_id": "ED001",
+    "correct_answer": "ESI 1 - Immediate cath lab activation for suspected STEMI",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED001"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED001"}, "compare_args": ["patient_id"]},
+        {"name": "assess_airway_breathing", "arguments": {"patient_id": "ED001"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "STEMI"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 1}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent identified STEMI as the likely diagnosis",
+        "Agent assigned ESI level 1",
+        "Agent activated or referenced STEMI/cath lab protocol",
+        "Agent noted hemodynamic instability (hypotension)"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_thunderclap_002",
+    "description": {
+      "purpose": "Triage a young woman with thunderclap headache (possible SAH)",
+      "difficulty": "hard",
+      "category": "neurological_emergency",
+      "key_challenges": ["Recognize SAH presentation", "ESI-2 assignment", "Order STAT CT head"]
+    },
+    "ticket": "Patient ED002 (28F) walks in with the worst headache of her life, sudden onset 1 hour ago. Neck stiffness and photophobia noted. Triage and determine urgency level.",
+    "patient_id": "ED002",
+    "correct_answer": "ESI 2 - High risk for SAH, STAT CT head needed",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED002"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED002"}, "compare_args": ["patient_id"]},
+        {"name": "get_medical_history", "arguments": {"patient_id": "ED002"}, "compare_args": ["patient_id"]},
+        {"name": "calculate_esi_level", "arguments": {"patient_id": "ED002"}, "compare_args": ["patient_id"]},
+        {"name": "submit_answer", "arguments": {"esi_level": 2}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent identified thunderclap headache as high-risk for SAH",
+        "Agent assigned ESI level 2",
+        "Agent recommended CT head non-contrast",
+        "Agent noted meningeal signs (neck stiffness, photophobia)"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_stroke_003",
+    "description": {
+      "purpose": "Triage an acute stroke presentation with atrial fibrillation",
+      "difficulty": "hard",
+      "category": "neurological_emergency",
+      "key_challenges": ["Activate stroke alert", "Consider tPA eligibility", "Warfarin complicates thrombolysis"]
+    },
+    "ticket": "Patient ED003 (75M) arrives by ambulance with sudden right-sided weakness and slurred speech. On warfarin for atrial fibrillation. Last known well 3 hours ago. Perform triage and initiate stroke protocol.",
+    "patient_id": "ED003",
+    "correct_answer": "ESI 1 - Stroke alert, STAT CT head, check INR before tPA consideration",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED003"}, "compare_args": ["patient_id"]},
+        {"name": "assess_airway_breathing", "arguments": {"patient_id": "ED003"}, "compare_args": ["patient_id"]},
+        {"name": "get_medical_history", "arguments": {"patient_id": "ED003"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "stroke"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 1}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent activated stroke alert protocol",
+        "Agent assigned ESI level 1",
+        "Agent noted warfarin use complicating tPA eligibility",
+        "Agent ordered or recommended STAT CT head and coagulation panel"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_sepsis_004",
+    "description": {
+      "purpose": "Triage a septic shock patient",
+      "difficulty": "hard",
+      "category": "infectious_emergency",
+      "key_challenges": ["Recognize septic shock", "Initiate sepsis bundle", "Account for immunosuppression"]
+    },
+    "ticket": "Patient ED004 (45F) arrives by ambulance with fever 39.8C, confusion, and blood pressure 78/45. History of lupus on prednisone. Triage and initiate appropriate management.",
+    "patient_id": "ED004",
+    "correct_answer": "ESI 1 - Septic shock, initiate sepsis 1-hour bundle immediately",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED004"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED004"}, "compare_args": ["patient_id"]},
+        {"name": "assess_airway_breathing", "arguments": {"patient_id": "ED004"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "sepsis"}, "compare_args": []},
+        {"name": "order_stat_labs", "arguments": {"patient_id": "ED004"}, "compare_args": ["patient_id"]},
+        {"name": "submit_answer", "arguments": {"esi_level": 1}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent recognized septic shock",
+        "Agent assigned ESI level 1",
+        "Agent initiated or referenced sepsis bundle",
+        "Agent noted immunosuppression (lupus/prednisone) as risk factor",
+        "Agent ordered fluid resuscitation and antibiotics"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_peds_fracture_005",
+    "description": {
+      "purpose": "Triage a pediatric patient with extremity fracture",
+      "difficulty": "easy",
+      "category": "trauma",
+      "key_challenges": ["Appropriate ESI level for isolated injury", "Pain management", "Pediatric considerations"]
+    },
+    "ticket": "Patient ED005 (8M) arrives walking with his mother after falling from playground equipment. Visible deformity of left forearm with swelling. In significant pain. Triage this pediatric patient.",
+    "patient_id": "ED005",
+    "correct_answer": "ESI 3 - Needs X-ray, pain management, and possible reduction",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED005"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED005"}, "compare_args": ["patient_id"]},
+        {"name": "calculate_esi_level", "arguments": {"patient_id": "ED005"}, "compare_args": ["patient_id"]},
+        {"name": "submit_answer", "arguments": {"esi_level": 3}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent assigned ESI level 3 or 4",
+        "Agent identified need for X-ray",
+        "Agent addressed pain management",
+        "Agent considered neurovascular status of the extremity"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_chf_exacerbation_006",
+    "description": {
+      "purpose": "Triage an elderly patient with acute CHF exacerbation",
+      "difficulty": "medium",
+      "category": "cardiac_emergency",
+      "key_challenges": ["Distinguish CHF from COPD exacerbation", "Multiple comorbidities", "Hypoxemia management"]
+    },
+    "ticket": "Patient ED006 (82F) arrives by ambulance with 3-day progressive dyspnea, now at rest. Pink frothy sputum. On warfarin for AFib. SpO2 86% on arrival. Multiple cardiac comorbidities. Triage assessment.",
+    "patient_id": "ED006",
+    "correct_answer": "ESI 2 - Acute decompensated heart failure, needs immediate intervention",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED006"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED006"}, "compare_args": ["patient_id"]},
+        {"name": "assess_airway_breathing", "arguments": {"patient_id": "ED006"}, "compare_args": ["patient_id"]},
+        {"name": "get_medical_history", "arguments": {"patient_id": "ED006"}, "compare_args": ["patient_id"]},
+        {"name": "submit_answer", "arguments": {"esi_level": 2}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent identified acute decompensated heart failure",
+        "Agent assigned ESI level 2",
+        "Agent noted significant hypoxemia (SpO2 86%)",
+        "Agent recommended oxygen therapy and diuretics"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_ankle_injury_007",
+    "description": {
+      "purpose": "Triage a young adult with minor ankle injury",
+      "difficulty": "easy",
+      "category": "musculoskeletal",
+      "key_challenges": ["Identify as low-acuity", "Apply Ottawa ankle rules", "Appropriate fast-track placement"]
+    },
+    "ticket": "Patient ED007 (22M) walks in after twisting his right ankle playing basketball 1 hour ago. Able to bear some weight. Moderate swelling, no deformity. Triage assessment.",
+    "patient_id": "ED007",
+    "correct_answer": "ESI 4 - Single resource (X-ray) needed, fast track",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED007"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED007"}, "compare_args": ["patient_id"]},
+        {"name": "calculate_esi_level", "arguments": {"patient_id": "ED007"}, "compare_args": ["patient_id"]},
+        {"name": "submit_answer", "arguments": {"esi_level": 4}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent assigned ESI level 4 or 5",
+        "Agent identified as low-acuity injury",
+        "Agent mentioned X-ray as the primary resource needed",
+        "Agent considered Ottawa ankle rules"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_acute_abdomen_008",
+    "description": {
+      "purpose": "Triage a patient with acute abdomen (possible surgical emergency)",
+      "difficulty": "medium",
+      "category": "surgical_emergency",
+      "key_challenges": ["Assess for peritonitis", "Multiple resources needed", "Prior appendectomy complicates DDx"]
+    },
+    "ticket": "Patient ED008 (35F) presents with 8 hours of RLQ abdominal pain that migrated from periumbilical area, nausea, vomiting, and low-grade fever. Prior appendectomy. Triage assessment.",
+    "patient_id": "ED008",
+    "correct_answer": "ESI 3 - Needs labs, imaging, IV fluids, possible surgical consult",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED008"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED008"}, "compare_args": ["patient_id"]},
+        {"name": "get_medical_history", "arguments": {"patient_id": "ED008"}, "compare_args": ["patient_id"]},
+        {"name": "calculate_esi_level", "arguments": {"patient_id": "ED008"}, "compare_args": ["patient_id"]},
+        {"name": "submit_answer", "arguments": {"esi_level": 3}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent assigned ESI level 3",
+        "Agent noted prior appendectomy changes differential",
+        "Agent identified need for CT abdomen and labs",
+        "Agent considered surgical emergency differential"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_med_refill_009",
+    "description": {
+      "purpose": "Triage a non-urgent medication refill patient",
+      "difficulty": "easy",
+      "category": "non_urgent",
+      "key_challenges": ["Identify as ESI-5", "Check for hypertensive urgency", "Appropriate fast track"]
+    },
+    "ticket": "Patient ED009 (55M) walks in requesting a prescription refill for blood pressure medication. Ran out 3 days ago. BP 148/92, otherwise stable. Triage assessment.",
+    "patient_id": "ED009",
+    "correct_answer": "ESI 5 - No resources needed, prescription refill",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED009"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED009"}, "compare_args": ["patient_id"]},
+        {"name": "submit_answer", "arguments": {"esi_level": 5}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent assigned ESI level 5",
+        "Agent verified BP is not in hypertensive urgency range",
+        "Agent identified as non-urgent, prescription refill only"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "triage_anaphylaxis_010",
+    "description": {
+      "purpose": "Triage a patient with anaphylaxis",
+      "difficulty": "hard",
+      "category": "allergic_emergency",
+      "key_challenges": ["Recognize anaphylaxis despite prior epinephrine", "ESI-1 assignment", "Activate anaphylaxis protocol"]
+    },
+    "ticket": "Patient ED010 (40F) arrives by ambulance with severe allergic reaction after eating shrimp. Diffuse urticaria, lip/tongue swelling, stridor, and hypotension. Paramedics administered EpiPen en route. Triage and initiate management.",
+    "patient_id": "ED010",
+    "correct_answer": "ESI 1 - Anaphylaxis with airway compromise, immediate resuscitation",
+    "evaluation_criteria": {
+      "actions": [
+        {"name": "get_patient_presentation", "arguments": {"patient_id": "ED010"}, "compare_args": ["patient_id"]},
+        {"name": "assess_airway_breathing", "arguments": {"patient_id": "ED010"}, "compare_args": ["patient_id"]},
+        {"name": "get_vital_signs", "arguments": {"patient_id": "ED010"}, "compare_args": ["patient_id"]},
+        {"name": "check_protocol", "arguments": {"protocol_name": "anaphylaxis"}, "compare_args": []},
+        {"name": "submit_answer", "arguments": {"esi_level": 1}, "compare_args": ["esi_level"]}
+      ],
+      "nl_assertions": [
+        "Agent recognized anaphylaxis",
+        "Agent assigned ESI level 1",
+        "Agent noted airway compromise (stridor, angioedema)",
+        "Agent initiated anaphylaxis protocol",
+        "Agent noted need for repeat epinephrine"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  }
+]

@@ -1,0 +1,424 @@
+[
+  {
+    "id": "psy_depression_si_001",
+    "description": {
+      "purpose": "Comprehensive assessment of severe depression with suicidal ideation",
+      "difficulty": "hard",
+      "key_challenges": ["Suicide risk assessment", "Safety planning", "Medication optimization"]
+    },
+    "user_scenario": {
+      "persona": "A psychiatry resident evaluating an ED consult",
+      "instructions": "Evaluate this patient presenting with severe depression and suicidal ideation. Perform a thorough psychiatric assessment including risk stratification and treatment planning."
+    },
+    "ticket": "PSY-001 (Sarah Chen, 28F) referred from ED after presenting with worsening depression and suicidal thoughts. Has been on sertraline 50mg for 3 months with minimal improvement. Reports passive SI with vague plan but denies intent. Lives alone.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "get_presentation", "name": "get_patient_presentation", "arguments": {"patient_id": "PSY-001"}, "info": "Review initial presentation"},
+        {"action_id": "get_history", "name": "get_psychiatric_history", "arguments": {"patient_id": "PSY-001"}, "info": "Review psychiatric history"},
+        {"action_id": "do_mse", "name": "perform_mental_status_exam", "arguments": {"patient_id": "PSY-001"}, "info": "Perform MSE"},
+        {"action_id": "phq9", "name": "administer_phq9", "arguments": {"patient_id": "PSY-001"}, "info": "Administer PHQ-9"},
+        {"action_id": "suicide_risk", "name": "assess_suicide_risk", "arguments": {"patient_id": "PSY-001"}, "info": "MANDATORY: Assess suicide risk"},
+        {"action_id": "get_meds", "name": "get_current_medications", "arguments": {"patient_id": "PSY-001"}, "info": "Review current medications"},
+        {"action_id": "social", "name": "get_social_history", "arguments": {"patient_id": "PSY-001"}, "info": "Assess social support and risk factors"},
+        {"action_id": "guidelines", "name": "review_treatment_guidelines", "arguments": {"condition": "MDD"}, "info": "Review MDD treatment guidelines"}
+      ],
+      "nl_assertions": [
+        "Agent assessed suicide risk using C-SSRS or equivalent",
+        "Agent identified moderate suicide risk level",
+        "Agent created or recommended a safety plan",
+        "Agent addressed medication optimization (increase dose or switch)",
+        "Agent recommended psychotherapy (CBT)",
+        "Agent planned appropriate follow-up interval"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_anxiety_substance_001",
+    "description": {
+      "purpose": "Evaluation of comorbid anxiety disorders with hazardous alcohol use and benzodiazepine dependence risk",
+      "difficulty": "moderate",
+      "key_challenges": ["Dual diagnosis management", "Benzodiazepine taper planning", "Alcohol use identification"]
+    },
+    "user_scenario": {
+      "persona": "A psychiatry resident in outpatient clinic",
+      "instructions": "Evaluate this patient with worsening anxiety and panic attacks. Assess for substance use comorbidity and develop an integrated treatment plan addressing both psychiatric and substance use concerns."
+    },
+    "ticket": "PSY-002 (Michael Torres, 45M) referred by PCP for worsening anxiety despite alprazolam 0.5mg PRN. Reports escalating panic attacks and chronic worry affecting work performance. PCP concerned about increasing benzodiazepine use and possible alcohol misuse.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "get_presentation", "name": "get_patient_presentation", "arguments": {"patient_id": "PSY-002"}, "info": "Review initial presentation"},
+        {"action_id": "get_history", "name": "get_psychiatric_history", "arguments": {"patient_id": "PSY-002"}, "info": "Review psychiatric history"},
+        {"action_id": "do_mse", "name": "perform_mental_status_exam", "arguments": {"patient_id": "PSY-002"}, "info": "Perform MSE"},
+        {"action_id": "gad7", "name": "administer_gad7", "arguments": {"patient_id": "PSY-002"}, "info": "Administer GAD-7"},
+        {"action_id": "audit", "name": "administer_audit", "arguments": {"patient_id": "PSY-002"}, "info": "Screen for alcohol use disorder"},
+        {"action_id": "get_meds", "name": "get_current_medications", "arguments": {"patient_id": "PSY-002"}, "info": "Review current medications including PRN benzodiazepine use"},
+        {"action_id": "substance", "name": "get_substance_use_history", "arguments": {"patient_id": "PSY-002"}, "info": "Detailed substance use assessment"},
+        {"action_id": "guidelines", "name": "review_treatment_guidelines", "arguments": {"condition": "GAD"}, "info": "Review GAD treatment guidelines"}
+      ],
+      "nl_assertions": [
+        "Agent identified hazardous alcohol use (AUDIT >= 8)",
+        "Agent recognized benzodiazepine-alcohol interaction risk",
+        "Agent recommended benzodiazepine taper plan",
+        "Agent recommended SSRI or SNRI as first-line pharmacotherapy",
+        "Agent addressed all three diagnoses (GAD, Panic, AUD)",
+        "Agent recommended CBT and brief alcohol intervention"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_psychosis_first_001",
+    "description": {
+      "purpose": "Assessment and management of first-episode psychosis in a young adult",
+      "difficulty": "hard",
+      "key_challenges": ["Differentiating primary psychosis from substance-induced", "Risk assessment with command hallucinations", "Family engagement", "Early intervention coordination"]
+    },
+    "user_scenario": {
+      "persona": "An emergency psychiatry fellow evaluating an acute presentation",
+      "instructions": "Evaluate this young man brought to the ED by his mother for new-onset psychotic symptoms. Determine the most likely diagnosis, assess safety, and create an acute management plan."
+    },
+    "ticket": "PSY-003 (Jamal Washington, 22M) brought to ED by mother who reports 6 weeks of progressive social withdrawal, paranoia, and now auditory hallucinations. No prior psychiatric history. Daily cannabis use for 2 years. Family history significant for schizophrenia.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "get_presentation", "name": "get_patient_presentation", "arguments": {"patient_id": "PSY-003"}, "info": "Review initial presentation and collateral from mother"},
+        {"action_id": "get_history", "name": "get_psychiatric_history", "arguments": {"patient_id": "PSY-003"}, "info": "Review psychiatric history"},
+        {"action_id": "do_mse", "name": "perform_mental_status_exam", "arguments": {"patient_id": "PSY-003"}, "info": "Perform detailed MSE focusing on psychotic symptoms"},
+        {"action_id": "substance", "name": "get_substance_use_history", "arguments": {"patient_id": "PSY-003"}, "info": "Detailed substance use history"},
+        {"action_id": "suicide_risk", "name": "assess_suicide_risk", "arguments": {"patient_id": "PSY-003"}, "info": "Assess suicide risk (command hallucinations present)"},
+        {"action_id": "family_hx", "name": "get_family_history", "arguments": {"patient_id": "PSY-003"}, "info": "Review family psychiatric history"},
+        {"action_id": "labs", "name": "order_laboratory_tests", "arguments": {"patient_id": "PSY-003", "tests": ["urine_tox", "CBC", "CMP", "TSH", "brain_MRI"]}, "info": "Order workup to rule out organic causes"},
+        {"action_id": "guidelines", "name": "review_treatment_guidelines", "arguments": {"condition": "schizophrenia"}, "info": "Review first-episode psychosis guidelines"}
+      ],
+      "nl_assertions": [
+        "Agent differentiated primary psychosis from substance-induced psychosis",
+        "Agent ordered appropriate labs and brain imaging",
+        "Agent assessed suicide risk given command hallucinations",
+        "Agent recommended low-dose atypical antipsychotic",
+        "Agent recommended inpatient admission for stabilization",
+        "Agent addressed cannabis cessation",
+        "Agent recommended first-episode psychosis (FEP) program coordination",
+        "Agent engaged family for collateral and psychoeducation"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_mania_001",
+    "description": {
+      "purpose": "Acute management of a manic episode with medication nonadherence",
+      "difficulty": "moderate",
+      "key_challenges": ["Managing uncooperative patient", "Medication restart strategy", "Acute mania stabilization", "Assessing need for involuntary hold"]
+    },
+    "user_scenario": {
+      "persona": "A psychiatry attending in the emergency department",
+      "instructions": "Evaluate this patient with known Bipolar I Disorder presenting with acute mania after self-discontinuing lithium. Determine the appropriate level of care and develop an acute management plan."
+    },
+    "ticket": "PSY-004 (Rebecca Martinez, 35F) brought to ED by EMS after husband called 911. Found directing traffic at 3 AM in nightgown. Known Bipolar I, stopped lithium 2 weeks ago. Euphoric but becoming irritable, spent $15,000 in 3 days. Refusing voluntary admission.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "get_presentation", "name": "get_patient_presentation", "arguments": {"patient_id": "PSY-004"}, "info": "Review presentation and collateral from husband"},
+        {"action_id": "get_history", "name": "get_psychiatric_history", "arguments": {"patient_id": "PSY-004"}, "info": "Review psychiatric and medication history"},
+        {"action_id": "do_mse", "name": "perform_mental_status_exam", "arguments": {"patient_id": "PSY-004"}, "info": "Perform MSE"},
+        {"action_id": "ymrs", "name": "administer_ymrs", "arguments": {"patient_id": "PSY-004"}, "info": "Administer YMRS for mania severity"},
+        {"action_id": "get_meds", "name": "get_current_medications", "arguments": {"patient_id": "PSY-004"}, "info": "Review medications and adherence"},
+        {"action_id": "labs", "name": "order_laboratory_tests", "arguments": {"patient_id": "PSY-004", "tests": ["lithium_level", "renal_function", "thyroid", "CBC", "urine_tox"]}, "info": "Order baseline labs"},
+        {"action_id": "guidelines", "name": "review_treatment_guidelines", "arguments": {"condition": "bipolar"}, "info": "Review bipolar disorder treatment guidelines"}
+      ],
+      "nl_assertions": [
+        "Agent identified severe mania requiring inpatient stabilization",
+        "Agent discussed involuntary hold criteria given patient refusal",
+        "Agent recommended restarting lithium with level monitoring",
+        "Agent recommended adjunctive atypical antipsychotic for acute mania",
+        "Agent addressed medication nonadherence as precipitant",
+        "Agent ordered appropriate baseline labs",
+        "Agent planned family meeting with husband"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_dementia_001",
+    "description": {
+      "purpose": "Comprehensive geriatric psychiatry evaluation of dementia with behavioral disturbances",
+      "difficulty": "moderate",
+      "key_challenges": ["Behavioral and psychological symptoms of dementia (BPSD)", "Caregiver assessment", "Non-pharmacological vs pharmacological management", "Ethical and legal considerations"]
+    },
+    "user_scenario": {
+      "persona": "A geriatric psychiatry fellow in outpatient clinic",
+      "instructions": "Evaluate this patient with progressive dementia and worsening behavioral disturbances. Assess cognitive status, behavioral symptoms, caregiver burden, and develop a comprehensive management plan."
+    },
+    "ticket": "PSY-005 (Robert Kim, 67M) brought by wife to geriatric psychiatry clinic. Diagnosed with mild neurocognitive disorder in 2024, now showing significant cognitive decline (MMSE dropped from 24 to 18). Wife reports new agitation, paranoid accusations, wandering, and nighttime confusion. Wife appears exhausted.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "get_presentation", "name": "get_patient_presentation", "arguments": {"patient_id": "PSY-005"}, "info": "Review presentation and caregiver report"},
+        {"action_id": "get_history", "name": "get_psychiatric_history", "arguments": {"patient_id": "PSY-005"}, "info": "Review medical and psychiatric history"},
+        {"action_id": "do_mse", "name": "perform_mental_status_exam", "arguments": {"patient_id": "PSY-005"}, "info": "Perform MSE with focus on cognition"},
+        {"action_id": "mmse", "name": "administer_mmse", "arguments": {"patient_id": "PSY-005"}, "info": "Administer MMSE"},
+        {"action_id": "npi", "name": "administer_npi", "arguments": {"patient_id": "PSY-005"}, "info": "Administer Neuropsychiatric Inventory"},
+        {"action_id": "get_meds", "name": "get_current_medications", "arguments": {"patient_id": "PSY-005"}, "info": "Review current medications"},
+        {"action_id": "caregiver", "name": "assess_caregiver_burden", "arguments": {"patient_id": "PSY-005"}, "info": "Assess caregiver burnout and support needs"},
+        {"action_id": "safety", "name": "assess_home_safety", "arguments": {"patient_id": "PSY-005"}, "info": "Evaluate home safety and wandering risk"}
+      ],
+      "nl_assertions": [
+        "Agent documented cognitive decline from baseline",
+        "Agent assessed behavioral and psychological symptoms of dementia",
+        "Agent prioritized non-pharmacological interventions first",
+        "Agent discussed risks of antipsychotics in dementia (black box warning)",
+        "Agent assessed and addressed caregiver burden",
+        "Agent recommended home safety evaluation",
+        "Agent discussed advance care planning and legal documents",
+        "Agent recommended appropriate follow-up interval"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_ptsd_001",
+    "description": {
+      "purpose": "Evaluation and treatment planning for acute PTSD with substance use coping",
+      "difficulty": "hard",
+      "key_challenges": ["Trauma-informed assessment approach", "Differentiating PTSD from other trauma responses", "Substance use as coping mechanism", "Coordinating with legal/campus resources"]
+    },
+    "user_scenario": {
+      "persona": "A psychiatry resident in a college mental health clinic",
+      "instructions": "Evaluate this college student presenting with PTSD symptoms following sexual assault. Conduct a trauma-informed assessment, assess for comorbid substance use, and develop a treatment plan that addresses both clinical and psychosocial needs."
+    },
+    "ticket": "PSY-006 (Amara Johnson, 19F) referred from campus counseling center. Reports persistent nightmares, flashbacks, avoidance, and hypervigilance 6 months after sexual assault. Using alcohol to cope (AUDIT=8). Academic performance declining. Title IX investigation ongoing.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "get_presentation", "name": "get_patient_presentation", "arguments": {"patient_id": "PSY-006"}, "info": "Review initial presentation with trauma-informed approach"},
+        {"action_id": "get_history", "name": "get_psychiatric_history", "arguments": {"patient_id": "PSY-006"}, "info": "Review psychiatric history"},
+        {"action_id": "do_mse", "name": "perform_mental_status_exam", "arguments": {"patient_id": "PSY-006"}, "info": "Perform MSE noting dissociative features"},
+        {"action_id": "pcl5", "name": "administer_pcl5", "arguments": {"patient_id": "PSY-006"}, "info": "Administer PCL-5 for PTSD severity"},
+        {"action_id": "phq9", "name": "administer_phq9", "arguments": {"patient_id": "PSY-006"}, "info": "Screen for comorbid depression"},
+        {"action_id": "audit", "name": "administer_audit", "arguments": {"patient_id": "PSY-006"}, "info": "Screen for alcohol use"},
+        {"action_id": "substance", "name": "get_substance_use_history", "arguments": {"patient_id": "PSY-006"}, "info": "Assess substance use as coping"},
+        {"action_id": "guidelines", "name": "review_treatment_guidelines", "arguments": {"condition": "PTSD"}, "info": "Review PTSD treatment guidelines"}
+      ],
+      "nl_assertions": [
+        "Agent used trauma-informed approach throughout assessment",
+        "Agent administered PCL-5 and confirmed PTSD diagnosis",
+        "Agent identified alcohol use as maladaptive coping mechanism",
+        "Agent recommended trauma-focused psychotherapy (CPT or PE) as first-line",
+        "Agent addressed sleep disturbance with prazosin consideration",
+        "Agent coordinated with campus resources (Title IX, victim advocacy)",
+        "Agent addressed safety concerns (perpetrator proximity)",
+        "Agent provided psychoeducation about PTSD symptoms and recovery"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_peds_adhd_001",
+    "description": {
+      "purpose": "Pediatric psychiatry assessment of ADHD with comorbid ODD and previous medication trial failure",
+      "difficulty": "moderate",
+      "key_challenges": ["Re-engaging adolescent in treatment", "Managing comorbid ODD", "Navigating previous medication concerns", "School-based interventions"]
+    },
+    "user_scenario": {
+      "persona": "A child and adolescent psychiatrist in outpatient clinic",
+      "instructions": "Evaluate this adolescent with ADHD and oppositional behaviors who previously discontinued stimulant medication. Develop a comprehensive treatment plan addressing academic, behavioral, and family concerns."
+    },
+    "ticket": "PSY-007 (Ethan Brooks, 16M) brought by parents. Failing all classes, suspended for fighting. Previous ADHD diagnosis (age 8), stopped methylphenidate at age 12 due to appetite suppression. Parents report worsening defiance and aggression over past year. Father has ADHD.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "get_presentation", "name": "get_patient_presentation", "arguments": {"patient_id": "PSY-007"}, "info": "Review presentation and parent/teacher reports"},
+        {"action_id": "get_history", "name": "get_psychiatric_history", "arguments": {"patient_id": "PSY-007"}, "info": "Review psychiatric and medication history"},
+        {"action_id": "do_mse", "name": "perform_mental_status_exam", "arguments": {"patient_id": "PSY-007"}, "info": "Perform MSE"},
+        {"action_id": "vanderbilt", "name": "review_adhd_rating_scales", "arguments": {"patient_id": "PSY-007"}, "info": "Review Vanderbilt ADHD rating scales (parent and teacher)"},
+        {"action_id": "screen_mood", "name": "screen_for_mood_disorders", "arguments": {"patient_id": "PSY-007"}, "info": "Screen for depression and anxiety"},
+        {"action_id": "substance", "name": "screen_substance_use", "arguments": {"patient_id": "PSY-007"}, "info": "Adolescent substance use screening"},
+        {"action_id": "get_meds", "name": "get_current_medications", "arguments": {"patient_id": "PSY-007"}, "info": "Review previous medication trials and response"},
+        {"action_id": "guidelines", "name": "review_treatment_guidelines", "arguments": {"condition": "ADHD"}, "info": "Review ADHD treatment guidelines"}
+      ],
+      "nl_assertions": [
+        "Agent obtained multi-informant data (patient, parent, teacher)",
+        "Agent addressed previous medication concerns (appetite suppression)",
+        "Agent recommended re-trial of stimulant with different formulation or non-stimulant",
+        "Agent addressed ODD with behavioral interventions (parent management training)",
+        "Agent recommended school-based accommodations (504 plan or IEP)",
+        "Agent included family therapy in treatment plan",
+        "Agent screened for learning disabilities",
+        "Agent engaged adolescent in treatment planning"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_trd_001",
+    "description": {
+      "purpose": "Expert-level management of treatment-resistant depression with multiple failed trials",
+      "difficulty": "expert",
+      "key_challenges": ["Systematic review of failed treatments", "Advanced treatment options (ECT, ketamine, TMS)", "Managing chronic suicidality", "Pharmacogenomics consideration", "Medical comorbidity management"]
+    },
+    "user_scenario": {
+      "persona": "A consultation-liaison psychiatrist at a tertiary care TRD clinic",
+      "instructions": "Evaluate this patient with treatment-resistant depression who has failed multiple adequate antidepressant trials. Systematically review previous treatments, consider advanced therapeutic options, and develop a comprehensive management plan."
+    },
+    "ticket": "PSY-008 (Linda O'Brien, 55F) referred to TRD clinic. Failed: sertraline, fluoxetine, citalopram (3 SSRIs), tried bupropion and mirtazapine with partial response. Currently on venlafaxine 225mg + aripiprazole 5mg augmentation with inadequate response. PHQ-9=19, passive SI. History of one suicide attempt (2017). Comorbid fibromyalgia and AUD in remission.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "get_presentation", "name": "get_patient_presentation", "arguments": {"patient_id": "PSY-008"}, "info": "Review current presentation"},
+        {"action_id": "get_history", "name": "get_psychiatric_history", "arguments": {"patient_id": "PSY-008"}, "info": "Review comprehensive psychiatric history"},
+        {"action_id": "review_trials", "name": "review_medication_trials", "arguments": {"patient_id": "PSY-008"}, "info": "Systematic review of all previous medication trials (dose, duration, response)"},
+        {"action_id": "do_mse", "name": "perform_mental_status_exam", "arguments": {"patient_id": "PSY-008"}, "info": "Perform MSE"},
+        {"action_id": "phq9", "name": "administer_phq9", "arguments": {"patient_id": "PSY-008"}, "info": "Administer PHQ-9"},
+        {"action_id": "suicide_risk", "name": "assess_suicide_risk", "arguments": {"patient_id": "PSY-008"}, "info": "Assess chronic suicide risk"},
+        {"action_id": "get_meds", "name": "get_current_medications", "arguments": {"patient_id": "PSY-008"}, "info": "Review current medications and interactions"},
+        {"action_id": "guidelines", "name": "review_treatment_guidelines", "arguments": {"condition": "MDD"}, "info": "Review TRD treatment guidelines"},
+        {"action_id": "pharmacogenomics", "name": "consider_pharmacogenomic_testing", "arguments": {"patient_id": "PSY-008"}, "info": "Assess utility of pharmacogenomic testing"}
+      ],
+      "nl_assertions": [
+        "Agent systematically reviewed all previous medication trials for adequacy",
+        "Agent confirmed treatment-resistant depression (failed >=2 adequate trials)",
+        "Agent discussed ECT as evidence-based option for TRD",
+        "Agent discussed ketamine/esketamine as treatment option",
+        "Agent considered TMS as non-invasive alternative",
+        "Agent addressed chronic suicidality with safety plan review",
+        "Agent considered pharmacogenomic testing",
+        "Agent addressed comorbid pain (fibromyalgia) in treatment planning",
+        "Agent considered augmentation strategy changes"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_safety_plan_001",
+    "description": {
+      "purpose": "Creating a comprehensive safety plan for a patient with suicidal ideation",
+      "difficulty": "moderate",
+      "key_challenges": ["Collaborative safety planning", "Identifying warning signs and coping strategies", "Means restriction counseling", "Emergency contacts and crisis resources"]
+    },
+    "user_scenario": {
+      "persona": "A psychiatry resident working with a patient being discharged from ED observation",
+      "instructions": "Create a comprehensive safety plan with this patient who presented to the ED with suicidal ideation. The plan should be collaborative, patient-centered, and follow the Stanley-Brown Safety Planning Intervention model."
+    },
+    "ticket": "PSY-001 (Sarah Chen, 28F) being discharged from ED after overnight observation. Suicide risk has been assessed as moderate (C-SSRS=3). Patient is agreeable to outpatient follow-up. Needs a comprehensive safety plan before discharge. Lives alone, limited support system, has access to medications at home.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "get_presentation", "name": "get_patient_presentation", "arguments": {"patient_id": "PSY-001"}, "info": "Review current risk factors"},
+        {"action_id": "suicide_risk", "name": "assess_suicide_risk", "arguments": {"patient_id": "PSY-001"}, "info": "Confirm current risk level"},
+        {"action_id": "social", "name": "get_social_history", "arguments": {"patient_id": "PSY-001"}, "info": "Identify support network for safety plan"},
+        {"action_id": "create_safety_plan", "name": "create_safety_plan", "arguments": {"patient_id": "PSY-001"}, "info": "Develop collaborative safety plan"},
+        {"action_id": "means_restriction", "name": "assess_means_access", "arguments": {"patient_id": "PSY-001"}, "info": "Assess access to lethal means and counsel on restriction"},
+        {"action_id": "crisis_resources", "name": "provide_crisis_resources", "arguments": {"patient_id": "PSY-001"}, "info": "Provide crisis hotline and emergency resources"}
+      ],
+      "nl_assertions": [
+        "Agent identified personalized warning signs with the patient",
+        "Agent identified internal coping strategies",
+        "Agent identified social contacts and safe settings for distraction",
+        "Agent identified people to contact during crisis",
+        "Agent provided professional and crisis resources (988 Lifeline, Crisis Text Line)",
+        "Agent addressed means restriction (secure medications)",
+        "Agent made the environment safe (medication lock box recommendation)",
+        "Agent documented the safety plan collaboratively"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_drug_interaction_001",
+    "description": {
+      "purpose": "Assessment of dangerous drug interaction scenario during medication transition",
+      "difficulty": "hard",
+      "key_challenges": ["SSRI to MAOI washout period", "Serotonin syndrome risk", "Safe transition planning", "Patient education on dietary restrictions"]
+    },
+    "user_scenario": {
+      "persona": "A pharmacist consulting with a psychiatry attending",
+      "instructions": "A patient currently on fluoxetine is being considered for a switch to phenelzine (MAOI) due to treatment resistance. Evaluate the drug interaction risks and develop a safe transition plan."
+    },
+    "ticket": "A 42-year-old male with treatment-resistant depression currently on fluoxetine 60mg is being considered for transition to phenelzine (MAOI). The outpatient psychiatrist has requested consultation on the safe transition protocol. The patient has failed multiple SSRIs and SNRIs and is eager to try a new approach.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "check_interaction", "name": "check_drug_interaction", "arguments": {"drug_1": "fluoxetine", "drug_2": "phenelzine"}, "info": "Check interaction between SSRI and MAOI"},
+        {"action_id": "review_fluoxetine", "name": "get_drug_properties", "arguments": {"drug_name": "fluoxetine"}, "info": "Review fluoxetine pharmacokinetics (long half-life, active metabolite)"},
+        {"action_id": "review_phenelzine", "name": "get_drug_properties", "arguments": {"drug_name": "phenelzine"}, "info": "Review phenelzine pharmacology and dietary restrictions"},
+        {"action_id": "serotonin_syndrome", "name": "review_serotonin_syndrome", "arguments": {}, "info": "Review serotonin syndrome presentation and management"},
+        {"action_id": "washout", "name": "calculate_washout_period", "arguments": {"drug_name": "fluoxetine"}, "info": "Calculate required washout period for fluoxetine (5 weeks minimum due to norfluoxetine)"},
+        {"action_id": "transition_plan", "name": "create_transition_plan", "arguments": {"from_drug": "fluoxetine", "to_drug": "phenelzine"}, "info": "Create safe transition protocol"}
+      ],
+      "nl_assertions": [
+        "Agent identified the SSRI-MAOI combination as contraindicated (serotonin syndrome risk)",
+        "Agent correctly identified fluoxetine's uniquely long washout period (5 weeks minimum) due to norfluoxetine active metabolite",
+        "Agent recommended complete fluoxetine discontinuation before starting phenelzine",
+        "Agent provided serotonin syndrome warning signs to monitor",
+        "Agent counseled on MAOI dietary restrictions (tyramine-containing foods)",
+        "Agent addressed the gap period management (patient may worsen during washout)",
+        "Agent documented a clear timeline for the transition"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_crisis_001",
+    "description": {
+      "purpose": "Acute management of a suicidal crisis in an unknown patient",
+      "difficulty": "expert",
+      "key_challenges": ["Acute crisis de-escalation", "Rapid risk assessment with limited history", "Disposition decision-making", "Involuntary hold consideration", "Documentation under pressure"]
+    },
+    "user_scenario": {
+      "persona": "An on-call psychiatrist responding to an ED crisis consult",
+      "instructions": "You are called to the ED for an acute psychiatric emergency. A patient was brought in by police after being found on a bridge railing. The patient is agitated, refusing to speak, and has no identification. Perform a rapid assessment and make disposition decisions."
+    },
+    "ticket": "UNKNOWN PATIENT (appears 30s, M) brought by police from bridge overpass. Officers report patient was standing on railing and initially refused to come down. Eventually complied after 20 minutes of negotiation. No ID, refusing to give name. Agitated, tearful, not speaking. No belongings, no medical history available.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "rapid_assessment", "name": "perform_rapid_psychiatric_assessment", "arguments": {"patient_id": "UNKNOWN"}, "info": "Rapid assessment of acute suicide risk"},
+        {"action_id": "do_mse", "name": "perform_mental_status_exam", "arguments": {"patient_id": "UNKNOWN"}, "info": "Perform MSE on uncooperative patient"},
+        {"action_id": "deescalate", "name": "attempt_deescalation", "arguments": {"patient_id": "UNKNOWN"}, "info": "Use crisis de-escalation techniques"},
+        {"action_id": "medical_clear", "name": "order_medical_clearance", "arguments": {"patient_id": "UNKNOWN", "tests": ["vitals", "blood_glucose", "urine_tox", "BAL", "basic_labs"]}, "info": "Order medical clearance workup"},
+        {"action_id": "hold_assessment", "name": "assess_involuntary_hold_criteria", "arguments": {"patient_id": "UNKNOWN"}, "info": "Assess criteria for involuntary psychiatric hold"},
+        {"action_id": "disposition", "name": "determine_disposition", "arguments": {"patient_id": "UNKNOWN"}, "info": "Determine appropriate disposition (admit vs. observe)"},
+        {"action_id": "safety", "name": "implement_safety_precautions", "arguments": {"patient_id": "UNKNOWN"}, "info": "Implement immediate safety measures (1:1, belongings search, safe room)"}
+      ],
+      "nl_assertions": [
+        "Agent classified this as imminent suicide risk requiring emergency intervention",
+        "Agent implemented immediate safety precautions (1:1 observation, belongings removal, safe room)",
+        "Agent attempted therapeutic engagement and de-escalation",
+        "Agent ordered medical clearance including toxicology",
+        "Agent assessed and documented involuntary hold criteria",
+        "Agent determined inpatient psychiatric admission as appropriate disposition",
+        "Agent documented assessment despite limited available history",
+        "Agent considered medical causes for altered behavior (intoxication, delirium)"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  },
+  {
+    "id": "psy_geriatric_depression_001",
+    "description": {
+      "purpose": "Differentiating late-life depression from early dementia (pseudodementia vs. neurocognitive disorder)",
+      "difficulty": "hard",
+      "key_challenges": ["Differentiating depression from dementia", "Cognitive testing interpretation in depressed elderly", "Polypharmacy concerns", "Medical comorbidity overlap", "Suicide risk in elderly (high-lethality population)"]
+    },
+    "user_scenario": {
+      "persona": "A geriatric psychiatrist in outpatient consultation",
+      "instructions": "Evaluate this elderly patient referred for cognitive decline. Determine whether the presentation is consistent with primary neurocognitive disorder, depressive pseudodementia, or both. Develop a diagnostic and treatment plan."
+    },
+    "ticket": "A 74-year-old woman referred by PCP for progressive memory complaints over 6 months. Family notes she has stopped cooking, lost interest in grandchildren, and stays in bed most of the day. PCP started donepezil 5mg empirically. Patient tearful in appointment and says 'what's the point of remembering if there's nothing worth remembering.' Husband died 8 months ago.",
+    "evaluation_criteria": {
+      "actions": [
+        {"action_id": "get_presentation", "name": "get_patient_presentation", "arguments": {"patient_id": "NEW-GERIATRIC"}, "info": "Review initial presentation"},
+        {"action_id": "get_history", "name": "get_psychiatric_history", "arguments": {"patient_id": "NEW-GERIATRIC"}, "info": "Obtain comprehensive history including timeline of symptoms relative to bereavement"},
+        {"action_id": "do_mse", "name": "perform_mental_status_exam", "arguments": {"patient_id": "NEW-GERIATRIC"}, "info": "Perform MSE"},
+        {"action_id": "cognitive_testing", "name": "perform_cognitive_assessment", "arguments": {"patient_id": "NEW-GERIATRIC", "tests": ["MMSE", "MoCA", "clock_drawing"]}, "info": "Administer cognitive screening"},
+        {"action_id": "phq9", "name": "administer_phq9", "arguments": {"patient_id": "NEW-GERIATRIC"}, "info": "Screen for depression (PHQ-9 or GDS)"},
+        {"action_id": "suicide_risk", "name": "assess_suicide_risk", "arguments": {"patient_id": "NEW-GERIATRIC"}, "info": "Assess suicide risk (elderly white female — high-risk demographic)"},
+        {"action_id": "medical_review", "name": "review_medical_causes", "arguments": {"patient_id": "NEW-GERIATRIC"}, "info": "Review medical causes of cognitive decline and depression (thyroid, B12, RPR)"},
+        {"action_id": "grief", "name": "assess_grief_process", "arguments": {"patient_id": "NEW-GERIATRIC"}, "info": "Assess complicated grief vs. MDD"}
+      ],
+      "nl_assertions": [
+        "Agent differentiated depressive pseudodementia from primary neurocognitive disorder",
+        "Agent identified key distinguishing features (onset, course, effort on testing, mood symptoms)",
+        "Agent recognized bereavement as precipitant and assessed for complicated grief",
+        "Agent assessed suicide risk in this high-risk demographic",
+        "Agent ordered appropriate medical workup (TSH, B12, folate, CBC, CMP, RPR)",
+        "Agent recommended antidepressant trial before concluding dementia diagnosis",
+        "Agent questioned appropriateness of empiric donepezil without confirmed dementia",
+        "Agent considered polypharmacy and age-appropriate prescribing"
+      ],
+      "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }
+  }
+]

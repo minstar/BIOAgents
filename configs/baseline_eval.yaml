@@ -1,0 +1,82 @@
+# BIOAgents Multi-Domain Baseline Evaluation Config
+# Usage: python scripts/run_multidomain_baseline.py (reads MODELS/DOMAINS from script)
+#
+# This file documents the evaluation setup for reproducibility.
+
+experiment:
+  name: "P0-2: Multi-Domain Baseline Evaluation"
+  date: "2026-02-12"
+  purpose: >
+    Establish pre-training baseline performance across all 5 medical domains
+    for 3 candidate models (Qwen3-8B-Base, Qwen2.5-VL-7B-Instruct, Lingshu-7B).
+    These baselines serve as the reference point for subsequent SFT and GRPO training.
+
+models:
+  - name: Qwen3-8B-Base
+    path: /data/project/private/minstar/models/Qwen3-8B-Base
+    type: text-only
+    params: 8B
+    notes: "Base model without instruction tuning. Strong pretraining knowledge."
+
+  - name: Qwen2.5-VL-7B-Instruct
+    path: checkpoints/models/Qwen2.5-VL-7B-Instruct
+    type: vision-language
+    params: 7B
+    notes: "General VLM with instruction tuning. Good tool-call format following."
+
+  - name: Lingshu-7B
+    path: checkpoints/models/Lingshu-7B
+    type: vision-language-medical
+    params: 7B
+    notes: "Medical specialized VLM. Qwen2.5-VL based with medical fine-tuning."
+
+domains:
+  clinical_diagnosis:
+    tasks: 5
+    split: all
+    max_turns: 15
+    metrics: [action_score, composite_reward]
+    description: "Patient assessment → diagnosis → treatment plan"
+
+  medical_qa:
+    tasks: 15
+    split: test
+    max_turns: 12
+    metrics: [action_score, composite_reward, qa_accuracy]
+    description: "MedQA/MedMCQA/MMLU evidence-based QA"
+
+  visual_diagnosis:
+    tasks: 8
+    split: all
+    max_turns: 10
+    metrics: [action_score, composite_reward]
+    description: "Chest X-ray, CT, pathology, dermoscopy, fundus, MRI analysis"
+
+  drug_interaction:
+    tasks: 5
+    split: all
+    max_turns: 12
+    metrics: [action_score, composite_reward]
+    description: "Warfarin+aspirin, serotonin syndrome, polypharmacy, PPI interaction"
+
+  ehr_management:
+    tasks: 7
+    split: test
+    max_turns: 15
+    metrics: [action_score, composite_reward]
+    description: "Chart review, critical values, clinical scoring, discharge planning"
+
+generation:
+  temperature: 0.1
+  top_p: 0.95
+  max_new_tokens: 1024
+
+hardware:
+  gpus: 8  # A100 80GB
+  gpus_per_model: 2
+  note: "Models run sequentially per domain to avoid OOM"
+
+output:
+  log_dir: logs/baseline/
+  format: json
+  comparison_table: true

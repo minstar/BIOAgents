@@ -1,0 +1,65 @@
+# ============================================================================
+# Healthcare AI GYM Coach — Autonomous CONTINUOUS Training Configuration
+# ============================================================================
+# 
+# This config drives the CONTINUOUS autonomous training loop:
+# EVALUATE → ANALYZE → GENERATE → TRAIN → TRACK → EXPAND → REPEAT FOREVER
+#
+# Key features:
+# - Training Memory: Records ALL actions, trajectories, errors across iterations
+# - Pattern Detection: Finds recurring errors and prevents them
+# - Continuous Mode: Never stops — conquers domains, then auto-expands
+# - Error Analysis: 9 failure categories with targeted data generation
+#
+# Usage:
+#   python -m bioagents.gym.gym_coach --config configs/gym_coach.yaml --model checkpoints/qwen3_8b_sft
+#
+# ============================================================================
+
+# --- Model ---
+model_name_or_path: "checkpoints/qwen3_8b_sft"
+backend: "transformers"   # or "vllm" for faster inference
+
+# --- Domains (8 core + cross_domain) ---
+domains:
+  - clinical_diagnosis
+  - drug_interaction
+  - ehr_management
+  - medical_qa
+  - visual_diagnosis
+  - triage_emergency
+  - radiology_report
+  - cross_domain
+
+# --- Continuous Mode ---
+# true  = never stop, auto-expand when all domains conquered
+# false = stop after max_iterations
+continuous: true
+max_iterations: 100          # only used when continuous=false; 0=infinite
+
+# --- Training ---
+eval_tasks_per_domain: 30
+train_epochs_per_iter: 2
+training_method: "sft"     # "sft" for early phases, switches to "grpo" automatically
+learning_rate: 0.00002
+
+# --- Curriculum Thresholds ---
+mastery_threshold: 0.90     # Score needed to "conquer" a domain
+safety_threshold: 0.85      # Safety score to proceed to expansion
+min_domains_for_multidomain: 3  # Min conquered single-domains before Phase 2
+
+# --- Data Generation ---
+tasks_per_weakness: 10      # Tasks to generate per identified weakness
+max_generated_tasks: 100    # Max tasks to generate per iteration
+
+# --- Paths ---
+output_dir: "checkpoints/gym_coach"
+log_dir: "logs/gym_coach"
+generated_data_dir: "data/generated"
+
+# NOTE: Training Memory logs are automatically created at:
+#   logs/gym_coach/training_memory/
+#   ├── actions/          # Every action as JSONL per iteration
+#   ├── errors/           # All errors with deduplication + recurrence tracking
+#   ├── trajectories/     # Full multi-turn trajectories per domain per iteration
+#   └── snapshot_iter_*.json  # Periodic memory snapshots

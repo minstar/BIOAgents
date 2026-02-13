@@ -1,0 +1,6 @@
+[submodule "GYM_reference/AgentGym-RL"]
+	path = GYM_reference/AgentGym-RL
+	url = https://github.com/WooooDyy/AgentGym-RL.git
+[submodule "databases/tau2-bench"]
+	path = databases/tau2-bench
+	url = https://github.com/sierra-research/tau2-bench.git

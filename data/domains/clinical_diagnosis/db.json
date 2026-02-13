@@ -93,6 +93,189 @@
       ],
       "family_history": "Father: colon cancer at age 65. Mother: alive and well.",
       "social_history": "Non-smoker. No alcohol. Restaurant manager."
+    },
+    "P004": {
+      "patient_id": "P004",
+      "name": "Jessica Rivera",
+      "age": 38,
+      "sex": "female",
+      "date_of_birth": "1987-06-18",
+      "blood_type": "AB+",
+      "chief_complaint": "Sudden onset pleuritic chest pain with shortness of breath",
+      "allergies": [],
+      "medications": [
+        {"drug_name": "Oral Contraceptive (ethinyl estradiol/drospirenone)", "dosage": "standard", "frequency": "once daily", "route": "oral", "start_date": "2023-09-01", "end_date": null, "prescriber": "Dr. Adams"}
+      ],
+      "conditions": [
+        {"condition_name": "Obesity", "icd10_code": "E66.01", "status": "chronic", "onset_date": "2021-01-01", "notes": "BMI 34.2"},
+        {"condition_name": "Factor V Leiden heterozygous", "icd10_code": "D68.51", "status": "chronic", "onset_date": "2026-02-12", "notes": "Newly discovered during this workup"}
+      ],
+      "vital_signs": [
+        {"timestamp": "2026-02-12T11:00:00", "blood_pressure_systolic": 128, "blood_pressure_diastolic": 78, "heart_rate": 118, "temperature": 37.6, "respiratory_rate": 26, "spo2": 89, "weight": 92.0},
+        {"timestamp": "2026-02-12T15:00:00", "blood_pressure_systolic": 122, "blood_pressure_diastolic": 74, "heart_rate": 108, "temperature": 37.3, "respiratory_rate": 22, "spo2": 93, "weight": null}
+      ],
+      "lab_results": [
+        {"test_id": "LAB-P004-001", "test_name": "D-Dimer", "category": "coagulation", "value": "4850", "unit": "ng/mL FEU", "reference_range": "0-500", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P004-002", "test_name": "Troponin I", "category": "chemistry", "value": "0.12", "unit": "ng/mL", "reference_range": "0-0.04", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P004-003", "test_name": "BNP", "category": "chemistry", "value": "380", "unit": "pg/mL", "reference_range": "0-100", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P004-004", "test_name": "ABG pH", "category": "blood_gas", "value": "7.48", "unit": "", "reference_range": "7.35-7.45", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P004-005", "test_name": "ABG pCO2", "category": "blood_gas", "value": "28", "unit": "mmHg", "reference_range": "35-45", "flag": "low", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P004-006", "test_name": "ABG pO2", "category": "blood_gas", "value": "58", "unit": "mmHg", "reference_range": "80-100", "flag": "low", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"}
+      ],
+      "clinical_notes": [
+        {"note_id": "NOTE-P004-001", "note_type": "admission", "author": "Dr. Thompson", "date": "2026-02-12", "content": "38F presents with sudden onset right-sided pleuritic chest pain and dyspnea that started 4 hours ago while at work. Reports swelling in right calf for 2 days. Recently returned from a 12-hour flight from Seoul 5 days ago. On OCPs. BMI 34.2. Exam: tachycardic, tachypneic, mild hypoxia on RA. Right calf tender with 3cm circumference difference compared to left. CT-PA shows bilateral pulmonary emboli in segmental and subsegmental branches. RV/LV ratio 1.2 on CT. No saddle embolus.", "diagnosis_codes": ["I26.99"]}
+      ],
+      "family_history": "Mother: DVT at age 52. Father: healthy. No known coagulopathy history until current diagnosis.",
+      "social_history": "Non-smoker. Social drinker. Marketing manager. Frequent international business travel. Recent 12-hour flight Seoul to NYC 5 days ago."
+    },
+    "P005": {
+      "patient_id": "P005",
+      "name": "Marcus Johnson",
+      "age": 24,
+      "sex": "male",
+      "date_of_birth": "2001-10-05",
+      "blood_type": "O+",
+      "chief_complaint": "Confusion, abdominal pain, and rapid breathing",
+      "allergies": [],
+      "medications": [
+        {"drug_name": "Insulin Glargine", "dosage": "22 units", "frequency": "once daily at bedtime", "route": "subcutaneous", "start_date": "2020-03-15", "end_date": null, "prescriber": "Dr. Patel"},
+        {"drug_name": "Insulin Lispro", "dosage": "sliding scale", "frequency": "before meals", "route": "subcutaneous", "start_date": "2020-03-15", "end_date": null, "prescriber": "Dr. Patel"}
+      ],
+      "conditions": [
+        {"condition_name": "Type 1 Diabetes Mellitus", "icd10_code": "E10.10", "status": "chronic", "onset_date": "2015-08-20", "notes": "Diagnosed at age 14. History of poor compliance."}
+      ],
+      "vital_signs": [
+        {"timestamp": "2026-02-12T06:30:00", "blood_pressure_systolic": 98, "blood_pressure_diastolic": 58, "heart_rate": 128, "temperature": 37.1, "respiratory_rate": 32, "spo2": 98, "weight": 68.0},
+        {"timestamp": "2026-02-12T10:00:00", "blood_pressure_systolic": 108, "blood_pressure_diastolic": 64, "heart_rate": 112, "temperature": 37.0, "respiratory_rate": 26, "spo2": 99, "weight": null}
+      ],
+      "lab_results": [
+        {"test_id": "LAB-P005-001", "test_name": "Blood Glucose", "category": "chemistry", "value": "542", "unit": "mg/dL", "reference_range": "70-100", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P005-002", "test_name": "Arterial pH", "category": "blood_gas", "value": "7.18", "unit": "", "reference_range": "7.35-7.45", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P005-003", "test_name": "Serum Bicarbonate", "category": "chemistry", "value": "8", "unit": "mEq/L", "reference_range": "22-28", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P005-004", "test_name": "Anion Gap", "category": "chemistry", "value": "28", "unit": "mEq/L", "reference_range": "8-12", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P005-005", "test_name": "Serum Ketones (Beta-hydroxybutyrate)", "category": "chemistry", "value": "6.8", "unit": "mmol/L", "reference_range": "0-0.6", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P005-006", "test_name": "Potassium", "category": "chemistry", "value": "5.8", "unit": "mEq/L", "reference_range": "3.5-5.0", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P005-007", "test_name": "HbA1c", "category": "chemistry", "value": "12.4", "unit": "%", "reference_range": "4.0-5.6", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"}
+      ],
+      "clinical_notes": [
+        {"note_id": "NOTE-P005-001", "note_type": "admission", "author": "Dr. Singh", "date": "2026-02-12", "content": "24M T1DM brought by roommate for confusion and vomiting over last 12 hours. Reports running out of insulin 3 days ago due to cost issues. Roommate notes fruity breath odor. On exam: Kussmaul breathing, dry mucous membranes, poor skin turgor, diffuse abdominal tenderness without guarding. GCS 13 (E3V4M6). Classic DKA presentation with severe metabolic acidosis. Initiating DKA protocol: IV insulin drip, aggressive IVF resuscitation, K+ monitoring q2h.", "diagnosis_codes": ["E10.10"]}
+      ],
+      "family_history": "Mother: T2DM. Father: unknown. No family history of T1DM.",
+      "social_history": "College student. Non-smoker. Occasional marijuana use. No alcohol. Recently lost health insurance. Lives in dormitory."
+    },
+    "P006": {
+      "patient_id": "P006",
+      "name": "Dorothy Patterson",
+      "age": 72,
+      "sex": "female",
+      "date_of_birth": "1953-12-30",
+      "blood_type": "A-",
+      "chief_complaint": "Vomiting blood and black tarry stools for 1 day",
+      "allergies": [
+        {"allergen": "Codeine", "reaction": "nausea/vomiting", "severity": "moderate"}
+      ],
+      "medications": [
+        {"drug_name": "Aspirin", "dosage": "81mg", "frequency": "once daily", "route": "oral", "start_date": "2020-06-01", "end_date": null, "prescriber": "Dr. Hernandez"},
+        {"drug_name": "Naproxen", "dosage": "500mg", "frequency": "twice daily", "route": "oral", "start_date": "2025-11-15", "end_date": null, "prescriber": "Dr. Kim"},
+        {"drug_name": "Amlodipine", "dosage": "5mg", "frequency": "once daily", "route": "oral", "start_date": "2022-01-10", "end_date": null, "prescriber": "Dr. Hernandez"},
+        {"drug_name": "Omeprazole", "dosage": "20mg", "frequency": "once daily", "route": "oral", "start_date": "2025-12-01", "end_date": null, "prescriber": "Dr. Kim"}
+      ],
+      "conditions": [
+        {"condition_name": "Osteoarthritis", "icd10_code": "M19.90", "status": "chronic", "onset_date": "2018-01-01", "notes": "Bilateral knees and hips, chronic NSAID use"},
+        {"condition_name": "Hypertension", "icd10_code": "I10", "status": "chronic", "onset_date": "2015-06-01", "notes": "Well controlled on amlodipine"},
+        {"condition_name": "Coronary Artery Disease", "icd10_code": "I25.10", "status": "chronic", "onset_date": "2020-04-15", "notes": "Stent placed 2020, on aspirin"}
+      ],
+      "vital_signs": [
+        {"timestamp": "2026-02-12T09:00:00", "blood_pressure_systolic": 92, "blood_pressure_diastolic": 54, "heart_rate": 118, "temperature": 36.4, "respiratory_rate": 22, "spo2": 96, "weight": 64.0},
+        {"timestamp": "2026-02-12T12:00:00", "blood_pressure_systolic": 104, "blood_pressure_diastolic": 62, "heart_rate": 102, "temperature": 36.5, "respiratory_rate": 20, "spo2": 97, "weight": null}
+      ],
+      "lab_results": [
+        {"test_id": "LAB-P006-001", "test_name": "Hemoglobin", "category": "hematology", "value": "7.2", "unit": "g/dL", "reference_range": "12.0-16.0", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P006-002", "test_name": "Hematocrit", "category": "hematology", "value": "21.8", "unit": "%", "reference_range": "36-46", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P006-003", "test_name": "BUN", "category": "chemistry", "value": "42", "unit": "mg/dL", "reference_range": "7-20", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P006-004", "test_name": "Creatinine", "category": "chemistry", "value": "1.1", "unit": "mg/dL", "reference_range": "0.6-1.1", "flag": "normal", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P006-005", "test_name": "INR", "category": "coagulation", "value": "1.0", "unit": "", "reference_range": "0.9-1.1", "flag": "normal", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P006-006", "test_name": "Lactate", "category": "chemistry", "value": "3.2", "unit": "mmol/L", "reference_range": "0.5-2.0", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P006-007", "test_name": "Type and Screen", "category": "blood_bank", "value": "A negative, antibody screen negative", "unit": "", "reference_range": "", "flag": null, "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"}
+      ],
+      "clinical_notes": [
+        {"note_id": "NOTE-P006-001", "note_type": "admission", "author": "Dr. Garcia", "date": "2026-02-12", "content": "72F presents with 3 episodes of hematemesis (coffee-ground to frank red blood) and multiple melanotic stools since yesterday evening. History of chronic NSAID use (naproxen) for OA plus daily aspirin for CAD. On PPI but started only 3 months ago. Hemodynamically significant — tachycardic and hypotensive on arrival. Orthostatic. Hgb 7.2 (baseline 12.5). BUN/Cr ratio >20 suggestive of upper GI source. Glasgow-Blatchford score 14 (high risk). Resuscitation with 2 units pRBC and IV crystalloid initiated. GI consulted for urgent EGD. NPO. Hold aspirin and naproxen. IV PPI (pantoprazole 80mg bolus then 8mg/hr drip).", "diagnosis_codes": ["K92.0", "K25.0"]}
+      ],
+      "family_history": "Father: died of MI at 68. Mother: osteoporosis. Sister: rheumatoid arthritis.",
+      "social_history": "Non-smoker. Glass of wine with dinner. Retired school teacher. Lives alone. Independent in ADLs."
+    },
+    "P007": {
+      "patient_id": "P007",
+      "name": "Frank O'Brien",
+      "age": 66,
+      "sex": "male",
+      "date_of_birth": "1959-03-22",
+      "blood_type": "B-",
+      "chief_complaint": "Worsening shortness of breath and increased sputum production for 4 days",
+      "allergies": [
+        {"allergen": "Tetracycline", "reaction": "photosensitivity", "severity": "mild"}
+      ],
+      "medications": [
+        {"drug_name": "Tiotropium", "dosage": "18mcg", "frequency": "once daily", "route": "inhaled", "start_date": "2022-04-01", "end_date": null, "prescriber": "Dr. Lee"},
+        {"drug_name": "Albuterol", "dosage": "2 puffs", "frequency": "PRN", "route": "inhaled", "start_date": "2019-01-01", "end_date": null, "prescriber": "Dr. Lee"},
+        {"drug_name": "Fluticasone/Salmeterol", "dosage": "250/50mcg", "frequency": "twice daily", "route": "inhaled", "start_date": "2023-06-15", "end_date": null, "prescriber": "Dr. Lee"},
+        {"drug_name": "Lisinopril", "dosage": "20mg", "frequency": "once daily", "route": "oral", "start_date": "2021-01-01", "end_date": null, "prescriber": "Dr. Chen"}
+      ],
+      "conditions": [
+        {"condition_name": "COPD (GOLD Stage III)", "icd10_code": "J44.1", "status": "chronic", "onset_date": "2018-01-01", "notes": "FEV1 38% predicted. 3 exacerbations in past year."},
+        {"condition_name": "Hypertension", "icd10_code": "I10", "status": "chronic", "onset_date": "2015-01-01", "notes": null},
+        {"condition_name": "Cor Pulmonale", "icd10_code": "I27.81", "status": "chronic", "onset_date": "2025-06-01", "notes": "Echo showing RVSP 55mmHg"}
+      ],
+      "vital_signs": [
+        {"timestamp": "2026-02-12T07:00:00", "blood_pressure_systolic": 152, "blood_pressure_diastolic": 88, "heart_rate": 108, "temperature": 38.1, "respiratory_rate": 30, "spo2": 82, "weight": 78.0},
+        {"timestamp": "2026-02-12T12:00:00", "blood_pressure_systolic": 140, "blood_pressure_diastolic": 82, "heart_rate": 98, "temperature": 37.6, "respiratory_rate": 24, "spo2": 89, "weight": null}
+      ],
+      "lab_results": [
+        {"test_id": "LAB-P007-001", "test_name": "ABG pH", "category": "blood_gas", "value": "7.28", "unit": "", "reference_range": "7.35-7.45", "flag": "low", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P007-002", "test_name": "ABG pCO2", "category": "blood_gas", "value": "68", "unit": "mmHg", "reference_range": "35-45", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P007-003", "test_name": "ABG pO2", "category": "blood_gas", "value": "48", "unit": "mmHg", "reference_range": "80-100", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P007-004", "test_name": "White Blood Cell Count", "category": "hematology", "value": "16.8", "unit": "x10^9/L", "reference_range": "4.5-11.0", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P007-005", "test_name": "Procalcitonin", "category": "chemistry", "value": "0.35", "unit": "ng/mL", "reference_range": "0-0.5", "flag": "normal", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P007-006", "test_name": "BNP", "category": "chemistry", "value": "520", "unit": "pg/mL", "reference_range": "0-100", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"}
+      ],
+      "clinical_notes": [
+        {"note_id": "NOTE-P007-001", "note_type": "admission", "author": "Dr. Murphy", "date": "2026-02-12", "content": "66M with severe COPD (GOLD III, FEV1 38%) presents with 4-day history of worsening dyspnea, increased purulent sputum (green), and wheezing unresponsive to home nebulizers. Using accessory muscles, tripod positioning. Barrel chest. Diffuse expiratory wheezing with prolonged expiratory phase. ABG shows acute-on-chronic hypercarbic respiratory failure (pH 7.28, pCO2 68 — baseline pCO2 ~52). O2 sat 82% on room air. Started BiPAP and IV methylprednisolone. Sputum culture sent. CXR shows hyperinflation without clear infiltrate. Considering ICU transfer if no improvement on BiPAP within 2 hours.", "diagnosis_codes": ["J44.1"]}
+      ],
+      "family_history": "Father: emphysema, died at 72. Mother: lung cancer. Brother: COPD.",
+      "social_history": "Active smoker, 45 pack-years. Drinks 2-3 beers daily. Retired construction worker. Lives with wife. On 2L home O2."
+    },
+    "P008": {
+      "patient_id": "P008",
+      "name": "George Nakamura",
+      "age": 48,
+      "sex": "male",
+      "date_of_birth": "1977-08-11",
+      "blood_type": "A+",
+      "chief_complaint": "Severe epigastric pain radiating to back with nausea and vomiting",
+      "allergies": [],
+      "medications": [],
+      "conditions": [
+        {"condition_name": "Alcohol Use Disorder", "icd10_code": "F10.20", "status": "chronic", "onset_date": "2020-01-01", "notes": "Reports drinking 8-10 beers daily for past 6 years"}
+      ],
+      "vital_signs": [
+        {"timestamp": "2026-02-12T03:00:00", "blood_pressure_systolic": 142, "blood_pressure_diastolic": 86, "heart_rate": 112, "temperature": 38.4, "respiratory_rate": 24, "spo2": 95, "weight": 82.0},
+        {"timestamp": "2026-02-12T10:00:00", "blood_pressure_systolic": 118, "blood_pressure_diastolic": 72, "heart_rate": 104, "temperature": 38.0, "respiratory_rate": 22, "spo2": 96, "weight": null}
+      ],
+      "lab_results": [
+        {"test_id": "LAB-P008-001", "test_name": "Lipase", "category": "chemistry", "value": "2840", "unit": "U/L", "reference_range": "0-160", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P008-002", "test_name": "Amylase", "category": "chemistry", "value": "1560", "unit": "U/L", "reference_range": "25-125", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P008-003", "test_name": "White Blood Cell Count", "category": "hematology", "value": "14.2", "unit": "x10^9/L", "reference_range": "4.5-11.0", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P008-004", "test_name": "ALT", "category": "chemistry", "value": "68", "unit": "U/L", "reference_range": "7-56", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P008-005", "test_name": "Calcium", "category": "chemistry", "value": "7.8", "unit": "mg/dL", "reference_range": "8.5-10.5", "flag": "low", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P008-006", "test_name": "Triglycerides", "category": "chemistry", "value": "380", "unit": "mg/dL", "reference_range": "0-150", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P008-007", "test_name": "Lactate", "category": "chemistry", "value": "2.8", "unit": "mmol/L", "reference_range": "0.5-2.0", "flag": "high", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"},
+        {"test_id": "LAB-P008-008", "test_name": "CRP", "category": "chemistry", "value": "145", "unit": "mg/L", "reference_range": "0-5", "flag": "critical", "order_date": "2026-02-12", "result_date": "2026-02-12", "status": "completed"}
+      ],
+      "clinical_notes": [
+        {"note_id": "NOTE-P008-001", "note_type": "admission", "author": "Dr. Yamada", "date": "2026-02-12", "content": "48M presents with acute onset severe epigastric pain (10/10) radiating to back, started 8 hours ago after binge drinking episode. Multiple episodes of non-bloody vomiting. Reports 8-10 beers daily for 6 years with 2 prior episodes of 'pancreas problems.' On exam: distressed, guarding in epigastrium, decreased bowel sounds, no rebound. Cullen and Grey Turner signs absent. Lipase >17x ULN. CT abdomen: diffuse pancreatic enlargement with peripancreatic fat stranding, no necrosis on initial scan. Ranson's criteria at admission: 3 (age <55, WBC >16K, glucose 180, LDH pending, AST pending). BISAP score 2. Plan: aggressive IVF (250-500mL/hr LR), NPO, IV analgesia (hydromorphone PCA), CIWA monitoring for alcohol withdrawal risk.", "diagnosis_codes": ["K85.20"]}
+      ],
+      "family_history": "Father: alcoholism. Mother: gallstones. No family history of pancreatic cancer.",
+      "social_history": "Heavy alcohol use (8-10 beers daily x 6 years). Former smoker (10 pack-years, quit 2 years ago). Warehouse worker. Divorced. Lives alone."
     }
   },
   "drug_interactions": [
@@ -155,6 +338,102 @@
         "Pain management: avoid NSAIDs if GI bleeding risk; use acetaminophen or opioids"
       ],
       "last_updated": "2025-03-20"
+    },
+    "GL004": {
+      "guideline_id": "GL004",
+      "condition": "Pulmonary embolism",
+      "title": "ESC/ERS Guidelines for Diagnosis and Management of Acute Pulmonary Embolism",
+      "source": "European Society of Cardiology / European Respiratory Society",
+      "summary": "Evidence-based guidelines for the diagnosis, risk stratification, and treatment of acute pulmonary embolism.",
+      "recommendations": [
+        "Use Wells score or Geneva score for pre-test probability assessment",
+        "D-dimer testing to exclude PE in low-to-intermediate probability patients",
+        "CT pulmonary angiography (CTPA) is the gold standard imaging",
+        "Risk stratify using sPESI score, troponin, BNP, and RV/LV ratio on CT",
+        "Anticoagulation with LMWH or UFH for initial treatment",
+        "DOACs (apixaban or rivaroxaban) for most patients as first-line therapy",
+        "Systemic thrombolysis for massive PE with hemodynamic instability",
+        "Consider catheter-directed therapy for submassive PE with RV dysfunction",
+        "Thrombophilia workup in unprovoked PE in young patients"
+      ],
+      "last_updated": "2024-08-15"
+    },
+    "GL005": {
+      "guideline_id": "GL005",
+      "condition": "Diabetic ketoacidosis",
+      "title": "ADA Guidelines for Management of Diabetic Ketoacidosis",
+      "source": "American Diabetes Association",
+      "summary": "Protocol for the acute management of diabetic ketoacidosis in adults.",
+      "recommendations": [
+        "Diagnosis: glucose >250, pH <7.3, bicarbonate <18, positive ketones, elevated anion gap",
+        "Aggressive IV fluid resuscitation: NS 1-1.5 L/hr for first 1-2 hours",
+        "Continuous IV insulin infusion: 0.1 units/kg/hr (or 0.14 units/kg/hr without bolus)",
+        "Monitor potassium before starting insulin — replace if K+ <3.3 before insulin",
+        "Replace potassium in IV fluids when K+ <5.3 mEq/L",
+        "Monitor glucose hourly, BMP q2-4h",
+        "Switch to subcutaneous insulin when pH >7.3, bicarb >15, anion gap normalized, patient eating",
+        "Overlap IV and SC insulin by 1-2 hours",
+        "Identify and treat precipitating cause (infection, non-compliance, new-onset T1DM)"
+      ],
+      "last_updated": "2025-01-01"
+    },
+    "GL006": {
+      "guideline_id": "GL006",
+      "condition": "Upper gastrointestinal bleeding",
+      "title": "ACG Guidelines for Management of Upper Gastrointestinal Bleeding",
+      "source": "American College of Gastroenterology",
+      "summary": "Clinical practice guidelines for diagnosis and management of upper GI bleeding.",
+      "recommendations": [
+        "Risk stratify using Glasgow-Blatchford Score at presentation",
+        "Volume resuscitation — target MAP >65 mmHg",
+        "Transfuse pRBCs for hemoglobin <7 g/dL (or <9 g/dL in active coronary disease)",
+        "IV PPI: pantoprazole 80mg bolus then 8mg/hr drip (for high-risk patients)",
+        "EGD within 24 hours (within 12 hours for high-risk patients)",
+        "Hold aspirin/NSAIDs; resume aspirin within 3-7 days if cardiovascular indication exists",
+        "Erythromycin 250mg IV 20-120 minutes before EGD to improve visualization",
+        "For variceal bleeding: octreotide + antibiotics (ceftriaxone) + urgent EGD with banding",
+        "Interventional radiology or surgery for endoscopy-refractory bleeding"
+      ],
+      "last_updated": "2024-06-15"
+    },
+    "GL007": {
+      "guideline_id": "GL007",
+      "condition": "COPD exacerbation",
+      "title": "GOLD Guidelines for Management of COPD Exacerbations",
+      "source": "Global Initiative for Chronic Obstructive Lung Disease",
+      "summary": "Management recommendations for acute exacerbations of COPD.",
+      "recommendations": [
+        "Short-acting bronchodilators (SABA +/- SAMA) as first-line therapy",
+        "Systemic corticosteroids: prednisone 40mg/day for 5 days (or IV equivalent)",
+        "Antibiotics if increased dyspnea, sputum volume, AND sputum purulence (Anthonisen criteria)",
+        "Controlled oxygen therapy: target SpO2 88-92% to avoid CO2 retention",
+        "Non-invasive ventilation (BiPAP) for respiratory acidosis (pH <7.35, pCO2 >45)",
+        "Invasive ventilation if NIV fails, pH <7.25, or patient unable to protect airway",
+        "ABG monitoring for patients on supplemental O2 or NIV",
+        "VTE prophylaxis for hospitalized patients",
+        "Assess and optimize maintenance therapy at discharge"
+      ],
+      "last_updated": "2025-11-01"
+    },
+    "GL008": {
+      "guideline_id": "GL008",
+      "condition": "Acute pancreatitis",
+      "title": "ACG Guidelines for Management of Acute Pancreatitis",
+      "source": "American College of Gastroenterology",
+      "summary": "Evidence-based guidelines for diagnosis and management of acute pancreatitis.",
+      "recommendations": [
+        "Diagnosis: 2 of 3 criteria — characteristic abdominal pain, lipase/amylase >3x ULN, imaging findings",
+        "Aggressive early IV fluid resuscitation: goal-directed (LR preferred, 250-500 mL/hr initially)",
+        "Monitor fluid responsiveness: urine output, heart rate, BUN trending",
+        "Pain management: multimodal analgesia, opioids as needed (no evidence against morphine)",
+        "NPO initially; start oral feeding when pain improving and no nausea",
+        "Early oral feeding (within 24 hours if tolerated) reduces length of stay",
+        "No role for prophylactic antibiotics in mild-moderate pancreatitis",
+        "CT abdomen with contrast at 72-96 hours if no clinical improvement (assess for necrosis)",
+        "ERCP within 24 hours for acute pancreatitis with cholangitis",
+        "Alcohol cessation counseling and follow-up for alcohol-related pancreatitis"
+      ],
+      "last_updated": "2024-03-01"
     }
   },
   "lab_orders": {},

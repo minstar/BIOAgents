@@ -119,6 +119,96 @@
       "findings_description": "Right thyroid lobe: Measures 4.5 x 2.0 x 1.8 cm. Contains a 2.2 x 1.5 x 1.8 cm solid hypoechoic nodule with irregular margins, taller-than-wide shape, and punctate echogenic foci (microcalcifications). Internal vascularity is increased on Doppler. Left thyroid lobe: Measures 4.0 x 1.8 x 1.5 cm. Contains a 0.6 cm benign-appearing cystic nodule. Isthmus: Normal thickness (3mm). No suspicious cervical lymphadenopathy.",
       "impression_reference": "1. Right thyroid lobe: 2.2 cm solid hypoechoic nodule with irregular margins, microcalcifications, and taller-than-wide shape. ACR TI-RADS 5 (Highly Suspicious). Given size >1.0 cm and TI-RADS 5, FNA biopsy is recommended. 2. Left thyroid: 0.6 cm cystic nodule, benign appearance (TI-RADS 2). No biopsy needed. 3. No suspicious lymphadenopathy.",
       "urgency": "routine"
+    },
+    "RAD009": {
+      "study_id": "RAD009",
+      "modality": "CT",
+      "body_part": "abdomen",
+      "indication": "RLQ pain, fever, elevated WBC. R/O appendicitis.",
+      "technique": "CT abdomen and pelvis with IV contrast",
+      "patient_id": "RAD_P009",
+      "patient_age": 28,
+      "patient_sex": "M",
+      "clinical_history": "28-year-old male with 18-hour history of periumbilical pain migrating to RLQ, nausea, anorexia. WBC 17.2. Low-grade fever. McBurney's point tenderness.",
+      "prior_studies": [],
+      "findings_description": "Appendix: The appendix is dilated to 14mm with wall thickening and mucosal hyperenhancement. An appendicolith is seen at the base of the appendix measuring 8mm. There is a focal discontinuity of the appendiceal wall at the tip with a small amount of extraluminal gas and a 3 cm periappendiceal fluid collection, consistent with contained perforation. Periappendiceal fat stranding is extensive. Cecum and terminal ileum are mildly thickened reactively. No free intraperitoneal air. Small amount of free fluid in the pelvis. No lymphadenopathy. Kidneys, liver, spleen, and pancreas are unremarkable.",
+      "impression_reference": "1. Acute appendicitis with contained perforation: dilated appendix (14mm), appendicolith, focal wall discontinuity with extraluminal gas and periappendiceal abscess (3 cm). 2. Recommend urgent surgical consultation. Given contained perforation with small abscess, options include immediate appendectomy vs. percutaneous drainage with interval appendectomy. 3. No evidence of diffuse peritonitis.",
+      "urgency": "stat"
+    },
+    "RAD010": {
+      "study_id": "RAD010",
+      "modality": "MRI",
+      "body_part": "spine_lumbar",
+      "indication": "Acute onset bilateral leg weakness, urinary retention, saddle anesthesia. R/O cauda equina syndrome.",
+      "technique": "MRI lumbar spine without and with gadolinium contrast. Sequences: T1, T2 sagittal and axial, STIR, post-contrast T1.",
+      "patient_id": "RAD_P010",
+      "patient_age": 45,
+      "patient_sex": "M",
+      "clinical_history": "45-year-old male with 2-day history of progressive bilateral leg weakness, urinary retention requiring catheterization, and perineal numbness. History of chronic low back pain. Denies trauma.",
+      "prior_studies": [],
+      "findings_description": "L4-L5: Large central disc extrusion measuring 15 x 12 x 18 mm extending caudally. The extruded disc fragment fills the central spinal canal and significantly compresses the thecal sac and cauda equina nerve roots. There is severe canal stenosis at this level with less than 20% residual canal diameter. L3-L4: Broad-based disc bulge with mild bilateral foraminal narrowing. L5-S1: Mild degenerative disc disease without significant stenosis. Conus medullaris terminates at L1 level (normal). The cauda equina nerve roots show clumping/redundancy inferior to the L4-L5 level. No abnormal enhancement to suggest tumor or infection. Vertebral body heights and alignment are preserved. No fracture.",
+      "impression_reference": "1. EMERGENCY: Large L4-L5 central disc extrusion causing severe cauda equina compression. Findings consistent with cauda equina syndrome. 2. Immediate neurosurgical consultation for emergent decompression is recommended (surgical decompression within 24-48 hours improves outcomes). 3. Mild degenerative changes at adjacent levels.",
+      "urgency": "stat"
+    },
+    "RAD011": {
+      "study_id": "RAD011",
+      "modality": "CT",
+      "body_part": "chest",
+      "indication": "Post-operative day 5 after hip replacement. New dyspnea and pleuritic chest pain. R/O PE vs pneumonia.",
+      "technique": "CT pulmonary angiography with IV contrast",
+      "patient_id": "RAD_P011",
+      "patient_age": 68,
+      "patient_sex": "F",
+      "clinical_history": "68-year-old female, post-op day 5 status post right total hip arthroplasty. Developed acute onset dyspnea and right-sided pleuritic chest pain. SpO2 dropped from 97% to 89%. D-dimer elevated at 3200 ng/mL. On prophylactic enoxaparin.",
+      "prior_studies": [],
+      "findings_description": "Pulmonary arteries: Multiple filling defects identified in the right lower lobe segmental and subsegmental arteries and the right middle lobe segmental artery, consistent with pulmonary emboli. The main pulmonary arteries are patent. No saddle embolus. RV/LV ratio is 1.1 (borderline). Interventricular septum appears flat/bowed toward the LV. Lung parenchyma: Dependent atelectasis in bilateral lower lobes. No consolidation to suggest pneumonia. No ground-glass opacity. Small right-sided pleural effusion. Heart: No pericardial effusion. Mediastinum: No lymphadenopathy. Bones: Post-surgical changes in the right hip.",
+      "impression_reference": "1. Acute pulmonary embolism: Multiple filling defects in right lower lobe and right middle lobe segmental arteries. 2. Borderline RV enlargement (RV/LV 1.1) with septal flattening, suggesting right heart strain — submassive PE. 3. No evidence of pneumonia. 4. Small right pleural effusion. 5. Recommend anticoagulation escalation, cardiology consultation for risk stratification, and repeat echo.",
+      "urgency": "stat"
+    },
+    "RAD012": {
+      "study_id": "RAD012",
+      "modality": "US",
+      "body_part": "abdomen_ruq",
+      "indication": "RUQ pain, fever, Murphy sign positive. R/O acute cholecystitis.",
+      "technique": "Ultrasound right upper quadrant with Doppler",
+      "patient_id": "RAD_P012",
+      "patient_age": 45,
+      "patient_sex": "F",
+      "clinical_history": "45-year-old female with acute onset RUQ pain after fatty meal, nausea, vomiting, and fever (38.6°C). Positive Murphy sign on exam. WBC 14.5. ALT 85, AST 72. Alkaline phosphatase 210.",
+      "prior_studies": [],
+      "findings_description": "Gallbladder: Distended, measuring 12 x 5 cm. Multiple gallstones are present, the largest measuring 1.5 cm, with one impacted in the gallbladder neck. Gallbladder wall thickness is 6 mm (normal <3 mm). Pericholecystic fluid is present. Sonographic Murphy sign is positive. Hyperemia of the gallbladder wall is demonstrated on color Doppler. Common bile duct: Measures 5 mm (normal, <7 mm). No choledocholithiasis. Liver: Normal echotexture. No focal hepatic lesion. No intrahepatic ductal dilation. Right kidney: Normal. Pancreatic head (partially visualized): No abnormality seen.",
+      "impression_reference": "1. Acute cholecystitis: Distended gallbladder with wall thickening (6 mm), gallstone impacted in neck, pericholecystic fluid, positive sonographic Murphy sign, and gallbladder wall hyperemia. 2. Multiple cholelithiasis. 3. No choledocholithiasis — CBD normal caliber. 4. Recommend surgical consultation for cholecystectomy.",
+      "urgency": "urgent"
+    },
+    "RAD013": {
+      "study_id": "RAD013",
+      "modality": "XR",
+      "body_part": "chest",
+      "indication": "Sudden chest pain and dyspnea in tall thin male. R/O pneumothorax.",
+      "technique": "PA and lateral chest radiographs (upright)",
+      "patient_id": "RAD_P013",
+      "patient_age": 22,
+      "patient_sex": "M",
+      "clinical_history": "22-year-old tall thin male (6'3\", 155 lbs) with sudden onset right-sided chest pain and mild dyspnea while at rest. Non-smoker. No trauma. No prior episodes.",
+      "prior_studies": [],
+      "findings_description": "Right lung: There is a visible pleural line in the right hemithorax with absence of lung markings peripheral to this line, consistent with a right-sided pneumothorax. The estimated size is approximately 25-30% on PA view (distance from apex to cupola approximately 3 cm). The lung appears partially collapsed with a small amount of residual aeration. No mediastinal shift. No tension features. Left lung: Clear. No pneumothorax. Heart size is normal. No pleural effusion bilaterally. No rib fractures.",
+      "impression_reference": "1. Moderate right-sided primary spontaneous pneumothorax (approximately 25-30%). 2. No tension pneumothorax features — no mediastinal shift, trachea midline. 3. Given size >20% in a symptomatic patient, aspiration or chest tube drainage is recommended per BTS guidelines. 4. Follow-up chest X-ray after intervention to confirm lung re-expansion.",
+      "urgency": "urgent"
+    },
+    "RAD014": {
+      "study_id": "RAD014",
+      "modality": "CT",
+      "body_part": "head",
+      "indication": "80-year-old on anticoagulation with fall and head strike. Altered mental status. R/O intracranial hemorrhage.",
+      "technique": "Non-contrast CT head",
+      "patient_id": "RAD_P014",
+      "patient_age": 80,
+      "patient_sex": "F",
+      "clinical_history": "80-year-old female on apixaban for atrial fibrillation, fell at home striking head on table edge 3 hours ago. Scalp laceration. Initially alert but now increasingly confused. GCS 13. On apixaban 5mg BID.",
+      "prior_studies": ["PRIOR_RAD014"],
+      "findings_description": "Extra-axial: Crescentic hyperdense collection along the right frontoparietal convexity measuring up to 12mm in maximal thickness, consistent with acute subdural hematoma. The collection extends along the tentorium on the right side. There is 7mm of leftward midline shift at the level of the septum pellucidum. Right lateral ventricle is compressed. Left lateral ventricle is mildly dilated (early contralateral hydrocephalus). Brain parenchyma: Loss of gray-white matter differentiation in the right hemisphere subjacent to the hematoma, consistent with mass effect rather than infarct. No intraparenchymal hemorrhage. Posterior fossa: Unremarkable. No tonsillar herniation. Skull: 3 cm right parietal scalp soft tissue swelling. No skull fracture identified. Comparison: Prior CT head 6 months ago was unremarkable. Mild generalized cerebral atrophy (age-appropriate).",
+      "impression_reference": "1. ACUTE RIGHT SUBDURAL HEMATOMA: 12mm maximum thickness with 7mm leftward midline shift. This is a neurosurgical emergency. 2. Findings concerning for early uncal herniation — immediate neurosurgical consultation for evacuation. 3. Patient is on anticoagulation (apixaban) — reversal with andexanet alfa or 4-factor PCC should be considered urgently. 4. No skull fracture. Right parietal scalp hematoma.",
+      "urgency": "stat"
     }
   },
   "templates": {
@@ -179,6 +269,13 @@
       "date": "2025-02-01",
       "impression": "BI-RADS 1 (Negative) bilateral. No suspicious mass or calcification. Heterogeneously dense breast tissue. Recommend routine annual screening.",
       "key_findings": ["negative bilateral", "dense tissue", "routine screening"]
+    },
+    "PRIOR_RAD014": {
+      "report_id": "PRIOR_RAD014",
+      "study_id": "RAD014_prior",
+      "date": "2025-08-10",
+      "impression": "No acute intracranial abnormality. Mild generalized cerebral atrophy consistent with age. No subdural or epidural hematoma. No midline shift.",
+      "key_findings": ["no acute abnormality", "age-appropriate atrophy", "no hemorrhage"]
     }
   },
   "knowledge_base": {

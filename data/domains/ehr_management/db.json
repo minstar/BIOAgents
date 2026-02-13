@@ -344,12 +344,448 @@
         "notes": "Low risk. Door-to-balloon <90 min. All GDMT initiated."
       },
       "prior_admissions": []
+    },
+    "HADM_10004": {
+      "demographics": {
+        "patient_id": "P2004",
+        "name": "Patricia Murphy",
+        "age": 71,
+        "sex": "F",
+        "date_of_birth": "1954-07-19",
+        "ethnicity": "White",
+        "language": "English",
+        "insurance": "Medicare",
+        "marital_status": "Widowed"
+      },
+      "admission": {
+        "hadm_id": "HADM_10004",
+        "patient_id": "P2004",
+        "admit_time": "2026-02-08 06:15",
+        "discharge_time": "2026-02-13 14:00",
+        "admit_type": "emergency",
+        "admit_location": "Emergency Room",
+        "discharge_location": "Home with services",
+        "diagnosis_at_admission": "Acute COPD exacerbation with hypercarbic respiratory failure",
+        "icd_codes": ["J44.1", "J96.01", "I10", "F17.210"],
+        "drg_code": "DRG-190",
+        "los_days": 5.32,
+        "icu_stays": ["ICU_5004"],
+        "is_readmission": false
+      },
+      "icu_stays": [
+        {
+          "icustay_id": "ICU_5004",
+          "hadm_id": "HADM_10004",
+          "patient_id": "P2004",
+          "icu_type": "MICU",
+          "intime": "2026-02-08 07:00",
+          "outtime": "2026-02-10 16:00",
+          "los_icu_hours": 57.0
+        }
+      ],
+      "lab_events": [
+        {"itemid": "L030", "label": "ABG pH", "value": 7.26, "valueuom": "", "flag": "abnormal", "ref_range_lower": 7.35, "ref_range_upper": 7.45, "charttime": "2026-02-08 07:00"},
+        {"itemid": "L031", "label": "ABG pCO2", "value": 72.0, "valueuom": "mmHg", "flag": "abnormal", "ref_range_lower": 35, "ref_range_upper": 45, "charttime": "2026-02-08 07:00"},
+        {"itemid": "L032", "label": "ABG pO2", "value": 52.0, "valueuom": "mmHg", "flag": "abnormal", "ref_range_lower": 80, "ref_range_upper": 100, "charttime": "2026-02-08 07:00"},
+        {"itemid": "L030", "label": "ABG pH", "value": 7.32, "valueuom": "", "flag": "abnormal", "ref_range_lower": 7.35, "ref_range_upper": 7.45, "charttime": "2026-02-08 14:00"},
+        {"itemid": "L031", "label": "ABG pCO2", "value": 58.0, "valueuom": "mmHg", "flag": "abnormal", "ref_range_lower": 35, "ref_range_upper": 45, "charttime": "2026-02-08 14:00"},
+        {"itemid": "L030", "label": "ABG pH", "value": 7.38, "valueuom": "", "flag": "normal", "ref_range_lower": 7.35, "ref_range_upper": 7.45, "charttime": "2026-02-09 06:00"},
+        {"itemid": "L031", "label": "ABG pCO2", "value": 50.0, "valueuom": "mmHg", "flag": "abnormal", "ref_range_lower": 35, "ref_range_upper": 45, "charttime": "2026-02-09 06:00"},
+        {"itemid": "L010", "label": "WBC", "value": 14.2, "valueuom": "K/uL", "flag": "abnormal", "ref_range_lower": 4.0, "ref_range_upper": 11.0, "charttime": "2026-02-08 07:00"},
+        {"itemid": "L010", "label": "WBC", "value": 10.5, "valueuom": "K/uL", "flag": "normal", "ref_range_lower": 4.0, "ref_range_upper": 11.0, "charttime": "2026-02-10 06:00"},
+        {"itemid": "L012", "label": "Procalcitonin", "value": 0.18, "valueuom": "ng/mL", "flag": "normal", "ref_range_lower": 0, "ref_range_upper": 0.5, "charttime": "2026-02-08 07:00"}
+      ],
+      "vital_events": [
+        {"charttime": "2026-02-08 07:00", "heart_rate": 112, "sbp": 158, "dbp": 92, "mean_bp": 114, "resp_rate": 32, "temperature": 37.8, "spo2": 82, "fio2": 0.21, "gcs_total": 14},
+        {"charttime": "2026-02-08 10:00", "heart_rate": 98, "sbp": 142, "dbp": 84, "mean_bp": 103, "resp_rate": 24, "temperature": 37.4, "spo2": 90, "fio2": 0.28, "gcs_total": 15},
+        {"charttime": "2026-02-09 06:00", "heart_rate": 88, "sbp": 136, "dbp": 78, "mean_bp": 97, "resp_rate": 20, "temperature": 37.0, "spo2": 92, "fio2": 0.24, "gcs_total": 15},
+        {"charttime": "2026-02-10 06:00", "heart_rate": 82, "sbp": 130, "dbp": 76, "mean_bp": 94, "resp_rate": 18, "temperature": 36.8, "spo2": 93, "fio2": 0.21, "gcs_total": 15}
+      ],
+      "medication_orders": [
+        {"order_id": "ORD_030", "drug": "methylprednisolone", "drug_type": "MAIN", "dose_val": "125", "dose_unit": "mg", "route": "IV", "frequency": "Q6H x 48h then taper", "start_time": "2026-02-08 08:00", "end_time": "2026-02-10 08:00", "status": "completed"},
+        {"order_id": "ORD_031", "drug": "prednisone", "drug_type": "MAIN", "dose_val": "40", "dose_unit": "mg", "route": "PO", "frequency": "daily x 5 days", "start_time": "2026-02-10 08:00", "end_time": "2026-02-15 08:00", "status": "active"},
+        {"order_id": "ORD_032", "drug": "albuterol/ipratropium", "drug_type": "MAIN", "dose_val": "3/0.5", "dose_unit": "mg", "route": "nebulizer", "frequency": "Q4H", "start_time": "2026-02-08 07:30", "end_time": null, "status": "active"},
+        {"order_id": "ORD_033", "drug": "azithromycin", "drug_type": "MAIN", "dose_val": "500", "dose_unit": "mg", "route": "IV", "frequency": "daily x 3 days", "start_time": "2026-02-08 09:00", "end_time": "2026-02-11 09:00", "status": "completed"},
+        {"order_id": "ORD_034", "drug": "enoxaparin", "drug_type": "MAIN", "dose_val": "40", "dose_unit": "mg", "route": "SC", "frequency": "daily", "start_time": "2026-02-08 20:00", "end_time": "2026-02-13 08:00", "status": "completed"}
+      ],
+      "procedures": [
+        {"procedure_id": "PROC_030", "procedure_name": "Non-invasive ventilation (BiPAP)", "icd_procedure_code": "5A09357", "procedure_time": "2026-02-08 07:15", "performed_by": "RT staff", "notes": "BiPAP 12/5, FiO2 28%. Patient tolerated well. Weaned off after 48 hours.", "outcome": "Successful — avoided intubation"}
+      ],
+      "discharge_summary": {
+        "note_id": "NOTE_10004",
+        "hadm_id": "HADM_10004",
+        "chartdate": "2026-02-13",
+        "category": "Discharge summary",
+        "text": "71F with severe COPD (GOLD III) presenting with acute exacerbation and hypercarbic respiratory failure. Managed with BiPAP in MICU for 57 hours, systemic steroids, nebulizers, and azithromycin. ABG improved from pH 7.26/pCO2 72 to 7.38/50. Successfully weaned to room air with SpO2 93%. Discharged on prednisone taper and optimized inhaler regimen. Smoking cessation counseling reinforced.",
+        "diagnoses": ["Acute COPD exacerbation", "Acute hypercarbic respiratory failure", "Hypertension", "Nicotine dependence"],
+        "discharge_medications": ["prednisone 40mg PO daily x 3 more days", "tiotropium 18mcg inhaled daily", "fluticasone/vilanterol 100/25mcg inhaled daily", "albuterol MDI PRN", "amlodipine 5mg PO daily"],
+        "follow_up_instructions": "Pulmonology follow-up in 1 week. Smoking cessation program referral. PFTs in 6 weeks. Pneumococcal and influenza vaccination if not current."
+      },
+      "clinical_scores": [
+        {"score_name": "NEWS2", "score_value": 11, "interpretation": "High clinical risk. Urgent clinical review.", "components": {"resp_rate": 3, "spo2": 3, "systolic_bp": 0, "heart_rate": 1, "consciousness": 1, "temperature": 1}, "calculated_at": "2026-02-08 07:00"},
+        {"score_name": "NEWS2", "score_value": 2, "interpretation": "Low clinical risk.", "components": {"resp_rate": 0, "spo2": 0, "systolic_bp": 0, "heart_rate": 0, "consciousness": 0, "temperature": 0}, "calculated_at": "2026-02-12 06:00"}
+      ],
+      "quality_indicators": {
+        "readmission_risk": 0.30,
+        "mortality_risk": 0.08,
+        "expected_los": 5.0,
+        "sepsis_flag": false,
+        "aki_stage": null,
+        "notes": "Avoided intubation with BiPAP. High readmission risk due to severe COPD and ongoing smoking."
+      },
+      "prior_admissions": []
+    },
+    "HADM_10005": {
+      "demographics": {
+        "patient_id": "P2005",
+        "name": "Richard Kowalski",
+        "age": 58,
+        "sex": "M",
+        "date_of_birth": "1967-11-30",
+        "ethnicity": "White",
+        "language": "English",
+        "insurance": "Medicaid",
+        "marital_status": "Single"
+      },
+      "admission": {
+        "hadm_id": "HADM_10005",
+        "patient_id": "P2005",
+        "admit_time": "2026-02-06 22:40",
+        "discharge_time": "2026-02-12 11:00",
+        "admit_type": "emergency",
+        "admit_location": "Emergency Room",
+        "discharge_location": "Home",
+        "diagnosis_at_admission": "Acute upper GI bleeding — variceal",
+        "icd_codes": ["K92.0", "K70.31", "I85.01", "F10.20"],
+        "drg_code": "DRG-377",
+        "los_days": 5.51,
+        "icu_stays": ["ICU_5005"],
+        "is_readmission": true
+      },
+      "icu_stays": [
+        {
+          "icustay_id": "ICU_5005",
+          "hadm_id": "HADM_10005",
+          "patient_id": "P2005",
+          "icu_type": "MICU",
+          "intime": "2026-02-06 23:00",
+          "outtime": "2026-02-09 10:00",
+          "los_icu_hours": 59.0
+        }
+      ],
+      "lab_events": [
+        {"itemid": "L005", "label": "Hemoglobin", "value": 6.8, "valueuom": "g/dL", "flag": "abnormal", "ref_range_lower": 13.5, "ref_range_upper": 17.5, "charttime": "2026-02-06 23:00"},
+        {"itemid": "L005", "label": "Hemoglobin", "value": 8.2, "valueuom": "g/dL", "flag": "abnormal", "ref_range_lower": 13.5, "ref_range_upper": 17.5, "charttime": "2026-02-07 12:00"},
+        {"itemid": "L005", "label": "Hemoglobin", "value": 9.1, "valueuom": "g/dL", "flag": "abnormal", "ref_range_lower": 13.5, "ref_range_upper": 17.5, "charttime": "2026-02-09 06:00"},
+        {"itemid": "L013", "label": "Platelet", "value": 68.0, "valueuom": "K/uL", "flag": "abnormal", "ref_range_lower": 150, "ref_range_upper": 400, "charttime": "2026-02-06 23:00"},
+        {"itemid": "L040", "label": "INR", "value": 1.8, "valueuom": "", "flag": "abnormal", "ref_range_lower": 0.9, "ref_range_upper": 1.1, "charttime": "2026-02-06 23:00"},
+        {"itemid": "L014", "label": "Bilirubin Total", "value": 3.8, "valueuom": "mg/dL", "flag": "abnormal", "ref_range_lower": 0.1, "ref_range_upper": 1.2, "charttime": "2026-02-06 23:00"},
+        {"itemid": "L041", "label": "Albumin", "value": 2.4, "valueuom": "g/dL", "flag": "abnormal", "ref_range_lower": 3.5, "ref_range_upper": 5.0, "charttime": "2026-02-06 23:00"},
+        {"itemid": "L002", "label": "Creatinine", "value": 1.4, "valueuom": "mg/dL", "flag": "abnormal", "ref_range_lower": 0.7, "ref_range_upper": 1.3, "charttime": "2026-02-06 23:00"},
+        {"itemid": "L011", "label": "Lactate", "value": 3.5, "valueuom": "mmol/L", "flag": "abnormal", "ref_range_lower": 0.5, "ref_range_upper": 2.0, "charttime": "2026-02-06 23:00"},
+        {"itemid": "L011", "label": "Lactate", "value": 1.8, "valueuom": "mmol/L", "flag": "normal", "ref_range_lower": 0.5, "ref_range_upper": 2.0, "charttime": "2026-02-07 12:00"}
+      ],
+      "vital_events": [
+        {"charttime": "2026-02-06 23:00", "heart_rate": 118, "sbp": 82, "dbp": 48, "mean_bp": 59, "resp_rate": 24, "temperature": 36.4, "spo2": 96, "fio2": 0.21, "gcs_total": 14},
+        {"charttime": "2026-02-07 04:00", "heart_rate": 102, "sbp": 98, "dbp": 58, "mean_bp": 71, "resp_rate": 20, "temperature": 36.8, "spo2": 97, "fio2": 0.21, "gcs_total": 15},
+        {"charttime": "2026-02-07 12:00", "heart_rate": 92, "sbp": 108, "dbp": 64, "mean_bp": 79, "resp_rate": 18, "temperature": 36.9, "spo2": 98, "fio2": 0.21, "gcs_total": 15},
+        {"charttime": "2026-02-09 06:00", "heart_rate": 82, "sbp": 116, "dbp": 70, "mean_bp": 85, "resp_rate": 16, "temperature": 36.7, "spo2": 98, "fio2": 0.21, "gcs_total": 15}
+      ],
+      "medication_orders": [
+        {"order_id": "ORD_040", "drug": "octreotide", "drug_type": "MAIN", "dose_val": "50", "dose_unit": "mcg", "route": "IV", "frequency": "bolus then 50mcg/hr drip x 5 days", "start_time": "2026-02-06 23:15", "end_time": "2026-02-11 23:00", "status": "completed"},
+        {"order_id": "ORD_041", "drug": "pantoprazole", "drug_type": "MAIN", "dose_val": "40", "dose_unit": "mg", "route": "IV", "frequency": "BID", "start_time": "2026-02-06 23:30", "end_time": "2026-02-09 10:00", "status": "completed"},
+        {"order_id": "ORD_042", "drug": "ceftriaxone", "drug_type": "MAIN", "dose_val": "1", "dose_unit": "g", "route": "IV", "frequency": "daily x 7 days", "start_time": "2026-02-07 00:00", "end_time": "2026-02-13 00:00", "status": "completed"},
+        {"order_id": "ORD_043", "drug": "packed red blood cells", "drug_type": "BLOOD", "dose_val": "2", "dose_unit": "units", "route": "IV", "frequency": "once", "start_time": "2026-02-07 00:30", "end_time": "2026-02-07 04:00", "status": "completed"},
+        {"order_id": "ORD_044", "drug": "nadolol", "drug_type": "MAIN", "dose_val": "20", "dose_unit": "mg", "route": "PO", "frequency": "daily", "start_time": "2026-02-09 08:00", "end_time": null, "status": "active"},
+        {"order_id": "ORD_045", "drug": "lactulose", "drug_type": "MAIN", "dose_val": "30", "dose_unit": "mL", "route": "PO", "frequency": "TID", "start_time": "2026-02-07 08:00", "end_time": null, "status": "active"}
+      ],
+      "procedures": [
+        {"procedure_id": "PROC_040", "procedure_name": "Emergent esophagogastroduodenoscopy (EGD)", "icd_procedure_code": "0DJ08ZZ", "procedure_time": "2026-02-07 02:00", "performed_by": "Dr. Garcia", "notes": "Grade II esophageal varices with active oozing. 3 bands placed. No gastric varices. Portal hypertensive gastropathy.", "outcome": "Successful variceal band ligation, hemostasis achieved"}
+      ],
+      "discharge_summary": {
+        "note_id": "NOTE_10005",
+        "hadm_id": "HADM_10005",
+        "chartdate": "2026-02-12",
+        "category": "Discharge summary",
+        "text": "58M with alcoholic cirrhosis (Child-Pugh B, MELD 18) presenting with acute variceal bleeding. Hemoglobin nadir 6.8. Resuscitated with 2 units pRBC, octreotide drip, and prophylactic ceftriaxone. Emergent EGD with successful variceal band ligation (3 bands). No rebleeding. Started on nadolol for secondary prophylaxis. MELD score 18 — hepatology referral for transplant evaluation. Active alcohol use counseling provided.",
+        "diagnoses": ["Acute variceal bleeding", "Alcoholic cirrhosis Child-Pugh B", "Esophageal varices", "Alcohol use disorder", "Thrombocytopenia"],
+        "discharge_medications": ["nadolol 20mg PO daily", "lactulose 30mL PO TID (titrate to 2-3 BM/day)", "rifaximin 550mg PO BID", "thiamine 100mg PO daily", "folic acid 1mg PO daily"],
+        "follow_up_instructions": "Hepatology in 1 week. Repeat EGD in 2 weeks for re-banding. Alcohol abstinence program enrollment. No NSAIDs or aspirin."
+      },
+      "clinical_scores": [
+        {"score_name": "MELD", "score_value": 18, "interpretation": "Moderate liver disease. 3-month mortality ~6%.", "components": {"bilirubin": 3.8, "INR": 1.8, "creatinine": 1.4}, "calculated_at": "2026-02-07 00:00"},
+        {"score_name": "NEWS2", "score_value": 8, "interpretation": "High clinical risk.", "components": {"resp_rate": 2, "spo2": 0, "systolic_bp": 3, "heart_rate": 1, "consciousness": 1, "temperature": 1}, "calculated_at": "2026-02-06 23:00"}
+      ],
+      "quality_indicators": {
+        "readmission_risk": 0.40,
+        "mortality_risk": 0.15,
+        "expected_los": 6.0,
+        "sepsis_flag": false,
+        "aki_stage": null,
+        "notes": "High readmission risk (active alcohol use, cirrhosis). Variceal rebleeding risk ~60% without secondary prophylaxis."
+      },
+      "prior_admissions": ["HADM_8001"]
+    },
+    "HADM_10006": {
+      "demographics": {
+        "patient_id": "P2006",
+        "name": "Angela Foster",
+        "age": 34,
+        "sex": "F",
+        "date_of_birth": "1991-05-12",
+        "ethnicity": "Black",
+        "language": "English",
+        "insurance": "Private",
+        "marital_status": "Married"
+      },
+      "admission": {
+        "hadm_id": "HADM_10006",
+        "patient_id": "P2006",
+        "admit_time": "2026-02-10 14:20",
+        "discharge_time": "2026-02-13 10:00",
+        "admit_type": "emergency",
+        "admit_location": "Emergency Room",
+        "discharge_location": "Home",
+        "diagnosis_at_admission": "Submassive pulmonary embolism with DVT",
+        "icd_codes": ["I26.99", "I82.401", "Z79.01"],
+        "drg_code": "DRG-175",
+        "los_days": 2.82,
+        "icu_stays": [],
+        "is_readmission": false
+      },
+      "icu_stays": [],
+      "lab_events": [
+        {"itemid": "L050", "label": "D-Dimer", "value": 5200.0, "valueuom": "ng/mL", "flag": "abnormal", "ref_range_lower": 0, "ref_range_upper": 500, "charttime": "2026-02-10 15:00"},
+        {"itemid": "L006", "label": "Troponin I", "value": 0.15, "valueuom": "ng/mL", "flag": "abnormal", "ref_range_lower": 0, "ref_range_upper": 0.04, "charttime": "2026-02-10 15:00"},
+        {"itemid": "L001", "label": "BNP", "value": 420.0, "valueuom": "pg/mL", "flag": "abnormal", "ref_range_lower": 0, "ref_range_upper": 100, "charttime": "2026-02-10 15:00"},
+        {"itemid": "L002", "label": "Creatinine", "value": 0.8, "valueuom": "mg/dL", "flag": "normal", "ref_range_lower": 0.6, "ref_range_upper": 1.1, "charttime": "2026-02-10 15:00"},
+        {"itemid": "L006", "label": "Troponin I", "value": 0.08, "valueuom": "ng/mL", "flag": "abnormal", "ref_range_lower": 0, "ref_range_upper": 0.04, "charttime": "2026-02-11 06:00"}
+      ],
+      "vital_events": [
+        {"charttime": "2026-02-10 14:30", "heart_rate": 115, "sbp": 108, "dbp": 68, "mean_bp": 81, "resp_rate": 26, "temperature": 37.4, "spo2": 90, "fio2": 0.21, "gcs_total": 15},
+        {"charttime": "2026-02-10 20:00", "heart_rate": 100, "sbp": 112, "dbp": 72, "mean_bp": 85, "resp_rate": 20, "temperature": 37.1, "spo2": 94, "fio2": 0.28, "gcs_total": 15},
+        {"charttime": "2026-02-11 06:00", "heart_rate": 88, "sbp": 118, "dbp": 74, "mean_bp": 89, "resp_rate": 18, "temperature": 36.9, "spo2": 96, "fio2": 0.21, "gcs_total": 15},
+        {"charttime": "2026-02-12 06:00", "heart_rate": 78, "sbp": 120, "dbp": 76, "mean_bp": 91, "resp_rate": 16, "temperature": 36.8, "spo2": 98, "fio2": 0.21, "gcs_total": 15}
+      ],
+      "medication_orders": [
+        {"order_id": "ORD_050", "drug": "heparin", "drug_type": "MAIN", "dose_val": "80", "dose_unit": "units/kg bolus then 18 units/kg/hr", "route": "IV", "frequency": "continuous", "start_time": "2026-02-10 15:30", "end_time": "2026-02-12 08:00", "status": "completed"},
+        {"order_id": "ORD_051", "drug": "rivaroxaban", "drug_type": "MAIN", "dose_val": "15", "dose_unit": "mg", "route": "PO", "frequency": "BID x 21 days then 20mg daily", "start_time": "2026-02-12 08:00", "end_time": null, "status": "active"}
+      ],
+      "procedures": [
+        {"procedure_id": "PROC_050", "procedure_name": "CT Pulmonary Angiography", "icd_procedure_code": "B32BZZZ", "procedure_time": "2026-02-10 15:00", "performed_by": "Radiology", "notes": "Bilateral PE: multiple filling defects in segmental and subsegmental pulmonary arteries. RV/LV ratio 1.3. No saddle PE.", "outcome": "Confirmed submassive PE"},
+        {"procedure_id": "PROC_051", "procedure_name": "Lower extremity duplex ultrasound", "icd_procedure_code": "B34BZZZ", "procedure_time": "2026-02-10 16:30", "performed_by": "Vascular lab", "notes": "Acute DVT in left popliteal and femoral veins. Non-compressible.", "outcome": "Confirmed left leg DVT"}
+      ],
+      "discharge_summary": {
+        "note_id": "NOTE_10006",
+        "hadm_id": "HADM_10006",
+        "chartdate": "2026-02-13",
+        "category": "Discharge summary",
+        "text": "34F presenting with pleuritic chest pain and dyspnea. CTA confirmed bilateral submassive PE (elevated troponin, RV strain on CT). Left leg DVT on duplex US. Risk factors: OCP use, recent 14-hour flight, BMI 32. Started on IV heparin, transitioned to rivaroxaban. Troponin trending down. Hemodynamically stable throughout. OCP discontinued. Thrombophilia workup sent (Factor V Leiden, Protein C/S, antithrombin, antiphospholipid panel).",
+        "diagnoses": ["Bilateral submassive pulmonary embolism", "Left lower extremity deep vein thrombosis", "Obesity"],
+        "discharge_medications": ["rivaroxaban 15mg PO BID x 21 days, then 20mg daily (minimum 3 months)", "compression stockings left leg"],
+        "follow_up_instructions": "Hematology follow-up in 2 weeks for thrombophilia workup results. Repeat echo in 3 months to assess RV function. Discontinue OCP permanently. Discuss alternative contraception. Activity as tolerated. Return if worsening dyspnea or leg swelling."
+      },
+      "clinical_scores": [
+        {"score_name": "sPESI", "score_value": 0, "interpretation": "Low risk (age <80, no cancer, no CHF/COPD, HR <110 after treatment, SBP >100, SpO2 >90 after O2).", "components": {"age_gt80": 0, "cancer": 0, "chf_copd": 0, "hr_ge110": 0, "sbp_lt100": 0, "spo2_lt90": 0}, "calculated_at": "2026-02-11 06:00"}
+      ],
+      "quality_indicators": {
+        "readmission_risk": 0.08,
+        "mortality_risk": 0.03,
+        "expected_los": 3.0,
+        "sepsis_flag": false,
+        "aki_stage": null,
+        "notes": "Submassive PE, hemodynamically stable. Good prognosis with anticoagulation."
+      },
+      "prior_admissions": []
+    },
+    "HADM_10007": {
+      "demographics": {
+        "patient_id": "P2007",
+        "name": "Howard Kim",
+        "age": 76,
+        "sex": "M",
+        "date_of_birth": "1949-09-08",
+        "ethnicity": "Asian",
+        "language": "English",
+        "insurance": "Medicare",
+        "marital_status": "Married"
+      },
+      "admission": {
+        "hadm_id": "HADM_10007",
+        "patient_id": "P2007",
+        "admit_time": "2026-02-07 16:45",
+        "discharge_time": "2026-02-14 10:00",
+        "admit_type": "emergency",
+        "admit_location": "Emergency Room",
+        "discharge_location": "Acute rehabilitation facility",
+        "diagnosis_at_admission": "Acute ischemic stroke — left MCA territory",
+        "icd_codes": ["I63.512", "I48.91", "I10", "E78.5"],
+        "drg_code": "DRG-061",
+        "los_days": 6.72,
+        "icu_stays": ["ICU_5007"],
+        "is_readmission": false
+      },
+      "icu_stays": [
+        {
+          "icustay_id": "ICU_5007",
+          "hadm_id": "HADM_10007",
+          "patient_id": "P2007",
+          "icu_type": "Neuro ICU",
+          "intime": "2026-02-07 17:30",
+          "outtime": "2026-02-10 10:00",
+          "los_icu_hours": 64.5
+        }
+      ],
+      "lab_events": [
+        {"itemid": "L040", "label": "INR", "value": 1.5, "valueuom": "", "flag": "abnormal", "ref_range_lower": 0.9, "ref_range_upper": 1.1, "charttime": "2026-02-07 17:00"},
+        {"itemid": "L060", "label": "Glucose", "value": 168.0, "valueuom": "mg/dL", "flag": "abnormal", "ref_range_lower": 70, "ref_range_upper": 100, "charttime": "2026-02-07 17:00"},
+        {"itemid": "L022", "label": "LDL Cholesterol", "value": 148.0, "valueuom": "mg/dL", "flag": "abnormal", "ref_range_lower": 0, "ref_range_upper": 100, "charttime": "2026-02-08 06:00"},
+        {"itemid": "L023", "label": "HbA1c", "value": 7.2, "valueuom": "%", "flag": "abnormal", "ref_range_lower": 4.0, "ref_range_upper": 5.7, "charttime": "2026-02-08 06:00"},
+        {"itemid": "L002", "label": "Creatinine", "value": 1.2, "valueuom": "mg/dL", "flag": "normal", "ref_range_lower": 0.7, "ref_range_upper": 1.3, "charttime": "2026-02-07 17:00"}
+      ],
+      "vital_events": [
+        {"charttime": "2026-02-07 17:00", "heart_rate": 92, "sbp": 178, "dbp": 95, "mean_bp": 123, "resp_rate": 18, "temperature": 36.9, "spo2": 97, "fio2": 0.21, "gcs_total": 11},
+        {"charttime": "2026-02-07 22:00", "heart_rate": 82, "sbp": 152, "dbp": 85, "mean_bp": 107, "resp_rate": 16, "temperature": 37.0, "spo2": 98, "fio2": 0.21, "gcs_total": 12},
+        {"charttime": "2026-02-08 06:00", "heart_rate": 78, "sbp": 145, "dbp": 82, "mean_bp": 103, "resp_rate": 16, "temperature": 36.8, "spo2": 98, "fio2": 0.21, "gcs_total": 13},
+        {"charttime": "2026-02-10 06:00", "heart_rate": 74, "sbp": 138, "dbp": 78, "mean_bp": 98, "resp_rate": 16, "temperature": 36.7, "spo2": 99, "fio2": 0.21, "gcs_total": 14}
+      ],
+      "medication_orders": [
+        {"order_id": "ORD_060", "drug": "alteplase", "drug_type": "MAIN", "dose_val": "0.9", "dose_unit": "mg/kg", "route": "IV", "frequency": "10% bolus, 90% over 1 hour", "start_time": "2026-02-07 17:30", "end_time": "2026-02-07 18:30", "status": "completed"},
+        {"order_id": "ORD_061", "drug": "aspirin", "drug_type": "MAIN", "dose_val": "325", "dose_unit": "mg", "route": "PO", "frequency": "once then 81mg daily", "start_time": "2026-02-08 18:00", "end_time": null, "status": "active"},
+        {"order_id": "ORD_062", "drug": "apixaban", "drug_type": "MAIN", "dose_val": "5", "dose_unit": "mg", "route": "PO", "frequency": "BID", "start_time": "2026-02-09 08:00", "end_time": null, "status": "active"},
+        {"order_id": "ORD_063", "drug": "atorvastatin", "drug_type": "MAIN", "dose_val": "80", "dose_unit": "mg", "route": "PO", "frequency": "daily", "start_time": "2026-02-08 08:00", "end_time": null, "status": "active"},
+        {"order_id": "ORD_064", "drug": "amlodipine", "drug_type": "MAIN", "dose_val": "10", "dose_unit": "mg", "route": "PO", "frequency": "daily", "start_time": "2026-02-08 08:00", "end_time": null, "status": "active"}
+      ],
+      "procedures": [
+        {"procedure_id": "PROC_060", "procedure_name": "CT Head non-contrast", "icd_procedure_code": "BW20ZZZ", "procedure_time": "2026-02-07 17:00", "performed_by": "Radiology", "notes": "Hyperdense left MCA sign. Early loss of gray-white differentiation in left insular cortex. No hemorrhage. ASPECTS 8.", "outcome": "Acute left MCA ischemic stroke, no hemorrhage"},
+        {"procedure_id": "PROC_061", "procedure_name": "IV Thrombolysis (alteplase)", "icd_procedure_code": "3E03317", "procedure_time": "2026-02-07 17:30", "performed_by": "Dr. Neurology on-call", "notes": "Door-to-needle time 42 min. NIHSS 14 (right hemiparesis, aphasia, neglect). Last known well 2.5 hours ago.", "outcome": "Thrombolysis administered within window"},
+        {"procedure_id": "PROC_062", "procedure_name": "MRI Brain with DWI", "icd_procedure_code": "BN39YZZ", "procedure_time": "2026-02-08 08:00", "performed_by": "Radiology", "notes": "Acute left MCA infarct involving left insular cortex, frontal and temporal opercula. DWI restriction ~45mL volume. No hemorrhagic transformation.", "outcome": "Confirmed moderate left MCA territory infarct"}
+      ],
+      "discharge_summary": {
+        "note_id": "NOTE_10007",
+        "hadm_id": "HADM_10007",
+        "chartdate": "2026-02-14",
+        "category": "Discharge summary",
+        "text": "76M with AF (subtherapeutic warfarin, INR 1.5), HTN, and DM2 presenting with acute left MCA stroke (NIHSS 14). IV tPA administered with door-to-needle 42 min. MRI confirmed moderate left MCA infarct. NIHSS improved 14→8 by day 3. Right hemiparesis improving, expressive aphasia persistent. Swallow eval: mild dysphagia, soft diet. Transitioned from warfarin to apixaban. PT/OT/SLP evaluations: requires acute rehab. Discharged to rehab facility.",
+        "diagnoses": ["Acute ischemic stroke (left MCA)", "Atrial fibrillation", "Hypertension", "Type 2 diabetes mellitus", "Hyperlipidemia"],
+        "discharge_medications": ["apixaban 5mg PO BID", "atorvastatin 80mg PO daily", "amlodipine 10mg PO daily", "metformin 500mg PO BID", "aspirin 81mg PO daily (to be discontinued after 90 days)"],
+        "follow_up_instructions": "Neurology follow-up in 2 weeks. Continue PT/OT/SLP at rehab. Repeat MRI in 3 months. Anticoagulation for AF (apixaban indefinitely). Strict BP <130/80 target."
+      },
+      "clinical_scores": [
+        {"score_name": "NIHSS", "score_value": 14, "interpretation": "Moderate stroke. Right hemiparesis, expressive aphasia, left gaze preference.", "components": {"consciousness": 1, "gaze": 1, "visual": 1, "facial_palsy": 2, "motor_arm_R": 3, "motor_leg_R": 2, "ataxia": 0, "sensory": 1, "language": 2, "dysarthria": 1, "neglect": 0}, "calculated_at": "2026-02-07 17:15"},
+        {"score_name": "NIHSS", "score_value": 8, "interpretation": "Moderate improvement.", "components": {"consciousness": 0, "gaze": 0, "visual": 1, "facial_palsy": 1, "motor_arm_R": 2, "motor_leg_R": 1, "ataxia": 0, "sensory": 1, "language": 1, "dysarthria": 1, "neglect": 0}, "calculated_at": "2026-02-10 06:00"}
+      ],
+      "quality_indicators": {
+        "readmission_risk": 0.12,
+        "mortality_risk": 0.06,
+        "expected_los": 7.0,
+        "sepsis_flag": false,
+        "aki_stage": null,
+        "notes": "Door-to-needle <60 min achieved. NIHSS improved from 14 to 8. Discharged to acute rehab."
+      },
+      "prior_admissions": []
+    },
+    "HADM_10008": {
+      "demographics": {
+        "patient_id": "P2008",
+        "name": "Jasmine Brooks",
+        "age": 22,
+        "sex": "F",
+        "date_of_birth": "2003-08-25",
+        "ethnicity": "Black",
+        "language": "English",
+        "insurance": "Private (parent)",
+        "marital_status": "Single"
+      },
+      "admission": {
+        "hadm_id": "HADM_10008",
+        "patient_id": "P2008",
+        "admit_time": "2026-02-09 02:15",
+        "discharge_time": "2026-02-11 14:00",
+        "admit_type": "emergency",
+        "admit_location": "Emergency Room",
+        "discharge_location": "Home",
+        "diagnosis_at_admission": "Diabetic ketoacidosis",
+        "icd_codes": ["E10.10", "E10.65"],
+        "drg_code": "DRG-637",
+        "los_days": 2.49,
+        "icu_stays": ["ICU_5008"],
+        "is_readmission": false
+      },
+      "icu_stays": [
+        {
+          "icustay_id": "ICU_5008",
+          "hadm_id": "HADM_10008",
+          "patient_id": "P2008",
+          "icu_type": "MICU",
+          "intime": "2026-02-09 03:00",
+          "outtime": "2026-02-10 15:00",
+          "los_icu_hours": 36.0
+        }
+      ],
+      "lab_events": [
+        {"itemid": "L060", "label": "Glucose", "value": 485.0, "valueuom": "mg/dL", "flag": "abnormal", "ref_range_lower": 70, "ref_range_upper": 100, "charttime": "2026-02-09 02:30"},
+        {"itemid": "L030", "label": "ABG pH", "value": 7.15, "valueuom": "", "flag": "abnormal", "ref_range_lower": 7.35, "ref_range_upper": 7.45, "charttime": "2026-02-09 02:30"},
+        {"itemid": "L070", "label": "Bicarbonate", "value": 6.0, "valueuom": "mEq/L", "flag": "abnormal", "ref_range_lower": 22, "ref_range_upper": 28, "charttime": "2026-02-09 02:30"},
+        {"itemid": "L071", "label": "Anion Gap", "value": 30.0, "valueuom": "mEq/L", "flag": "abnormal", "ref_range_lower": 8, "ref_range_upper": 12, "charttime": "2026-02-09 02:30"},
+        {"itemid": "L072", "label": "Beta-hydroxybutyrate", "value": 7.2, "valueuom": "mmol/L", "flag": "abnormal", "ref_range_lower": 0, "ref_range_upper": 0.6, "charttime": "2026-02-09 02:30"},
+        {"itemid": "L003", "label": "Potassium", "value": 5.9, "valueuom": "mEq/L", "flag": "abnormal", "ref_range_lower": 3.5, "ref_range_upper": 5.0, "charttime": "2026-02-09 02:30"},
+        {"itemid": "L003", "label": "Potassium", "value": 4.2, "valueuom": "mEq/L", "flag": "normal", "ref_range_lower": 3.5, "ref_range_upper": 5.0, "charttime": "2026-02-09 06:00"},
+        {"itemid": "L003", "label": "Potassium", "value": 3.6, "valueuom": "mEq/L", "flag": "normal", "ref_range_lower": 3.5, "ref_range_upper": 5.0, "charttime": "2026-02-09 10:00"},
+        {"itemid": "L060", "label": "Glucose", "value": 320.0, "valueuom": "mg/dL", "flag": "abnormal", "ref_range_lower": 70, "ref_range_upper": 100, "charttime": "2026-02-09 06:00"},
+        {"itemid": "L060", "label": "Glucose", "value": 210.0, "valueuom": "mg/dL", "flag": "abnormal", "ref_range_lower": 70, "ref_range_upper": 100, "charttime": "2026-02-09 12:00"},
+        {"itemid": "L030", "label": "ABG pH", "value": 7.28, "valueuom": "", "flag": "abnormal", "ref_range_lower": 7.35, "ref_range_upper": 7.45, "charttime": "2026-02-09 08:00"},
+        {"itemid": "L030", "label": "ABG pH", "value": 7.38, "valueuom": "", "flag": "normal", "ref_range_lower": 7.35, "ref_range_upper": 7.45, "charttime": "2026-02-09 16:00"},
+        {"itemid": "L023", "label": "HbA1c", "value": 11.8, "valueuom": "%", "flag": "abnormal", "ref_range_lower": 4.0, "ref_range_upper": 5.7, "charttime": "2026-02-09 06:00"}
+      ],
+      "vital_events": [
+        {"charttime": "2026-02-09 03:00", "heart_rate": 132, "sbp": 95, "dbp": 55, "mean_bp": 68, "resp_rate": 34, "temperature": 36.8, "spo2": 99, "fio2": 0.21, "gcs_total": 13},
+        {"charttime": "2026-02-09 06:00", "heart_rate": 112, "sbp": 105, "dbp": 62, "mean_bp": 76, "resp_rate": 26, "temperature": 36.9, "spo2": 99, "fio2": 0.21, "gcs_total": 14},
+        {"charttime": "2026-02-09 12:00", "heart_rate": 95, "sbp": 112, "dbp": 68, "mean_bp": 83, "resp_rate": 20, "temperature": 37.0, "spo2": 99, "fio2": 0.21, "gcs_total": 15},
+        {"charttime": "2026-02-10 06:00", "heart_rate": 80, "sbp": 118, "dbp": 72, "mean_bp": 87, "resp_rate": 16, "temperature": 36.7, "spo2": 99, "fio2": 0.21, "gcs_total": 15}
+      ],
+      "medication_orders": [
+        {"order_id": "ORD_070", "drug": "insulin regular", "drug_type": "MAIN", "dose_val": "0.1", "dose_unit": "units/kg/hr", "route": "IV", "frequency": "continuous drip", "start_time": "2026-02-09 03:15", "end_time": "2026-02-10 08:00", "status": "completed"},
+        {"order_id": "ORD_071", "drug": "normal saline", "drug_type": "BASE", "dose_val": "1000", "dose_unit": "mL/hr x 2hr then 500mL/hr", "route": "IV", "frequency": "continuous", "start_time": "2026-02-09 03:00", "end_time": "2026-02-09 18:00", "status": "completed"},
+        {"order_id": "ORD_072", "drug": "potassium chloride", "drug_type": "ELECTROLYTE", "dose_val": "20", "dose_unit": "mEq", "route": "IV", "frequency": "per protocol (when K+ <5.3)", "start_time": "2026-02-09 04:00", "end_time": "2026-02-09 16:00", "status": "completed"},
+        {"order_id": "ORD_073", "drug": "insulin glargine", "drug_type": "MAIN", "dose_val": "18", "dose_unit": "units", "route": "SC", "frequency": "at bedtime", "start_time": "2026-02-10 08:00", "end_time": null, "status": "active"},
+        {"order_id": "ORD_074", "drug": "insulin lispro", "drug_type": "MAIN", "dose_val": "sliding scale", "dose_unit": "units", "route": "SC", "frequency": "before meals", "start_time": "2026-02-10 12:00", "end_time": null, "status": "active"}
+      ],
+      "procedures": [],
+      "discharge_summary": {
+        "note_id": "NOTE_10008",
+        "hadm_id": "HADM_10008",
+        "chartdate": "2026-02-11",
+        "category": "Discharge summary",
+        "text": "22F with T1DM presenting with severe DKA (pH 7.15, glucose 485, AG 30, BHB 7.2). Precipitated by insulin pump malfunction — patient did not recognize symptoms early. Treated per DKA protocol: IV insulin drip, aggressive IVF, potassium replacement. AG closed and pH normalized within 14 hours. Transitioned to SC insulin. HbA1c 11.8% — significant chronic hyperglycemia. Diabetes educator consulted. Insulin pump to be replaced. Endocrinology follow-up arranged.",
+        "diagnoses": ["Diabetic ketoacidosis (severe)", "Type 1 diabetes mellitus poorly controlled"],
+        "discharge_medications": ["insulin glargine 18 units SC at bedtime", "insulin lispro per carb counting + correction factor", "glucose meter supplies"],
+        "follow_up_instructions": "Endocrinology in 1 week for pump replacement and dose optimization. Check BMP in 3 days. Download glucose data from CGM. Sick day rules education provided."
+      },
+      "clinical_scores": [
+        {"score_name": "NEWS2", "score_value": 9, "interpretation": "High clinical risk.", "components": {"resp_rate": 3, "spo2": 0, "systolic_bp": 1, "heart_rate": 2, "consciousness": 1, "temperature": 0}, "calculated_at": "2026-02-09 03:00"},
+        {"score_name": "NEWS2", "score_value": 1, "interpretation": "Low clinical risk.", "components": {"resp_rate": 0, "spo2": 0, "systolic_bp": 0, "heart_rate": 0, "consciousness": 0, "temperature": 0}, "calculated_at": "2026-02-10 06:00"}
+      ],
+      "quality_indicators": {
+        "readmission_risk": 0.15,
+        "mortality_risk": 0.02,
+        "expected_los": 2.5,
+        "sepsis_flag": false,
+        "aki_stage": null,
+        "notes": "Severe DKA, rapid resolution. Young patient, good prognosis. Risk of recurrence if pump issues not resolved."
+      },
+      "prior_admissions": []
     }
   },
   "patient_index": {
     "P2001": ["HADM_9001", "HADM_10001"],
     "P2002": ["HADM_10002"],
-    "P2003": ["HADM_10003"]
+    "P2003": ["HADM_10003"],
+    "P2004": ["HADM_10004"],
+    "P2005": ["HADM_10005"],
+    "P2006": ["HADM_10006"],
+    "P2007": ["HADM_10007"],
+    "P2008": ["HADM_10008"]
   },
   "lab_reference_ranges": {
     "BNP": {"lower": 0, "upper": 100, "unit": "pg/mL"},

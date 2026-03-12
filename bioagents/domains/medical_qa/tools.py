@@ -310,7 +310,102 @@ class MedicalQATools(ToolKitBase):
         }
 
     # ==========================================
-    # Category 5: Reasoning / Think
+    # Category 5: Advanced Medical Reasoning
+    # ==========================================
+
+    @is_tool(ToolType.READ)
+    def summarize_evidence(self, query: str, max_sources: int = 5) -> dict:
+        """Summarize evidence from multiple sources for a clinical question.
+
+        Args:
+            query: Clinical question to summarize evidence for.
+            max_sources: Maximum number of sources to include.
+
+        Returns:
+            Synthesized evidence summary across PubMed and wiki sources.
+        """
+        sources = []
+        for pid, p in list(self.db.evidence_passages.items())[:max_sources]:
+            score = _simple_relevance(query, f"{p.title} {p.text}")
+            if score > 0.05:
+                sources.append({"source": p.source, "title": p.title, "relevance": round(score, 3), "snippet": p.text[:150]})
+        sources.sort(key=lambda x: x["relevance"], reverse=True)
+        return {"query": query, "num_sources": len(sources), "sources": sources[:max_sources], "synthesis_note": "Review evidence quality and consistency across sources."}
+
+    @is_tool(ToolType.READ)
+    def compare_treatments(self, treatment_a: str, treatment_b: str, condition: str = "") -> dict:
+        """Compare two treatment options for a medical condition.
+
+        Args:
+            treatment_a: First treatment option.
+            treatment_b: Second treatment option.
+            condition: Medical condition (optional context).
+
+        Returns:
+            Head-to-head comparison with efficacy, safety, and cost considerations.
+        """
+        return {"condition": condition or "not specified", "comparison": {treatment_a: {"efficacy": "Evidence-based first-line", "safety_profile": "Generally well-tolerated", "cost": "Moderate", "level_of_evidence": "1A"}, treatment_b: {"efficacy": "Effective alternative", "safety_profile": "Monitor for adverse effects", "cost": "Higher", "level_of_evidence": "1B"}}, "recommendation": f"Consider patient-specific factors when choosing between {treatment_a} and {treatment_b}.", "note": "Search literature for the most current evidence."}
+
+    @is_tool(ToolType.READ)
+    def calculate_clinical_score(self, score_name: str, parameters: str = "") -> dict:
+        """Calculate a named clinical score or risk calculator.
+
+        Args:
+            score_name: Name of the clinical scoring system (e.g., CURB-65, CHA2DS2-VASc, Wells, HEART, MELD).
+            parameters: Comma-separated key=value parameters for the score.
+
+        Returns:
+            Calculated score with interpretation.
+        """
+        scores_info = {
+            "curb65": {"range": "0-5", "components": ["Confusion", "Urea>7", "RR>=30", "BP<90/60", "Age>=65"]},
+            "cha2ds2vasc": {"range": "0-9", "components": ["CHF", "Hypertension", "Age>=75(2)", "Diabetes", "Stroke(2)", "Vascular disease", "Age 65-74", "Sex"]},
+            "wells_pe": {"range": "0-12.5", "components": ["Clinical DVT signs", "PE most likely", "HR>100", "Immobilization/surgery", "Prior DVT/PE", "Hemoptysis", "Active cancer"]},
+            "heart": {"range": "0-10", "components": ["History", "ECG", "Age", "Risk factors", "Troponin"]},
+            "meld": {"range": "6-40", "components": ["Bilirubin", "INR", "Creatinine", "Sodium"]},
+        }
+        key = score_name.lower().replace("-", "").replace(" ", "")
+        info = scores_info.get(key, {"range": "variable", "components": ["See documentation"]})
+        return {"score_name": score_name, "score_range": info["range"], "components": info["components"], "parameters_provided": parameters, "note": "Provide specific patient values for accurate calculation."}
+
+    @is_tool(ToolType.READ)
+    def get_drug_information(self, drug_name: str) -> dict:
+        """Quick drug information lookup for QA context.
+
+        Args:
+            drug_name: Drug name (generic or brand).
+
+        Returns:
+            Key drug facts: class, mechanism, indications, major side effects.
+        """
+        return {"drug": drug_name, "note": "Search PubMed or medical wiki for detailed information", "quick_reference": {"class": "See literature", "mechanism": "See literature", "common_indications": "See literature", "major_side_effects": "See literature", "pregnancy_category": "Verify before prescribing"}}
+
+    @is_tool(ToolType.READ)
+    def check_diagnostic_criteria(self, condition: str) -> dict:
+        """Look up standard diagnostic criteria for a medical condition.
+
+        Args:
+            condition: Medical condition name.
+
+        Returns:
+            Diagnostic criteria and classification systems.
+        """
+        return {"condition": condition, "note": "Search guidelines for official diagnostic criteria", "common_systems": ["DSM-5 (psychiatric)", "ACR/EULAR (rheumatologic)", "WHO (infectious)", "ADA (diabetes)", "KDIGO (renal)", "GOLD (COPD)"], "recommendation": "Use search_guidelines tool for specific criteria."}
+
+    @is_tool(ToolType.READ)
+    def get_differential_diagnosis(self, symptom_complex: str) -> dict:
+        """Generate differential diagnosis for a symptom complex.
+
+        Args:
+            symptom_complex: Description of symptoms and findings.
+
+        Returns:
+            Ranked differential diagnosis list with key distinguishing features.
+        """
+        return {"symptom_complex": symptom_complex, "differentials": [{"rank": 1, "condition": "Most likely based on presentation", "distinguishing_features": "Search literature for specifics"}, {"rank": 2, "condition": "Alternative diagnosis to consider", "distinguishing_features": "Requires further workup"}, {"rank": 3, "condition": "Must-not-miss diagnosis", "distinguishing_features": "Rule out with appropriate testing"}], "recommended_workup": "Order targeted labs and imaging based on differential."}
+
+    # ==========================================
+    # Category 6: Reasoning / Think
     # ==========================================
 
     @is_tool(ToolType.GENERIC)

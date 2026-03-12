@@ -1418,6 +1418,198 @@ class CurriculumAgent:
         
         return prompts
     
+    def generate_tasks_from_specs(
+        self,
+        specs: list[dict],
+        provider: str = "anthropic",
+        model: str = "claude-sonnet-4-20250514",
+        max_tasks: int = 10,
+        failure_examples: list[dict] | None = None,
+    ) -> list[dict]:
+        """Generate actual executable tasks from CurriculumAgent specs using LLM.
+
+        This is the core of the Agent0-style self-evolving loop: the model's
+        failure analysis drives new task creation via LLM, not template copying.
+
+        Args:
+            specs: Task spec dicts from _generate_task_prompts() — each has
+                   domain, target_skill, strategy, requirements, difficulty.
+            provider: LLM provider ('anthropic' or 'openai').
+            model: Model name.
+            max_tasks: Maximum tasks to generate (avoid runaway API costs).
+            failure_examples: Up to 3 real failure dicts from _evaluate()
+                {task_id, failure_type, expected_actions, actual_actions, reward}.
+                Used to give the LLM concrete failure context (Agent0-style).
+                NOTE: These are from GYM internal tasks only — external
+                benchmark test data (MedQA, MMLU, VQA-RAD, etc.) is NEVER
+                passed here to prevent test set contamination.
+
+        Returns:
+            List of properly-formatted task dicts (with ticket + evaluation_criteria).
+        """
+        import os
+        import re
+        import time as _time
+
+        if not specs:
+            return []
+
+        system_prompt = (
+            "You are a medical education expert designing AI agent training scenarios. "
+            "Generate diverse, realistic clinical tasks that expose and train specific skill gaps. "
+            "The AI agent will use structured clinical tools to solve the task. "
+            "Focus on scenarios where the targeted skill failure would realistically occur."
+        )
+
+        generated: list[dict] = []
+
+        for spec in specs[:max_tasks]:
+            domain = spec.get("domain", "clinical_diagnosis")
+            strategy = spec.get("strategy", "Create a comprehensive medical task")
+            requirements = spec.get("requirements", [])
+            difficulty = spec.get("difficulty", "medium")
+            target_skill = spec.get("target_skill", "clinical_reasoning")
+            anti_pattern = spec.get("anti_pattern", "")
+            task_id = spec.get("task_id", f"ca_{self._task_counter:05d}")
+
+            req_text = "\n".join(f"  - {r}" for r in requirements)
+            anti_text = f"\nCRITICAL: {anti_pattern}" if anti_pattern else ""
+
+            # C-2: Build failure context section (Agent0-style, arXiv:2511.16043)
+            # Only GYM-internal task failures — no external benchmark data.
+            failure_text = ""
+            if failure_examples:
+                lines = ["\n## Recent Agent Failures (from GYM eval, NOT test data)"]
+                lines.append(
+                    "Design your task so that an agent making these exact mistakes "
+                    "would fail, forcing it to learn the correct approach:"
+                )
+                for i, ex in enumerate(failure_examples, 1):
+                    ftype = ex.get("failure_type", "unknown")
+                    exp = ", ".join(ex.get("expected_actions", [])) or "none recorded"
+                    act = ", ".join(ex.get("actual_actions", [])) or "none recorded"
+                    reward = ex.get("reward", 0.0)
+                    lines.append(
+                        f"  Failure {i} [{ftype}] reward={reward:.2f}: "
+                        f"expected=[{exp}], actual=[{act}]"
+                    )
+                lines.append(
+                    "→ Your task MUST require the expected tool sequence above."
+                )
+                failure_text = "\n".join(lines)
+
+            user_prompt = f"""Generate a {difficulty}-difficulty medical AI agent training task.
+
+Domain: {domain}
+Target skill gap: {target_skill}
+Training strategy: {strategy}
+Requirements:
+{req_text}{anti_text}{failure_text}
+
+Available tools the agent can call: get_patient_info, get_vital_signs, get_lab_results,
+get_clinical_notes, get_medication_list, get_differential_diagnosis, order_lab_test,
+check_drug_interaction, calculate_clinical_score, search_clinical_guidelines,
+search_pubmed, search_medical_wiki, submit_answer
+
+Output ONLY valid JSON (no markdown, no explanation):
+{{
+    "id": "ca_{domain[:8]}_{task_id[-5:]}",
+    "ticket": "<2-4 paragraph realistic clinical scenario: patient demographics, chief complaint, HPI, PMH, vitals, relevant labs/imaging if applicable>",
+    "description": {{"purpose": "<one-line learning objective>", "difficulty": "{difficulty}", "skill_target": "{target_skill}"}},
+    "evaluation_criteria": {{
+        "actions": [
+            {{"name": "<tool_name>", "arguments": {{}}, "compare_args": [], "info": "<clinical reason for this tool>"}},
+            {{"name": "<tool_name>", "arguments": {{}}, "compare_args": [], "info": "<clinical reason>"}}
+        ],
+        "nl_assertions": [
+            "<assertion about clinical reasoning the agent must demonstrate>",
+            "<assertion about safety or guideline compliance>"
+        ],
+        "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }},
+    "metadata": {{"source": "curriculum_agent_llm", "skill": "{target_skill}", "domain": "{domain}"}}
+}}"""
+
+            try:
+                response_text: Optional[str] = None
+
+                if provider == "anthropic":
+                    from anthropic import Anthropic
+                    client = Anthropic()
+                    resp = client.messages.create(
+                        model=model,
+                        max_tokens=2048,
+                        system=system_prompt,
+                        messages=[{"role": "user", "content": user_prompt}],
+                    )
+                    response_text = resp.content[0].text
+
+                elif provider == "openai":
+                    from openai import OpenAI
+                    client = OpenAI()
+                    resp = client.chat.completions.create(
+                        model=model,
+                        max_tokens=2048,
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_prompt},
+                        ],
+                    )
+                    response_text = resp.choices[0].message.content
+
+                if response_text:
+                    task = self._parse_llm_task_json(response_text)
+                    if task and "ticket" in task and "evaluation_criteria" in task:
+                        task.setdefault("metadata", {})["source"] = "curriculum_agent_llm"
+                        task.setdefault("metadata", {})["skill"] = target_skill
+                        generated.append(task)
+                        logger.info(
+                            f"  [CurriculumAgent] LLM task: {task.get('id', '?')} "
+                            f"({domain}, {difficulty})"
+                        )
+                    else:
+                        logger.warning(
+                            f"  [CurriculumAgent] Invalid JSON from LLM for {domain}/{target_skill}"
+                        )
+
+                _time.sleep(0.3)  # gentle rate limit
+
+            except Exception as e:
+                logger.warning(f"  [CurriculumAgent] LLM generation failed for {domain}: {e}")
+                continue
+
+        logger.info(f"[CurriculumAgent] LLM generated {len(generated)}/{len(specs[:max_tasks])} tasks")
+        return generated
+
+    @staticmethod
+    def _parse_llm_task_json(text: str) -> Optional[dict]:
+        """Extract and parse a JSON task dict from raw LLM output."""
+        import json
+        import re
+
+        # Direct parse
+        try:
+            return json.loads(text.strip())
+        except Exception:
+            pass
+
+        # Strip markdown code fences
+        cleaned = re.sub(r"```(?:json)?", "", text).strip()
+        try:
+            return json.loads(cleaned)
+        except Exception:
+            pass
+
+        # Greedy JSON block extraction
+        match = re.search(r"\{[\s\S]*\}", text)
+        if match:
+            try:
+                return json.loads(match.group())
+            except Exception:
+                pass
+
+        return None
+
     def _select_difficulty(self, gap: dict) -> str:
         """Select difficulty based on current mastery and failure severity."""
         severity = gap.get("severity", 0.5)
@@ -1951,14 +2143,52 @@ class GymCoach:
                     tasks_per_weakness=self.config.tasks_per_weakness,
                 )
                 
-                # Add Curriculum Agent's novel task prompts
-                for prompt in curriculum_proposal.task_prompts:
-                    generated_tasks.append(prompt)
-                
+                # Agent0-style: generate actual tasks from Curriculum Agent specs via LLM
+                template_count = len(generated_tasks)
+                import os as _os
+                _llm_provider = _os.environ.get("CURRICULUM_LLM_PROVIDER", "anthropic")
+                _llm_model = _os.environ.get(
+                    "CURRICULUM_LLM_MODEL", "claude-sonnet-4-20250514"
+                )
+                _use_llm = _os.environ.get("CURRICULUM_USE_LLM", "1") != "0"
+
+                if _use_llm and curriculum_proposal.task_prompts:
+                    # C-2: Extract failure examples from ErrorAnalyzer reports
+                    # (GYM-internal task failures only — test sets excluded)
+                    _failure_examples: list[dict] = []
+                    for _rpt in eval_reports.values():
+                        for _fc in getattr(_rpt, "failure_cases", [])[:2]:
+                            _failure_examples.append({
+                                "task_id": getattr(_fc, "task_id", ""),
+                                "failure_type": getattr(_fc, "failure_type", "unknown"),
+                                "expected_actions": getattr(_fc, "expected_actions", []),
+                                "actual_actions": getattr(_fc, "actual_actions", []),
+                                "reward": 1.0 - getattr(_fc, "severity", 0.5),
+                            })
+                    _failure_examples = _failure_examples[:3]  # max 3 examples
+
+                    llm_tasks = self.curriculum_agent.generate_tasks_from_specs(
+                        curriculum_proposal.task_prompts,
+                        provider=_llm_provider,
+                        model=_llm_model,
+                        max_tasks=min(
+                            len(curriculum_proposal.task_prompts),
+                            self.config.tasks_per_weakness,
+                        ),
+                        failure_examples=_failure_examples or None,
+                    )
+                    generated_tasks.extend(llm_tasks)
+                    curriculum_count = len(llm_tasks)
+                else:
+                    # Fallback: append spec dicts (original behaviour)
+                    for prompt in curriculum_proposal.task_prompts:
+                        generated_tasks.append(prompt)
+                    curriculum_count = len(curriculum_proposal.task_prompts)
+
                 gen_ms = (time.time() - gen_start) * 1000
                 logger.info(f"  Generated {len(generated_tasks)} targeted tasks ({gen_ms:.0f}ms)")
-                logger.info(f"    ├── Template-based: {len(generated_tasks) - len(curriculum_proposal.task_prompts)}")
-                logger.info(f"    └── Curriculum Agent: {len(curriculum_proposal.task_prompts)}")
+                logger.info(f"    ├── Template-based (deepcopy): {template_count}")
+                logger.info(f"    └── Curriculum Agent (LLM):    {curriculum_count}")
                 
                 # Save generated tasks
                 gen_path = Path(self.config.generated_data_dir) / f"iter_{iteration}_tasks.json"

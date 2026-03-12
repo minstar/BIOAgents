@@ -1,0 +1,48 @@
+# Autonomous GYM -- 1-Cycle Dry-Run (1 Agent, 1 GPU)
+# Usage: python scripts/run_autonomous_gym.py --config configs/autonomous_gym_dryrun.yaml
+
+gym:
+  num_gpus: 1
+  gpu_ids:
+  - 6   # Use GPU 6 (GPUs 0-3 used by baseline eval when running in parallel)
+  available_domains:
+  - clinical_diagnosis
+  - medical_qa
+  - drug_interaction
+  safety_score_floor: 0.15
+  max_consecutive_failures: 10
+  cooldown_seconds: 30
+  max_queue_size: 10
+  idle_check_interval: 5.0
+  log_dir: logs/autonomous_gym_dryrun
+  logbook_dir: logs/shared_logbook_dryrun
+  wandb_project: pt2-minstar-gym-rl
+  continuous: false
+  eval_timeout_seconds: 3600    # 1h max for dryrun (eval_tasks_per_domain=2 → should take ~10-30min)
+  train_timeout_seconds: 3600   # 1h max for dryrun training (1 epoch)
+
+benchmark:
+  every_n_cycles: 0
+  max_samples: 0
+
+agents:
+- agent_id: dryrun_qwen25vl
+  model_path: /data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen2.5-VL-7B-Instruct
+  base_model_path: /data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen2.5-VL-7B-Instruct
+  backend: transformers
+  gpus_for_eval: 1
+  gpus_for_train: 1
+  curiosity_weight: 0.20
+  weakness_weight: 0.30
+  peer_learning_weight: 0.10
+  diversity_weight: 0.15
+  mastery_push_weight: 0.15
+  safety_weight: 0.10
+  max_turns: 5
+  eval_tasks_per_domain: 2
+  training_epochs: 1
+  learning_rate: 0.00002
+  quality_threshold: 0.3
+  mastery_threshold: 0.90
+  output_dir: checkpoints/autonomous/dryrun_qwen25vl
+  log_dir: logs/autonomous/dryrun_qwen25vl

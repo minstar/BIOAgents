@@ -793,7 +793,8 @@ print(f"Merged to: {{output_path}}")
         with open(script_path, "w") as f:
             f.write(merge_script)
 
-        subprocess.run(["python", script_path], timeout=600)
+        from bioagents import PYTHON_EXE
+        subprocess.run([PYTHON_EXE, script_path], timeout=600)
 
     def _evaluate(self, model_path: str, iteration: int) -> dict:
         """Evaluate current model on all domains."""

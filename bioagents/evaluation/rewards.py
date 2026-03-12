@@ -346,19 +346,29 @@ def process_reward_tool_usage(
 def process_reward_reasoning_quality(
     response: str,
     correct_answer: str = "",
+    rubric: dict = None,
     **kwargs,
 ) -> float:
-    """Heuristic reward for reasoning quality.
+    """Rubric-enhanced reward for reasoning quality.
 
     Evaluates the quality of the agent's reasoning based on:
     - Length (reasonable, not too short)
     - Mention of key medical terms
     - Structured reasoning indicators
     - Clinical specificity (drug names, lab values, scores)
+    - **Rubric-based scoring** (when rubric is provided)
+    - **Evidence grounding** (search/browse tool usage)
+    - **Systematic approach** (clinical workflow adherence)
+
+    Enhanced with insights from:
+    - RaR (Rubrics as Rewards): Multi-criteria rubric-based feedback
+    - Clinical-R1 CRPO: Faithfulness and completeness checks
+    - DiagGym: Process-oriented evaluation rubrics
 
     Args:
         response: The agent's reasoning/final response
         correct_answer: The correct answer (for context)
+        rubric: Optional rubric dict with scoring criteria
 
     Returns:
         Score between 0.0 and 1.0
@@ -369,12 +379,102 @@ def process_reward_reasoning_quality(
     score = 0.0
     response_lower = response.lower()
 
+    # ── Rubric-based scoring (if rubric provided) ────────────────────
+    # Reference: RaR (Rubrics as Rewards) — up to 31% improvement on HealthBench
+    if rubric and isinstance(rubric, dict):
+        rubric_score = _compute_rubric_score(response, rubric)
+        # Blend rubric score with heuristic (rubric takes priority)
+        return rubric_score * 0.7 + _compute_heuristic_process_score(response, correct_answer) * 0.3
+
+    return _compute_heuristic_process_score(response, correct_answer)
+
+
+def _compute_rubric_score(response: str, rubric: dict) -> float:
+    """Compute process quality using a rubric-based scoring system.
+
+    Rubric format:
+        {
+            "required_elements": ["history taking", "differential diagnosis", ...],
+            "required_tools": ["get_patient_info", "get_lab_results", ...],
+            "clinical_workflow": ["gather_data", "analyze", "diagnose", "plan"],
+            "key_findings": ["elevated troponin", "ST elevation", ...],
+            "safety_checks": ["drug interaction", "allergy check", ...],
+        }
+
+    Each matched element contributes to the rubric score.
+
+    Reference: RaR (Rubrics as Rewards, ICLR 2026)
+    """
+    response_lower = response.lower()
+    total_items = 0
+    matched_items = 0
+
+    # Check required clinical elements
+    required_elements = rubric.get("required_elements", [])
+    if required_elements:
+        total_items += len(required_elements)
+        for element in required_elements:
+            if isinstance(element, str) and element.lower() in response_lower:
+                matched_items += 1
+
+    # Check required tool usage
+    required_tools = rubric.get("required_tools", [])
+    if required_tools:
+        total_items += len(required_tools)
+        for tool in required_tools:
+            if isinstance(tool, str) and tool.lower() in response_lower:
+                matched_items += 1
+
+    # Check clinical workflow adherence (ordered steps)
+    workflow = rubric.get("clinical_workflow", [])
+    if workflow:
+        total_items += len(workflow)
+        last_pos = -1
+        for step in workflow:
+            pos = response_lower.find(step.lower())
+            if pos > last_pos:
+                matched_items += 1
+                last_pos = pos
+
+    # Check key findings mentioned
+    key_findings = rubric.get("key_findings", [])
+    if key_findings:
+        total_items += len(key_findings)
+        for finding in key_findings:
+            if isinstance(finding, str) and finding.lower() in response_lower:
+                matched_items += 1
+
+    # Check safety verification steps
+    safety_checks = rubric.get("safety_checks", [])
+    if safety_checks:
+        # Safety checks are weighted 1.5x
+        total_items += len(safety_checks) * 1.5
+        for check in safety_checks:
+            if isinstance(check, str) and check.lower() in response_lower:
+                matched_items += 1.5
+
+    if total_items == 0:
+        return 0.5  # No rubric criteria → neutral score
+
+    return min(1.0, matched_items / total_items)
+
+
+def _compute_heuristic_process_score(response: str, correct_answer: str = "") -> float:
+    """Compute process quality using heuristic scoring (fallback when no rubric).
+
+    Enhanced with evidence grounding and systematic approach checks.
+    """
+    import re as _re
+
+    score = 0.0
+    response_lower = response.lower()
+
     # ── Length check (reasonable response length) ────────────────────
     word_count = len(response.split())
     if 50 <= word_count <= 800:
-        score += 0.25          # ideal range for thorough clinical reasoning
+        score += 0.20          # ideal range for thorough clinical reasoning
     elif 20 <= word_count <= 1200:
-        score += 0.15
+        score += 0.12
     elif 10 <= word_count:
         score += 0.05
 
@@ -389,7 +489,7 @@ def process_reward_reasoning_quality(
         "laboratory", "imaging", "biopsy", "histology",
     ]
     term_count = sum(1 for term in medical_indicators if term in response_lower)
-    score += min(0.25, term_count * 0.03)
+    score += min(0.20, term_count * 0.025)
 
     # ── Structured reasoning indicators ──────────────────────────────
     reasoning_markers = [
@@ -400,26 +500,258 @@ def process_reward_reasoning_quality(
         "risk", "benefit", "indication", "guideline",
     ]
     marker_count = sum(1 for m in reasoning_markers if m in response_lower)
-    score += min(0.2, marker_count * 0.04)
+    score += min(0.15, marker_count * 0.03)
 
     # ── Clinical specificity (numbers, scores, drug names) ──────────
-    import re as _re
     has_numbers = bool(_re.search(r'\d+\.?\d*\s*(?:mg|mcg|ml|mmol|mmHg|bpm|%|mg/dL|mEq/L|U/L)', response))
     has_scores = bool(_re.search(r'(?:SOFA|NEWS|GRACE|APACHE|GCS|MELD|CHA2DS2|HAS-BLED|Wells)\s*(?:score)?\s*(?:=|:|\d)', response, _re.IGNORECASE))
     has_labs = bool(_re.search(r'(?:creatinine|BNP|troponin|lactate|WBC|hemoglobin|BUN|INR|HbA1c|LDL|CRP|procalcitonin)', response, _re.IGNORECASE))
 
     specificity_count = sum([has_numbers, has_scores, has_labs])
-    score += min(0.15, specificity_count * 0.05)
+    score += min(0.10, specificity_count * 0.04)
+
+    # ── Evidence grounding (NEW — inspired by Clinical-R1 CRPO) ─────
+    evidence_patterns = [
+        r'"name"\s*:\s*"(?:search|search_pubmed|search_evidence|search_guidelines|browse)',
+        r"(?:according to|based on evidence|studies show|guidelines recommend)",
+        r"(?:PMID|pubmed|guideline|protocol|AHA|ACOG|SSC|IDSA)",
+    ]
+    evidence_count = sum(
+        len(_re.findall(p, response, _re.IGNORECASE)) for p in evidence_patterns
+    )
+    score += min(0.15, evidence_count * 0.05)
+
+    # ── Systematic clinical approach (NEW — inspired by DiagGym) ─────
+    # Checks if the response follows a systematic clinical workflow
+    workflow_steps = [
+        ("gather", r"\b(?:history|present|chief complaint|vitals|exam)\b"),
+        ("analyze", r"\b(?:differential|DDx|consider|workup|assess)\b"),
+        ("investigate", r"\b(?:lab|imaging|test|order|obtain|check)\b"),
+        ("decide", r"\b(?:diagnos|impression|assessment|most likely)\b"),
+        ("plan", r"\b(?:treat|prescri|recommend|plan|refer|follow.up)\b"),
+    ]
+    steps_found = sum(
+        1 for _, pattern in workflow_steps
+        if _re.search(pattern, response, _re.IGNORECASE)
+    )
+    workflow_score = steps_found / max(len(workflow_steps), 1)
+    score += workflow_score * 0.10
 
     # ── Answer presence ──────────────────────────────────────────────
     if correct_answer and correct_answer.strip().upper() in response.upper():
-        score += 0.15
+        score += 0.10
 
     return min(1.0, score)
 
 
 # ============================================================
-# 4. Composite Reward (for RL training)
+# 4. Clinical Assertion Reward (Clinician-Validated Evaluation)
+# ============================================================
+
+
+def nl_assertion_reward(
+    response: str,
+    nl_assertions: list = None,
+    tool_call_log: list[dict] = None,
+    **kwargs,
+) -> dict:
+    """Evaluate natural language assertions from clinician-defined evaluation criteria.
+
+    Uses a multi-method approach:
+    1. Evidence extraction: key phrases present in response / tool calls
+    2. Semantic fuzzy matching: token-level overlap with assertion text
+    3. Importance weighting: critical assertions weighted higher
+
+    Assertions can be plain strings or structured dicts:
+        {"assertion": "...", "importance": "critical|high|medium|low",
+         "required_evidence": ["term1", "term2"], "weight": 1.5}
+
+    Returns dict with per-assertion scores and aggregate.
+    """
+    if not nl_assertions:
+        return {"total": 0.5, "per_assertion": [], "evaluated": 0}
+
+    if tool_call_log is None:
+        tool_call_log = []
+
+    corpus = _build_evaluation_corpus(response, tool_call_log)
+    corpus_lower = corpus.lower()
+    corpus_tokens = set(corpus_lower.split())
+
+    per_assertion = []
+    weighted_sum = 0.0
+    total_weight = 0.0
+
+    for assertion in nl_assertions:
+        if isinstance(assertion, str):
+            assertion_text = assertion
+            importance = "medium"
+            required_evidence = []
+            weight = 1.0
+        elif isinstance(assertion, dict):
+            assertion_text = assertion.get("assertion", "")
+            importance = assertion.get("importance", "medium")
+            required_evidence = assertion.get("required_evidence", [])
+            weight = assertion.get("weight", _importance_weight(importance))
+        else:
+            continue
+
+        if not assertion_text:
+            continue
+
+        score = _evaluate_single_assertion(
+            assertion_text, required_evidence, corpus_lower, corpus_tokens
+        )
+
+        per_assertion.append({
+            "assertion": assertion_text[:120],
+            "score": score,
+            "importance": importance,
+            "weight": weight,
+        })
+        weighted_sum += score * weight
+        total_weight += weight
+
+    aggregate = weighted_sum / max(total_weight, 1e-8)
+    return {
+        "total": min(1.0, aggregate),
+        "per_assertion": per_assertion,
+        "evaluated": len(per_assertion),
+        "satisfied": sum(1 for a in per_assertion if a["score"] >= 0.5),
+    }
+
+
+def _build_evaluation_corpus(response: str, tool_call_log: list[dict]) -> str:
+    """Build a combined text corpus from response and tool call history."""
+    parts = [response]
+    for tc in tool_call_log:
+        tool_name = tc.get("tool_name", tc.get("name", ""))
+        args = tc.get("arguments", {})
+        result = tc.get("result", tc.get("output", ""))
+        parts.append(f"tool:{tool_name}")
+        if isinstance(args, dict):
+            parts.append(" ".join(str(v) for v in args.values()))
+        if isinstance(result, str):
+            parts.append(result[:500])
+        elif isinstance(result, dict):
+            parts.append(json.dumps(result, ensure_ascii=False)[:500])
+    return " ".join(parts)
+
+
+def _importance_weight(importance: str) -> float:
+    """Map importance level to numerical weight."""
+    return {"critical": 2.0, "high": 1.5, "medium": 1.0, "low": 0.5}.get(
+        importance.lower(), 1.0
+    )
+
+
+def _evaluate_single_assertion(
+    assertion_text: str,
+    required_evidence: list[str],
+    corpus_lower: str,
+    corpus_tokens: set[str],
+) -> float:
+    """Score a single assertion against the evaluation corpus.
+
+    Combines:
+    - Evidence phrase matching (40%)
+    - Key concept extraction and matching (35%)
+    - Token overlap (25%)
+    """
+    scores = []
+
+    # --- Evidence phrase matching (explicit required evidence) ---
+    if required_evidence:
+        matched = sum(
+            1 for ev in required_evidence if ev.lower() in corpus_lower
+        )
+        scores.append(("evidence", 0.40, matched / max(len(required_evidence), 1)))
+    else:
+        evidence_phrases = _extract_key_phrases(assertion_text)
+        if evidence_phrases:
+            matched = sum(
+                1 for ep in evidence_phrases if ep.lower() in corpus_lower
+            )
+            scores.append(("evidence", 0.40, matched / max(len(evidence_phrases), 1)))
+
+    # --- Key concept matching ---
+    concepts = _extract_medical_concepts(assertion_text)
+    if concepts:
+        matched = sum(1 for c in concepts if c.lower() in corpus_lower)
+        scores.append(("concepts", 0.35, matched / max(len(concepts), 1)))
+
+    # --- Token overlap (Jaccard-like) ---
+    assertion_tokens = set(assertion_text.lower().split()) - _STOPWORDS
+    if assertion_tokens:
+        overlap = len(assertion_tokens & corpus_tokens)
+        token_score = overlap / max(len(assertion_tokens), 1)
+        scores.append(("tokens", 0.25, min(1.0, token_score)))
+
+    if not scores:
+        return 0.5
+
+    total_w = sum(w for _, w, _ in scores)
+    return sum(w * s for _, w, s in scores) / max(total_w, 1e-8)
+
+
+def _extract_key_phrases(text: str) -> list[str]:
+    """Extract clinically meaningful key phrases from assertion text."""
+    phrases = []
+    text_lower = text.lower()
+
+    verb_patterns = [
+        r"(?:identified|recognized|detected|noted|found|checked|assessed|evaluated|ordered|performed|calculated|administered)\s+([\w\s',()-]+?)(?:\.|,|$|and\b)",
+        r"(?:recommended|suggested|prescribed|referred|considered)\s+([\w\s',()-]+?)(?:\.|,|$|and\b)",
+    ]
+    for pat in verb_patterns:
+        for m in re.finditer(pat, text_lower):
+            phrase = m.group(1).strip().rstrip(" ,.")
+            if len(phrase) > 3:
+                phrases.append(phrase)
+
+    quoted = re.findall(r"['\"]([^'\"]+)['\"]", text)
+    phrases.extend(quoted)
+
+    return phrases[:10]
+
+
+def _extract_medical_concepts(text: str) -> list[str]:
+    """Extract medical concepts (diseases, drugs, tests, scores) from text."""
+    concepts = []
+    text_lower = text.lower()
+
+    medical_patterns = [
+        r"\b((?:penicillin|amoxicillin|warfarin|aspirin|metformin|insulin|heparin|morphine|epinephrine|atropine|norepinephrine|dopamine|fentanyl|propofol|midazolam|fluoxetine|sertraline|lithium|carbamazepine|phenytoin|digoxin|amiodarone|simvastatin|lisinopril|losartan|amlodipine|omeprazole|methotrexate|cyclosporine|tacrolimus)(?:\s+allerg(?:y|ies))?)\b",
+        r"\b((?:troponin|creatinine|BUN|BNP|procalcitonin|lactate|WBC|hemoglobin|platelets|INR|HbA1c|TSH|CRP|ESR|d-dimer|ferritin|albumin|bilirubin|AST|ALT|ALP|GGT|LDH))\b",
+        r"\b((?:SOFA|qSOFA|NEWS|NEWS2|APACHE|GCS|MELD|CHA2DS2|HAS-BLED|Wells|HEART|PHQ-9|GAD-7|MMSE|Bishop|Apgar|BI-RADS|TI-RADS|ESI|CURB-65|GRACE)\s*(?:score)?)\b",
+        r"\b((?:pneumonia|sepsis|stroke|STEMI|PE|DVT|DKA|AKI|ARDS|anaphylaxis|meningitis|appendicitis|pancreatitis|cholecystitis|preeclampsia|eclampsia|aortic dissection|tamponade|tension pneumothorax))\b",
+        r"\b((?:chest x-ray|CT scan|MRI|ultrasound|ECG|EKG|echocardiogram|blood culture|urinalysis|lumbar puncture|ABG|CBC|BMP|CMP|LFTs|coagulation))\b",
+        r"\b((?:allerg(?:y|ies)|contraindication|drug interaction|adverse (?:effect|reaction)|side effect|toxicity|overdose))\b",
+    ]
+
+    for pat in medical_patterns:
+        for m in re.finditer(pat, text_lower, re.IGNORECASE):
+            concepts.append(m.group(1))
+
+    return list(set(concepts))[:15]
+
+
+_STOPWORDS = {
+    "the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
+    "have", "has", "had", "do", "does", "did", "will", "would", "could",
+    "should", "may", "might", "shall", "can", "need", "must", "ought",
+    "to", "of", "in", "for", "on", "with", "at", "by", "from", "as",
+    "into", "through", "during", "before", "after", "above", "below",
+    "between", "out", "off", "over", "under", "again", "further", "then",
+    "once", "that", "this", "these", "those", "it", "its", "they", "them",
+    "their", "we", "our", "you", "your", "he", "him", "his", "she", "her",
+    "and", "but", "or", "nor", "not", "so", "very", "too", "also",
+    "agent", "should", "must", "patient", "correctly", "properly",
+}
+
+
+# ============================================================
+# 5. Composite Reward (for RL training)
 # ============================================================
 
 
@@ -429,6 +761,7 @@ def compute_composite_reward(
     reference_text: str = "",
     tool_call_log: list[dict] = None,
     expected_actions: list[dict] = None,
+    nl_assertions: list = None,
     turn_idx: int = 0,
     is_final: bool = False,
     weights: dict = None,
@@ -436,26 +769,30 @@ def compute_composite_reward(
 ) -> dict:
     """Compute the composite reward from all signal components.
 
+    6D reward: accuracy + format + process + safety + coherence + assertion.
+
     Args:
         response: The agent's response
         correct_answer: Ground truth answer
         reference_text: Reference explanation
         tool_call_log: Log of tool calls made
         expected_actions: Expected tool call specifications
+        nl_assertions: Clinician-defined natural language assertions
         turn_idx: Current turn index
         is_final: Whether this is the final response
-        weights: Reward component weights (default: accuracy=0.4, format=0.2, process=0.4)
+        weights: Reward component weights
 
     Returns:
         Dictionary with individual scores and weighted total
     """
     if weights is None:
         weights = {
-            "accuracy": 0.30,
-            "format": 0.15,
-            "process": 0.25,
+            "accuracy": 0.25,
+            "format": 0.10,
+            "process": 0.20,
             "safety": 0.20,
             "coherence": 0.10,
+            "assertion": 0.15,
         }
 
     if tool_call_log is None:
@@ -493,30 +830,45 @@ def compute_composite_reward(
             safety_score = 1.0  # Assume safe if evaluation fails
 
     # --- 5. Coherence Reward ---
-    # Measures response structure: logical flow, no contradictions,
-    # clear final answer
     coherence_score = _compute_coherence_score(response, is_final)
 
-    # Weighted 5D total
+    # --- 6. Clinical Assertion Reward ---
+    assertion_score = 0.5  # Neutral if no assertions
+    assertion_details = {}
+    if nl_assertions and weights.get("assertion", 0) > 0:
+        assertion_result = nl_assertion_reward(
+            response=response,
+            nl_assertions=nl_assertions,
+            tool_call_log=tool_call_log,
+        )
+        assertion_score = assertion_result["total"]
+        assertion_details = assertion_result
+
+    # Weighted 6D total
     total = (
-        weights.get("accuracy", 0.30) * accuracy
-        + weights.get("format", 0.15) * format_score
-        + weights.get("process", 0.25) * process_score
+        weights.get("accuracy", 0.25) * accuracy
+        + weights.get("format", 0.10) * format_score
+        + weights.get("process", 0.20) * process_score
         + weights.get("safety", 0.20) * safety_score
         + weights.get("coherence", 0.10) * coherence_score
+        + weights.get("assertion", 0.15) * assertion_score
     )
 
-    return {
+    result = {
         "total": total,
         "accuracy": accuracy,
         "format": format_score,
         "process": process_score,
         "safety": safety_score,
         "coherence": coherence_score,
+        "assertion": assertion_score,
         "tool_usage": tool_score,
         "reasoning_quality": reasoning_score,
         "weights": weights,
     }
+    if assertion_details:
+        result["assertion_details"] = assertion_details
+    return result
 
 
 def _compute_coherence_score(response: str, is_final: bool = False) -> float:
@@ -593,6 +945,7 @@ _REWARD_REGISTRY: dict[str, Callable] = {
     "format_composite": format_reward_composite,
     "process_tool_usage": process_reward_tool_usage,
     "process_reasoning": process_reward_reasoning_quality,
+    "assertion": lambda **kw: nl_assertion_reward(**kw)["total"],
     "composite": lambda **kw: compute_composite_reward(**kw)["total"],
 }
 

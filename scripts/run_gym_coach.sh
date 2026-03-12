@@ -33,6 +33,16 @@ set -e
 PROJECT_ROOT="/data/project/private/minstar/workspace/BIOAgents"
 cd "$PROJECT_ROOT"
 
+# ── IMPORTANT: Always use the project .venv ──────────────────────
+# The project dependencies (bioagents, vllm, flash-attn, etc.) are
+# installed ONLY in .venv/. Using conda base will cause import errors.
+if [ -f "$PROJECT_ROOT/.venv/bin/activate" ]; then
+    source "$PROJECT_ROOT/.venv/bin/activate"
+    echo "[env] Using project .venv: $(which python)"
+else
+    echo "[WARNING] .venv not found! Run: uv venv .venv && uv pip install -e '.[dev,flash]'"
+fi
+
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 LOG_FILE="logs/gym_coach/coach_${TIMESTAMP}.log"
 mkdir -p logs/gym_coach
@@ -40,6 +50,7 @@ mkdir -p logs/gym_coach
 echo "============================================================================"
 echo "  Healthcare AI GYM Coach — Continuous Autonomous Training"
 echo "  Start: $TIMESTAMP"
+echo "  Python: $(which python)"
 echo "  Log: $LOG_FILE"
 echo "============================================================================"
 

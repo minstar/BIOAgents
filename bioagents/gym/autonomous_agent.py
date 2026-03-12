@@ -111,6 +111,9 @@ class AutonomousAgentConfig:
     training_epochs: int = 2
     learning_rate: float = 2e-5
     quality_threshold: float = 0.5
+    adaptive_quality: bool = True        # Normalize score distribution → keep 0.2-0.8 range
+    adaptive_quality_lo: float = 0.2     # Lower percentile cutoff (too hard, skip)
+    adaptive_quality_hi: float = 0.8     # Upper percentile cutoff (mastered, skip)
 
     # Reflection config
     reflection_window: int = 20         # How many past workouts to reflect on
@@ -132,6 +135,14 @@ class AutonomousAgentConfig:
     gradient_accumulation_steps: int = 0  # 0 = auto-tune
     lora_r: int = 0                     # 0 = auto-tune
     gpu_memory_utilization: float = 0.0  # 0.0 = auto-tune
+
+    # FairGRPO: demographic-fairness-aware reward weighting
+    use_fair_grpo: bool = False         # Enable FairGRPO (demographic fairness)
+    fairness_weight: float = 0.1        # Weight of fairness signal in composite reward
+    max_fairness_gap: float = 0.15      # Max allowed performance gap across groups
+
+    # Dr. GRPO: remove per-token length normalization (2025)
+    use_dr_grpo: bool = False
 
     # Paths
     output_dir: str = "checkpoints/autonomous"
@@ -807,11 +818,45 @@ class WorkoutExecutor:
                 from bioagents.data_pipeline.auto_task_generator import (
                     AutoTaskGenerator,
                 )
+
+                # --- C-2: Extract failure cases for targeted task generation ---
+                # (Agent0-style: pass real failure context to the LLM task
+                #  generator so it creates tasks that directly address observed
+                #  weaknesses. IMPORTANT: only GYM internal task failures are
+                #  used here — external benchmark test data is NEVER injected.)
+                failure_examples = []
+                task_results = (eval_result or {}).get("task_results", [])
+                for r in task_results:
+                    if getattr(r, "final_reward", 1.0) < 0.6:
+                        expected = []
+                        actual = []
+                        turns = getattr(r, "turns", [])
+                        for t in turns:
+                            tc = getattr(t, "parsed_tool_call", None)
+                            if tc and isinstance(tc, dict):
+                                actual.append(tc.get("name", ""))
+                        if hasattr(r, "trajectory") and isinstance(r.trajectory, dict):
+                            expected = r.trajectory.get("expected_actions", [])
+                        failure_examples.append({
+                            "task_id": getattr(r, "task_id", ""),
+                            "failure_type": (
+                                "premature_stop" if getattr(r, "total_turns", 5) <= 2
+                                else "tool_use_failure" if getattr(r, "action_score", 1.0) < 0.3
+                                else "reasoning_error"
+                            ),
+                            "expected_actions": expected,
+                            "actual_actions": [a for a in actual if a],
+                            "reward": getattr(r, "final_reward", 0.0),
+                        })
+                # Cap at 3 failure examples to keep LLM prompt concise
+                failure_examples = failure_examples[:3]
+
                 gen = AutoTaskGenerator()
                 new_tasks = gen.generate(
                     domain=domain,
                     target=target,
                     sources=sources,
+                    failure_examples=failure_examples,  # C-2 context
                 )
                 if new_tasks:
                     data_dir.mkdir(parents=True, exist_ok=True)
@@ -1015,8 +1060,40 @@ class WorkoutExecutor:
             "reason": f"No action needed (pool={pool_size}).",
         }
 
+    # ── Anti-contamination: GYM-internal eval data sources ─────────────────
+    # The GYM evaluates on INTERNAL tasks only (data/domains/*/tasks*.json).
+    # External test sets (MedQA, MedMCQA, MMLU, VQA-RAD, PathVQA, MedLFQA,
+    # KQA, LiveQA, MedicationQA, MIMIC-III, eICU) are used SOLELY for
+    # periodic benchmarking via evaluate_external_benchmarks() and NEVER
+    # appear in the training data pipeline or the replay buffer.
+    #
+    # The replay buffer (eval_trajectories in BioAgentGRPOConfig) contains
+    # ONLY trajectories from internal GYM tasks. The failure_examples passed
+    # to CurriculumAgent LLM contain ONLY error patterns from internal tasks.
+    # ────────────────────────────────────────────────────────────────────────
+    _EXTERNAL_TEST_DOMAINS = frozenset({
+        "medqa", "medmcqa", "mmlu", "vqa_rad", "slake", "pathvqa",
+        "mimic_cxr_vqa", "pmcvqa", "omnimed", "kqa_golden", "kqa_silver",
+        "liveqa", "medication_qa", "healthqa", "mimic_iii", "eicu",
+    })
+
     def _evaluate(self, domain: str) -> dict:
-        """Evaluate current model on a domain."""
+        """Evaluate current model on GYM-internal domain tasks.
+
+        IMPORTANT: Only runs on internal tasks from data/domains/{domain}/.
+        External benchmark test sets are NEVER used here — they are only
+        accessed via evaluate_external_benchmarks() for reporting purposes.
+        """
+        # Sanity check: domain must not be an external test benchmark
+        if domain.lower() in self._EXTERNAL_TEST_DOMAINS:
+            logger.error(
+                f"[{self.config.agent_id}] CONTAMINATION GUARD: "
+                f"domain '{domain}' is an external test set. "
+                f"Refusing to evaluate — this would contaminate train/test split."
+            )
+            return {"action_score": 0.0, "num_tasks": 0,
+                    "error_types": ["contamination_guard_triggered"]}
+
         try:
             from bioagents.evaluation.agent_runner import AgentRunner, RunConfig
 
@@ -1024,10 +1101,25 @@ class WorkoutExecutor:
             max_new_tokens = self.config.inference_max_new_tokens or 1024
             gpu_mem_util = self.config.gpu_memory_utilization or 0.85
 
+            # Sample eval_tasks_per_domain tasks to avoid running all tasks
+            # (eval_tasks_per_domain=0 means run all tasks)
+            sampled_task_ids = None
+            max_eval = self.config.eval_tasks_per_domain or 0
+            if max_eval > 0:
+                import random
+                from bioagents.gym.agent_env import BioAgentGymEnv
+                _tmp_env = BioAgentGymEnv(domain=domain)
+                all_ids = [t["id"] for t in _tmp_env._tasks]
+                if len(all_ids) > max_eval:
+                    sampled_task_ids = random.sample(all_ids, max_eval)
+                else:
+                    sampled_task_ids = all_ids
+
             run_config = RunConfig(
                 model_name_or_path=self.config.model_path,
                 backend=self.config.backend,
                 domain=domain,
+                task_ids=sampled_task_ids,
                 max_turns=self.config.max_turns,
                 temperature=0.1,
                 max_new_tokens=max_new_tokens,
@@ -1067,6 +1159,69 @@ class WorkoutExecutor:
                     else:
                         error_types.append("reasoning_error")
 
+            # --- Collect high-reward trajectories for eval→train replay ---
+            # (WebRL-style: successful eval trajectories are replayed in
+            #  the next GRPO training batch as warm-start demonstrations.)
+            replay_trajectories = []
+
+            # Adaptive quality filtering: normalize score distribution to
+            # [0,1] and keep trajectories in [lo, hi] percentile range.
+            # This selects the "zone of proximal development" — not too
+            # easy (already mastered) and not too hard (no learning signal).
+            all_rewards = [r.final_reward for r in task_results]
+            if self.config.adaptive_quality and len(all_rewards) >= 2:
+                r_min, r_max = min(all_rewards), max(all_rewards)
+                if r_max > r_min:
+                    lo_cutoff = r_min + self.config.adaptive_quality_lo * (r_max - r_min)
+                    hi_cutoff = r_min + self.config.adaptive_quality_hi * (r_max - r_min)
+                else:
+                    # All scores identical → keep all non-zero
+                    lo_cutoff = r_min - 0.01 if r_min > 0 else 0.0
+                    hi_cutoff = r_max + 0.01
+                logger.info(
+                    f"[{self.config.agent_id}] Adaptive quality: "
+                    f"range=[{r_min:.3f}, {r_max:.3f}] → "
+                    f"keep [{lo_cutoff:.3f}, {hi_cutoff:.3f}]"
+                )
+            else:
+                # Fallback: fixed threshold (non-adaptive mode)
+                lo_cutoff = self.config.quality_threshold
+                hi_cutoff = float("inf")
+
+            for r in task_results:
+                if r.final_reward < lo_cutoff or r.final_reward > hi_cutoff:
+                    continue
+                # Build full_text from the turn-by-turn conversation
+                turn_texts = []
+                for turn in getattr(r, "turns", []):
+                    p = getattr(turn, "prompt", "") or ""
+                    o = getattr(turn, "raw_output", "") or ""
+                    if p or o:
+                        turn_texts.append(f"{p}\n{o}".strip())
+                full_text = "\n".join(turn_texts)
+                if not full_text:
+                    continue
+                tool_calls = [
+                    getattr(t, "parsed_tool_call", None)
+                    for t in getattr(r, "turns", [])
+                    if getattr(t, "parsed_tool_call", None)
+                ]
+                replay_trajectories.append({
+                    "task_id": r.task_id,
+                    "domain": domain,
+                    "full_text": full_text,
+                    "final_response": (
+                        getattr(r.turns[-1], "raw_output", "")
+                        if getattr(r, "turns", []) else ""
+                    ),
+                    "reward": r.final_reward,
+                    "final_reward": r.final_reward,
+                    "tool_calls": tool_calls,
+                    "num_turns": getattr(r, "total_turns", len(getattr(r, "turns", []))),
+                    # advantage set positive — these are known-good trajectories
+                    "advantage": 1.0,
+                })
+
             del runner
             try:
                 import torch
@@ -1087,6 +1242,13 @@ class WorkoutExecutor:
                 if action_scores else 0.0
             )
 
+            logger.info(
+                f"[{self.config.agent_id}] Eval replay pool: "
+                f"{len(replay_trajectories)}/{len(task_results)} trajectories "
+                f"(cutoff=[{lo_cutoff:.3f}, {hi_cutoff:.3f}]"
+                f"{' adaptive' if self.config.adaptive_quality else ' fixed'})"
+            )
+
             return {
                 "action_score": avg_blended,
                 "action_score_raw": avg_action,
@@ -1097,6 +1259,8 @@ class WorkoutExecutor:
                 ),
                 "error_types": error_types,
                 "task_results": task_results,
+                "trajectories": replay_trajectories,  # for GRPO replay
+                "adaptive_lo_cutoff": lo_cutoff,       # for GRPO min_reward
             }
 
         except Exception as e:
@@ -1516,7 +1680,9 @@ class WorkoutExecutor:
             from bioagents.training.grpo_trainer import (
                 BioAgentGRPOConfig,
                 MultiTurnGRPOConfig,
+                FairGRPOConfig,
                 train_multiturn,
+                train_fair_grpo,
             )
             from bioagents.evaluation.agent_runner import repair_model_config
 
@@ -1565,7 +1731,15 @@ class WorkoutExecutor:
                 f"rewards={reward_functions}"
             )
 
-            grpo_config = BioAgentGRPOConfig(
+            # Retrieve eval trajectories for replay (C-1: WebRL-style)
+            eval_replay_trajs = eval_result.get("trajectories") or []
+            if eval_replay_trajs:
+                logger.info(
+                    f"[{self.config.agent_id}] Replay pool: "
+                    f"{len(eval_replay_trajs)} eval trajectories → GRPO batch"
+                )
+
+            _common_kwargs = dict(
                 model_name_or_path=self.config.model_path,
                 torch_dtype="bfloat16",
                 attn_implementation="sdpa",
@@ -1588,17 +1762,37 @@ class WorkoutExecutor:
                 use_gym_env=True,
                 reward_functions=reward_functions,
                 reward_strategy=reward_strategy,
+                # C-1: Eval→Train replay (WebRL-style, arXiv:2411.02337)
+                eval_trajectories=eval_replay_trajs or None,
+                eval_trajectory_mix_ratio=0.3,
+                eval_trajectory_min_reward=eval_result.get("adaptive_lo_cutoff", self.config.quality_threshold),
+                # C-3: Dr. GRPO length normalization removal
+                use_dr_grpo=getattr(self.config, "use_dr_grpo", False),
                 use_wandb=True,
                 wandb_project="pt2-minstar-gym-rl",
                 run_name=f"{self.config.agent_id}_{domain}_{reward_strategy}",
-                log_dir=str(
-                    Path(self.config.log_dir) / self.config.agent_id
-                ),
+                log_dir=str(Path(self.config.log_dir) / self.config.agent_id),
                 seed=42 + iteration_id % 1000,
             )
 
-            # Run multi-turn GRPO training
-            trajectories = train_multiturn(grpo_config)
+            # Route to FairGRPO when fairness training is enabled for this agent
+            if self.config.use_fair_grpo:
+                grpo_config = FairGRPOConfig(
+                    **_common_kwargs,
+                    fairness_enabled=True,
+                    fairness_weight=self.config.fairness_weight,
+                    max_fairness_gap=self.config.max_fairness_gap,
+                )
+                logger.info(
+                    f"[{self.config.agent_id}] Using FairGRPO "
+                    f"(fairness_weight={self.config.fairness_weight}, "
+                    f"max_gap={self.config.max_fairness_gap})"
+                )
+                trajectories = train_fair_grpo(grpo_config)
+            else:
+                grpo_config = BioAgentGRPOConfig(**_common_kwargs)
+                # Run multi-turn GRPO training
+                trajectories = train_multiturn(grpo_config)
 
             logger.info(
                 f"[{self.config.agent_id}] GRPO complete: "
@@ -1807,8 +2001,9 @@ print(f"Merged to: {{output_path}}")
             with open(script_path, "w") as f:
                 f.write(merge_script)
 
+            from bioagents import PYTHON_EXE
             result = subprocess.run(
-                ["python", script_path],
+                [PYTHON_EXE, script_path],
                 timeout=600,
                 capture_output=True,
                 text=True,

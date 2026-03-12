@@ -4,7 +4,7 @@
 
 > "Static benchmarks tell you if a model memorized medical facts. The GYM tells you if it can practice medicine."
 
-Healthcare AI GYM is an end-to-end infrastructure for training medical AI agents that use 126+ clinical tools, follow evidence-based guidelines, and make safe decisions across 10 medical specialties. Agents in the GYM don't just answer questions — they gather information, reason through cases, use tools, check safety, and submit structured clinical assessments.
+Healthcare AI GYM is an end-to-end infrastructure for training medical AI agents that use 187+ clinical tools, follow evidence-based guidelines, and make safe decisions across 10 medical specialties. Agents in the GYM don't just answer questions — they gather information, reason through cases, use tools, check safety, and submit structured clinical assessments.
 
 **What makes it different?** The agents train *themselves*. Each agent reflects on its own performance, chooses what to practice, generates its own training data from medical knowledge sources, learns through RL, and shares what it learns with peers. No human curriculum. No manual data curation. Just open the GYM doors and let the agents work out.
 
@@ -15,11 +15,12 @@ Healthcare AI GYM is an end-to-end infrastructure for training medical AI agents
 | | |
 |---|---|
 | **Medical Domains** | 10 specialties (diagnosis, triage, EHR, radiology, psychiatry, OB/GYN, ...) |
-| **Clinical Tools** | 126+ (labs, vitals, imaging, prescribing, scoring, protocols) |
-| **Training Tasks** | 2,400+ (original + scaled + auto-generated from 828K knowledge passages) |
+| **Clinical Tools** | 187+ (labs, vitals, imaging, prescribing, scoring, protocols) |
+| **Training Tasks** | 2,580+ (original + scaled + auto-generated from 828K knowledge passages) |
 | **Benchmarks** | 21 (MedQA, MedMCQA, 6x MMLU, 6x VQA, 5x MedLFQA, 2x EHR) |
 | **Reward System** | 5D: Accuracy + Format + Process + Safety + Coherence |
-| **RL Strategies** | GRPO, MRPO, SARL, Adaptive (auto-selected per task) |
+| **RL Strategies** | GRPO, MRPO, SARL, Dr. GRPO, FairGRPO, Adaptive (auto-selected per task) |
+| **Training Data** | Adaptive quality filtering (Zone of Proximal Development) + WebRL-style replay |
 | **Knowledge Base** | 828K medical passages + 188 GB Wikipedia (FTS5 + FAISS) |
 | **Modalities** | Text + Vision (VL models supported natively) |
 | **Models Tested** | Qwen2.5-VL-7B, LingShu-7B, Step3-VL-10B |
@@ -94,7 +95,7 @@ Healthcare AI GYM is an end-to-end infrastructure for training medical AI agents
 | **Visual Diagnosis** | 11 | 39 | Medical image analysis, pattern recognition |
 | **Radiology Report** | 11 | 20 | Structured reporting (BI-RADS, TI-RADS, Fleischner) |
 | **Cross-Domain** | -- | 25 | Multi-phase patient journeys across specialties |
-| **Total** | **126+** | **2,400+** | |
+| **Total** | **187+** | **2,580+** | |
 
 ### Cross-Domain Clinical Pathways
 
@@ -171,6 +172,8 @@ Every agent response is evaluated across 5 dimensions. The composite reward driv
 | **GRPO** | Default, stable performance | Group Relative Policy Optimization |
 | **MRPO** | Reasoning errors | Token-level reward shaping (alignment + relevance + factuality) |
 | **SARL** | Premature stops, tool-heavy domains | Self-assessment decay + tool usage bonus |
+| **Dr. GRPO** | Length bias correction | Per-token normalization to remove length bias |
+| **FairGRPO** | Demographic fairness | Demographic-aware reward weighting for equitable performance |
 | **Adaptive** | New domains, uncertain performance | Dynamic strategy selection |
 
 ---
@@ -283,8 +286,18 @@ Healthcare AI must be safe. The GYM integrates safety at every level.
 
 ### Install
 
+> **⚠ This project uses a dedicated `.venv/` virtual environment (created with `uv`).
+> NEVER use conda `base` or system Python — key packages (bioagents, vllm, flash-attn)
+> are only installed in `.venv/`.**
+
 ```bash
-pip install -e ".[dev]"
+# Activate the project venv (REQUIRED before any command)
+source .venv/bin/activate
+
+# Or install from scratch (if .venv doesn't exist)
+uv venv .venv --python 3.12
+source .venv/bin/activate
+uv pip install -e ".[dev,flash]"
 ```
 
 ### Option 1: Run the Autonomous GYM (Recommended)
@@ -292,6 +305,7 @@ pip install -e ".[dev]"
 Register your models in `configs/autonomous_gym.yaml` and let them train themselves:
 
 ```bash
+source .venv/bin/activate  # Always activate first!
 python -m bioagents.gym.autonomous_gym --config configs/autonomous_gym.yaml
 ```
 
@@ -305,6 +319,7 @@ See [AGENT_GUIDELINE.md](AGENT_GUIDELINE.md) for the full agent onboarding guide
 ### Option 2: Run a Single Agent Task
 
 ```python
+# Make sure .venv is activated first!
 import gymnasium as gym
 from bioagents.gym.agent_env import register_bioagent_gym
 
@@ -317,6 +332,8 @@ print(obs)  # Patient scenario + available tools
 ### Option 3: Train with GRPO Directly
 
 ```bash
+source .venv/bin/activate  # Always activate first!
+
 # Single domain
 python bioagents/training/grpo_trainer.py --config configs/grpo_triage_emergency.yaml
 
@@ -327,7 +344,12 @@ python -m bioagents.training.grpo_trainer --config configs/grpo_adaptive_strateg
 ### Benchmark Evaluation
 
 ```bash
-# Text benchmarks
+source .venv/bin/activate  # Always activate first!
+
+# Full 21-benchmark evaluation (3 models in parallel, 8 GPUs)
+python scripts/run_all_benchmarks_parallel.py
+
+# Text benchmarks only
 python bioagents/evaluation/benchmark_eval.py \
     --model checkpoints/my_model \
     --benchmarks medqa medmcqa mmlu_anatomy
@@ -407,10 +429,26 @@ The `AGENT_GUIDELINE.md` is automatically updated with live intelligence from tr
 
 ---
 
+## Environment Requirements
+
+| Requirement | Details |
+|---|---|
+| **Python** | 3.12+ |
+| **Virtual env** | `.venv/` (created with `uv`) — **ALWAYS use this** |
+| **Activation** | `source .venv/bin/activate` |
+| **In subprocesses** | `from bioagents import PYTHON_EXE` |
+| **GPU** | 8x A100-80GB (recommended) |
+| **CUDA** | 12.8+ |
+
+See [AGENT_GUIDELINE.md](AGENT_GUIDELINE.md) § 2 for detailed environment setup.
+
+---
+
 ## Project Structure
 
 ```
 BIOAgents/
+├── .venv/                         # ★ Project virtual environment (use THIS python)
 ├── bioagents/
 │   ├── gym/                        # Autonomous GYM system
 │   │   ├── autonomous_gym.py       # GYM orchestrator (GPU scheduler + safety)
@@ -453,12 +491,15 @@ BIOAgents/
 ├── configs/                        # YAML configs (27 total)
 │   └── autonomous_gym.yaml         # Main GYM config
 ├── AGENT_GUIDELINE.md              # Living agent onboarding guide
-└── PLANNING.md                     # Internal research planning document
+├── PLANNING.md                     # Internal research planning document
+└── RESEARCH_LOG.md                 # Recent papers (CLI-Gym, SMTL, ResearchGym, etc.) + action items
 ```
 
 ---
 
 ## vs. Existing Work
+
+> **Recent research (2026):** See [RESEARCH_LOG.md](RESEARCH_LOG.md) for CLI-Gym, Search More Think Less (SMTL), ResearchGym, LongCLI-Bench, EnvScaler, MedAgentGym, and related work with GYM applicability notes.
 
 | Dimension | DiagGym | MedAgentGym | AgentClinic | **Healthcare AI GYM** |
 |-----------|---------|-------------|-------------|----------------------|
@@ -466,7 +507,7 @@ BIOAgents/
 | Task type | Diagnosis | Code execution | Conversation | **Tool-use agent** |
 | Multimodal | No | No | No | **Text + Vision** |
 | Cross-domain | No | No | No | **6 pathways** |
-| Clinical tools | ~10 | Python RT | None | **126+** |
+| Clinical tools | ~10 | Python RT | None | **187+** |
 | Safety eval | Limited | No | No | **5D + 50 adversarial + 11 bias** |
 | Fairness (RL) | No | No | No | **FairGRPO** |
 | Self-training | No | Limited | No | **Full autonomous** |

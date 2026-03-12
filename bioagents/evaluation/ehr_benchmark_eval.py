@@ -64,7 +64,7 @@ class EHRBenchmarkConfig:
     benchmarks: list[str] = field(
         default_factory=lambda: ["mimic_iii", "eicu"]
     )
-    max_samples: int = 0        # 0 = all
+    max_samples: int = 5000     # stratified 5K/db default; 0 = all (use only for full eval)
     max_turns: int = 15
     temperature: float = 0.1
     max_new_tokens: int = 1024
@@ -174,10 +174,30 @@ class EHRBenchmarkEvaluator:
         if self.config.task_split:
             tasks = [t for t in tasks if t.get("split", "test") == self.config.task_split]
 
-        # Limit samples
-        if self.config.max_samples > 0:
-            tasks = tasks[:self.config.max_samples]
-            logger.info(f"  Limited to {len(tasks)} tasks (--max-samples {self.config.max_samples})")
+        # Stratified sample: preserve category distribution when limiting samples
+        if self.config.max_samples > 0 and len(tasks) > self.config.max_samples:
+            import random
+            from collections import defaultdict
+            category_buckets: dict = defaultdict(list)
+            for t in tasks:
+                category_buckets[t.get("category", "_unknown")].append(t)
+            n_categories = len(category_buckets)
+            per_cat = max(1, self.config.max_samples // n_categories)
+            sampled: list = []
+            for cat_tasks in category_buckets.values():
+                random.shuffle(cat_tasks)
+                sampled.extend(cat_tasks[:per_cat])
+            # Fill up to max_samples if rounding left gaps
+            sampled_ids = {id(t) for t in sampled}
+            remaining = [t for t in tasks if id(t) not in sampled_ids]
+            random.shuffle(remaining)
+            sampled.extend(remaining[: self.config.max_samples - len(sampled)])
+            tasks = sampled[: self.config.max_samples]
+            logger.info(
+                f"  Stratified sample: {len(tasks)} tasks "
+                f"({n_categories} categories, ~{per_cat}/cat) "
+                f"from {self.config.max_samples} max_samples"
+            )
 
         return db, tasks
 
@@ -218,10 +238,38 @@ class EHRBenchmarkEvaluator:
             max_turns=self.config.max_turns,
         )
 
-        task_results = []
+        # Checkpoint file: resume from last completed task on restart
+        ckpt_dir = Path(self.config.output_dir) / "checkpoints"
+        ckpt_dir.mkdir(parents=True, exist_ok=True)
+        ckpt_path = ckpt_dir / f"{benchmark_key}_{self.config.model_name}_ckpt.json"
+
+        # Load existing checkpoint if available
+        import dataclasses
+        completed_ids: set = set()
+        task_results: list = []
+        if ckpt_path.exists():
+            try:
+                with open(ckpt_path) as f:
+                    ckpt = json.load(f)
+                for r in ckpt.get("task_results", []):
+                    # Filter to known fields only for forward-compatibility
+                    known = {f.name for f in dataclasses.fields(EHRTaskResult)}
+                    task_results.append(EHRTaskResult(**{k: v for k, v in r.items() if k in known}))
+                completed_ids = {r.task_id for r in task_results}
+                logger.info(
+                    f"  [{benchmark_key}] Resuming from checkpoint: "
+                    f"{len(completed_ids)} tasks already done"
+                )
+            except Exception as e:
+                logger.warning(f"  [{benchmark_key}] Checkpoint load failed: {e} — starting fresh")
+                task_results = []
+                completed_ids = set()
+
+        # Skip already-completed tasks
+        remaining_tasks = [t for t in tasks if t["id"] not in completed_ids]
         t0 = time.time()
 
-        for i, task in enumerate(tasks):
+        for i, task in enumerate(remaining_tasks):
             task_id = task["id"]
 
             try:
@@ -255,15 +303,36 @@ class EHRBenchmarkEvaluator:
 
             task_results.append(task_result)
 
-            if (i + 1) % 10 == 0 or (i + 1) == len(tasks):
+            # Progress log every 10 tasks
+            if (i + 1) % 10 == 0 or (i + 1) == len(remaining_tasks):
+                n_done = len(completed_ids) + i + 1
                 completed = sum(1 for r in task_results if r.completed)
                 avg_score = sum(r.action_score for r in task_results) / max(len(task_results), 1)
                 elapsed = time.time() - t0
                 logger.info(
-                    f"  [{benchmark_key}] {i+1}/{len(tasks)} tasks, "
+                    f"  [{benchmark_key}] {n_done}/{len(tasks)} tasks, "
                     f"completed={completed}, avg_action_score={avg_score:.3f}, "
                     f"elapsed={elapsed:.0f}s"
                 )
+
+            # Save checkpoint every 100 tasks
+            if (i + 1) % 100 == 0:
+                try:
+                    with open(ckpt_path, "w") as f:
+                        json.dump(
+                            {"task_results": [dataclasses.asdict(r) for r in task_results]},
+                            f,
+                            default=str,
+                        )
+                except Exception as e:
+                    logger.warning(f"  [{benchmark_key}] Checkpoint save failed: {e}")
+
+        # Remove checkpoint after successful completion
+        if ckpt_path.exists():
+            try:
+                ckpt_path.unlink()
+            except Exception:
+                pass
 
         # ── Aggregate results ─────────────────────────────────────────────
         completed_results = [r for r in task_results if r.completed]

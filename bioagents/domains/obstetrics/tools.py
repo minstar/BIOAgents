@@ -294,6 +294,100 @@ class ObstetricsTools(ToolKitBase):
         return json.dumps({"status": "ordered", "patient_id": patient_id, "tests": tests}, indent=2)
 
     @is_tool
+    def interpret_ctg(self, patient_id: str) -> str:
+        """Interpret cardiotocography (CTG/NST) tracing.
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            CTG interpretation with NICHD category (I/II/III).
+        """
+        p = self.db.patients.get(patient_id)
+        if not p:
+            return json.dumps({"error": f"Patient {patient_id} not found"})
+        return json.dumps({"patient_id": patient_id, "baseline_fhr": 140, "variability": "moderate (6-25 bpm)", "accelerations": "present (reactive)", "decelerations": "none", "contractions": "irregular, every 5-7 min", "category": "Category I (Normal)", "interpretation": "Reassuring fetal status. Normal baseline, moderate variability, accelerations present, no decelerations.", "recommendation": "Continue routine monitoring"}, indent=2)
+
+    @is_tool
+    def calculate_gestational_age(self, patient_id: str) -> str:
+        """Calculate gestational age from LMP and/or ultrasound dating.
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            Gestational age, EDD, and trimester.
+        """
+        p = self.db.patients.get(patient_id)
+        if not p:
+            return json.dumps({"error": f"Patient {patient_id} not found"})
+        ga_weeks = getattr(p, "gestational_age_weeks", 34)
+        ga_days = getattr(p, "gestational_age_days", 2)
+        trimester = "first" if ga_weeks < 14 else ("second" if ga_weeks < 28 else "third")
+        return json.dumps({"patient_id": patient_id, "gestational_age": f"{ga_weeks}w{ga_days}d", "weeks": ga_weeks, "days": ga_days, "trimester": trimester, "edd": "2026-04-15", "dating_method": "ultrasound (first trimester)", "viability": ga_weeks >= 24}, indent=2)
+
+    @is_tool
+    def screen_gestational_diabetes(self, patient_id: str) -> str:
+        """GDM screening with glucose challenge test results.
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            GDM screening results and diagnostic criteria.
+        """
+        p = self.db.patients.get(patient_id)
+        if not p:
+            return json.dumps({"error": f"Patient {patient_id} not found"})
+        return json.dumps({"patient_id": patient_id, "screening_type": "1-hour GCT (50g)", "gct_result": 148, "gct_threshold": 140, "gct_status": "POSITIVE (requires 3-hour OGTT)", "ogtt_3hour": {"fasting": 95, "1_hour": 188, "2_hour": 160, "3_hour": 135, "thresholds": {"fasting": 95, "1_hour": 180, "2_hour": 155, "3_hour": 140}, "abnormal_values": 2, "diagnosis": "Gestational Diabetes Mellitus (2+ abnormal values)"}, "recommendations": ["Nutrition counseling", "Blood glucose monitoring QID", "Consider endocrinology referral"]}, indent=2)
+
+    @is_tool
+    def check_rh_status(self, patient_id: str) -> str:
+        """Check Rh status, antibody screen, and RhoGAM need.
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            Rh status and immunization recommendation.
+        """
+        p = self.db.patients.get(patient_id)
+        if not p:
+            return json.dumps({"error": f"Patient {patient_id} not found"})
+        return json.dumps({"patient_id": patient_id, "blood_type": "O", "rh_status": "Negative", "antibody_screen": "Negative", "rh_sensitized": False, "rhogam_indicated": True, "rhogam_timing": ["28 weeks prophylactic", "within 72 hours of delivery", "after any sensitizing event (amniocentesis, bleeding, trauma)"], "last_rhogam": "None administered this pregnancy"}, indent=2)
+
+    @is_tool
+    def assess_preterm_risk(self, patient_id: str) -> str:
+        """Assess preterm labor risk: fetal fibronectin, cervical length, risk factors.
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            Preterm risk assessment with recommendations.
+        """
+        p = self.db.patients.get(patient_id)
+        if not p:
+            return json.dumps({"error": f"Patient {patient_id} not found"})
+        ga = getattr(p, "gestational_age_weeks", 30)
+        return json.dumps({"patient_id": patient_id, "gestational_age_weeks": ga, "cervical_length_mm": 28, "fetal_fibronectin": "negative", "risk_factors": ["prior preterm birth", "multiple gestation", "short cervix"], "risk_level": "MODERATE", "recommendations": ["Serial cervical length measurements", "Consider progesterone supplementation", "Patient education on preterm labor signs", "Antenatal corticosteroids if 24-34 weeks with risk"]}, indent=2)
+
+    @is_tool
+    def calculate_modified_bpp(self, patient_id: str) -> str:
+        """Calculate Modified Biophysical Profile (NST + AFI).
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            Modified BPP score with interpretation.
+        """
+        p = self.db.patients.get(patient_id)
+        if not p:
+            return json.dumps({"error": f"Patient {patient_id} not found"})
+        return json.dumps({"patient_id": patient_id, "nst": {"result": "reactive", "score": 2}, "afi_cm": 12.5, "afi_normal": True, "modified_bpp_score": "2/2 (normal)", "interpretation": "Reassuring fetal status. Reactive NST with normal AFI.", "recommendation": "Continue routine antepartum surveillance"}, indent=2)
+
+    @is_tool
     def think(self, thought: str) -> str:
         """Record internal clinical reasoning.
 

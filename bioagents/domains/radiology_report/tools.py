@@ -237,6 +237,92 @@ class RadiologyReportTools(ToolKitBase):
         }, indent=2)
 
     @is_tool
+    def apply_classification_system(self, study_id: str, system: str = "BI-RADS") -> str:
+        """Apply a standardized imaging classification system to findings.
+
+        Args:
+            study_id: Study identifier.
+            system: Classification system (BI-RADS, TI-RADS, LI-RADS, Lung-RADS, PI-RADS).
+
+        Returns:
+            Classification category with management recommendation.
+        """
+        classifications = {
+            "BI-RADS": {"category": "BI-RADS 4A", "description": "Low suspicion for malignancy", "management": "Tissue diagnosis recommended (biopsy)", "cancer_risk": "2-10%"},
+            "TI-RADS": {"category": "TI-RADS TR3", "description": "Mildly suspicious", "management": "FNA if >= 2.5cm, follow-up if 1.5-2.4cm", "points": 3},
+            "LI-RADS": {"category": "LI-RADS 4", "description": "Probably HCC", "management": "Multidisciplinary discussion, consider biopsy or treatment", "diagnostic_certainty": "high"},
+            "Lung-RADS": {"category": "Lung-RADS 3", "description": "Probably benign", "management": "6-month LDCT follow-up", "nodule_risk": "<5%"},
+            "PI-RADS": {"category": "PI-RADS 4", "description": "High likelihood of clinically significant cancer", "management": "MRI-targeted biopsy recommended", "cancer_probability": "60-70%"},
+        }
+        result = classifications.get(system, {"error": f"Unknown system: {system}. Supported: BI-RADS, TI-RADS, LI-RADS, Lung-RADS, PI-RADS"})
+        result["study_id"] = study_id
+        result["system"] = system
+        return json.dumps(result, indent=2)
+
+    @is_tool
+    def compare_with_prior_study(self, study_id: str, prior_study_id: str = "") -> str:
+        """Detailed comparison with prior imaging study.
+
+        Args:
+            study_id: Current study identifier.
+            prior_study_id: Prior study identifier for comparison.
+
+        Returns:
+            Comparison results with interval changes.
+        """
+        return json.dumps({"study_id": study_id, "prior_study_id": prior_study_id or "PRIOR_001", "interval": "6 months", "comparison": {"new_findings": [], "resolved_findings": [], "stable_findings": ["Right lower lobe nodule (5mm, unchanged)"], "changed_findings": [{"finding": "Left pleural effusion", "change": "decreased", "prior": "moderate", "current": "small", "clinical_significance": "improving"}]}, "overall_impression": "Interval improvement with decreasing left pleural effusion. Stable right lower lobe nodule."}, indent=2)
+
+    @is_tool
+    def measure_lesion_size(self, study_id: str, lesion_description: str = "") -> str:
+        """Measure lesion dimensions using RECIST criteria.
+
+        Args:
+            study_id: Study identifier.
+            lesion_description: Description of the lesion to measure.
+
+        Returns:
+            Lesion dimensions and RECIST classification.
+        """
+        return json.dumps({"study_id": study_id, "lesion": lesion_description or "target lesion", "dimensions_mm": {"long_axis": 22, "short_axis": 15, "depth": 18}, "volume_ml": 3.1, "recist": {"target_lesion": True, "sum_of_diameters": 22, "prior_sum": 20, "change_percent": 10.0, "response_category": "Stable Disease (SD)"}, "measurement_method": "Axial plane, longest diameter"}, indent=2)
+
+    @is_tool
+    def generate_critical_finding_alert(self, study_id: str, finding: str = "") -> str:
+        """Generate a critical/urgent finding notification for immediate communication.
+
+        Args:
+            study_id: Study identifier.
+            finding: Description of the critical finding.
+
+        Returns:
+            Alert details with communication documentation.
+        """
+        return json.dumps({"study_id": study_id, "alert_level": "CRITICAL", "finding": finding or "New acute finding requiring immediate attention", "communication": {"method": "Direct verbal communication", "recipient": "Ordering physician", "timestamp": "2026-02-17T10:45:00Z", "acknowledged": False}, "acr_guidelines": "ACR Practice Parameter for Communication of Diagnostic Imaging Findings", "documentation": "Critical result communicated per institutional policy"}, indent=2)
+
+    @is_tool
+    def calculate_coronary_calcium_score(self, study_id: str) -> str:
+        """Calculate Agatston coronary artery calcium score.
+
+        Args:
+            study_id: Study identifier.
+
+        Returns:
+            Calcium score with risk category and percentile.
+        """
+        return json.dumps({"study_id": study_id, "agatston_score": 150, "risk_category": "Moderate", "risk_categories": {"0": "No identifiable disease", "1-10": "Minimal", "11-100": "Mild", "101-400": "Moderate", "401+": "Severe"}, "percentile_for_age_sex": 75, "10_year_cad_risk": "Moderate (consider statin therapy)", "vessel_scores": {"LAD": 80, "LCx": 30, "RCA": 40, "LM": 0}}, indent=2)
+
+    @is_tool
+    def get_radiation_dose(self, study_id: str) -> str:
+        """Get radiation dose information for the study.
+
+        Args:
+            study_id: Study identifier.
+
+        Returns:
+            Radiation dose metrics and context.
+        """
+        return json.dumps({"study_id": study_id, "dlp_mgy_cm": 520, "ctdi_vol_mgy": 12.5, "effective_dose_msv": 7.8, "reference_levels": {"background_annual_msv": 3.0, "chest_xray_msv": 0.02, "ct_chest_msv": 7.0, "ct_abdomen_msv": 10.0}, "dose_comparison": "Approximately equivalent to 2.6 years of background radiation", "optimization": "Dose within diagnostic reference levels", "alara_compliant": True}, indent=2)
+
+    @is_tool
     def think(self, thought: str) -> str:
         """Record internal reasoning about the radiology findings.
 

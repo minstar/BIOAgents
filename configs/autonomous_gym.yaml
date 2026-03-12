@@ -66,7 +66,7 @@ gym:
   logbook_dir: "logs/shared_logbook"
   wandb_project: "pt2-minstar-gym-rl"
 
-  continuous: true
+  continuous: true  # 1-cycle dry-run test (change to true for 24/7)
 
 # --- External Benchmark Evaluation ---
 # 14+ benchmarks: MedQA, MedMCQA, 6x MMLU, 6x VQA, MedLFQA, EHR
@@ -100,12 +100,13 @@ agents:
     diversity_weight: 0.10
     mastery_push_weight: 0.15
     safety_weight: 0.10
-    max_turns: 15
-    eval_tasks_per_domain: 15
+    max_turns: 8
+    eval_tasks_per_domain: 3
     training_epochs: 2
     learning_rate: 0.00002
     quality_threshold: 0.4
     mastery_threshold: 0.90
+    use_dr_grpo: true             # Dr. GRPO: no length bias
     output_dir: "checkpoints/autonomous/lingshu_weakness_fixer"
     log_dir: "logs/autonomous/lingshu_weakness_fixer"
 
@@ -122,8 +123,8 @@ agents:
     diversity_weight: 0.10
     mastery_push_weight: 0.10
     safety_weight: 0.35
-    max_turns: 20
-    eval_tasks_per_domain: 20
+    max_turns: 8
+    eval_tasks_per_domain: 3
     training_epochs: 3
     learning_rate: 0.00001
     quality_threshold: 0.50
@@ -144,8 +145,8 @@ agents:
     diversity_weight: 0.10
     mastery_push_weight: 0.35
     safety_weight: 0.10
-    max_turns: 15
-    eval_tasks_per_domain: 18
+    max_turns: 8
+    eval_tasks_per_domain: 3
     training_epochs: 2
     learning_rate: 0.00001
     quality_threshold: 0.50
@@ -162,14 +163,16 @@ agents:
     backend: "transformers"
     gpus_for_eval: 1
     gpus_for_train: 1
+    gpu_memory_utilization: 0.70   # 10B model needs conservative VRAM budget to avoid OOM/SIGTERM
+    inference_batch_size: 1        # 10B model: single-sample inference to prevent OOM
     curiosity_weight: 0.30
     weakness_weight: 0.15
     peer_learning_weight: 0.15
     diversity_weight: 0.25
     mastery_push_weight: 0.10
     safety_weight: 0.05
-    max_turns: 15
-    eval_tasks_per_domain: 12
+    max_turns: 8
+    eval_tasks_per_domain: 3
     training_epochs: 2
     learning_rate: 0.00002
     quality_threshold: 0.35
@@ -184,14 +187,16 @@ agents:
     backend: "transformers"
     gpus_for_eval: 1
     gpus_for_train: 1
+    gpu_memory_utilization: 0.70   # 10B model needs conservative VRAM budget to avoid OOM/SIGTERM
+    inference_batch_size: 1        # 10B model: single-sample inference to prevent OOM
     curiosity_weight: 0.10
     weakness_weight: 0.25
     peer_learning_weight: 0.30
     diversity_weight: 0.15
     mastery_push_weight: 0.10
     safety_weight: 0.10
-    max_turns: 15
-    eval_tasks_per_domain: 15
+    max_turns: 8
+    eval_tasks_per_domain: 3
     training_epochs: 3
     learning_rate: 0.000015
     quality_threshold: 0.45
@@ -206,14 +211,16 @@ agents:
     backend: "transformers"
     gpus_for_eval: 1
     gpus_for_train: 1
+    gpu_memory_utilization: 0.70   # 10B model needs conservative VRAM budget to avoid OOM/SIGTERM
+    inference_batch_size: 1        # 10B model: single-sample inference to prevent OOM
     curiosity_weight: 0.17
     weakness_weight: 0.22
     peer_learning_weight: 0.18
     diversity_weight: 0.17
     mastery_push_weight: 0.13
     safety_weight: 0.13
-    max_turns: 15
-    eval_tasks_per_domain: 15
+    max_turns: 8
+    eval_tasks_per_domain: 3
     training_epochs: 2
     learning_rate: 0.00002
     quality_threshold: 0.45
@@ -236,8 +243,8 @@ agents:
     diversity_weight: 0.10
     mastery_push_weight: 0.15
     safety_weight: 0.10
-    max_turns: 15
-    eval_tasks_per_domain: 15
+    max_turns: 8
+    eval_tasks_per_domain: 3
     training_epochs: 2
     learning_rate: 0.00002
     quality_threshold: 0.4
@@ -245,7 +252,7 @@ agents:
     output_dir: "checkpoints/autonomous/qwen25vl_weakness_fixer"
     log_dir: "logs/autonomous/qwen25vl_weakness_fixer"
 
-  # Agent 8: Qwen VL Safety — safety-focused with strong instruction compliance
+  # Agent 8: Qwen VL Safety + FairGRPO — safety + demographic fairness
   - agent_id: "qwen25vl_safety"
     model_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen2.5-VL-7B-Instruct"
     base_model_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen2.5-VL-7B-Instruct"
@@ -258,11 +265,16 @@ agents:
     diversity_weight: 0.10
     mastery_push_weight: 0.10
     safety_weight: 0.40
-    max_turns: 20
-    eval_tasks_per_domain: 20
+    max_turns: 8
+    eval_tasks_per_domain: 3
     training_epochs: 3
     learning_rate: 0.00001
     quality_threshold: 0.55
     mastery_threshold: 0.90
     output_dir: "checkpoints/autonomous/qwen25vl_safety"
     log_dir: "logs/autonomous/qwen25vl_safety"
+    # FairGRPO: demographic-fairness-aware training
+    use_fair_grpo: true
+    fairness_weight: 0.15       # 15% fairness signal in reward
+    max_fairness_gap: 0.15      # Block updates if any group lags >15%
+    use_dr_grpo: true           # Dr. GRPO: no length normalization bias

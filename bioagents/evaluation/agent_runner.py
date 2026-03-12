@@ -46,6 +46,15 @@ class RunConfig:
     gpu_memory_utilization: float = 0.85
     log_dir: str = "logs/runs"
     seed: int = 42
+    # Ablation: disable tools to measure "w/ tools" vs "w/o tools" performance
+    # (SciAgentGYM-style). When True, agent gets only the task ticket and must
+    # answer without any tool calls. max_turns is set to 1 (single-shot).
+    no_tools: bool = False
+    # Ablation: disable think() tool to measure reasoning chain impact.
+    # When True, think() is removed from tool definitions, forcing the
+    # agent to reason within its response text only (no explicit CoT).
+    # Used for "Short reasoning vs Long reasoning" ablation study.
+    no_think: bool = False
 
 
 @dataclass
@@ -88,22 +97,27 @@ def _build_onboarding_guidance(domain: str) -> str:
 
     _DOMAIN_TIPS = {
         "clinical_diagnosis": (
-            "1. Gather info first: patient summary → vitals → labs → history\n"
+            "1. Gather info first: get_patient_info → get_vital_signs → get_lab_results → get_clinical_notes\n"
             "2. Use think() to build differential diagnosis\n"
             "3. Search guidelines for evidence-based management\n"
             "4. Record your diagnosis with ICD-10 code before submitting"
         ),
         "drug_interaction": (
-            "1. Get patient medications first\n"
-            "2. Check each interaction pair systematically\n"
-            "3. Search for safer alternatives if severe interaction found\n"
+            "1. get_patient_medications → see current med list\n"
+            "2. check_interaction or check_all_interactions → check each pair\n"
+            "3. search_alternatives → if severe interaction found\n"
             "4. Assess cumulative risk before recommending"
         ),
         "ehr_management": (
-            "1. Start with patient summary (hadm_id)\n"
-            "2. Check lab trends + vital alerts for dynamic patterns\n"
-            "3. Calculate clinical scores (SOFA, NEWS) for severity\n"
-            "4. Review procedures + discharge summary for full picture"
+            "1. **get_patient_summary(hadm_id=...)** → overview of the admission (ALWAYS start here)\n"
+            "2. **get_lab_results(hadm_id=...)** → lab data; then get_lab_trend for specific lab trends\n"
+            "3. **get_vital_signs(hadm_id=...)** → vital signs; then detect_vital_alerts for abnormalities\n"
+            "4. **get_clinical_scores(hadm_id=...)** → SOFA, NEWS2, qSOFA severity scores\n"
+            "5. **get_medication_orders(hadm_id=...)** → current medications\n"
+            "6. **get_procedures / get_discharge_summary / get_admission_history** as needed\n"
+            "7. Use think() to synthesize findings, then submit_answer\n\n"
+            "NOTE: The task provides a **hadm_id** (hospital admission ID). Pass it as hadm_id, NOT patient_id.\n"
+            "Example: {\"name\": \"get_patient_summary\", \"arguments\": {\"hadm_id\": \"HADM_10001\"}}"
         ),
         "medical_qa": (
             "1. Analyze the question and identify key concepts\n"
@@ -112,45 +126,45 @@ def _build_onboarding_guidance(domain: str) -> str:
             "4. Use analyze_answer_options for MCQA before submitting"
         ),
         "triage_emergency": (
-            "1. Get presentation → ABC assessment immediately\n"
-            "2. Vitals + GCS for acuity level\n"
-            "3. Calculate ESI level using the algorithm\n"
-            "4. Order STAT labs/imaging per protocol\n"
+            "1. get_patient_presentation → assess_airway_breathing → immediately\n"
+            "2. get_vital_signs → calculate_gcs for acuity\n"
+            "3. calculate_esi_level → determine ESI\n"
+            "4. order_stat_labs / order_imaging per protocol\n"
             "5. Submit with ESI level + disposition + orders"
         ),
         "psychiatry": (
-            "1. Get presentation → psychiatric history\n"
-            "2. Perform mental status exam\n"
-            "3. Use validated scales: PHQ-9, GAD-7, Columbia-SSRS\n"
-            "4. Screen substance use (AUDIT/DAST)\n"
+            "1. get_patient_presentation → get_psychiatric_history\n"
+            "2. perform_mental_status_exam\n"
+            "3. Use validated scales: administer_phq9, administer_gad7, assess_suicide_risk\n"
+            "4. screen_substance_use (AUDIT/DAST)\n"
             "5. Submit: diagnosis + risk level + treatment plan + disposition"
         ),
         "obstetrics": (
-            "1. Get patient demographics + obstetric history\n"
-            "2. Assess fetal status (FHR, BPP)\n"
-            "3. Evaluate labor progress + Bishop score if applicable\n"
-            "4. Check medication safety (teratogenicity)\n"
-            "5. Follow ACOG protocols for management"
+            "1. get_patient_presentation → get_obstetric_history\n"
+            "2. assess_fetal_status (FHR, variability, decelerations)\n"
+            "3. assess_labor_progress + calculate_bishop_score if applicable\n"
+            "4. check_medication_safety (teratogenicity)\n"
+            "5. Follow ACOG protocols: check_ob_protocol"
         ),
         "visual_diagnosis": (
-            "1. Analyze the medical image with focus areas\n"
-            "2. Get patient context for clinical correlation\n"
-            "3. Search similar cases for comparison\n"
-            "4. Compare with prior studies if available\n"
-            "5. Record diagnosis with confidence level"
+            "1. analyze_medical_image with focus areas\n"
+            "2. get_patient_context for clinical correlation\n"
+            "3. search_similar_cases for comparison\n"
+            "4. compare_with_prior if prior studies available\n"
+            "5. record_visual_diagnosis with confidence level"
         ),
         "radiology_report": (
-            "1. Get study info + clinical history\n"
-            "2. Analyze findings systematically\n"
-            "3. Get prior reports for comparison\n"
-            "4. Use reporting checklist for completeness\n"
-            "5. Submit structured report: indication → technique → findings → impression"
+            "1. get_study_info + get_clinical_history\n"
+            "2. analyze_findings systematically\n"
+            "3. get_prior_reports for comparison\n"
+            "4. get_reporting_checklist for completeness\n"
+            "5. submit_report: indication → technique → findings → impression"
         ),
         "cross_domain": (
-            "1. Identify the primary clinical concern\n"
-            "2. Use domain-specific tools as needed across specialties\n"
-            "3. Ensure continuity of care between phases\n"
-            "4. Provide a comprehensive multi-specialty assessment"
+            "1. Read the pathway phase context carefully\n"
+            "2. Use the phase-specific domain tools (triage, diagnosis, imaging, etc.)\n"
+            "3. Use think() to note key findings for continuity across phases\n"
+            "4. Provide assessment relevant to the current phase before submitting"
         ),
     }
 
@@ -160,22 +174,29 @@ def _build_onboarding_guidance(domain: str) -> str:
     return f"""## Agent Behavior Guide
 **You are scored on 5 dimensions**: Accuracy (30%), Process (25%), Safety (20%), Format (15%), Coherence (10%).
 
-### Critical Rules
-- **Use tools before answering.** Gathering evidence is mandatory. Never answer from memory alone.
-- **Use think() liberally.** Show your clinical reasoning. It improves Process and Coherence scores.
-- **Use 3-8 turns.** 1-turn answers get premature_stop penalty. 12+ turns get over_investigation penalty.
+### IMPORTANT: Tool Usage Is Mandatory
+**You MUST call tools to gather information before answering.** Direct answers without tool usage receive a severe premature_stop penalty and near-zero Process score. Even if you think you know the answer, you MUST demonstrate systematic clinical reasoning by calling the appropriate tools first.
+
+**Minimum expected workflow:**
+1. Call at least 2-3 information-gathering tools (e.g. get patient data, labs, vitals)
+2. Use think() to reason about the gathered data
+3. Optionally search for evidence or guidelines
+4. Use submit_answer to provide your final assessment
+
+**Do NOT** skip straight to submit_answer. **Do NOT** write a long text response without tool calls. Each turn should contain ONLY a single JSON tool call — no surrounding text.
+
+### Scoring Rules
+- **3-8 turns** is the ideal range. 1-turn answers get **premature_stop** penalty (near-zero reward).
 - **Always end with submit_answer.** Your response is only recorded when you submit.
-- **One tool call per turn.** Respond with ONLY the JSON object — no extra text.
+- **One tool call per turn.** Respond with ONLY the JSON object.
 - **Check safety.** Drug interactions, contraindications, critical values — flag them explicitly.
 
 ### Knowledge Search Tools (Available in ALL Domains)
-You have access to powerful medical knowledge search tools. **Always search for evidence before making clinical decisions.**
-- **search(queries, max_results=8)** — Unified search across PubMed, Wikipedia (26M articles), evidence passages, and clinical guidelines. Use comma-separated queries for multi-topic search. **Start here for broad searches.**
-- **search_evidence(query, max_results=5, category="")** — Deep search across 581K PubMed/PMC evidence passages. Use for specific clinical evidence retrieval.
-- **search_pubmed(query, max_results=5)** — Search PubMed-style medical literature for articles and abstracts.
-- **search_medical_wiki(query, max_results=5)** — Search medical encyclopedia entries and 26M Wikipedia articles.
-- **search_guidelines(condition)** — Look up clinical practice guidelines (AHA, ACOG, SSC, IDSA, etc.).
-- **browse(url_or_id)** / **browse_article(pmid)** / **browse_wiki_entry(entry_id)** — Read full content of a specific source.
+You have access to medical knowledge search. **Search for evidence before clinical decisions.**
+- **search(queries, max_results=8)** — Unified search across PubMed, Wikipedia, evidence passages, and guidelines.
+- **search_evidence(query, max_results=5, category="")** — Deep search: 581K PubMed/PMC evidence passages.
+- **search_guidelines(condition)** — Clinical practice guidelines (AHA, ACOG, SSC, IDSA, etc.).
+- **browse(url_or_id)** / **browse_article(pmid)** / **browse_wiki_entry(entry_id)** — Read full content.
 {tip_block}"""
 
 
@@ -820,19 +841,41 @@ class AgentRunner:
         # Reset environment
         obs, info = env.reset(options={"task_id": task_id})
         
-        # Build conversation with adaptive tool guidance
-        system_prompt = build_system_prompt(
-            info["policy"],
-            info["tools"],
-            domain=self.config.domain,
-            task=task,
-            agent_profile=getattr(self, "_agent_profile", None),
-            reward_strategy=getattr(self, "_reward_strategy", "grpo"),
-        )
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": obs},
-        ]
+        # ── no_tools ablation (SciAgentGYM-style w/o tools baseline) ──
+        if self.config.no_tools:
+            no_tool_prompt = (
+                f"You are a medical AI assistant. Answer the following clinical "
+                f"question directly without using any tools. Provide your best "
+                f"answer based on your medical knowledge.\n\n"
+                f"Domain: {self.config.domain}\n"
+            )
+            messages = [
+                {"role": "system", "content": no_tool_prompt},
+                {"role": "user", "content": obs},
+            ]
+        else:
+            # Build conversation with adaptive tool guidance
+            tools_for_prompt = info["tools"]
+
+            # ── no_think ablation: remove think() from tool definitions ──
+            if self.config.no_think and tools_for_prompt:
+                tools_for_prompt = [
+                    t for t in tools_for_prompt
+                    if t.get("function", {}).get("name") != "think"
+                ]
+
+            system_prompt = build_system_prompt(
+                info["policy"],
+                tools_for_prompt,
+                domain=self.config.domain,
+                task=task,
+                agent_profile=getattr(self, "_agent_profile", None),
+                reward_strategy=getattr(self, "_reward_strategy", "grpo"),
+            )
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": obs},
+            ]
         
         try:
             for turn_idx in range(self.config.max_turns):
@@ -952,16 +995,20 @@ class AgentRunner:
                     break
             
             correct_answer = task.get("answer", task.get("correct_answer", ""))
-            expected_actions = task.get("evaluation_criteria", {}).get("actions", [])
+            eval_criteria = task.get("evaluation_criteria", {})
+            expected_actions = eval_criteria.get("actions", [])
+            nl_assertions = eval_criteria.get("nl_assertions", [])
             
             reward_details = compute_composite_reward(
                 response=final_answer_text,
                 correct_answer=correct_answer,
                 tool_call_log=env._tool_call_log,
                 expected_actions=expected_actions,
+                nl_assertions=nl_assertions,
                 is_final=True,
             )
             result.trajectory["reward_details"] = reward_details
+            result.trajectory["assertion_evaluation"] = reward_details.get("assertion_details", {})
             result.final_reward = reward_details["total"]
             
             result.completed = True

@@ -173,6 +173,190 @@ Output ONLY valid JSON matching the BIOAgents task format with evaluation_criter
             ],
         },
     },
+
+    "ehr_management": {
+        "system": "You are a hospitalist creating EHR management cases for AI training. Focus on real-world chart review, trend analysis, and clinical decision support tasks.",
+        "template": """Generate an EHR management task for a medical AI agent.
+
+Requirements:
+- Clinical scenario: {scenario}
+- Complexity: {complexity}
+- The task should use HADM IDs (hospital admission IDs) as identifiers
+- Include 4-7 expected actions from: get_patient_summary, get_admission_history, get_lab_results, get_lab_trend, get_vital_signs, detect_vital_alerts, get_medication_orders, get_clinical_scores, get_quality_indicators, get_procedures, get_discharge_summary, lookup_icd_code, submit_answer
+- Include 3-5 clinical assertions
+
+Output ONLY valid JSON:
+{{
+    "id": "ehr_{scenario_short}_{idx:03d}",
+    "ticket": "<clinical scenario with patient name, admission ID, and task description>",
+    "hadm_id": "HADM_GEN_{idx:03d}",
+    "description": {{"purpose": "<one line>", "difficulty": "<easy|medium|hard>", "category": "{scenario}"}},
+    "evaluation_criteria": {{
+        "actions": [{{"name": "<tool>", "arguments": {{}}, "compare_args": [], "info": "<desc>"}}],
+        "nl_assertions": ["<assertion>"],
+        "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }}
+}}""",
+        "variables": {
+            "scenarios": [
+                "chart_review", "critical_value_identification", "medication_reconciliation",
+                "readmission_risk", "clinical_scoring", "discharge_planning",
+                "antibiotic_stewardship", "icu_assessment", "aki_management",
+                "sepsis_bundle_compliance", "blood_transfusion_review",
+                "nutrition_assessment", "vte_prophylaxis_check",
+            ],
+            "complexities": ["straightforward", "moderate", "complex multi-system"],
+        },
+    },
+
+    "psychiatry": {
+        "system": "You are a psychiatrist creating psychiatric assessment cases for AI training. Emphasize safety, validated screening tools, and evidence-based treatment planning.",
+        "template": """Generate a psychiatric assessment task.
+
+Requirements:
+- Presenting problem: {condition}
+- Risk level: {risk_level}
+- Patient context: {context}
+- Include 4-7 expected actions from: get_patient_presentation, get_psychiatric_history, perform_mental_status_exam, administer_phq9, administer_gad7, assess_suicide_risk, screen_substance_use, administer_mmse, get_current_medications, check_drug_interactions, get_social_history, review_treatment_guidelines, submit_answer
+- Include 3-5 clinical assertions about diagnosis, risk assessment, and treatment
+
+Output ONLY valid JSON:
+{{
+    "id": "psych_{condition_short}_{idx:03d}",
+    "ticket": "<clinical presentation>",
+    "patient_id": "PSY_GEN_{idx:03d}",
+    "description": {{"purpose": "<one line>", "difficulty": "<easy|medium|hard>"}},
+    "evaluation_criteria": {{
+        "actions": [{{"name": "<tool>", "arguments": {{}}, "compare_args": [], "info": "<desc>"}}],
+        "nl_assertions": ["<assertion>"],
+        "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }}
+}}""",
+        "variables": {
+            "conditions": [
+                "major_depression", "generalized_anxiety", "panic_disorder",
+                "bipolar_mania", "schizophrenia", "ptsd",
+                "ocd", "eating_disorder", "substance_use",
+                "suicidal_ideation", "adjustment_disorder", "adhd_adult",
+                "insomnia", "personality_disorder", "psychotic_depression",
+            ],
+            "risk_levels": ["low", "moderate", "high", "imminent"],
+            "contexts": [
+                "new outpatient eval", "ED consult", "inpatient follow-up",
+                "crisis intervention", "medication management",
+            ],
+        },
+    },
+
+    "obstetrics": {
+        "system": "You are an OB/GYN specialist creating obstetric cases for AI training. Follow ACOG guidelines and emphasize maternal-fetal safety.",
+        "template": """Generate an obstetric/gynecologic assessment task.
+
+Requirements:
+- Clinical scenario: {scenario}
+- Gestational age: {gestational_age}
+- Urgency: {urgency}
+- Include 4-7 expected actions from: get_patient_presentation, get_prenatal_labs, get_obstetric_history, assess_fetal_status, assess_labor_progress, calculate_bishop_score, get_biophysical_profile, check_medication_safety, get_risk_assessment, check_ob_protocol, get_gyn_assessment, order_labs, submit_answer
+- Include 3-5 clinical assertions
+
+Output ONLY valid JSON:
+{{
+    "id": "ob_{scenario_short}_{idx:03d}",
+    "ticket": "<clinical presentation with obstetric details>",
+    "patient_id": "OB_GEN_{idx:03d}",
+    "description": {{"purpose": "<one line>", "difficulty": "<easy|medium|hard>"}},
+    "evaluation_criteria": {{
+        "actions": [{{"name": "<tool>", "arguments": {{}}, "compare_args": [], "info": "<desc>"}}],
+        "nl_assertions": ["<assertion>"],
+        "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }}
+}}""",
+        "variables": {
+            "scenarios": [
+                "preeclampsia", "gestational_diabetes", "preterm_labor",
+                "placenta_previa", "fetal_distress", "postpartum_hemorrhage",
+                "ectopic_pregnancy", "hyperemesis", "twin_pregnancy",
+                "IUGR", "shoulder_dystocia", "cord_prolapse",
+                "GBS_management", "induction_of_labor", "routine_prenatal",
+            ],
+            "gestational_ages": ["8 weeks", "20 weeks", "28 weeks", "34 weeks", "38 weeks", "40 weeks"],
+            "urgencies": ["routine", "urgent", "emergent"],
+        },
+    },
+
+    "medical_qa": {
+        "system": "You are a medical educator creating evidence-based QA tasks for AI training. Questions should test clinical reasoning and require searching medical literature.",
+        "template": """Generate a medical question-answering task that requires evidence retrieval.
+
+Requirements:
+- Topic: {topic}
+- Question type: {question_type}
+- Difficulty: {difficulty}
+- Include 3-5 expected actions from: search, search_pubmed, search_medical_wiki, search_evidence, search_guidelines, browse, browse_article, analyze_answer_options, think, submit_answer
+- For MCQA, include 4 options (A-D) with one correct answer
+
+Output ONLY valid JSON:
+{{
+    "id": "mqa_{topic_short}_{idx:03d}",
+    "ticket": "<question text, including options for MCQA>",
+    "correct_answer": "<correct answer>",
+    "description": {{"purpose": "<one line>", "difficulty": "{difficulty}", "category": "{topic}"}},
+    "evaluation_criteria": {{
+        "actions": [{{"name": "<tool>", "arguments": {{}}, "compare_args": [], "info": "<desc>"}}],
+        "nl_assertions": ["<assertion>"],
+        "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }}
+}}""",
+        "variables": {
+            "topics": [
+                "pharmacology", "pathophysiology", "anatomy",
+                "microbiology", "immunology", "biochemistry",
+                "cardiology", "pulmonology", "neurology",
+                "nephrology", "endocrinology", "oncology",
+                "infectious_disease", "rheumatology", "hematology",
+            ],
+            "question_types": ["mcqa", "open_ended", "clinical_vignette"],
+            "difficulties": ["easy", "medium", "hard"],
+        },
+    },
+
+    "visual_diagnosis": {
+        "system": "You are a diagnostic imaging expert creating visual diagnosis tasks. These tasks involve medical image analysis and pattern recognition.",
+        "template": """Generate a visual diagnosis task for a medical AI agent.
+
+Requirements:
+- Imaging modality: {modality}
+- Finding: {finding}
+- Clinical context: {context}
+- Include 4-6 expected actions from: analyze_medical_image, get_image_report, get_patient_context, search_similar_cases, compare_with_prior, search_imaging_knowledge, record_visual_diagnosis, submit_answer
+- Include 3-4 clinical assertions
+
+Output ONLY valid JSON:
+{{
+    "id": "vis_{finding_short}_{idx:03d}",
+    "ticket": "<clinical scenario with imaging description>",
+    "image_id": "IMG_GEN_{idx:03d}",
+    "description": {{"purpose": "<one line>", "difficulty": "<easy|medium|hard>", "modality": "{modality}"}},
+    "evaluation_criteria": {{
+        "actions": [{{"name": "<tool>", "arguments": {{}}, "compare_args": [], "info": "<desc>"}}],
+        "nl_assertions": ["<assertion>"],
+        "reward_basis": ["ACTION", "NL_ASSERTION"]
+    }}
+}}""",
+        "variables": {
+            "modalities": ["chest_xray", "ct", "mri", "ultrasound", "dermoscopy", "fundoscopy", "pathology"],
+            "findings": [
+                "pneumonia", "lung_nodule", "pleural_effusion",
+                "brain_tumor", "stroke", "melanoma",
+                "diabetic_retinopathy", "fracture", "aortic_aneurysm",
+                "breast_mass", "thyroid_nodule", "renal_mass",
+            ],
+            "contexts": [
+                "ED evaluation", "screening", "follow-up",
+                "pre-operative", "symptomatic workup",
+            ],
+        },
+    },
 }
 
 
@@ -209,10 +393,86 @@ def generate_with_anthropic(system_prompt: str, user_prompt: str, model: str = "
     return response.content[0].text
 
 
+_LOCAL_LLM = None
+_LOCAL_SAMPLING_PARAMS = None
+_LOCAL_TOKENIZER = None
+
+
 def generate_with_local(system_prompt: str, user_prompt: str, model_path: str = "") -> str:
-    """Generate task using local model via vLLM or transformers."""
-    # Placeholder — implement based on local setup
-    raise NotImplementedError("Local model generation not yet configured. Use --provider openai or anthropic.")
+    """Generate task using local model via vLLM (preferred) or transformers fallback.
+
+    Set model_path via --model CLI argument. Defaults to Qwen2.5-VL-7B-Instruct
+    if available in the checkpoints directory.
+    """
+    global _LOCAL_LLM, _LOCAL_SAMPLING_PARAMS, _LOCAL_TOKENIZER
+
+    if not model_path:
+        model_path = str(PROJECT_ROOT / "checkpoints" / "models" / "Qwen2.5-VL-7B-Instruct")
+
+    if _LOCAL_LLM is None:
+        logger.info(f"Loading local model from {model_path}...")
+        try:
+            from vllm import LLM, SamplingParams
+            _LOCAL_LLM = LLM(
+                model=model_path,
+                trust_remote_code=True,
+                tensor_parallel_size=1,
+                max_model_len=4096,
+                dtype="bfloat16",
+                gpu_memory_utilization=0.85,
+            )
+            _LOCAL_SAMPLING_PARAMS = SamplingParams(
+                temperature=0.8,
+                max_tokens=2000,
+                top_p=0.95,
+            )
+            logger.info("Local model loaded via vLLM")
+        except Exception as e:
+            logger.warning(f"vLLM load failed ({e}), falling back to transformers...")
+            import torch
+            from transformers import AutoModelForCausalLM, AutoTokenizer
+            _LOCAL_TOKENIZER = AutoTokenizer.from_pretrained(
+                model_path, trust_remote_code=True,
+            )
+            _LOCAL_LLM = AutoModelForCausalLM.from_pretrained(
+                model_path,
+                torch_dtype=torch.bfloat16,
+                trust_remote_code=True,
+                device_map="auto",
+            )
+            _LOCAL_LLM.eval()
+            logger.info("Local model loaded via transformers")
+
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt},
+    ]
+
+    if hasattr(_LOCAL_LLM, "generate") and _LOCAL_SAMPLING_PARAMS is not None:
+        from transformers import AutoTokenizer
+        if _LOCAL_TOKENIZER is None:
+            _LOCAL_TOKENIZER = AutoTokenizer.from_pretrained(
+                model_path, trust_remote_code=True,
+            )
+        prompt = _LOCAL_TOKENIZER.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True,
+        )
+        outputs = _LOCAL_LLM.generate([prompt], _LOCAL_SAMPLING_PARAMS)
+        return outputs[0].outputs[0].text.strip()
+    else:
+        import torch
+        text = _LOCAL_TOKENIZER.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True,
+        )
+        inputs = _LOCAL_TOKENIZER(text, return_tensors="pt", truncation=True, max_length=3072)
+        inputs = {k: v.to(_LOCAL_LLM.device) for k, v in inputs.items()}
+        with torch.no_grad():
+            out = _LOCAL_LLM.generate(
+                **inputs, max_new_tokens=2000, do_sample=True,
+                temperature=0.8, top_p=0.95,
+            )
+        generated = out[0][inputs["input_ids"].shape[-1]:]
+        return _LOCAL_TOKENIZER.decode(generated, skip_special_tokens=True).strip()
 
 
 PROVIDERS = {
@@ -294,6 +554,30 @@ def generate_tasks_for_domain(
             prompt_vars["modality"] = variables.get("modalities", "CT")
             prompt_vars["body_part"] = "chest"
             prompt_vars["scenario"] = variables.get("scenarios", "chest_pneumonia")
+        elif domain == "ehr_management":
+            prompt_vars["scenario"] = variables.get("scenarios", "chart_review")
+            prompt_vars["complexity"] = variables.get("complexities", "moderate")
+            prompt_vars["scenario_short"] = str(prompt_vars["scenario"])[:20].replace(" ", "_")
+        elif domain == "psychiatry":
+            prompt_vars["condition"] = variables.get("conditions", "major_depression")
+            prompt_vars["risk_level"] = variables.get("risk_levels", "moderate")
+            prompt_vars["context"] = variables.get("contexts", "new outpatient eval")
+            prompt_vars["condition_short"] = str(prompt_vars["condition"])[:20].replace(" ", "_")
+        elif domain == "obstetrics":
+            prompt_vars["scenario"] = variables.get("scenarios", "preeclampsia")
+            prompt_vars["gestational_age"] = variables.get("gestational_ages", "34 weeks")
+            prompt_vars["urgency"] = variables.get("urgencies", "urgent")
+            prompt_vars["scenario_short"] = str(prompt_vars["scenario"])[:20].replace(" ", "_")
+        elif domain == "medical_qa":
+            prompt_vars["topic"] = variables.get("topics", "pharmacology")
+            prompt_vars["question_type"] = variables.get("question_types", "mcqa")
+            prompt_vars["difficulty"] = variables.get("difficulties", "medium")
+            prompt_vars["topic_short"] = str(prompt_vars["topic"])[:20].replace(" ", "_")
+        elif domain == "visual_diagnosis":
+            prompt_vars["modality"] = variables.get("modalities", "chest_xray")
+            prompt_vars["finding"] = variables.get("findings", "pneumonia")
+            prompt_vars["context"] = variables.get("contexts", "ED evaluation")
+            prompt_vars["finding_short"] = str(prompt_vars["finding"])[:20].replace(" ", "_")
 
         try:
             user_prompt = config["template"].format(**prompt_vars)

@@ -2,47 +2,32 @@
 
 This environment orchestrates tools from multiple domains to simulate
 realistic multi-phase clinical workflows.
+
+Each cross-domain task has a ``domain`` field that specifies which
+domain's tools should be loaded for that phase (e.g. ``triage_emergency``
+for the triage phase).  At ``reset()`` time the GYM passes the selected
+task so we can load the correct toolkit.
 """
 
+import importlib
 import json
 from pathlib import Path
 from typing import Any, Optional
 
 from loguru import logger
 
+from bioagents.environment.environment import Environment
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 DATA_DIR = PROJECT_ROOT / "data" / "domains" / "cross_domain"
+POLICY_PATH = DATA_DIR / "policy.md"
 
 
-def get_environment(task: dict, **kwargs) -> dict:
-    """Build a cross-domain environment for the given task.
-
-    Since cross-domain tasks reference tools from their phase's domain,
-    this function delegates tool setup to the appropriate domain environment.
-
-    Args:
-        task: Task dict with 'domain' field indicating which domain's tools to use
-
-    Returns:
-        Environment dict with tools, db, and policy
-    """
-    phase_domain = task.get("domain", "clinical_diagnosis")
-
-    # Try to load the phase domain's environment
-    try:
-        import importlib
-        mod = importlib.import_module(f"bioagents.domains.{phase_domain}.environment")
-        base_env = mod.get_environment(task, **kwargs)
-    except Exception as e:
-        logger.warning(f"Could not load domain '{phase_domain}' environment: {e}")
-        base_env = {"tools": [], "db": {}, "policy": ""}
-
-    # Inject cross-domain context into the policy
+def _build_cross_domain_header(task: dict) -> str:
+    """Build a context header from the cross-domain task metadata."""
     patient_data = task.get("patient_data", {})
     phase_info = task.get("description", {})
-
-    cross_domain_header = (
+    return (
         f"=== CROSS-DOMAIN CLINICAL PATHWAY ===\n"
         f"Pathway: {phase_info.get('pathway', 'N/A')}\n"
         f"Current Phase: {phase_info.get('phase', 'N/A')}\n"
@@ -59,11 +44,75 @@ def get_environment(task: dict, **kwargs) -> dict:
         f"subsequent phases.\n\n"
     )
 
-    base_env["policy"] = cross_domain_header + base_env.get("policy", "")
-    base_env["cross_domain"] = True
-    base_env["patient_data"] = patient_data
 
-    return base_env
+def get_environment(
+    db=None,
+    max_turns: int = 20,
+    task: Optional[dict] = None,
+    **kwargs,
+) -> Environment:
+    """Create a cross-domain environment.
+
+    When *task* is supplied the function loads the phase-specific domain's
+    toolkit (e.g. ``triage_emergency`` tools for the triage phase) and
+    prepends a cross-domain patient-context header to the policy.
+
+    When *task* is ``None`` (e.g. called from ``get_gym_stats``),
+    a lightweight fallback environment with only the cross-domain
+    policy is returned.
+
+    Args:
+        db: Unused — kept for interface compatibility.
+        max_turns: Maximum interaction turns.
+        task: The cross-domain task dict (has ``domain`` field).
+
+    Returns:
+        A fully configured :class:`Environment`.
+    """
+    # Load the cross-domain base policy
+    policy_text = ""
+    if POLICY_PATH.exists():
+        with open(POLICY_PATH, "r", encoding="utf-8") as f:
+            policy_text = f.read()
+
+    # If no task provided, return a minimal environment (for stats / probing)
+    if task is None:
+        return Environment(
+            domain_name="cross_domain",
+            policy=policy_text,
+            tools=None,
+            max_turns=max_turns,
+        )
+
+    # ---- Task-aware path: load the phase domain's tools ----
+    phase_domain = task.get("domain", "clinical_diagnosis")
+    tools = None
+
+    try:
+        mod = importlib.import_module(
+            f"bioagents.domains.{phase_domain}.environment"
+        )
+        phase_env: Environment = mod.get_environment(max_turns=max_turns)
+        tools = phase_env.tools
+        # Append phase domain's policy under the cross-domain header
+        phase_policy = phase_env.policy or ""
+    except Exception as e:
+        logger.warning(
+            f"Could not load phase domain '{phase_domain}' tools: {e}. "
+            f"Cross-domain environment will have no tools."
+        )
+        phase_policy = ""
+
+    # Compose final policy: cross-domain header + base policy + phase policy
+    header = _build_cross_domain_header(task)
+    full_policy = header + policy_text + "\n\n" + phase_policy
+
+    return Environment(
+        domain_name="cross_domain",
+        policy=full_policy,
+        tools=tools,
+        max_turns=max_turns,
+    )
 
 
 def get_tasks(split: Optional[str] = None) -> list[dict]:

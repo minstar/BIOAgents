@@ -43,6 +43,8 @@ class RewardStrategyType(str, Enum):
     MRPO = "mrpo"           # Multi-Reward PO with token shaping & BERTScore
     SARL = "sarl"           # Search Agent RL with self-assessment rewards
     FAIR_GRPO = "fair_grpo" # Fairness-aware GRPO
+    DRPO = "drpo"           # Domain-aware Relative PO (QoQ-Med, NeurIPS 2025)
+    CRPO = "crpo"           # Clinical-objective Relative PO (Clinical-R1)
     ADAPTIVE = "adaptive"   # Meta-strategy: auto-selects per task
 
 
@@ -72,6 +74,35 @@ class RewardStrategyConfig:
     fairness_weight: float = 0.1
     alpha_repr: float = 0.5
     alpha_perf: float = 0.5
+    # DRPO parameters (QoQ-Med, NeurIPS 2025)
+    drpo_domain_rarity_weight: float = 0.4     # Upweight rare/difficult domains
+    drpo_modality_difficulty_weight: float = 0.3  # Scale by modality complexity
+    drpo_base_strategy: str = "grpo"           # Base reward before domain scaling
+    drpo_rarity_exponent: float = 0.5          # Rarity scaling power: freq^(-exp)
+    drpo_modality_scales: Dict[str, float] = field(default_factory=lambda: {
+        "text": 1.0,
+        "vision": 1.3,         # VL tasks are harder
+        "multi_modal": 1.5,    # Multi-modal cross-domain hardest
+    })
+    drpo_domain_difficulty: Dict[str, float] = field(default_factory=lambda: {
+        "medical_qa": 0.8,           # Relatively easier (MCQA)
+        "clinical_diagnosis": 1.0,
+        "drug_interaction": 1.0,
+        "ehr_management": 1.1,
+        "triage_emergency": 1.2,
+        "psychiatry": 1.1,
+        "obstetrics": 1.1,
+        "visual_diagnosis": 1.3,     # VL domain
+        "radiology_report": 1.4,     # VL + structured reporting
+        "cross_domain": 1.5,         # Multi-phase hardest
+    })
+    # CRPO parameters (Clinical-R1, arXiv:2512.00601)
+    crpo_accuracy_weight: float = 0.35      # Correctness
+    crpo_faithfulness_weight: float = 0.30  # No hallucination, grounded in evidence
+    crpo_completeness_weight: float = 0.20  # Covers all relevant aspects
+    crpo_safety_weight: float = 0.15        # No harmful recommendations
+    crpo_hallucination_penalty: float = -0.3   # Penalty per hallucinated claim
+    crpo_evidence_bonus: float = 0.15          # Bonus for citing evidence
     # Adaptive parameters
     adaptive_task_analysis: bool = True   # Analyze task to choose strategy
     adaptive_fallback: RewardStrategyType = RewardStrategyType.GRPO
@@ -590,6 +621,471 @@ class SARLRewardStrategy(RewardStrategy):
 
 
 # ============================================================
+# DRPO Strategy (Domain-aware Relative Policy Optimization)
+# ============================================================
+
+
+class DRPORewardStrategy(RewardStrategy):
+    """Domain-aware Relative Policy Optimization reward strategy.
+
+    Implements the DRPO framework from QoQ-Med (NeurIPS 2025 Oral):
+    - Hierarchically scales normalized rewards by domain rarity
+    - Modality difficulty scaling (text < vision < multi-modal)
+    - Prevents the model from over-fitting to easy/frequent domains
+    - Ensures balanced learning across all clinical specialties
+
+    DRPO reward = base_reward * domain_scale * modality_scale
+
+    where:
+        domain_scale = (1/domain_freq)^rarity_exponent * domain_difficulty
+        modality_scale = modality_difficulty[task_modality]
+
+    Reference: QoQ-Med (arXiv:2506.00711)
+    """
+
+    def __init__(self, config: RewardStrategyConfig):
+        super().__init__(config)
+        self._domain_counts: Dict[str, int] = {}
+        self._total_tasks: int = 0
+
+    @property
+    def name(self) -> str:
+        return "DRPO (Domain-aware Relative PO)"
+
+    @property
+    def strategy_type(self) -> RewardStrategyType:
+        return RewardStrategyType.DRPO
+
+    def record_domain(self, domain: str) -> None:
+        """Record domain occurrence for frequency-based rarity scaling."""
+        self._domain_counts[domain] = self._domain_counts.get(domain, 0) + 1
+        self._total_tasks += 1
+
+    def _get_domain_rarity_scale(self, domain: str) -> float:
+        """Compute domain rarity scale: upweight rare domains.
+
+        Uses inverse frequency with configurable exponent:
+            scale = (total / (n_domains * domain_count))^exponent
+        """
+        if not self._domain_counts or self._total_tasks == 0:
+            return 1.0
+
+        n_domains = max(len(self._domain_counts), 1)
+        domain_count = self._domain_counts.get(domain, 1)
+        uniform_count = self._total_tasks / n_domains
+
+        rarity = uniform_count / max(domain_count, 1)
+        return rarity ** self.config.drpo_rarity_exponent
+
+    def _get_modality_scale(self, task: Optional[dict] = None) -> float:
+        """Get modality difficulty scale based on task type."""
+        if not task:
+            return 1.0
+
+        domain = task.get("domain", "")
+        vl_domains = {"visual_diagnosis", "radiology_report"}
+        cross_domains = {"cross_domain"}
+
+        if domain in cross_domains:
+            modality = "multi_modal"
+        elif domain in vl_domains:
+            modality = "vision"
+        else:
+            modality = "text"
+
+        return self.config.drpo_modality_scales.get(modality, 1.0)
+
+    def _get_domain_difficulty(self, domain: str) -> float:
+        """Get pre-configured domain difficulty scale."""
+        return self.config.drpo_domain_difficulty.get(domain, 1.0)
+
+    def compute_reward(
+        self,
+        completions: list,
+        solution: list = None,
+        task: Optional[dict] = None,
+        domain: str = "",
+        **kwargs,
+    ) -> list[float]:
+        """Compute DRPO-scaled rewards.
+
+        Wraps a base reward strategy and applies domain-aware scaling.
+        """
+        from bioagents.evaluation.grpo_rewards import (
+            grpo_accuracy_reward,
+            grpo_format_reward,
+            grpo_process_reward,
+        )
+
+        # Determine domain
+        task_domain = domain or (task.get("domain", "") if task else "")
+
+        # Record domain for rarity tracking
+        if task_domain:
+            self.record_domain(task_domain)
+
+        # Compute base rewards (same as GRPO)
+        w = self.config.grpo_weights
+        accuracy_scores = grpo_accuracy_reward(
+            completions, solution=solution, **kwargs,
+        )
+        format_scores = grpo_format_reward(completions, **kwargs)
+        process_scores = grpo_process_reward(
+            completions, solution=solution, **kwargs,
+        )
+
+        # Compute DRPO scaling factors
+        rarity_scale = self._get_domain_rarity_scale(task_domain)
+        modality_scale = self._get_modality_scale(task)
+        difficulty_scale = self._get_domain_difficulty(task_domain)
+
+        # Combined DRPO scale = rarity * modality * difficulty
+        # Clamp to [0.5, 3.0] to prevent extreme scaling
+        drpo_scale = rarity_scale * modality_scale * difficulty_scale
+        drpo_scale = max(0.5, min(3.0, drpo_scale))
+
+        rewards = []
+        for acc, fmt, proc in zip(accuracy_scores, format_scores, process_scores):
+            base_reward = (
+                w.get("accuracy", 0.4) * acc
+                + w.get("format", 0.2) * fmt
+                + w.get("process", 0.4) * proc
+            )
+            # Apply DRPO domain-aware scaling
+            scaled_reward = base_reward * drpo_scale
+            rewards.append(float(scaled_reward))
+
+        return rewards
+
+    def get_reward_breakdown(
+        self,
+        completions: list,
+        solution: list = None,
+        task: Optional[dict] = None,
+        domain: str = "",
+        **kwargs,
+    ) -> list[dict]:
+        from bioagents.evaluation.grpo_rewards import (
+            grpo_accuracy_reward,
+            grpo_format_reward,
+            grpo_process_reward,
+        )
+
+        task_domain = domain or (task.get("domain", "") if task else "")
+        w = self.config.grpo_weights
+
+        accuracy_scores = grpo_accuracy_reward(
+            completions, solution=solution, **kwargs,
+        )
+        format_scores = grpo_format_reward(completions, **kwargs)
+        process_scores = grpo_process_reward(
+            completions, solution=solution, **kwargs,
+        )
+
+        rarity_scale = self._get_domain_rarity_scale(task_domain)
+        modality_scale = self._get_modality_scale(task)
+        difficulty_scale = self._get_domain_difficulty(task_domain)
+        drpo_scale = max(0.5, min(3.0, rarity_scale * modality_scale * difficulty_scale))
+
+        breakdowns = []
+        for acc, fmt, proc in zip(accuracy_scores, format_scores, process_scores):
+            base = (
+                w.get("accuracy", 0.4) * acc
+                + w.get("format", 0.2) * fmt
+                + w.get("process", 0.4) * proc
+            )
+            breakdowns.append({
+                "total": base * drpo_scale,
+                "strategy": self.name,
+                "base_reward": base,
+                "accuracy": acc,
+                "format": fmt,
+                "process": proc,
+                "domain": task_domain,
+                "drpo_scale": drpo_scale,
+                "rarity_scale": rarity_scale,
+                "modality_scale": modality_scale,
+                "difficulty_scale": difficulty_scale,
+            })
+        return breakdowns
+
+    def get_domain_stats(self) -> dict:
+        """Get domain frequency and scaling statistics."""
+        stats = {}
+        for domain, count in self._domain_counts.items():
+            stats[domain] = {
+                "count": count,
+                "rarity_scale": round(self._get_domain_rarity_scale(domain), 4),
+                "difficulty_scale": self._get_domain_difficulty(domain),
+            }
+        return stats
+
+
+# ============================================================
+# CRPO Strategy (Clinical-objective Relative Policy Optimization)
+# ============================================================
+
+
+class CRPORewardStrategy(RewardStrategy):
+    """Clinical-objective Relative Policy Optimization reward strategy.
+
+    Extends GRPO to medical domains by jointly optimizing four clinical
+    objectives critical for high-stakes medical reasoning:
+
+    1. **Accuracy**: Correctness of the final answer
+    2. **Faithfulness**: Grounded in evidence, no hallucinations
+    3. **Completeness**: Covers all clinically relevant aspects
+    4. **Safety**: No harmful recommendations or missed red flags
+
+    Key innovations from Clinical-R1 (arXiv:2512.00601):
+    - Rule-based faithfulness scoring (evidence citation detection)
+    - Completeness rubric matching (key clinical elements coverage)
+    - Hallucination penalty (unsupported claims detection)
+    - Evidence citation bonus (search/browse tool usage reward)
+
+    Reference: Clinical-R1 (arXiv:2512.00601)
+    """
+
+    @property
+    def name(self) -> str:
+        return "CRPO (Clinical-objective Relative PO)"
+
+    @property
+    def strategy_type(self) -> RewardStrategyType:
+        return RewardStrategyType.CRPO
+
+    def compute_reward(
+        self,
+        completions: list,
+        solution: list = None,
+        rubric: Optional[list] = None,
+        **kwargs,
+    ) -> list[float]:
+        from bioagents.evaluation.grpo_rewards import (
+            _extract_content,
+            _extract_answer_from_content,
+            grpo_accuracy_reward,
+        )
+
+        contents = _extract_content(completions)
+        solutions = solution or [""] * len(contents)
+        if isinstance(solutions, str):
+            solutions = [solutions] * len(contents)
+        rubrics = rubric or [None] * len(contents)
+
+        # Accuracy from base GRPO
+        accuracy_scores = grpo_accuracy_reward(
+            completions, solution=solution, **kwargs,
+        )
+
+        rewards = []
+        for i, (content, sol) in enumerate(zip(contents, solutions)):
+            acc = accuracy_scores[i]
+            faith = self._compute_faithfulness(content)
+            comp = self._compute_completeness(
+                content, sol, rubrics[i] if i < len(rubrics) else None
+            )
+            safe = self._compute_safety(content)
+
+            crpo_reward = (
+                self.config.crpo_accuracy_weight * acc
+                + self.config.crpo_faithfulness_weight * faith
+                + self.config.crpo_completeness_weight * comp
+                + self.config.crpo_safety_weight * safe
+            )
+
+            rewards.append(float(max(0.0, min(1.5, crpo_reward))))
+
+        return rewards
+
+    def _compute_faithfulness(self, content: str) -> float:
+        """Compute faithfulness score: grounded in evidence, no hallucinations.
+
+        Heuristic-based scoring:
+        - +bonus for citing evidence (search/browse tool usage)
+        - +bonus for referencing guidelines or literature
+        - -penalty for hedging-free assertions without evidence
+        - -penalty for fabricated statistics/citations
+        """
+        score = 0.5  # Baseline neutral
+
+        # Evidence citation indicators (positive)
+        evidence_patterns = [
+            r'"name"\s*:\s*"(?:search|search_pubmed|search_evidence|search_guidelines|browse)',
+            r"(?:according to|based on|evidence suggests|studies show|guidelines recommend)",
+            r"(?:PMID|doi:|pubmed|guideline|protocol)",
+            r"(?:search\(|browse\(|retrieve_evidence\()",
+        ]
+        evidence_count = 0
+        for pattern in evidence_patterns:
+            evidence_count += len(re.findall(pattern, content, re.IGNORECASE))
+
+        score += min(0.3, evidence_count * self.config.crpo_evidence_bonus)
+
+        # Hallucination indicators (negative)
+        hallucination_patterns = [
+            # Fabricated statistics without source
+            r"\b\d{2,3}%\s+(?:of patients|survival rate|cure rate|efficacy)\b",
+            # Fake citation patterns
+            r"(?:Smith et al\.|recent study|a 20\d{2} study)\s+(?:showed|found|demonstrated)",
+            # Over-confident claims without hedging
+            r"\b(?:always|never|guaranteed|100%|definitely)\b",
+        ]
+        hallucination_count = 0
+        for pattern in hallucination_patterns:
+            hallucination_count += len(re.findall(pattern, content, re.IGNORECASE))
+
+        # Only penalize if there's no evidence to back up claims
+        if evidence_count == 0 and hallucination_count > 0:
+            score += hallucination_count * self.config.crpo_hallucination_penalty
+
+        # Appropriate hedging (positive)
+        hedging_patterns = [
+            r"\b(?:may|might|could|possibly|consider|differential|likely|probable)\b",
+            r"\b(?:further workup|additional testing|recommend consultation)\b",
+        ]
+        hedging_count = sum(
+            len(re.findall(p, content, re.IGNORECASE)) for p in hedging_patterns
+        )
+        score += min(0.15, hedging_count * 0.03)
+
+        return max(0.0, min(1.0, score))
+
+    def _compute_completeness(
+        self, content: str, ground_truth: str, rubric: Optional[dict] = None
+    ) -> float:
+        """Compute completeness score: covers all clinically relevant aspects.
+
+        Uses rubric matching when available, otherwise heuristic-based.
+        """
+        score = 0.0
+
+        # If rubric is provided, use it for precise scoring
+        if rubric and isinstance(rubric, dict):
+            required_elements = rubric.get("required_elements", [])
+            if required_elements:
+                found = 0
+                for element in required_elements:
+                    if isinstance(element, str) and element.lower() in content.lower():
+                        found += 1
+                score = found / max(len(required_elements), 1)
+                return score
+
+        # Heuristic-based completeness scoring
+        # Check for clinical reasoning structure
+        clinical_elements = {
+            "history": [r"\b(?:history|HPI|presenting|chief complaint|symptoms)\b"],
+            "examination": [r"\b(?:exam|vital|BP|HR|SpO2|temperature|physical)\b"],
+            "differential": [r"\b(?:differential|DDx|consider|rule out|diagnos)\b"],
+            "investigation": [r"\b(?:lab|imaging|test|CT|MRI|X-ray|blood|CBC|BMP)\b"],
+            "assessment": [r"\b(?:assessment|impression|diagnosis|ICD|conclusion)\b"],
+            "plan": [r"\b(?:plan|treatment|prescri|recommend|follow.up|refer)\b"],
+        }
+
+        elements_found = 0
+        for element_name, patterns in clinical_elements.items():
+            for pattern in patterns:
+                if re.search(pattern, content, re.IGNORECASE):
+                    elements_found += 1
+                    break
+
+        score = elements_found / max(len(clinical_elements), 1)
+
+        # Bonus for structured output
+        if re.search(r"(?:1\.|2\.|3\.|\n-|\n\*|step\s*\d)", content, re.IGNORECASE):
+            score = min(1.0, score + 0.1)
+
+        return score
+
+    def _compute_safety(self, content: str) -> float:
+        """Compute safety score for CRPO: no harmful recommendations.
+
+        Lightweight rule-based check (heavier checks in safety_eval.py).
+        """
+        score = 1.0  # Start safe
+
+        # Critical safety violations
+        critical_patterns = [
+            (r"\b(?:do not call 911|do not go to ER|stay home)\b", -0.5),
+            (r"\b(?:ignore|disregard)\s+(?:symptoms|chest pain|bleeding)\b", -0.4),
+            (r"\b(?:stop taking)\s+(?:insulin|anticoagulant|blood thinner)\b", -0.4),
+            (r"\b(?:self-medicate|self-treat|no need for doctor)\b", -0.3),
+        ]
+
+        for pattern, penalty in critical_patterns:
+            if re.search(pattern, content, re.IGNORECASE):
+                score += penalty
+
+        # Positive safety indicators
+        safety_positive = [
+            r"\b(?:consult|refer|specialist|emergency|911|urgent)\b",
+            r"\b(?:contraindicated|allergy|interaction|caution|monitor)\b",
+            r"\b(?:informed consent|risk.benefit|side effect)\b",
+        ]
+        positive_count = sum(
+            1 for p in safety_positive if re.search(p, content, re.IGNORECASE)
+        )
+        score = min(1.0, score + positive_count * 0.05)
+
+        return max(0.0, score)
+
+    def get_reward_breakdown(
+        self,
+        completions: list,
+        solution: list = None,
+        rubric: Optional[list] = None,
+        **kwargs,
+    ) -> list[dict]:
+        from bioagents.evaluation.grpo_rewards import (
+            _extract_content,
+            grpo_accuracy_reward,
+        )
+
+        contents = _extract_content(completions)
+        solutions = solution or [""] * len(contents)
+        if isinstance(solutions, str):
+            solutions = [solutions] * len(contents)
+        rubrics = rubric or [None] * len(contents)
+
+        accuracy_scores = grpo_accuracy_reward(
+            completions, solution=solution, **kwargs,
+        )
+
+        breakdowns = []
+        for i, (content, sol) in enumerate(zip(contents, solutions)):
+            acc = accuracy_scores[i]
+            faith = self._compute_faithfulness(content)
+            comp = self._compute_completeness(
+                content, sol, rubrics[i] if i < len(rubrics) else None
+            )
+            safe = self._compute_safety(content)
+
+            total = (
+                self.config.crpo_accuracy_weight * acc
+                + self.config.crpo_faithfulness_weight * faith
+                + self.config.crpo_completeness_weight * comp
+                + self.config.crpo_safety_weight * safe
+            )
+
+            breakdowns.append({
+                "total": max(0.0, min(1.5, total)),
+                "strategy": self.name,
+                "accuracy": acc,
+                "faithfulness": faith,
+                "completeness": comp,
+                "safety": safe,
+                "weights": {
+                    "accuracy": self.config.crpo_accuracy_weight,
+                    "faithfulness": self.config.crpo_faithfulness_weight,
+                    "completeness": self.config.crpo_completeness_weight,
+                    "safety": self.config.crpo_safety_weight,
+                },
+            })
+
+        return breakdowns
+
+
+# ============================================================
 # Adaptive Strategy (Meta-Strategy)
 # ============================================================
 
@@ -626,6 +1122,8 @@ class AdaptiveRewardStrategy(RewardStrategy):
             RewardStrategyType.GRPO: GRPORewardStrategy(config),
             RewardStrategyType.MRPO: MRPORewardStrategy(config),
             RewardStrategyType.SARL: SARLRewardStrategy(config),
+            RewardStrategyType.DRPO: DRPORewardStrategy(config),
+            RewardStrategyType.CRPO: CRPORewardStrategy(config),
         }
         self._selection_log: list[dict] = []
 
@@ -682,17 +1180,33 @@ class AdaptiveRewardStrategy(RewardStrategy):
         chars = self.analyze_task(task)
 
         # Decision tree for strategy selection
+        # Enhanced with DRPO (domain-aware) and CRPO (clinical-objective)
         selected: RewardStrategyType
 
-        if chars.has_search_expected and chars.num_expected_tools >= 2:
+        if chars.domain in ("visual_diagnosis", "radiology_report"):
+            # VL domains with domain imbalance → DRPO for domain-aware scaling
+            selected = RewardStrategyType.DRPO
+            reason = f"VL domain '{chars.domain}' → DRPO domain-aware scaling"
+
+        elif chars.domain == "cross_domain":
+            # Multi-phase cross-domain → DRPO + modality scaling
+            selected = RewardStrategyType.DRPO
+            reason = "Cross-domain pathway → DRPO multi-modal difficulty scaling"
+
+        elif chars.has_search_expected and chars.num_expected_tools >= 2:
             # Heavy search tasks → SARL excels at rewarding tool usage
             selected = RewardStrategyType.SARL
             reason = "Task requires search/browse tools → SARL optimizes tool usage"
 
+        elif chars.has_patient_data and chars.num_expected_tools >= 3:
+            # Complex patient cases → CRPO for faithfulness + completeness
+            selected = RewardStrategyType.CRPO
+            reason = "Complex clinical case → CRPO optimizes accuracy+faithfulness+completeness+safety"
+
         elif chars.difficulty in ("hard", "complex") and not chars.has_multiple_choice:
-            # Hard open-ended tasks → MRPO for fine-grained token shaping
-            selected = RewardStrategyType.MRPO
-            reason = "Hard open-ended task → MRPO token shaping for nuanced reward"
+            # Hard open-ended tasks → CRPO for multi-objective clinical reasoning
+            selected = RewardStrategyType.CRPO
+            reason = "Hard open-ended clinical task → CRPO multi-objective optimization"
 
         elif chars.has_multiple_choice and chars.num_expected_tools <= 2:
             # Simple MC with minimal tools → GRPO is sufficient
@@ -703,6 +1217,11 @@ class AdaptiveRewardStrategy(RewardStrategy):
             # Multi-turn search tasks → SARL
             selected = RewardStrategyType.SARL
             reason = "Multi-turn search task → SARL self-assessment tracking"
+
+        elif chars.difficulty in ("hard",) and chars.has_multiple_choice:
+            # Hard MC → MRPO for fine-grained token shaping
+            selected = RewardStrategyType.MRPO
+            reason = "Hard MC task → MRPO token shaping for nuanced reward"
 
         else:
             # Default fallback
@@ -797,6 +1316,8 @@ STRATEGY_REGISTRY: Dict[RewardStrategyType, type] = {
     RewardStrategyType.GRPO: GRPORewardStrategy,
     RewardStrategyType.MRPO: MRPORewardStrategy,
     RewardStrategyType.SARL: SARLRewardStrategy,
+    RewardStrategyType.DRPO: DRPORewardStrategy,
+    RewardStrategyType.CRPO: CRPORewardStrategy,
     RewardStrategyType.ADAPTIVE: AdaptiveRewardStrategy,
 }
 

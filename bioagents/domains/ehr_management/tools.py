@@ -478,7 +478,121 @@ class EHRTools(ToolKitBase):
         return {"code": code, "description": "Code not found in the database."}
 
     # ==========================================
-    # Category 8: Reasoning & Answer
+    # Category 8: Documentation & Orders
+    # ==========================================
+
+    @is_tool(ToolType.WRITE)
+    def write_clinical_note(self, hadm_id: str, note_type: str = "progress_note", content: str = "") -> str:
+        """Write a clinical note to the patient chart.
+
+        Args:
+            hadm_id: Hospital admission ID.
+            note_type: Type (progress_note, consult_note, procedure_note, discharge_note).
+            content: Note content.
+
+        Returns:
+            JSON confirmation with note ID.
+        """
+        return json.dumps({"status": "note_saved", "note_id": f"NOTE_{hadm_id}_{note_type[:4].upper()}", "hadm_id": hadm_id, "note_type": note_type, "content_length": len(content), "timestamp": "2026-02-17T10:30:00Z"}, indent=2)
+
+    @is_tool(ToolType.WRITE)
+    def place_order(self, hadm_id: str, order_type: str, order_details: str = "") -> str:
+        """Place a medical order (lab, imaging, medication, consult, diet, activity).
+
+        Args:
+            hadm_id: Hospital admission ID.
+            order_type: Order category.
+            order_details: Specific order details.
+
+        Returns:
+            JSON with order ID and status.
+        """
+        return json.dumps({"status": "order_placed", "order_id": f"ORD_{hadm_id}_{order_type[:3].upper()}", "hadm_id": hadm_id, "order_type": order_type, "details": order_details, "priority": "routine"}, indent=2)
+
+    @is_tool(ToolType.WRITE)
+    def request_consult(self, hadm_id: str, service: str, reason: str = "", urgency: str = "routine") -> str:
+        """Request a specialist consultation.
+
+        Args:
+            hadm_id: Hospital admission ID.
+            service: Consulting service (cardiology, nephrology, etc.).
+            reason: Reason for consultation.
+            urgency: stat, urgent, or routine.
+
+        Returns:
+            JSON with consult ID and expected response time.
+        """
+        times = {"stat": "30 minutes", "urgent": "4 hours", "routine": "24 hours"}
+        return json.dumps({"status": "consult_requested", "consult_id": f"CONSULT_{hadm_id}_{service[:4].upper()}", "service": service, "reason": reason, "urgency": urgency, "expected_response": times.get(urgency, "24 hours")}, indent=2)
+
+    @is_tool(ToolType.READ)
+    def check_allergies(self, hadm_id: str) -> str:
+        """Get patient allergy list with reactions and cross-reactivity.
+
+        Args:
+            hadm_id: Hospital admission ID.
+
+        Returns:
+            JSON with allergy details.
+        """
+        allergies = [{"allergen": "Penicillin", "reaction": "Rash", "severity": "moderate", "cross_reactivity": ["amoxicillin", "ampicillin"]}, {"allergen": "Sulfonamides", "reaction": "Anaphylaxis", "severity": "severe", "cross_reactivity": ["TMP-SMX"]}]
+        return json.dumps({"hadm_id": hadm_id, "allergies": allergies, "nkda": False}, indent=2)
+
+    @is_tool(ToolType.READ)
+    def get_nursing_assessments(self, hadm_id: str) -> str:
+        """Get nursing assessment data: fall risk, skin, pain, functional status.
+
+        Args:
+            hadm_id: Hospital admission ID.
+
+        Returns:
+            JSON with nursing assessments.
+        """
+        return json.dumps({"hadm_id": hadm_id, "morse_fall_risk": {"score": 55, "risk": "high"}, "braden_skin": {"score": 16, "risk": "mild"}, "pain": {"score": 4, "location": "abdomen"}, "functional_status": {"mobility": "ambulatory with assist"}}, indent=2)
+
+    @is_tool(ToolType.READ)
+    def get_code_status(self, hadm_id: str) -> str:
+        """Get advance directives and code status.
+
+        Args:
+            hadm_id: Hospital admission ID.
+
+        Returns:
+            JSON with code status and directives.
+        """
+        return json.dumps({"hadm_id": hadm_id, "code_status": "Full Code", "healthcare_proxy": True, "advance_directive": True, "polst": False}, indent=2)
+
+    @is_tool(ToolType.READ)
+    def get_admission_info(self, hadm_id: str) -> str:
+        """Get admission details: admitting diagnosis, service, attending, admit date.
+
+        Args:
+            hadm_id: Hospital admission ID.
+
+        Returns:
+            JSON with admission information.
+        """
+        patient = self.db.patients.get(hadm_id)
+        if not patient:
+            return json.dumps({"error": f"Admission {hadm_id} not found"})
+        return json.dumps({"hadm_id": hadm_id, "admit_date": getattr(patient, "admit_date", "2026-02-10"), "service": getattr(patient, "service", "Medicine"), "attending": getattr(patient, "attending", "Dr. Smith"), "admitting_dx": getattr(patient, "admitting_diagnosis", "Unknown")}, indent=2)
+
+    @is_tool(ToolType.READ)
+    def calculate_readmission_risk(self, hadm_id: str) -> str:
+        """Calculate 30-day readmission risk using LACE index.
+
+        Args:
+            hadm_id: Hospital admission ID.
+
+        Returns:
+            JSON with LACE score and risk category.
+        """
+        lace = 8
+        risk = "MODERATE" if lace < 10 else "HIGH"
+        return json.dumps({"hadm_id": hadm_id, "lace_score": lace, "components": {"length_of_stay": 3, "acuity": 2, "comorbidities": 2, "ed_visits": 1}, "risk_category": risk, "estimated_readmission": "10-15%"}, indent=2)
+
+    # ==========================================
+    # Category 9: Reasoning & Answer
     # ==========================================
 
     @is_tool(ToolType.GENERIC)

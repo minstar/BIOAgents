@@ -246,7 +246,13 @@ class BioAgentGymEnv(gym.Env):
             self._current_task = self._tasks[idx]
         
         # Create fresh environment
-        self._env = self._get_environment_fn(max_turns=self.max_turns)
+        # cross_domain needs the task to determine which phase domain's tools to load
+        if self.domain_name == "cross_domain":
+            self._env = self._get_environment_fn(
+                max_turns=self.max_turns, task=self._current_task,
+            )
+        else:
+            self._env = self._get_environment_fn(max_turns=self.max_turns)
         self._turn_count = 0
         self._conversation_history = []
         self._tool_call_log = []
@@ -762,11 +768,16 @@ def get_gym_stats() -> dict:
         # Count tools
         try:
             env = info["get_environment"](max_turns=1)
-            tools = env.get_tool_definitions()
-            domain_stats["tools"] = len(tools)
-            domain_stats["tool_names"] = [
-                t.get("function", {}).get("name", "?") for t in tools
-            ]
+            if env.tools is not None:
+                tools = env.get_tool_definitions()
+                domain_stats["tools"] = len(tools)
+                domain_stats["tool_names"] = [
+                    t.get("function", {}).get("name", "?") for t in tools
+                ]
+            else:
+                # cross_domain without a task has no tools loaded
+                domain_stats["tools"] = 0
+                domain_stats["tool_names"] = ["(phase-dependent)"]
         except Exception:
             domain_stats["tools"] = 0
             domain_stats["tool_names"] = []

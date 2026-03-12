@@ -406,6 +406,198 @@ class WikiSearchBackend:
         except Exception as e:
             return f"Browse error: {e}"
 
+    # ---- FAISS Dense Retrieval ----
+
+    def _ensure_faiss_initialized(self) -> bool:
+        """Lazy-initialize the FAISS index for dense retrieval."""
+        if hasattr(self, "_faiss_ready"):
+            return self._faiss_ready
+
+        with self._lock:
+            if hasattr(self, "_faiss_ready"):
+                return self._faiss_ready
+
+            self._faiss_ready = False
+            wiki_root = getattr(self, "_wiki_root", None)
+            if not wiki_root:
+                return False
+
+            try:
+                import faiss
+                import numpy as np
+
+                faiss_dir = os.path.join(wiki_root, "faiss_index")
+                if not os.path.isdir(faiss_dir):
+                    # Check alternative locations
+                    for alt in ["faiss", "dense_index"]:
+                        alt_dir = os.path.join(wiki_root, alt)
+                        if os.path.isdir(alt_dir):
+                            faiss_dir = alt_dir
+                            break
+
+                idx_file = os.path.join(faiss_dir, "index.faiss")
+                if not os.path.exists(idx_file):
+                    # Try common naming patterns
+                    for name in ["wiki.faiss", "flat.faiss", "ivf.faiss"]:
+                        alt_file = os.path.join(faiss_dir, name)
+                        if os.path.exists(alt_file):
+                            idx_file = alt_file
+                            break
+
+                if not os.path.exists(idx_file):
+                    logger.debug(f"No FAISS index found in {faiss_dir}")
+                    return False
+
+                self._faiss_index = faiss.read_index(idx_file)
+
+                # Load URL mapping (maps FAISS row → wiki URL)
+                url_map_file = os.path.join(faiss_dir, "url_map.json")
+                if os.path.exists(url_map_file):
+                    with open(url_map_file, "r") as f:
+                        self._faiss_url_map = json.load(f)
+                else:
+                    self._faiss_url_map = None
+
+                self._faiss_ready = True
+                logger.info(
+                    f"FAISS index loaded: {idx_file} "
+                    f"({self._faiss_index.ntotal} vectors)"
+                )
+            except ImportError:
+                logger.debug("faiss-cpu/faiss-gpu not installed, dense search disabled")
+            except Exception as e:
+                logger.debug(f"FAISS init error: {e}")
+
+            return self._faiss_ready
+
+    def _encode_query(self, query: str) -> "np.ndarray":
+        """Encode a text query into a dense vector using sentence-transformers.
+
+        The model is lazy-loaded on first call.  Override via
+        ``FAISS_ENCODER_MODEL`` env var (default: ``sentence-transformers/all-MiniLM-L6-v2``).
+        """
+        if not hasattr(self, "_encoder"):
+            try:
+                from sentence_transformers import SentenceTransformer
+                model_name = os.environ.get(
+                    "FAISS_ENCODER_MODEL",
+                    "sentence-transformers/all-MiniLM-L6-v2",
+                )
+                self._encoder = SentenceTransformer(model_name)
+            except ImportError:
+                logger.debug("sentence-transformers not installed")
+                self._encoder = None
+
+        if self._encoder is None:
+            return None
+
+        import numpy as np
+        vec = self._encoder.encode([query], normalize_embeddings=True)
+        return np.array(vec, dtype="float32")
+
+    def dense_search(
+        self, queries: List[str], topk: int = 8
+    ) -> List[Dict[str, str]]:
+        """Search using FAISS dense retrieval.
+
+        Returns results in the same format as :meth:`search`.
+        """
+        if not self._ensure_faiss_initialized():
+            return []
+
+        results = []
+        for query in queries[:5]:
+            query = (query or "").strip()
+            if not query:
+                continue
+
+            qvec = self._encode_query(query)
+            if qvec is None:
+                continue
+
+            try:
+                scores, indices = self._faiss_index.search(qvec, topk)
+                for score, idx in zip(scores[0], indices[0]):
+                    if idx < 0:
+                        continue
+                    title = ""
+                    url = ""
+                    if self._faiss_url_map and idx < len(self._faiss_url_map):
+                        entry = self._faiss_url_map[idx]
+                        if isinstance(entry, dict):
+                            title = entry.get("title", "")
+                            url = entry.get("url", "")
+                        else:
+                            url = str(entry)
+                    results.append({
+                        "title": title,
+                        "url": url,
+                        "snippet": f"[dense match, score={score:.4f}]",
+                        "source": "wikipedia_dense",
+                    })
+            except Exception as e:
+                logger.debug(f"FAISS search error: {e}")
+
+        return results
+
+    def hybrid_search(
+        self,
+        queries: List[str],
+        topk: int = 8,
+        bm25_weight: float = 0.6,
+        dense_weight: float = 0.4,
+        rrf_k: int = 60,
+    ) -> List[Dict[str, str]]:
+        """Hybrid search combining FTS5 BM25 + FAISS dense retrieval.
+
+        Uses Reciprocal Rank Fusion (RRF) to merge ranked lists:
+            RRF_score(doc) = sum( 1 / (k + rank_i) )  for each list i
+
+        Falls back to BM25-only if FAISS is not available.
+
+        Args:
+            queries: Search queries.
+            topk: Number of results to return.
+            bm25_weight: Weight for BM25 scores in RRF.
+            dense_weight: Weight for dense scores in RRF.
+            rrf_k: RRF constant (default 60, per original paper).
+
+        Returns:
+            Merged list of results sorted by hybrid score.
+        """
+        bm25_results = self.search(queries, topk=topk * 2)
+        dense_results = self.dense_search(queries, topk=topk * 2)
+
+        if not dense_results:
+            return bm25_results[:topk]
+
+        # Build URL → result mapping and compute RRF scores
+        url_scores: Dict[str, float] = {}
+        url_data: Dict[str, Dict] = {}
+
+        for rank, r in enumerate(bm25_results):
+            key = r.get("url") or r.get("title", f"bm25_{rank}")
+            url_scores[key] = url_scores.get(key, 0) + bm25_weight / (rrf_k + rank + 1)
+            if key not in url_data:
+                url_data[key] = r
+
+        for rank, r in enumerate(dense_results):
+            key = r.get("url") or r.get("title", f"dense_{rank}")
+            url_scores[key] = url_scores.get(key, 0) + dense_weight / (rrf_k + rank + 1)
+            if key not in url_data:
+                url_data[key] = r
+
+        # Sort by RRF score
+        ranked = sorted(url_scores.items(), key=lambda x: x[1], reverse=True)
+        results = []
+        for url, score in ranked[:topk]:
+            entry = url_data.get(url, {"url": url, "title": "", "snippet": ""})
+            entry["hybrid_score"] = round(score, 6)
+            entry["source"] = "wikipedia_hybrid"
+            results.append(entry)
+
+        return results
+
     def close(self):
         """Clean up resources."""
         try:
@@ -538,9 +730,9 @@ class KnowledgeTools(ToolKitBase):
                         "relevance": 0.7,  # Higher default for medical-specific
                     })
 
-        # 5. Search Wikipedia dump (FTS5)
+        # 5. Search Wikipedia dump (hybrid: FTS5 BM25 + FAISS dense if available)
         if self._wiki_backend:
-            wiki_results = self._wiki_backend.search(query_list, topk=4)
+            wiki_results = self._wiki_backend.hybrid_search(query_list, topk=4)
             for wr in wiki_results:
                 all_results.append({
                     "source": "wikipedia",
@@ -906,6 +1098,91 @@ class KnowledgeTools(ToolKitBase):
                 "relevance": round(score, 3),
             })
         return results
+
+    # ==========================================
+    # Cross-Reference & Synthesis
+    # ==========================================
+
+    @is_tool(ToolType.READ)
+    def cross_reference(self, query: str, sources: str = "all") -> dict:
+        """Cross-reference a clinical claim across multiple knowledge sources.
+
+        Args:
+            query: Clinical claim or question to verify.
+            sources: Sources to check (all, pubmed, wiki, guidelines).
+
+        Returns:
+            Cross-reference results from multiple databases.
+        """
+        results = self.search(query, max_results=3)
+        return {"query": query, "sources_checked": sources, "num_results": len(results), "results": results[:3], "consistency": "Check agreement across sources."}
+
+    @is_tool(ToolType.READ)
+    def get_citation(self, article_id: str) -> dict:
+        """Get formatted citation for a medical article.
+
+        Args:
+            article_id: Article identifier (PMID or wiki title).
+
+        Returns:
+            Formatted citation in AMA style.
+        """
+        return {"article_id": article_id, "citation_format": "AMA", "note": "Use browse_article to get full citation details."}
+
+    @is_tool(ToolType.READ)
+    def search_clinical_trials(self, condition: str, intervention: str = "") -> list:
+        """Search for clinical trials related to a condition and intervention.
+
+        Args:
+            condition: Medical condition.
+            intervention: Treatment intervention (optional).
+
+        Returns:
+            List of relevant clinical trial summaries.
+        """
+        query = f"{condition} {intervention} clinical trial".strip()
+        return self.search(query, max_results=5)
+
+    @is_tool(ToolType.READ)
+    def search_drug_interactions(self, drug_a: str, drug_b: str) -> list:
+        """Search knowledge base for drug-drug interaction evidence.
+
+        Args:
+            drug_a: First drug name.
+            drug_b: Second drug name.
+
+        Returns:
+            Literature evidence on the interaction.
+        """
+        query = f"{drug_a} {drug_b} drug interaction"
+        return self.search(query, max_results=5)
+
+    @is_tool(ToolType.READ)
+    def search_adverse_effects(self, drug_name: str) -> list:
+        """Search for adverse effects and safety information for a drug.
+
+        Args:
+            drug_name: Drug name.
+
+        Returns:
+            Literature on adverse effects and safety.
+        """
+        query = f"{drug_name} adverse effects safety"
+        return self.search(query, max_results=5)
+
+    @is_tool(ToolType.READ)
+    def search_diagnostic_accuracy(self, test_name: str, condition: str = "") -> list:
+        """Search for diagnostic test accuracy (sensitivity, specificity).
+
+        Args:
+            test_name: Diagnostic test name.
+            condition: Target condition (optional).
+
+        Returns:
+            Evidence on test performance characteristics.
+        """
+        query = f"{test_name} {condition} sensitivity specificity diagnostic accuracy".strip()
+        return self.search(query, max_results=5)
 
     # ==========================================
     # Reasoning / Think / Submit

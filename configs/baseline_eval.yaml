@@ -101,7 +101,7 @@ benchmarks:
 
     metrics: [action_score, task_completion, avg_turns, tool_usage]
     max_turns: 15
-    max_samples: 0
+    max_samples: 5000    # stratified 5K/db; full eval은 명시적으로 0 지정 필요
     build_script: "python scripts/build_ehr_benchmark.py"
     description: "Real-world EHR navigation using full MIMIC-III and eICU datasets"
 

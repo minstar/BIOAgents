@@ -206,7 +206,7 @@ class VQABenchmarkEvaluator:
         self._model_type = getattr(model_config, "model_type", "")
         self._is_vl_model = self._model_type in (
             "qwen2_5_vl", "qwen2_vl", "llava", "llava_next",
-            "internvl", "lingshu",
+            "internvl", "lingshu", "step_robotics",
         )
 
         load_kwargs = dict(
@@ -226,6 +226,34 @@ class VQABenchmarkEvaluator:
             )
             self.tokenizer = self.processor.tokenizer
             logger.info("Loaded Qwen2.5-VL with processor")
+        elif self._model_type == "step_robotics":
+            import sys as _sys
+            from pathlib import Path as _Path
+            _sys.path.insert(0, str(_Path(self.config.model_name_or_path)))
+            from processing_step3 import Step3VLProcessor
+            from transformers import AutoModelForCausalLM
+
+            # Step3VL10BForCausalLM is not in transformers' VLMS list,
+            # so _checkpoint_conversion_mapping is not auto-applied.
+            # Pass key_mapping explicitly to remap checkpoint keys
+            # (mirrors Step3VL10BForCausalLM._checkpoint_conversion_mapping).
+            step3_key_mapping = {
+                "^vision_model": "model.vision_model",
+                r"^model(?!\.(language_model|vision_model))": "model.language_model",
+                "^vit_large_projector": "model.vit_large_projector",
+            }
+            self.model = AutoModelForCausalLM.from_pretrained(
+                self.config.model_name_or_path,
+                key_mapping=step3_key_mapping,
+                **load_kwargs,
+            )
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                self.config.model_name_or_path, trust_remote_code=True
+            )
+            if self.tokenizer.pad_token is None:
+                self.tokenizer.pad_token = self.tokenizer.eos_token
+            self.processor = Step3VLProcessor(tokenizer=self.tokenizer)
+            logger.info("Loaded Step3-VL with Step3VLProcessor")
         else:
             # Generic CausalLM (text-only fallback or Lingshu)
             from transformers import AutoModelForCausalLM
@@ -423,6 +451,8 @@ class VQABenchmarkEvaluator:
         """Generate answer using a Vision-Language model with image input."""
         if self._model_type in ("qwen2_5_vl", "qwen2_vl"):
             return self._generate_qwen_vl(prompt, image_path)
+        elif self._model_type == "step_robotics":
+            return self._generate_step3vl(prompt, image_path)
         else:
             # Fallback to text-only
             return self._generate_text_answer(prompt)
@@ -465,6 +495,50 @@ class VQABenchmarkEvaluator:
         generated = outputs[0][inputs["input_ids"].shape[-1]:]
         response = self.processor.decode(generated, skip_special_tokens=True)
         return response.strip()
+
+    def _generate_step3vl(self, prompt: str, image_path: str) -> str:
+        """Generate answer using Step3-VL with its custom Step3VLProcessor.
+
+        Step3VLProcessor replaces <im_patch> placeholder in text with actual
+        image feature tokens. Chat format follows Qwen2 style from chat_template.jinja.
+        """
+        from PIL import Image
+
+        image = Image.open(image_path).convert("RGB")
+
+        # Build Qwen2-style chat text with <im_patch> as image placeholder.
+        # Step3VLProcessor.__call__() replaces <im_patch> with actual feature tokens.
+        # Generation prompt from chat_template.jinja: '<|im_start|>assistant\n<think>\n'
+        text = (
+            f"<|im_start|>user\n"
+            f"<im_patch>\n"
+            f"{prompt}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+
+        inputs = self.processor(
+            text=text,
+            images=[image],
+            return_tensors="pt",
+        )
+        inputs = {k: v.to(self.model.device) for k, v in inputs.items()
+                  if isinstance(v, torch.Tensor)}
+
+        with torch.no_grad():
+            outputs = self.model.generate(
+                **inputs,
+                max_new_tokens=self.config.max_new_tokens,
+                do_sample=False,
+                pad_token_id=self.tokenizer.pad_token_id,
+            )
+
+        input_len = inputs["input_ids"].shape[-1]
+        generated = outputs[0][input_len:]
+        response = self.tokenizer.decode(generated, skip_special_tokens=True)
+        # Step3-VL uses <think>...</think> reasoning; strip it to get the answer.
+        import re as _re
+        response = _re.sub(r"<think>.*?</think>", "", response, flags=_re.DOTALL).strip()
+        return response
 
     def _generate_text_answer(self, prompt: str) -> str:
         """Generate answer using text-only model."""

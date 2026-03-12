@@ -788,6 +788,119 @@ class PatientAgent:
         
         return response
     
+    # ── Dynamic Symptom Progression (DoctorAgent-RL inspired) ──
+
+    def progress_condition(self) -> dict:
+        """Simulate time-based condition progression.
+
+        If the patient's condition is time-critical and the doctor hasn't
+        taken appropriate action, the patient deteriorates over turns:
+        - Vitals worsen (HR up, BP down, SpO2 down)
+        - New symptoms may emerge
+        - Severity increases
+
+        Returns:
+            Dict with progression status and any new symptoms/vital changes.
+        """
+        changes = {"deteriorated": False, "new_symptoms": [], "vital_changes": {}}
+
+        if not self.case.time_critical:
+            return changes
+
+        # Deterioration starts after turn 4 for critical cases
+        if self.turn_count < 4:
+            return changes
+
+        # Check if critical actions have been taken
+        doc_messages = [
+            h["content"].lower() for h in self.conversation_history
+            if h["role"] == "doctor"
+        ]
+        doc_text = " ".join(doc_messages)
+
+        critical_actions_taken = any(
+            w in doc_text for w in [
+                "order", "activate", "cath lab", "code", "intubat",
+                "epinephrine", "antibiot", "tpa", "thrombectomy",
+                "aspirin", "heparin", "ivf", "fluid", "vasopressor",
+            ]
+        )
+
+        if critical_actions_taken:
+            return changes
+
+        # Deteriorate
+        changes["deteriorated"] = True
+        turn_penalty = (self.turn_count - 3) * 0.5
+
+        # Worsen vitals
+        vitals = self.case.vitals.copy() if self.case.vitals else {}
+        if "HR" in vitals:
+            try:
+                base_hr = int(re.search(r"\d+", str(vitals["HR"])).group())
+                new_hr = min(180, base_hr + int(turn_penalty * 5))
+                vitals["HR"] = f"{new_hr} bpm"
+                changes["vital_changes"]["HR"] = f"{base_hr} -> {new_hr} bpm"
+            except (AttributeError, ValueError):
+                pass
+
+        if "SpO2" in vitals:
+            try:
+                base_spo2 = int(re.search(r"\d+", str(vitals["SpO2"])).group())
+                new_spo2 = max(75, base_spo2 - int(turn_penalty * 2))
+                vitals["SpO2"] = f"{new_spo2}% RA"
+                changes["vital_changes"]["SpO2"] = f"{base_spo2} -> {new_spo2}%"
+            except (AttributeError, ValueError):
+                pass
+
+        self.case.vitals = vitals
+
+        # Add new symptoms based on deterioration
+        deterioration_symptoms = [
+            "Patient appears more confused and less responsive",
+            "Skin is becoming cool and mottled",
+            "Patient is more tachypneic",
+            "New onset diaphoresis",
+        ]
+        idx = min(self.turn_count - 4, len(deterioration_symptoms) - 1)
+        new_symptom = deterioration_symptoms[idx]
+        changes["new_symptoms"].append(new_symptom)
+
+        # Add as a new high-priority layer
+        self.layers.append(SymptomLayer(
+            layer_id=0,
+            category="deterioration",
+            content=new_symptom,
+            trigger_keywords=["how", "what", "status", "look", "vital", "worse"],
+            revealed=False,
+            required_rapport=0,
+        ))
+
+        self.case.severity = f"{min(10, int(turn_penalty) + 8)}/10, worsening"
+
+        return changes
+
+    def get_time_pressure_score(self) -> float:
+        """Calculate time-pressure penalty for delayed treatment.
+
+        Returns:
+            Score from 0.0 (critical delay) to 1.0 (timely).
+        """
+        if not self.case.time_critical:
+            return 1.0
+
+        # For critical cases, ideal resolution within 4-6 turns
+        if self.turn_count <= 4:
+            return 1.0
+        elif self.turn_count <= 6:
+            return 0.8
+        elif self.turn_count <= 8:
+            return 0.5
+        elif self.turn_count <= 10:
+            return 0.3
+        else:
+            return 0.1
+
     def _update_rapport(self, doctor_message: str) -> None:
         """Update rapport based on doctor's communication style."""
         msg_lower = doctor_message.lower()
@@ -1155,15 +1268,29 @@ def evaluate_doctor_performance(
     else:
         efficiency_score = max(0.3, 1.0 - (patient.turn_count - expected_turns) * 0.1)
     
-    # Composite
-    composite = (
-        0.30 * diag_score
-        + 0.15 * info_score
-        + 0.20 * workup_score
-        + 0.15 * tx_score
-        + 0.10 * rapport_score
-        + 0.10 * efficiency_score
-    )
+    # 7. Time pressure (for critical cases)
+    time_pressure_score = patient.get_time_pressure_score()
+
+    # Composite (adjusted for time-critical cases)
+    if patient.case.time_critical:
+        composite = (
+            0.25 * diag_score
+            + 0.10 * info_score
+            + 0.20 * workup_score
+            + 0.15 * tx_score
+            + 0.05 * rapport_score
+            + 0.10 * efficiency_score
+            + 0.15 * time_pressure_score
+        )
+    else:
+        composite = (
+            0.30 * diag_score
+            + 0.15 * info_score
+            + 0.20 * workup_score
+            + 0.15 * tx_score
+            + 0.10 * rapport_score
+            + 0.10 * efficiency_score
+        )
     
     return {
         "composite_score": composite,
@@ -1173,7 +1300,9 @@ def evaluate_doctor_performance(
         "treatment_correctness": tx_score,
         "communication_rapport": rapport_score,
         "efficiency": efficiency_score,
+        "time_pressure": time_pressure_score,
         "turns_used": patient.turn_count,
+        "time_critical": patient.case.time_critical,
         "revelation_progress": progress,
         "ground_truth": gt,
     }

@@ -27,6 +27,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 PROJECT_ROOT = Path(__file__).parent.parent
 
+# ── venv-aware Python detection ──────────────────────────────────
+# IMPORTANT: Always use PYTHON_EXE for subprocesses to ensure the
+# project .venv is used (not conda base or system python).
+_VENV_PY = PROJECT_ROOT / ".venv" / "bin" / "python"
+PYTHON_EXE = str(_VENV_PY) if _VENV_PY.exists() else sys.executable
+
 
 def run_command(cmd: str, description: str, cwd: str = None) -> bool:
     """Run a command and return success status."""
@@ -192,7 +198,7 @@ def stage_eval():
         _create_eval_script(eval_script)
 
     ok = run_command(
-        f"python {eval_script}",
+        f"{PYTHON_EXE} {eval_script}",
         "P2 Multi-domain Evaluation",
     )
     return ok

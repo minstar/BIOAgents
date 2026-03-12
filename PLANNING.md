@@ -1,391 +1,465 @@
-# BIOAgents - Medical/Biomedical Agent GYM: 전체 기획 문서
+# BIOAgents - Medical/Biomedical Agent GYM: ?? ?? ??
 
-> **작성일**: 2026-02-12  
-> **마지막 업데이트**: 2026-02-14  
-> **목표**: NeurIPS 2026 제출 (2026년 6월)  
-> **가용자원**: A100 8대  
-> **현재 상태**: Phase 1 완료 + W&B 연동 + Adaptive RL 통합 완료 — GPU 학습 즉시 실행 가능 상태.
+> **???**: 2026-02-12  
+> **??? ????**: 2026-02-17  
+> **??**: NeurIPS 2026 ?? (2026? 6?)  
+> **????**: A100 8?  
+> **?? ??**: Phase 1 ?? + W&B ?? + Adaptive RL ?? ?? ? GPU ?? ?? ?? ?? ??.
 
 ---
 
-## 0. 프로젝트 현황 대시보드 (Status Dashboard)
+## 0. ???? ?? ???? (Status Dashboard)
 
-> **최종 업데이트**: 2026-02-14 13:00
+> **?? ????**: 2026-02-14 13:00
 
-### 시스템 규모
+### ??? ??
 
-| 항목 | 수량 | 비고 |
+| ?? | ?? | ?? |
 |------|------|------|
-| **의료 도메인** | 10 | clinical_dx, medical_qa, visual_dx, drug_interaction, ehr, triage, radiology, psychiatry, obstetrics, cross_domain |
-| **임상 도구** | 126+ | 도메인별 unique tools |
-| **GYM 태스크** | ~600 | original + scaled, 11개 데이터 디렉토리 |
-| **Training Configs** | 27 | GRPO×13, SFT×5, Self-Play×2, GymCoach×1, Accelerate×1, Baseline×1, Autonomous GYM×1, Strategy×3 |
-| **Python 모듈** | 79 | bioagents/ 하위 전체 |
-| **테스트 스위트** | 7 | 7개 도메인 테스트 + rewards + training pipeline |
-| **스크립트** | 23 | scripts/ 하위 |
+| **?? ???** | 10 | clinical_dx, medical_qa, visual_dx, drug_interaction, ehr, triage, radiology, psychiatry, obstetrics, cross_domain |
+| **?? ??** | 187 | ???? unique tools (W5 ??: 120?187) |
+| **GYM ???** | ~600 | original + scaled, 11? ??? ???? |
+| **Training Configs** | 27 | GRPO?13, SFT?5, Self-Play?2, GymCoach?1, Accelerate?1, Baseline?1, Autonomous GYM?1, Strategy?3 |
+| **Python ??** | 79 | bioagents/ ?? ?? |
+| **??? ???** | 7 | 7? ??? ??? + rewards + training pipeline |
+| **????** | 23 | scripts/ ?? |
 
-### 지식 검색 인프라
+### ?? ?? ???
 
-| 소스 | 크기 | 인덱스 상태 | 비고 |
+| ?? | ?? | ??? ?? | ?? |
 |------|------|------------|------|
-| **Wikipedia 2018** | 97GB (FTS5 35GB + JSONL 23GB + FAISS) | ✅ FTS5 + FAISS (26M vectors) | symlink databases/wiki2018_en/ |
-| **Wikipedia 2026** | 91GB (FTS5 40GB + JSONL 25GB + FAISS) | ✅ FTS5 + FAISS | symlink databases/wiki2026_en/ |
-| **MedCPT Evidence** | 2.9GB (581K entries) | ✅ FTS5 BM25 indexed | databases/retriever/ → medical_knowledge_fts.sqlite |
-| **Biomedical Instructions** | 260MB (122K entries) | ✅ FTS5 BM25 indexed | databases/instruction/ → medical_knowledge_fts.sqlite |
-| **Generator Retrieval** | 7.3GB (83K passages) | ✅ FTS5 BM25 indexed | databases/generator/ → medical_knowledge_fts.sqlite |
-| **MedInstruct-52k** | 69MB (52K entries) | ✅ FTS5 BM25 indexed | databases/instruction/ → medical_knowledge_fts.sqlite |
-| **Medical Knowledge FTS** | **2.4GB** | ✅ 828K passages + 581K evidence + 122K instructions | databases/medical_knowledge_fts.sqlite |
-| **Critic Data** | 239MB (16K entries) | 원본 JSON | databases/critic/ |
+| **Wikipedia 2018** | 97GB (FTS5 35GB + JSONL 23GB + FAISS) | ? FTS5 + FAISS (26M vectors) | symlink databases/wiki2018_en/ |
+| **Wikipedia 2026** | 91GB (FTS5 40GB + JSONL 25GB + FAISS) | ? FTS5 + FAISS | symlink databases/wiki2026_en/ |
+| **MedCPT Evidence** | 2.9GB (581K entries) | ? FTS5 BM25 indexed | databases/retriever/ ? medical_knowledge_fts.sqlite |
+| **Biomedical Instructions** | 260MB (122K entries) | ? FTS5 BM25 indexed | databases/instruction/ ? medical_knowledge_fts.sqlite |
+| **Generator Retrieval** | 7.3GB (83K passages) | ? FTS5 BM25 indexed | databases/generator/ ? medical_knowledge_fts.sqlite |
+| **MedInstruct-52k** | 69MB (52K entries) | ? FTS5 BM25 indexed | databases/instruction/ ? medical_knowledge_fts.sqlite |
+| **Medical Knowledge FTS** | **2.4GB** | ? 828K passages + 581K evidence + 122K instructions | databases/medical_knowledge_fts.sqlite |
+| **Critic Data** | 239MB (16K entries) | ?? JSON | databases/critic/ |
 
-### Reward & Learning 시스템
+### Reward & Learning ???
 
-| 컴포넌트 | 상태 | 설명 |
+| ???? | ?? | ?? |
 |----------|------|------|
-| **5D Reward** | ✅ | Accuracy + Format + Process + Safety + Coherence |
-| **GRPO Trainer** | ✅ | Multi-turn environment-in-the-loop + TRL GRPOTrainer |
-| **SFT Trainer** | ✅ | Trajectory SFT + Direct QA SFT + Instruction SFT |
-| **FairGRPO** | ✅ | Demographic-aware reward weighting |
-| **MRPO** | ✅ | Token-level shaping (alignment + relevance + factuality) |
-| **SARL** | ✅ | Self-assessment decay + tool usage bonus |
-| **Adaptive Strategy** | ✅ | Auto-select GRPO/MRPO/SARL per task |
-| **Tool Guidance** | ✅ | Task-aware adaptive prompt injection |
-| **Reward Registry** | ✅ | 12 functions: accuracy, format, process, tool_use, **coherence**, composite, safety, fairness, fair_composite, mrpo, sarl, adaptive |
-| **W&B Logging** | ✅ | Project: `pt2-minstar-gym-rl` — Trainer + Agent + GYM 세션 통합 로깅 |
+| **5D Reward** | ? | Accuracy + Format + Process + Safety + Coherence |
+| **GRPO Trainer** | ? | Multi-turn environment-in-the-loop + TRL GRPOTrainer |
+| **SFT Trainer** | ? | Trajectory SFT + Direct QA SFT + Instruction SFT |
+| **FairGRPO** | ? | Demographic-aware reward weighting |
+| **MRPO** | ? | Token-level shaping (alignment + relevance + factuality) |
+| **SARL** | ? | Self-assessment decay + tool usage bonus |
+| **DRPO** | ? **NEW** | Domain-aware Relative PO ? rarity ? modality ? difficulty scaling (QoQ-Med, NeurIPS 2025) |
+| **CRPO** | ? **NEW** | Clinical-objective Relative PO ? accuracy + faithfulness + completeness + safety (Clinical-R1) |
+| **Curriculum Learning** | ? **NEW** | 5-level progressive difficulty with competence gating + anti-regression |
+| **Rubric-based Process Reward** | ? **NEW** | RaR-inspired rubric matching + systematic clinical workflow scoring |
+| **Adaptive Strategy** | ? | Auto-select GRPO/MRPO/SARL/**DRPO**/**CRPO** per task (enhanced) |
+| **Tool Guidance** | ? | Task-aware adaptive prompt injection |
+| **Reward Registry** | ? | **18 functions**: accuracy, format, process, tool_use, coherence, composite, safety, fairness, fair_composite, mrpo, sarl, adaptive, drpo, crpo, **llm_judge**, **medical_embedding** |
+| **W&B Logging** | ? | Project: `pt2-minstar-gym-rl` ? Trainer + Agent + GYM ?? ?? ?? |
 
-### Autonomous GYM 시스템
+### Autonomous GYM ???
 
-| 컴포넌트 | 파일 | 상태 |
+| ???? | ?? | ?? |
 |----------|------|------|
-| **AutonomousGym** | `gym/autonomous_gym.py` | ✅ GPU scheduler + safety guardrail + worker pool |
-| **AutonomousAgent** | `gym/autonomous_agent.py` | ✅ REFLECT→CHOOSE→TRAIN→RECORD + adaptive reward strategy |
-| **SharedLogbook** | `gym/shared_logbook.py` | ✅ Cross-agent learning + leaderboard + herding detection |
-| **ModelProfiler** | `gym/model_profile.py` | ✅ Auto-detect architecture + optimal params |
-| **ToolGuidance** | `gym/tool_guidance.py` | ✅ Task analysis + adaptive prompt injection |
-| **KnowledgeTools** | `tools/knowledge_tools.py` | ✅ Unified search (Wiki + MedCPT + PubMed + textbooks) |
-| **AgentRunner** | `evaluation/agent_runner.py` | ✅ Multi-turn LLM agent execution + guidance injection |
-| **GymEnv** | `gym/agent_env.py` | ✅ Gymnasium-compatible, 10 domains registered |
-| **WandbLogger** | `utils/wandb_logger.py` | ✅ Centralized W&B logging (project: pt2-minstar-gym-rl) |
+| **AutonomousGym** | `gym/autonomous_gym.py` | ? GPU scheduler + safety guardrail + worker pool |
+| **AutonomousAgent** | `gym/autonomous_agent.py` | ? REFLECT?CHOOSE?TRAIN?RECORD + adaptive reward strategy |
+| **SharedLogbook** | `gym/shared_logbook.py` | ? Cross-agent learning + leaderboard + herding detection |
+| **ModelProfiler** | `gym/model_profile.py` | ? Auto-detect architecture + optimal params |
+| **ToolGuidance** | `gym/tool_guidance.py` | ? Task analysis + adaptive prompt injection |
+| **CurriculumScheduler** | `gym/curriculum.py` | ? **NEW** 5-level progressive difficulty + competence gating + anti-regression |
+| **KnowledgeTools** | `tools/knowledge_tools.py` | ? Unified search (Wiki + MedCPT + PubMed + textbooks) |
+| **AgentRunner** | `evaluation/agent_runner.py` | ? Multi-turn LLM agent execution + guidance injection |
+| **GymEnv** | `gym/agent_env.py` | ? Gymnasium-compatible, 10 domains registered |
+| **WandbLogger** | `utils/wandb_logger.py` | ? Centralized W&B logging (project: pt2-minstar-gym-rl) |
 
-### 진행 현황
+### ?? ??
 
-| Phase | 기간 | 상태 | 완료율 |
+| Phase | ?? | ?? | ??? |
 |-------|------|------|--------|
-| **Phase 1**: 기반 구축 | 02/12 ~ 02/15 | ✅ **완료** | 100% |
-| **Phase 1.5**: 통합 & Baseline | 02/15 ~ 02/28 | 🔄 **진행중** | 0% |
-| **Phase 2**: Autonomous RL 학습 | 03/01 ~ 04/15 | 🔲 대기 | 0% |
-| **Phase 3**: 반복 개선 | 04/15 ~ 05/15 | 🔲 대기 | 0% |
-| **Phase 4**: 논문 작성 | 05/15 ~ 06/01 | 🔲 대기 | 0% |
+| **Phase 1**: ?? ?? | 02/12 ~ 02/15 | ? **??** | 100% |
+| **Phase 1.5**: ?? & Baseline | 02/15 ~ 02/28 | ?? **???** | 0% |
+| **Phase 2**: Autonomous RL ?? | 03/01 ~ 04/15 | ?? ?? | 0% |
+| **Phase 3**: ?? ?? | 04/15 ~ 05/15 | ?? ?? | 0% |
+| **Phase 4**: ?? ?? | 05/15 ~ 06/01 | ?? ?? | 0% |
 
-> **모델 (3종 고정, 모두 VL)**:
+> **?? (3? ??, ?? VL)**:
 > - LingShu-7B, Qwen2.5-VL-7B-Instruct, Step3-VL-10B
 >
-> **학습 방식: Pure RL (SFT 없음)**
-> - Pre-trained VL 모델에서 바로 Multi-Turn GRPO 시작
-> - SFT warmup 불필요 — 모델이 이미 의료 지식 보유
+> **?? ??: Pure RL (SFT ??)**
+> - Pre-trained VL ???? ?? Multi-Turn GRPO ??
+> - SFT warmup ??? ? ??? ?? ?? ?? ??
 >
-> **즉시 실행 가능한 다음 단계**:
-> 1. KnowledgeTools 도메인 통합: 828K FTS5 + Wikipedia 검색을 모든 도메인에 연결
-> 2. Baseline 평가: `python scripts/run_full_baseline_eval.py --parallel`
-> 3. Autonomous GYM 실행: `python scripts/run_autonomous_gym.py --config configs/autonomous_gym.yaml`
+> **?? ?? ??? ?? ??**:
+> 1. KnowledgeTools ??? ??: 828K FTS5 + Wikipedia ??? ?? ???? ??
+> 2. Baseline ??: `python scripts/run_full_baseline_eval.py --parallel`
+> 3. Autonomous GYM ??: `python scripts/run_autonomous_gym.py --config configs/autonomous_gym.yaml`
 
 ---
 
-## 1. 프로젝트 개요 (Project Overview)
+## 1. ???? ?? (Project Overview)
 
-### 1.1 핵심 아이디어
-Medical & Biomedical 도메인에 특화된 **Agent GYM** 프레임워크를 구축한다.  
-AgentGym-RL과 τ²-bench의 아키텍처를 참고하되, **의료 도메인 특화 tool database**, **task 시나리오**, **Gymnasium-compatible 환경**을 새롭게 설계하여, multi-turn RL(GRPO/PPO)을 통해 medical agent를 학습시키는 end-to-end 시스템을 만든다.
+### 1.1 ?? ????
+Medical & Biomedical ???? ??? **Agent GYM** ?????? ????.  
+AgentGym-RL? ??-bench? ????? ????, **?? ??? ?? tool database**, **task ????**, **Gymnasium-compatible ??**? ??? ????, multi-turn RL(GRPO/PPO)? ?? medical agent? ????? end-to-end ???? ???.
 
-### 1.2 기획 의도 (README.md 원문 기반)
-1. medical & biomedical 관련 benchmark resource를 한 곳에 모아서 평가 가능하도록 한다.
-2. τ²-bench처럼 medical domain 특화된 tool 기반 database와 task를 만들고 tool 실행이 simulation 기반으로 가능하게 한다.
-3. agent가 gym 형태로 구성되어 medical 상황극에서의 모든 trajectory를 기록한다.
-4. 스스로 기록한 방식을 보고 어떠한 trajectory가 있어야 realistic한지 판단한다.
-5. realistic한 scenario 기반으로 스스로 학습(RL - GRPO)을 시키며 exploration & exploitation을 진행한다.
-6. 특정 step마다 학습한 agent는 visual medical QA, text medical QA 등 평가를 해보며 본인의 상태를 파악한다.
-7. 위와같은 과정을 지속, 반복하여 모든것을 기록한다.
+### 1.2 ?? ?? (README.md ?? ??)
+1. medical & biomedical ?? benchmark resource? ? ?? ??? ?? ????? ??.
+2. ??-bench?? medical domain ??? tool ?? database? task? ??? tool ??? simulation ???? ???? ??.
+3. agent? gym ??? ???? medical ?????? ?? trajectory? ????.
+4. ??? ??? ??? ?? ??? trajectory? ??? realistic?? ????.
+5. realistic? scenario ???? ??? ??(RL - GRPO)? ??? exploration & exploitation? ????.
+6. ?? step?? ??? agent? visual medical QA, text medical QA ? ??? ??? ??? ??? ????.
+7. ???? ??? ??, ???? ???? ????.
 
-### 1.3 핵심 차별점 (vs. 기존 연구) — 2025 경쟁 분석 반영
+### 1.3 ?? ??? (vs. ?? ??) ? 2025 ?? ?? ??
 
-| 기존 연구 | 핵심 특징 | 한계 | Healthcare AI GYM 차별점 |
+| ?? ?? | ?? ?? | ?? | Healthcare AI GYM ??? |
 |---|---|---|---|
 | **MedAgentBench** (Stanford, 2025) arXiv:2501.14654 | FHIR-compliant EHR, 100 patients, 700K data | Benchmark only (no RL training), single EHR domain | 8 domains + RL pipeline + multi-domain pathways |
 | **AgentClinic** (2024) arXiv:2405.07960 | Patient agent, 24 cognitive biases, 9 specialties | No RL training, no cross-domain, no safety eval | Patient Agent + RL + cross-domain + safety evaluation |
-| **Agent Hospital** (2024) arXiv:2405.02957 | Full hospital simulation, MedAgent-Zero, 10K patients | Chinese medical records, no tool-use, no safety | 88 clinical tools + safety rewards + English |
-| **DoctorAgent-RL** (2025) arXiv:2505.19630 | Multi-agent RL, progressive symptoms | Dialogue-only, single domain | 8 domains, 88 tools, structured evaluation |
+| **Agent Hospital** (2024) arXiv:2405.02957 | Full hospital simulation, MedAgent-Zero, 10K patients | Chinese medical records, no tool-use, no safety | 187 clinical tools + safety rewards + English |
+| **DoctorAgent-RL** (2025) arXiv:2505.19630 | Multi-agent RL, progressive symptoms | Dialogue-only, single domain | 10 domains, 187 tools, structured evaluation |
 | **MedAgentSim** (MICCAI 2025) | Doctor+Patient+Measurement agents | Limited domains, no RL reward design | 5D reward + guideline compliance + adversarial testing |
 | **CARES** (2025) Safety Benchmark | 18K adversarial prompts, AMA principles | Safety eval only, no training | 50 adversarial + 11 bias tests + RL safety reward |
 | **MedSafetyBench** (2024) | AMA ethics-based safety benchmark | No agent evaluation, static only | Integrated safety in agent training loop |
-| **LA-CDM** (2025) arXiv:2506.13474 | Hybrid SL+RL, MIMIC-CDM | Single domain (abdominal), no tools | Multi-domain, 88 tools, cross-domain pathways |
-| **AgentGym-RL** (arXiv 2025) | 일반 환경 multi-environment RL | 의료 도메인 없음 | 의료 특화 환경/도구/시나리오 |
-| τ²-bench | Tool-augmented agent benchmark | airline/retail/telecom만 | Medical domain with 88 clinical tools |
+| **LA-CDM** (2025) arXiv:2506.13474 | Hybrid SL+RL, MIMIC-CDM | Single domain (abdominal), no tools | Multi-domain, 187 tools, cross-domain pathways |
+| **AgentGym-RL** (arXiv 2025) | ?? ?? multi-environment RL | ?? ??? ?? | ?? ?? ??/??/???? |
+| ??-bench | Tool-augmented agent benchmark | airline/retail/telecom? | Medical domain with 187 clinical tools |
+| **SciAgentGYM** (2026) | 1,780 science tools, SciForge DAG trajectories, SciAgent-8B | Science only (physics/chem), no healthcare, no RL reward design | Healthcare-specific **187 tools** + 5D reward + RL loop + SciForge-inspired clinical DAGs |
 
-**Healthcare AI GYM의 고유 기여 (Unique Contributions):**
-1. **Cross-Domain Clinical Pathways** — 6개 실제 임상 경로 (다른 어떤 논문에도 없음)
-2. **5D Reward System** — Accuracy + Format + Process + Safety + Coherence
-3. **Integrated Safety RL** — Safety reward가 RL 학습에 직접 통합
-4. **Patient Agent + Tool-Use** — 동적 환자 상호작용 + 88개 임상 도구 동시 지원
-5. **Clinical Guidelines Compliance** — 10개 가이드라인 자동 준수 평가
-6. **Pure RL Training (No SFT)** — Pre-trained models learn directly via Multi-Turn GRPO with 5D adaptive rewards. Benchmark-guided reward weights dynamically adjust based on external evaluation results, enabling self-correcting RL without supervised fine-tuning.
-7. **FairGRPO** — 인구통계학적 공정성 인식 RL 학습 (demographic-aware reward weighting)
-8. **Adaptive Reward Strategy Selection** — 학습 전 모델이 태스크 특성 분석 후 GRPO/MRPO/SARL 중 최적 reward 전략 자동 선택
-9. **Unified Knowledge Search** — PubMed + Medical Wiki + Evidence + Wikipedia(26M articles)을 하나의 search/browse 인터페이스로 통합
-10. **Medical Knowledge BM25 Index** — MedCPT 581K + Biomedical Instructions 122K + Generator 83K + MedInstruct 52K → 828K passages, 2.4GB FTS5 BM25 index
-11. **Adaptive Tool Usage Guidance** — 태스크/도메인/agent 약점 분석 기반 동적 tool 사용 가이드 생성 및 system prompt 주입
+**Healthcare AI GYM? ?? ?? (Unique Contributions):**
+1. **Cross-Domain Clinical Pathways** ? 6? ?? ?? ?? (?? ?? ???? ??)
+2. **5D Reward System** ? Accuracy + Format + Process + Safety + Coherence
+3. **Integrated Safety RL** ? Safety reward? RL ??? ?? ??
+4. **Patient Agent + Tool-Use** ? ?? ?? ???? + 187? ?? ?? ?? ?? (9???? CYP450, SIRS/qSOFA, BI-RADS, HEART, Wells, CTG ?? ?? ?? ?????)
+5. **Clinical Guidelines Compliance** ? 10? ????? ?? ?? ??
+6. **Pure RL Training (No SFT)** ? Pre-trained models learn directly via Multi-Turn GRPO with 5D adaptive rewards. Benchmark-guided reward weights dynamically adjust based on external evaluation results, enabling self-correcting RL without supervised fine-tuning.
+7. **FairGRPO** ? ?????? ??? ?? RL ?? (demographic-aware reward weighting)
+8. **Adaptive Reward Strategy Selection** ? ?? ? ??? ??? ?? ?? ? GRPO/MRPO/SARL/DRPO/CRPO ? ?? reward ?? ?? ??
+12. **DRPO (Domain-aware Relative PO)** ? QoQ-Med (NeurIPS 2025) ?? ??? rarity ? modality difficulty ? domain difficulty ?? ????
+13. **CRPO (Clinical-objective Relative PO)** ? Clinical-R1 (arXiv:2512.00601) ?? accuracy + faithfulness + completeness + safety ??? ???
+14. **Curriculum Learning** ? 5?? ??? ?? ??? ??, competence gating + anti-regression + task mixing
+15. **Rubric-based Process Reward** ? RaR (Rubrics as Rewards, ICLR 2026) ?? rubric ?? + systematic clinical workflow ??
+9. **Unified Knowledge Search** ? PubMed + Medical Wiki + Evidence + Wikipedia(26M articles)? ??? search/browse ?????? ??
+10. **Medical Knowledge BM25 Index** ? MedCPT 581K + Biomedical Instructions 122K + Generator 83K + MedInstruct 52K ? 828K passages, 2.4GB FTS5 BM25 index
+11. **Adaptive Tool Usage Guidance** ? ???/???/agent ?? ?? ?? ?? tool ?? ??? ?? ? system prompt ??
 
-### 1.4 심층 경쟁자 분석: DiagGym vs MedAgentGym vs Healthcare AI GYM
+### 1.4 ?? ??? ??: DiagGym vs MedAgentGym vs Healthcare AI GYM
 
 #### DiagGym (arXiv:2510.24654, Oct 2025)
-- **핵심**: EHR 기반 world model로 진단 환경 시뮬레이션 + DiagAgent (LLM 기반 진단 에이전트)
-- **특징**: DiagBench (2.2K physician-validated cases), multi-turn RL로 진단 정책 학습
-- **성능**: 진단 정확도 +11.2%, 검사 추천 F1 +17.6% (vs SOTA LLM)
-- **한계**:
-  - 단일 도메인 (EHR 진단만) — cross-domain 경로 없음
-  - Tool-use 프레임워크 없음 (검사 선택만, 일반 도구 호출 아님)
-  - Safety 평가 프레임워크 명시적으로 없음
-  - Patient Agent 시뮬레이션 없음 (데이터 기반만)
+- **??**: EHR ?? world model? ?? ?? ????? + DiagAgent (LLM ?? ?? ????)
+- **??**: DiagBench (2.2K physician-validated cases), multi-turn RL? ?? ?? ??
+- **??**: ?? ??? +11.2%, ?? ?? F1 +17.6% (vs SOTA LLM)
+- **??**:
+  - ?? ??? (EHR ???) ? cross-domain ?? ??
+  - Tool-use ????? ?? (?? ???, ?? ?? ?? ??)
+  - Safety ?? ????? ????? ??
+  - Patient Agent ????? ?? (??? ???)
 
 #### MedAgentGym (ICLR 2026 Oral, June 2025)
-- **핵심**: 코드 중심 의생명 데이터 분석 에이전트 학습 환경 (Python 실행 기반)
-- **특징**: 72,413 task instances / 129 categories / 12 real-world 시나리오
-- **성능**: Med-Copilot offline RL +43%, online RL +45% (GPT-4o 수준)
-- **한계**:
-  - 코드 실행 기반 — 임상 의사결정이 아닌 데이터 분석 중심
-  - Text-only (멀티모달 미지원)
-  - 환자 상호작용 시뮬레이션 없음
-  - Cross-domain 임상 경로 없음
-  - PhysioNet 자격 요구 (일부 데이터)
+- **??**: ?? ?? ??? ??? ?? ???? ?? ?? (Python ?? ??)
+- **??**: 72,413 task instances / 129 categories / 12 real-world ????
+- **??**: Med-Copilot offline RL +43%, online RL +45% (GPT-4o ??)
+- **??**:
+  - ?? ?? ?? ? ?? ????? ?? ??? ?? ??
+  - Text-only (???? ???)
+  - ?? ???? ????? ??
+  - Cross-domain ?? ?? ??
+  - PhysioNet ?? ?? (?? ???)
 
-#### Healthcare AI GYM (Ours) — 차별화 포인트
+#### Healthcare AI GYM (Ours) ? ??? ???
 
-| 차원 | DiagGym | MedAgentGym | **Healthcare AI GYM** |
+| ?? | DiagGym | MedAgentGym | **Healthcare AI GYM** |
 |------|---------|-------------|----------------------|
-| **도메인 수** | 1 (EHR 진단) | 129 (데이터분석) | **10 임상 도메인** |
-| **태스크 유형** | 진단/검사 선택 | 코드 실행 | **Tool-use 에이전트** |
-| **태스크 수** | 2.2K | 72.4K | **550+ (확장 가능)** |
-| **멀티모달** | ✗ | ✗ | **✓ (Text + Vision)** |
-| **Cross-domain** | ✗ | ✗ | **✓ (6 clinical pathways)** |
-| **Patient Agent** | ✗ | ✗ | **✓ (12 personalities, 13 biases)** |
-| **Safety 평가** | 제한적 | ✗ | **✓ (5D reward + 50 adversarial + 11 bias tests)** |
-| **공정성 (Fairness)** | ✗ | ✗ | **✓ (FairGRPO)** |
-| **Tool 수** | ~10 검사 | Python runtime | **88+ 임상 도구** |
-| **RL 방법** | Multi-turn RL | Offline/Online RL | **GRPO + Self-Play + GymCoach** |
-| **자율 학습** | ✗ | ✗ | **✓ (GymCoach autonomous loop)** |
-| **가이드라인 준수** | ✗ | ✗ | **✓ (10 guidelines)** |
+| **??? ?** | 1 (EHR ??) | 129 (?????) | **10 ?? ???** |
+| **??? ??** | ??/?? ?? | ?? ?? | **Tool-use ????** |
+| **??? ?** | 2.2K | 72.4K | **550+ (?? ??)** |
+| **????** | ? | ? | **? (Text + Vision)** |
+| **Cross-domain** | ? | ? | **? (6 clinical pathways)** |
+| **Patient Agent** | ? | ? | **? (12 personalities, 13 biases)** |
+| **Safety ??** | ??? | ? | **? (5D reward + 50 adversarial + 11 bias tests)** |
+| **??? (Fairness)** | ? | ? | **? (FairGRPO)** |
+| **Tool ?** | ~10 ?? | Python runtime | **187 ?? ??** |
+| **RL ??** | Multi-turn RL | Offline/Online RL | **GRPO + Self-Play + GymCoach** |
+| **?? ??** | ? | ? | **? (GymCoach autonomous loop)** |
+| **????? ??** | ? | ? | **? (10 guidelines)** |
 
-**핵심 논쟁 포인트 (Rebuttal 준비):**
-1. "MedAgentGym이 72K 태스크인데 Healthcare AI GYM은 550개뿐?" 
-   → 우리는 tool-use 에이전트 환경이므로 태스크 하나가 multi-turn interaction + tool calling + reasoning으로 구성. LLM 기반 자동 태스크 생성(GymCoach)으로 무한 확장 가능.
-2. "DiagGym이 physician-validated인데?" 
-   → 우리도 evaluation_criteria에 nl_assertions (physician-level rubric)을 포함하며, 추가로 safety violation taxonomy까지 구현.
-3. "스케일이 부족?" 
-   → 우리의 기여는 스케일이 아닌 **통합 시스템** — 10 도메인 × 88 도구 × patient agent × safety × fairness × autonomous training. 어떤 단일 논문도 이 범위를 커버하지 못함.
+**?? ?? ??? (Rebuttal ??):**
+1. "MedAgentGym? 72K ????? Healthcare AI GYM? 550???" 
+   ? ??? tool-use ???? ????? ??? ??? multi-turn interaction + tool calling + reasoning?? ??. LLM ?? ?? ??? ??(GymCoach)?? ?? ?? ??.
+2. "DiagGym? physician-validated???" 
+   ? ??? evaluation_criteria? nl_assertions (physician-level rubric)? ????, ??? safety violation taxonomy?? ??.
+3. "???? ???" 
+   ? ??? ??? ???? ?? **?? ???** ? 10 ??? ? 88 ?? ? patient agent ? safety ? fairness ? autonomous training. ?? ?? ??? ? ??? ???? ??.
 
-### 1.5 FairGRPO 메커니즘 (arXiv:2510.19893)
+### 1.4.1 ?? ??? ?? (2026-02-15 ???? ? ?? ??)
 
-**구현 완료 (2026-02-13):**
+#### QoQ-Med (NeurIPS 2025 Oral, arXiv:2506.00711)
+- **??**: ??? open generalist clinical foundation model (Qwen2.5-VL ?? 7B/32B)
+- **??**: DRPO (Domain-aware Relative Policy Optimization), 2.61M instruction pairs, 9 clinical domains
+- **??**: macro-F1 +43% (vs GRPO), segmentation IoU 10x (matching o4-mini)
+- **??**:
+  - ??/?? ?? ? agent tool-use ????? ??
+  - ?? ?? ?? ?? (?? ??)
+  - Cross-domain clinical pathway ??
+  - Safety/fairness ?? ????? ??
+- **?? ???**: DRPO? ??? rarity/modality difficulty ?? ?? ???? ? ?? reward? ?? ??
+
+#### MediX-R1 (ICLR 2026 submitted, OpenReview)
+- **??**: Open-ended medical RL (GRPO ??), MCQA ?? ??? ??
+- **??**: LLM-as-judge accuracy + medical embedding semantic reward + format/modality reward
+- **??**: ~50K instruction?? radiology summarization/report generation?? ?? ??
+- **??**:
+  - Single-turn VQA ?? ? multi-turn agent interaction ??
+  - Tool-use ????? ??
+  - ?? ??? (radiology ??)
+- **?? ???**: LLM-as-judge reward function ? ?? composite reward? ?? ??
+
+#### Med-R1 (arXiv:2503.13939)
+- **??**: GRPO for medical VLM (Qwen2-VL-2B ??), 8 modalities, 5 tasks
+- **??**: 2B ??? 72B ?? ?? (GRPO ?????), No-Thinking variant
+- **??**: +29.94% accuracy, +32.06% cross-question-type generalization
+- **??**: Small-scale VQA, 2B ??, no agent framework
+- **?? ???**: No-Thinking variant ? reasoning chain ??? ?? ??? ?? ??. ?? ??.
+
+#### MTBBench (NeurIPS 2025 D&B, arXiv:2511.20490)
+- **??**: Molecular Tumor Board ?????, multimodal sequential decision-making
+- **??**: Clinician-validated, ??? ??? ?????, agentic tool framework
+- **??**: Tool-use agent? +9-11% task improvement
+- **??**: ?? ??? (???), ??? ???
+- **?? ???**: Clinician validation methodology, multi-expert agentic framework
+
+#### HealthFlow (arXiv:2508.02621)
+- **??**: Self-evolving AI agent with meta planning for autonomous healthcare research
+- **??**: Meta-level evolution, EHRFlowBench, procedural success/failure learning
+- **??**: ?? ??? ?? (?? ???? ??)
+- **?? ???**: Meta-planning ???? ? Autonomous GYM? ?? ?? ??? ??
+
+#### DoctorAgent-RL (arXiv:2505.19630)
+- **??**: Multi-agent collaborative RL, progressive symptom revelation
+- **??**: MTMedDialog dataset, doctor-patient agent interaction
+- **??**: Dialogue-only (no tool-use), single domain
+- **?? ???**: Dynamic questioning strategy ? ?? PatientAgent ??? ??
+
+#### ??? ?? ??? (2026-02-15)
+
+| ?? | DiagGym | MedAgentGym | QoQ-Med | MediX-R1 | DoctorAgent-RL | MTBBench | **Healthcare AI GYM** |
+|------|---------|-------------|---------|----------|----------------|----------|-----------------------|
+| **Venue** | arXiv | ICLR 2026 Oral | NeurIPS 2025 Oral | ICLR 2026 sub. | arXiv | NeurIPS 2025 | NeurIPS 2026 (target) |
+| **??? ?** | 1 | 129 (????) | 9 | 1 (radiology) | 1 | 1 (oncology) | **10 ?? ???** |
+| **??? ??** | ??/?? | ?? ?? | Instruction | VQA | Dialogue | Sequential | **Tool-use Agent** |
+| **????** | ? | ? | **?** (2D/3D+ECG+text) | ? (VL) | ? | ? | **?** (Text+Vision) |
+| **Cross-domain** | ? | ? | ? | ? | ? | ? | **?** (6 pathways) |
+| **Tool-use** | ~10 ?? | Python | ? | ? | ? | ?? | **126+ ??** |
+| **RL ??** | RL | Offline/Online | **DRPO** | GRPO | RL | ? | **GRPO+MRPO+SARL+DRPO+CRPO** |
+| **Safety** | ??? | ? | ? | ? | ? | ? | **?** (5D+adversarial) |
+| **Fairness** | ? | ? | ? | ? | ? | ? | **?** (FairGRPO) |
+| **?? ??** | ? | ? | ? | ? | ? | ? | **?** (Autonomous GYM) |
+
+### 1.5 FairGRPO ???? (arXiv:2510.19893)
+
+**?? ?? (2026-02-13):**
 
 1. **Demographic Group Extraction** (`grpo_rewards.py`)
-   - 환자 데이터에서 age_group / sex / ethnicity 자동 추출
-   - 라벨 없을 때 unsupervised clustering으로 발견 가능 (추후 구현)
+   - ?? ????? age_group / sex / ethnicity ?? ??
+   - ?? ?? ? unsupervised clustering?? ?? ?? (?? ??)
 
 2. **FairnessTracker** (`grpo_rewards.py`)
-   - 인구통계 그룹별 보상 통계 실시간 추적
-   - Representation weight: 소수 그룹 상향 가중 (빈도 역수)
-   - Performance weight: 저성과 그룹 상향 가중 (평균 역수)
-   - Fairness gap 모니터링: max-min 그룹 간 격차 추적
+   - ???? ??? ?? ?? ??? ??
+   - Representation weight: ?? ?? ?? ?? (?? ??)
+   - Performance weight: ??? ?? ?? ?? (?? ??)
+   - Fairness gap ????: max-min ?? ? ?? ??
 
 3. **FairGRPO Reward Functions** (`grpo_rewards.py`)
-   - `grpo_fairness_reward`: 기본 보상에 공정성 가중치 적용
-   - `grpo_fair_composite_reward`: composite reward + fairness signal 통합
+   - `grpo_fairness_reward`: ?? ??? ??? ??? ??
+   - `grpo_fair_composite_reward`: composite reward + fairness signal ??
 
 4. **FairGRPO Trainer** (`grpo_trainer.py`)
-   - `FairGRPOConfig`: 공정성 파라미터 (weight, alpha_repr, alpha_perf, max_gap)
-   - `train_fair_grpo()`: TRL GRPOTrainer 기반 공정성 인식 학습
-   - 학습 완료 후 fairness_report.json 자동 저장
+   - `FairGRPOConfig`: ??? ???? (weight, alpha_repr, alpha_perf, max_gap)
+   - `train_fair_grpo()`: TRL GRPOTrainer ?? ??? ?? ??
+   - ?? ?? ? fairness_report.json ?? ??
 
-5. **GymCoach 통합** (`gym_coach.py`)
-   - `_train_fair_grpo()`: 자율 학습 루프에서 FairGRPO 자동 활용
-   - Training Memory에 fairness 결과 기록
+5. **GymCoach ??** (`gym_coach.py`)
+   - `_train_fair_grpo()`: ?? ?? ???? FairGRPO ?? ??
+   - Training Memory? fairness ?? ??
 
 ---
 
-## 2. 현재 리소스 현황 (Resource Inventory)
+## 2. ?? ??? ?? (Resource Inventory)
 
-### 2.1 디렉토리 구조 (2026-02-14 최신)
+### 2.1 ???? ?? (2026-02-14 ??)
 ```
 BIOAgents/
-├── README.md                        # 프로젝트 포탈 (완전 재작성)
-├── PLANNING.md                      # 본 기획 문서
-├── LICENSE                          # Apache-2.0
-├── NOTICE                           # AI-generated code 공시
-├── THIRD_PARTY_LICENSES.md          # 40+ 컴포넌트 라이선스
-│
-├── bioagents/                       # 핵심 프레임워크 (79 Python modules)
-│   ├── agents/                      # Agent 모듈
-│   │   └── patient_agent.py         # Patient Agent (12 personalities, 13 biases)
-│   ├── data_pipeline/               # 데이터 파이프라인
-│   │   ├── medqa_loader.py          # MedQA/MedMCQA/MMLU → unified format
-│   │   ├── vqa_loader.py            # 6개 VQA 통합 로더
-│   │   ├── medical_image_catalog.py # 2,300 medical images catalog
-│   │   └── sft_generator.py         # SFT trajectory 생성
-│   ├── domains/                     # 10개 의료 도메인
-│   │   ├── clinical_diagnosis/      # 17 tools, 52+60 tasks
-│   │   ├── medical_qa/              # 8 tools, 35+200 tasks
-│   │   ├── visual_diagnosis/        # 11 tools, 31+8 tasks
-│   │   ├── drug_interaction/        # 10 tools, 52+13 tasks
-│   │   ├── ehr_management/          # 14 tools, 58+17 tasks
-│   │   ├── triage_emergency/        # 12 tools, 14+6 tasks
-│   │   ├── radiology_report/        # 11 tools, 14+6 tasks
-│   │   ├── psychiatry/              # 14 tools, 13+7 tasks
-│   │   ├── obstetrics/              # 14 tools, 13+7 tasks
-│   │   └── cross_domain/            # 6 pathways, 25 phase tasks
-│   ├── environment/                 # Base 환경 (τ²-bench 스타일)
-│   │   ├── db.py                    # DB abstraction
-│   │   ├── environment.py           # Environment base
-│   │   └── toolkit.py               # ToolKit base + @is_tool
-│   ├── evaluation/                  # 평가 시스템
-│   │   ├── rewards.py               # Core 5D rewards
-│   │   ├── grpo_rewards.py          # TRL-compatible wrappers (11 functions)
-│   │   ├── reward_strategies.py     # GRPO/MRPO/SARL/Adaptive strategies
-│   │   ├── safety_eval.py           # Safety rewards + adversarial tests
-│   │   ├── agent_runner.py          # Multi-turn LLM agent + guidance injection
-│   │   ├── benchmark_eval.py        # Text QA benchmark
-│   │   ├── vqa_benchmark_eval.py    # Visual QA benchmark (6 datasets)
-│   │   ├── ehr_benchmark_eval.py    # EHR-specific benchmark
-│   │   └── cognitive_bias.py        # 24 cognitive bias tests
-│   ├── gym/                         # Autonomous GYM
-│   │   ├── agent_env.py             # Gymnasium-compatible env (10 domains)
-│   │   ├── autonomous_agent.py      # Self-aware agent (REFLECT→CHOOSE→TRAIN→RECORD)
-│   │   ├── autonomous_gym.py        # Multi-agent gym scheduler
-│   │   ├── shared_logbook.py        # Cross-agent learning + leaderboard
-│   │   ├── gym_coach.py             # Legacy coach (still usable)
-│   │   ├── self_play.py             # Self-play loop
-│   │   ├── training_memory.py       # Training memory store
-│   │   ├── model_profile.py         # Auto model profiler
-│   │   └── tool_guidance.py         # Adaptive tool usage guidance (NEW 02/14)
-│   ├── knowledge/                   # Knowledge management
-│   │   └── guidelines.py            # 10 clinical guidelines
-│   ├── tools/                       # Unified tools
-│   │   └── knowledge_tools.py       # KnowledgeTools + WikiSearchBackend + MedicalKnowledgeBackend
-│   ├── training/                    # Training modules
-│   │   ├── grpo_trainer.py          # Multi-turn GRPO + strategy support
-│   │   └── sft_trainer.py           # Trajectory SFT + QA SFT
-│   └── utils/
-│       └── model_loader.py          # Model loading utilities
-│
-├── configs/                         # 27개 학습/평가 설정
-│   ├── grpo_*.yaml                  # 13개 GRPO configs (도메인별 + 전략별)
-│   ├── sft_*.yaml                   # 5개 SFT configs
-│   ├── self_play_*.yaml             # 2개 Self-Play configs
-│   ├── autonomous_gym.yaml          # Autonomous GYM config
-│   ├── gym_coach.yaml               # GymCoach config
-│   ├── baseline_eval.yaml           # Baseline 평가 config
-│   └── accelerate_ds_zero2.yaml     # DeepSpeed ZeRO-2
-│
-├── scripts/                         # 23개 실행 스크립트
-│   ├── build_medical_fts_index.py   # BM25 FTS5 인덱스 빌더 (NEW 02/14)
-│   ├── download_medical_images.py   # Medical image downloader (NEW 02/14)
-│   ├── run_autonomous_gym.py        # Autonomous GYM 실행
-│   ├── run_full_benchmark_suite.py  # 전체 벤치마크 실행
-│   ├── generate_gym_data.py         # 벤치마크 → GYM data
-│   ├── generate_tasks_llm.py        # LLM 기반 task 생성
-│   ├── scale_tasks.py               # 템플릿 기반 task 확장
-│   └── ...                          # 16개 추가 스크립트
-│
-├── tests/                           # 7개 테스트 스위트
-│   ├── test_clinical_diagnosis.py
-│   ├── test_drug_interaction.py
-│   ├── test_ehr_management.py
-│   ├── test_medical_qa.py
-│   ├── test_rewards.py              # 61 tests
-│   ├── test_training_pipeline.py
-│   └── test_visual_diagnosis.py
-│
-├── data/domains/                    # 11개 도메인 데이터 디렉토리
-│   ├── clinical_diagnosis/          # db.json, policy.md, tasks.json, split_tasks.json
-│   ├── medical_qa/                  # + tasks_scaled.json (200 tasks)
-│   ├── medical_qa_200/              # Large-scale variant
-│   ├── visual_diagnosis/            # + IMG011~IMG031
-│   ├── drug_interaction/            # + 21 drugs, 16 interactions
-│   ├── ehr_management/              # MIMIC-compatible, 3 patients
-│   ├── triage_emergency/            # 10 ED patients, 4 protocols
-│   ├── radiology_report/            # 8 studies, 5 knowledge bases
-│   ├── psychiatry/                  # 20 tasks
-│   ├── obstetrics/                  # 20 tasks
-│   └── cross_domain/               # 6 clinical pathways
-│
-├── databases/                       # Knowledge Base & Indexes
-│   ├── medical_knowledge_fts.sqlite # 2.4GB FTS5 BM25 index (NEW 02/14)
-│   ├── critic/                      # Self-BioRAG critic (239MB, 8 JSON)
-│   ├── generator/                   # Self-BioRAG generator (7.3GB)
-│   ├── instruction/                 # 의료 instruction (260MB, 4 JSON)
-│   ├── retriever/                   # MedCPT evidence (2.9GB, 581K entries)
-│   ├── tau2-bench/                  # τ²-bench 참고용 (1.2GB)
-│   ├── wiki2018_en/ → ../../wiki2018/  # 167GB (FTS5 + FAISS 26M vectors)
-│   └── wiki2026_en/ → ../../wiki2026/  # 106GB (FTS5 + FAISS)
-│
-├── datasets/                        # 학습/평가 데이터
-│   └── medical_images/              # 2,300 images (690MB), 10 modalities (NEW 02/14)
-│
-├── evaluations/                     # 외부 평가 벤치마크 코드
-│   ├── mimic-code/                  # MIMIC-III/IV EHR
-│   ├── OLAPH/                       # MedLFQA
-│   ├── PathVQA/                     # PathVQA baseline
-│   ├── PMC-VQA/                     # PMC-VQA + Slake1.0
-│   ├── quilt-llava/                 # Quilt-VQA
-│   ├── self-biorag/                 # Self-BioRAG (MedQA, MedMCQA, MMLU)
-│   └── VQA-Med-2021/               # VQA-Med 2021
-│
-├── GYM_reference/                   # 참고 코드
-│   └── AgentGym-RL/                 # verl 기반 RL trainer
-├── references/                      # 참고 논문 (18개)
-│   ├── medical_agent/               # 의료 agent 논문 4편
-│   └── medical_qa/                  # 의료 QA 논문 + MRPO 코드 14개
-├── tool_simulations/                # Tool Simulation 엔진
-│   └── tool-dataset-generation/     # LLM 기반 tool 데이터 생성
-└── trains/                          # 외부 학습 프레임워크
-    ├── oumi/                        # Oumi SFT
-    └── snapshot-po/                 # Snapshot-PO RL (SARL)
+??? README.md                        # ???? ?? (?? ???)
+??? PLANNING.md                      # ? ?? ??
+??? LICENSE                          # Apache-2.0
+??? NOTICE                           # AI-generated code ??
+??? THIRD_PARTY_LICENSES.md          # 40+ ???? ????
+?
+??? bioagents/                       # ?? ????? (79 Python modules)
+?   ??? agents/                      # Agent ??
+?   ?   ??? patient_agent.py         # Patient Agent (12 personalities, 13 biases)
+?   ??? data_pipeline/               # ??? ?????
+?   ?   ??? medqa_loader.py          # MedQA/MedMCQA/MMLU ? unified format
+?   ?   ??? vqa_loader.py            # 6? VQA ?? ??
+?   ?   ??? medical_image_catalog.py # 2,300 medical images catalog
+?   ?   ??? sft_generator.py         # SFT trajectory ??
+?   ??? domains/                     # 10? ?? ???
+?   ?   ??? clinical_diagnosis/      # 17 tools, 52+60 tasks
+?   ?   ??? medical_qa/              # 8 tools, 35+200 tasks
+?   ?   ??? visual_diagnosis/        # 11 tools, 31+8 tasks
+?   ?   ??? drug_interaction/        # 10 tools, 52+13 tasks
+?   ?   ??? ehr_management/          # 14 tools, 58+17 tasks
+?   ?   ??? triage_emergency/        # 12 tools, 14+6 tasks
+?   ?   ??? radiology_report/        # 11 tools, 14+6 tasks
+?   ?   ??? psychiatry/              # 14 tools, 13+7 tasks
+?   ?   ??? obstetrics/              # 14 tools, 13+7 tasks
+?   ?   ??? cross_domain/            # 6 pathways, 25 phase tasks
+?   ??? environment/                 # Base ?? (??-bench ???)
+?   ?   ??? db.py                    # DB abstraction
+?   ?   ??? environment.py           # Environment base
+?   ?   ??? toolkit.py               # ToolKit base + @is_tool
+?   ??? evaluation/                  # ?? ???
+?   ?   ??? rewards.py               # Core 5D rewards
+?   ?   ??? grpo_rewards.py          # TRL-compatible wrappers (11 functions)
+?   ?   ??? reward_strategies.py     # GRPO/MRPO/SARL/Adaptive strategies
+?   ?   ??? safety_eval.py           # Safety rewards + adversarial tests
+?   ?   ??? agent_runner.py          # Multi-turn LLM agent + guidance injection
+?   ?   ??? benchmark_eval.py        # Text QA benchmark
+?   ?   ??? vqa_benchmark_eval.py    # Visual QA benchmark (6 datasets)
+?   ?   ??? ehr_benchmark_eval.py    # EHR-specific benchmark
+?   ?   ??? cognitive_bias.py        # 24 cognitive bias tests
+?   ??? gym/                         # Autonomous GYM
+?   ?   ??? agent_env.py             # Gymnasium-compatible env (10 domains)
+?   ?   ??? autonomous_agent.py      # Self-aware agent (REFLECT?CHOOSE?TRAIN?RECORD)
+?   ?   ??? autonomous_gym.py        # Multi-agent gym scheduler
+?   ?   ??? shared_logbook.py        # Cross-agent learning + leaderboard
+?   ?   ??? gym_coach.py             # Legacy coach (still usable)
+?   ?   ??? self_play.py             # Self-play loop
+?   ?   ??? training_memory.py       # Training memory store
+?   ?   ??? model_profile.py         # Auto model profiler
+?   ?   ??? tool_guidance.py         # Adaptive tool usage guidance (NEW 02/14)
+?   ??? knowledge/                   # Knowledge management
+?   ?   ??? guidelines.py            # 10 clinical guidelines
+?   ??? tools/                       # Unified tools
+?   ?   ??? knowledge_tools.py       # KnowledgeTools + WikiSearchBackend + MedicalKnowledgeBackend
+?   ??? training/                    # Training modules
+?   ?   ??? grpo_trainer.py          # Multi-turn GRPO + strategy support
+?   ?   ??? sft_trainer.py           # Trajectory SFT + QA SFT
+?   ??? utils/
+?       ??? model_loader.py          # Model loading utilities
+?
+??? configs/                         # 27? ??/?? ??
+?   ??? grpo_*.yaml                  # 13? GRPO configs (???? + ???)
+?   ??? sft_*.yaml                   # 5? SFT configs
+?   ??? self_play_*.yaml             # 2? Self-Play configs
+?   ??? autonomous_gym.yaml          # Autonomous GYM config
+?   ??? gym_coach.yaml               # GymCoach config
+?   ??? baseline_eval.yaml           # Baseline ?? config
+?   ??? accelerate_ds_zero2.yaml     # DeepSpeed ZeRO-2
+?
+??? scripts/                         # 23? ?? ????
+?   ??? build_medical_fts_index.py   # BM25 FTS5 ??? ?? (NEW 02/14)
+?   ??? download_medical_images.py   # Medical image downloader (NEW 02/14)
+?   ??? run_autonomous_gym.py        # Autonomous GYM ??
+?   ??? run_full_benchmark_suite.py  # ?? ???? ??
+?   ??? generate_gym_data.py         # ???? ? GYM data
+?   ??? generate_tasks_llm.py        # LLM ?? task ??
+?   ??? scale_tasks.py               # ??? ?? task ??
+?   ??? ...                          # 16? ?? ????
+?
+??? tests/                           # 7? ??? ???
+?   ??? test_clinical_diagnosis.py
+?   ??? test_drug_interaction.py
+?   ??? test_ehr_management.py
+?   ??? test_medical_qa.py
+?   ??? test_rewards.py              # 61 tests
+?   ??? test_training_pipeline.py
+?   ??? test_visual_diagnosis.py
+?
+??? data/domains/                    # 11? ??? ??? ????
+?   ??? clinical_diagnosis/          # db.json, policy.md, tasks.json, split_tasks.json
+?   ??? medical_qa/                  # + tasks_scaled.json (200 tasks)
+?   ??? medical_qa_200/              # Large-scale variant
+?   ??? visual_diagnosis/            # + IMG011~IMG031
+?   ??? drug_interaction/            # + 21 drugs, 16 interactions
+?   ??? ehr_management/              # MIMIC-compatible, 3 patients
+?   ??? triage_emergency/            # 10 ED patients, 4 protocols
+?   ??? radiology_report/            # 8 studies, 5 knowledge bases
+?   ??? psychiatry/                  # 20 tasks
+?   ??? obstetrics/                  # 20 tasks
+?   ??? cross_domain/               # 6 clinical pathways
+?
+??? databases/                       # Knowledge Base & Indexes
+?   ??? medical_knowledge_fts.sqlite # 2.4GB FTS5 BM25 index (NEW 02/14)
+?   ??? critic/                      # Self-BioRAG critic (239MB, 8 JSON)
+?   ??? generator/                   # Self-BioRAG generator (7.3GB)
+?   ??? instruction/                 # ?? instruction (260MB, 4 JSON)
+?   ??? retriever/                   # MedCPT evidence (2.9GB, 581K entries)
+?   ??? tau2-bench/                  # ??-bench ??? (1.2GB)
+?   ??? wiki2018_en/ ? ../../wiki2018/  # 167GB (FTS5 + FAISS 26M vectors)
+?   ??? wiki2026_en/ ? ../../wiki2026/  # 106GB (FTS5 + FAISS)
+?
+??? datasets/                        # ??/?? ???
+?   ??? medical_images/              # 2,300 images (690MB), 10 modalities (NEW 02/14)
+?
+??? evaluations/                     # ?? ?? ???? ??
+?   ??? mimic-code/                  # MIMIC-III/IV EHR
+?   ??? OLAPH/                       # MedLFQA
+?   ??? PathVQA/                     # PathVQA baseline
+?   ??? PMC-VQA/                     # PMC-VQA + Slake1.0
+?   ??? quilt-llava/                 # Quilt-VQA
+?   ??? self-biorag/                 # Self-BioRAG (MedQA, MedMCQA, MMLU)
+?   ??? VQA-Med-2021/               # VQA-Med 2021
+?
+??? GYM_reference/                   # ?? ??
+?   ??? AgentGym-RL/                 # verl ?? RL trainer
+??? references/                      # ?? ?? (18?)
+?   ??? medical_agent/               # ?? agent ?? 4?
+?   ??? medical_qa/                  # ?? QA ?? + MRPO ?? 14?
+??? tool_simulations/                # Tool Simulation ??
+?   ??? tool-dataset-generation/     # LLM ?? tool ??? ??
+??? trains/                          # ?? ?? ?????
+    ??? oumi/                        # Oumi SFT
+    ??? snapshot-po/                 # Snapshot-PO RL (SARL)
 ```
 
-### 2.2 보유 데이터셋 상세
+### 2.2 ?? ???? ??
 
-#### Visual Medical QA (6개 소스)
-| # | 데이터셋 | 소스 | 특징 | 상태 |
+#### Visual Medical QA (6? ??)
+| # | ???? | ?? | ?? | ?? |
 |---|---|---|---|---|
-| 1 | VQA-RAD | HuggingFace (flaviagiammarino/vqa-rad) | 방사선학 VQA (500 QA + images) | ✅ 다운로드 완료 |
-| 2 | SLAKE | HuggingFace (BoKelvin/SLAKE) + evaluations/PMC-VQA/Slake1.0 | 다국어 의료 VQA (500 QA + images) | ✅ 다운로드 완료 |
-| 3 | PathVQA | HuggingFace (flaviagiammarino/path-vqa) + evaluations/PathVQA | 병리학 VQA (300 QA + images) | ✅ 다운로드 완료 |
-| 4 | PMC-VQA | HuggingFace (RadGenome/PMC-VQA) + evaluations/PMC-VQA | 의학 논문 이미지 VQA | 로컬 보유 (HF 스키마 이슈) |
-| 5 | VQA-Med-2021 | evaluations/VQA-Med-2021 | 의료 VQA 챌린지 | 로컬 보유 (zip) |
-| 6 | Quilt-VQA | HuggingFace (wisdomik/Quilt_VQA) + evaluations/quilt-llava | 조직병리학 VQA | 로컬 보유 |
+| 1 | VQA-RAD | HuggingFace (flaviagiammarino/vqa-rad) | ???? VQA (500 QA + images) | ? ???? ?? |
+| 2 | SLAKE | HuggingFace (BoKelvin/SLAKE) + evaluations/PMC-VQA/Slake1.0 | ??? ?? VQA (500 QA + images) | ? ???? ?? |
+| 3 | PathVQA | HuggingFace (flaviagiammarino/path-vqa) + evaluations/PathVQA | ??? VQA (300 QA + images) | ? ???? ?? |
+| 4 | PMC-VQA | HuggingFace (RadGenome/PMC-VQA) + evaluations/PMC-VQA | ?? ?? ??? VQA | ?? ?? (HF ??? ??) |
+| 5 | VQA-Med-2021 | evaluations/VQA-Med-2021 | ?? VQA ??? | ?? ?? (zip) |
+| 6 | Quilt-VQA | HuggingFace (wisdomik/Quilt_VQA) + evaluations/quilt-llava | ????? VQA | ?? ?? |
 
-#### Medical Imaging for RL Tool Simulation (신규 — 2026-02-14)
-> RL 학습 시 `analyze_medical_image`, `get_image_report` 등 tool 호출에 실제 이미지를 사용하기 위한 데이터셋
-> 소스: https://github.com/sfikas/medical-imaging-datasets
-> 경로: `datasets/medical_images/`
-> 카탈로그: `bioagents/data_pipeline/medical_image_catalog.py`
+#### Medical Imaging for RL Tool Simulation (?? ? 2026-02-14)
+> RL ?? ? `analyze_medical_image`, `get_image_report` ? tool ??? ?? ???? ???? ?? ????
+> ??: https://github.com/sfikas/medical-imaging-datasets
+> ??: `datasets/medical_images/`
+> ????: `bioagents/data_pipeline/medical_image_catalog.py`
 
-| # | 데이터셋 | 소스 | Modality | 샘플 수 | 상태 |
+| # | ???? | ?? | Modality | ?? ? | ?? |
 |---|---|---|---|---|---|
-| 1 | Chest X-ray Pneumonia | HuggingFace (hf-vision/chest-xray-pneumonia) | X-ray | 300 | ✅ |
-| 2 | Brain Tumor MRI | HuggingFace (AIOmarRehan/Brain_Tumor_MRI_Dataset) | MRI | 300 | ✅ |
-| 3 | Skin Cancer ISIC (HAM10000) | HuggingFace (marmal88/skin_cancer) | Dermoscopy | 300 | ✅ |
-| 4 | MedMNIST v2 (12 subsets) | medmnist pip (zenodo) | Mixed (8 modalities) | 600 | ✅ |
-| | — PathMNIST | | pathology/colon | 50 | ✅ |
-| | — ChestMNIST | | xray/chest | 50 | ✅ |
-| | — DermaMNIST | | dermoscopy/skin | 50 | ✅ |
-| | — OCTMNIST | | oct/eye | 50 | ✅ |
-| | — PneumoniaMNIST | | xray/chest | 50 | ✅ |
-| | — RetinaMNIST | | fundus/eye | 50 | ✅ |
-| | — BreastMNIST | | ultrasound/breast | 50 | ✅ |
-| | — BloodMNIST | | microscopy/blood | 50 | ✅ |
-| | — TissueMNIST | | microscopy/tissue | 50 | ✅ |
-| | — OrganA/C/SMNIST | | ct/abdomen | 150 | ✅ |
-| | **총 Medical Images** | | **10 modalities** | **2,300** | ✅ |
+| 1 | Chest X-ray Pneumonia | HuggingFace (hf-vision/chest-xray-pneumonia) | X-ray | 300 | ? |
+| 2 | Brain Tumor MRI | HuggingFace (AIOmarRehan/Brain_Tumor_MRI_Dataset) | MRI | 300 | ? |
+| 3 | Skin Cancer ISIC (HAM10000) | HuggingFace (marmal88/skin_cancer) | Dermoscopy | 300 | ? |
+| 4 | MedMNIST v2 (12 subsets) | medmnist pip (zenodo) | Mixed (8 modalities) | 600 | ? |
+| | ? PathMNIST | | pathology/colon | 50 | ? |
+| | ? ChestMNIST | | xray/chest | 50 | ? |
+| | ? DermaMNIST | | dermoscopy/skin | 50 | ? |
+| | ? OCTMNIST | | oct/eye | 50 | ? |
+| | ? PneumoniaMNIST | | xray/chest | 50 | ? |
+| | ? RetinaMNIST | | fundus/eye | 50 | ? |
+| | ? BreastMNIST | | ultrasound/breast | 50 | ? |
+| | ? BloodMNIST | | microscopy/blood | 50 | ? |
+| | ? TissueMNIST | | microscopy/tissue | 50 | ? |
+| | ? OrganA/C/SMNIST | | ct/abdomen | 150 | ? |
+| | **? Medical Images** | | **10 modalities** | **2,300** | ? |
 
-**사용법:**
+**???:**
 ```python
 from bioagents.data_pipeline.medical_image_catalog import MedicalImageCatalog
 catalog = MedicalImageCatalog()
@@ -394,210 +468,210 @@ tool_data = catalog.get_tool_simulation_data("visual_diagnosis", num_images=10)
 vqa_pairs = catalog.get_vqa_pairs(dataset="vqa_rad", limit=50)
 ```
 
-#### Text Medical QA (3개 소스)
-| # | 데이터셋 | 소스 | 특징 | 상태 |
+#### Text Medical QA (3? ??)
+| # | ???? | ?? | ?? | ?? |
 |---|---|---|---|---|
-| 1 | MedLFQA | HuggingFace (dmis-lab/MedLFQA) + evaluations/OLAPH | Long-form 의료 QA | 로컬 보유 |
-| 2 | MedQA/MedMCQA/MMLU | evaluations/self-biorag/data/benchmark/ | 객관식 의료 시험 문제 | 로컬 보유 |
-| 3 | Biomedical Instructions | databases/instruction/ | SFT용 instruction 데이터 (52k+) | 로컬 보유 |
+| 1 | MedLFQA | HuggingFace (dmis-lab/MedLFQA) + evaluations/OLAPH | Long-form ?? QA | ?? ?? |
+| 2 | MedQA/MedMCQA/MMLU | evaluations/self-biorag/data/benchmark/ | ??? ?? ?? ?? | ?? ?? |
+| 3 | Biomedical Instructions | databases/instruction/ | SFT? instruction ??? (52k+) | ?? ?? |
 
-#### EHR Record (1개 소스)
-| # | 데이터셋 | 소스 | 특징 | 상태 |
+#### EHR Record (1? ??)
+| # | ???? | ?? | ?? | ?? |
 |---|---|---|---|---|
-| 1 | MIMIC-III/IV | evaluations/mimic-code | EHR 코드, SQL concepts, 벤치마크 | 코드 보유 (데이터는 별도 접근 필요) |
+| 1 | MIMIC-III/IV | evaluations/mimic-code | EHR ??, SQL concepts, ???? | ?? ?? (???? ?? ?? ??) |
 
 #### Knowledge Base
-| # | 리소스 | 경로 | 용도 |
+| # | ??? | ?? | ?? |
 |---|---|---|---|
-| 1 | Wikipedia 2018 dump | databases/wiki2018_en/ | 검색 시뮬레이션용 |
-| 2 | Wikipedia 2026 dump | databases/wiki2026_en/ | 검색 시뮬레이션용 |
-| 3 | MedCPT evidence | databases/retriever/ | top-10 의료 근거 검색 |
-| 4 | Critic 데이터 | databases/critic/ | relevance/utility/groundness 평가 |
-| 5 | Generator 데이터 | databases/generator/ | retrieval token 기반 생성 |
+| 1 | Wikipedia 2018 dump | databases/wiki2018_en/ | ?? ?????? |
+| 2 | Wikipedia 2026 dump | databases/wiki2026_en/ | ?? ?????? |
+| 3 | MedCPT evidence | databases/retriever/ | top-10 ?? ?? ?? |
+| 4 | Critic ??? | databases/critic/ | relevance/utility/groundness ?? |
+| 5 | Generator ??? | databases/generator/ | retrieval token ?? ?? |
 
-### 2.3 모델 후보군
-| # | 모델 | 크기 | 특징 | 용도 |
+### 2.3 ?? ???
+| # | ?? | ?? | ?? | ?? |
 |---|---|---|---|---|
-| 1 | Lingshu-7B | 7B | 의료 MLLM, multi-modality | 주 학습 대상 후보 |
-| 2 | Qwen2.5-VL-7B-Instruct | 7B | 범용 VLM, tool-use 지원 | 주 학습 대상 후보 |
-| 3 | Step3-VL-10B | 10B | VLM, 고성능 | 비교 실험용 |
+| 1 | Lingshu-7B | 7B | ?? MLLM, multi-modality | ? ?? ?? ?? |
+| 2 | Qwen2.5-VL-7B-Instruct | 7B | ?? VLM, tool-use ?? | ? ?? ?? ?? |
+| 3 | Step3-VL-10B | 10B | VLM, ??? | ?? ??? |
 
-### 2.4 학습 프레임워크 현황
-| 프레임워크 | 경로 | 용도 | 비고 |
+### 2.4 ?? ????? ??
+| ????? | ?? | ?? | ?? |
 |---|---|---|---|
-| Oumi | trains/oumi/ | SFT (Supervised Fine-Tuning) | 이미 agent SFT config 존재 |
-| Snapshot-PO | trains/snapshot-po/ | SARL (Search Agent RL) | GRPO 기반, 실행 로그 존재 (260209~260212) |
-| AgentGym-RL | GYM_reference/AgentGym-RL/ | Multi-turn RL (PPO/GRPO) | verl 기반, 환경 서버 아키텍처 |
-| MRPO (참고) | references/medical_qa/ | VQA GRPO with token shaping | ICML 제출 코드, BERTScore/ROUGE reward |
+| Oumi | trains/oumi/ | SFT (Supervised Fine-Tuning) | ?? agent SFT config ?? |
+| Snapshot-PO | trains/snapshot-po/ | SARL (Search Agent RL) | GRPO ??, ?? ?? ?? (260209~260212) |
+| AgentGym-RL | GYM_reference/AgentGym-RL/ | Multi-turn RL (PPO/GRPO) | verl ??, ?? ?? ???? |
+| MRPO (??) | references/medical_qa/ | VQA GRPO with token shaping | ICML ?? ??, BERTScore/ROUGE reward |
 
-### 2.5 참고 시스템 아키텍처 분석
+### 2.5 ?? ??? ???? ??
 
-#### τ²-bench 도메인 구조 (databases/tau2-bench)
+#### ??-bench ??? ?? (databases/tau2-bench)
 ```
-도메인 1개 구성 요소:
-├── src/tau2/domains/{domain}/
-│   ├── data_model.py    # DB 스키마 (Pydantic BaseModel)
-│   ├── tools.py         # ToolKitBase 상속, @is_tool 데코레이터
-│   ├── environment.py   # get_environment(), get_tasks() 함수
-│   └── utils.py         # 경로 설정 등
-├── data/tau2/domains/{domain}/
-│   ├── db.json          # 시뮬레이션용 데이터베이스
-│   ├── policy.md        # 에이전트 행동 정책
-│   ├── tasks.json       # 평가용 task 시나리오
-│   └── split_tasks.json # train/test 분리
-└── Gymnasium-compatible gym interface (gym_agent.py)
-    ├── AgentGymEnv  - reset() → observation, step(action) → obs, reward, done
-    └── UserGymEnv   - 사용자 역할 플레이
+??? 1? ?? ??:
+??? src/tau2/domains/{domain}/
+?   ??? data_model.py    # DB ??? (Pydantic BaseModel)
+?   ??? tools.py         # ToolKitBase ??, @is_tool ?????
+?   ??? environment.py   # get_environment(), get_tasks() ??
+?   ??? utils.py         # ?? ?? ?
+??? data/tau2/domains/{domain}/
+?   ??? db.json          # ?????? ??????
+?   ??? policy.md        # ???? ?? ??
+?   ??? tasks.json       # ??? task ????
+?   ??? split_tasks.json # train/test ??
+??? Gymnasium-compatible gym interface (gym_agent.py)
+    ??? AgentGymEnv  - reset() ? observation, step(action) ? obs, reward, done
+    ??? UserGymEnv   - ??? ?? ???
 ```
 
-#### AgentGym-RL 아키텍처 (GYM_reference/AgentGym-RL)
+#### AgentGym-RL ???? (GYM_reference/AgentGym-RL)
 ```
-3개 모듈:
-1. Environment Module: HTTP 서버 기반 환경, 병렬 요청 지원
-2. Agent Module: 추론/의사결정, 장기 계획, self-reflection
-3. Training Module: verl 기반 PPO/GRPO/RLOO/REINFORCE++
-   - RolloutHandler: attention mask, loss mask, position ids 처리
+3? ??:
+1. Environment Module: HTTP ?? ?? ??, ?? ?? ??
+2. Agent Module: ??/????, ?? ??, self-reflection
+3. Training Module: verl ?? PPO/GRPO/RLOO/REINFORCE++
+   - RolloutHandler: attention mask, loss mask, position ids ??
    - EnvClient: observation(), available_actions(), step(), reset()
    - RoundScheduler: fixed / scaling_inter_stepwise (ScalingInter-RL)
 ```
 
-#### Tool Simulation 파이프라인 (tool_simulations/tool-dataset-generation)
+#### Tool Simulation ????? (tool_simulations/tool-dataset-generation)
 ```
-파이프라인 단계:
-1. tool_generation/   → 질문에서 tool spec 자동 생성 (LLM 기반)
-2. task_generation/   → 시나리오/대화 생성 (initial + continual)
-3. tool_simulation/   → LLM으로 tool 실행 결과 시뮬레이션
-4. user_simulation/   → 사용자 행동 시뮬레이션
-5. response_generation/ → 응답 생성
-6. validation/        → 품질 검증
+????? ??:
+1. tool_generation/   ? ???? tool spec ?? ?? (LLM ??)
+2. task_generation/   ? ????/?? ?? (initial + continual)
+3. tool_simulation/   ? LLM?? tool ?? ?? ?????
+4. user_simulation/   ? ??? ?? ?????
+5. response_generation/ ? ?? ??
+6. validation/        ? ?? ??
 ```
 
 ---
 
-## 3. 기술 설계 (Technical Design)
+## 3. ?? ?? (Technical Design)
 
-### 3.1 BIOAgents GYM 아키텍처 (설계안)
+### 3.1 BIOAgents GYM ???? (???)
 
 ```
-┌────────────────────────────────────────────────────────┐
-│                    BIOAgents GYM                        │
-│                                                        │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │  Environment  │  │    Agent     │  │   Training   │ │
-│  │    Module     │  │    Module    │  │    Module    │ │
-│  │              │  │              │  │              │ │
-│  │ ·Medical     │  │ ·Reasoning   │  │ ·SFT (Oumi) │ │
-│  │  Domains     │  │ ·Tool Use    │  │ ·GRPO       │ │
-│  │ ·Tool DB     │  │ ·Planning    │  │ ·PPO        │ │
-│  │ ·Simulation  │  │ ·Reflection  │  │ ·ScalingRL  │ │
-│  │ ·EHR System  │  │ ·Multi-modal │  │ ·Logging    │ │
-│  └──────────────┘  └──────────────┘  └──────────────┘ │
-│                                                        │
-│  ┌──────────────────────────────────────────────────┐  │
-│  │              Evaluation Suite                     │  │
-│  │  Text QA │ Visual QA │ EHR Tasks │ Agent Tasks   │  │
-│  └──────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────┘
+??????????????????????????????????????????????????????????
+?                    BIOAgents GYM                        ?
+?                                                        ?
+?  ????????????????  ????????????????  ???????????????? ?
+?  ?  Environment  ?  ?    Agent     ?  ?   Training   ? ?
+?  ?    Module     ?  ?    Module    ?  ?    Module    ? ?
+?  ?              ?  ?              ?  ?              ? ?
+?  ? ?Medical     ?  ? ?Reasoning   ?  ? ?SFT (Oumi) ? ?
+?  ?  Domains     ?  ? ?Tool Use    ?  ? ?GRPO       ? ?
+?  ? ?Tool DB     ?  ? ?Planning    ?  ? ?PPO        ? ?
+?  ? ?Simulation  ?  ? ?Reflection  ?  ? ?ScalingRL  ? ?
+?  ? ?EHR System  ?  ? ?Multi-modal ?  ? ?Logging    ? ?
+?  ????????????????  ????????????????  ???????????????? ?
+?                                                        ?
+?  ????????????????????????????????????????????????????  ?
+?  ?              Evaluation Suite                     ?  ?
+?  ?  Text QA ? Visual QA ? EHR Tasks ? Agent Tasks   ?  ?
+?  ????????????????????????????????????????????????????  ?
+??????????????????????????????????????????????????????????
 ```
 
-### 3.2 Medical Domain 설계 (τ²-bench 스타일)
+### 3.2 Medical Domain ?? (??-bench ???)
 
-**도메인 목록 (계획):**
+**??? ?? (??):**
 
-| # | Domain | 설명 | Tools | Tasks (orig+scaled) | 상태 |
+| # | Domain | ?? | Tools | Tasks (orig+scaled) | ?? |
 |---|---|---|---|---|---|
-| 1 | `clinical_diagnosis` | 환자 증상 → 진단 | 20 | 5 + 60 scaled | 52/13 | ✅ |
-| 2 | `medical_qa` | 의료 질문 응답 | 10 | 50 + 200 scaled | 35/15 | ✅ |
-| 3 | `visual_diagnosis` | 의료 이미지 분석 | 11 | 8 + 31 scaled | 31/8 | ✅ |
-| 4 | `drug_interaction` | 약물 상호작용 검증 | 10 | 5 + 60 scaled | 52/13 | ✅ |
-| 5 | `ehr_management` | EHR 조회/분석 | 14 | 15 + 60 scaled | 58/17 | ✅ |
-| 6 | `triage_emergency` | 응급실 트리아지 | 12 | 20 | 14/6 | ✅ 확장 |
-| 7 | `radiology_report` | 영상 판독문 생성 | 11 | 20 | 14/6 | ✅ 확장 |
-| 8 | `psychiatry` | 정신건강 평가 & 치료 | 14 | 20 | 13/7 | ✅ **NEW** |
-| 9 | `obstetrics` | 산과 진료 & 분만 관리 | 14 | 20 | 13/7 | ✅ **NEW** |
-| 10 | `cross_domain` | 다단계 임상 경로 (6 pathways) | multi | 25 | 17/8 | ✅ |
-| | **총계** | | **126+ unique** | **~600** | 299/107 | |
+| 1 | `clinical_diagnosis` | ?? ?? ? ?? | 20 | 5 + 60 scaled | 52/13 | ? |
+| 2 | `medical_qa` | ?? ?? ?? | 10 | 50 + 200 scaled | 35/15 | ? |
+| 3 | `visual_diagnosis` | ?? ??? ?? | 11 | 8 + 31 scaled | 31/8 | ? |
+| 4 | `drug_interaction` | ?? ???? ?? | 10 | 5 + 60 scaled | 52/13 | ? |
+| 5 | `ehr_management` | EHR ??/?? | 14 | 15 + 60 scaled | 58/17 | ? |
+| 6 | `triage_emergency` | ??? ???? | 12 | 20 | 14/6 | ? ?? |
+| 7 | `radiology_report` | ?? ??? ?? | 11 | 20 | 14/6 | ? ?? |
+| 8 | `psychiatry` | ???? ?? & ?? | 14 | 20 | 13/7 | ? **NEW** |
+| 9 | `obstetrics` | ?? ?? & ?? ?? | 14 | 20 | 13/7 | ? **NEW** |
+| 10 | `cross_domain` | ??? ?? ?? (6 pathways) | multi | 25 | 17/8 | ? |
+| | **??** | | **126+ unique** | **~600** | 299/107 | |
 
-### 3.3 Medical Tool Database 설계 (상세)
+### 3.3 Medical Tool Database ?? (??)
 
 ```python
-# 계획된 Tool 카테고리 (총 ~25개 tool)
+# ??? Tool ???? (? ~25? tool)
 
-# Category 0: Unified Knowledge Search (NEW — bioagents/tools/knowledge_tools.py)
+# Category 0: Unified Knowledge Search (NEW ? bioagents/tools/knowledge_tools.py)
 # All search/browse tools consolidated into KnowledgeTools class
-- search(queries: str) → list[{source, title, snippet, relevance}]  # Unified across all sources
-- browse(url_or_id: str, query: str) → dict  # Browse any source by PMID/entry_id/URL
+- search(queries: str) ? list[{source, title, snippet, relevance}]  # Unified across all sources
+- browse(url_or_id: str, query: str) ? dict  # Browse any source by PMID/entry_id/URL
 # + Source-specific aliases:
-- search_pubmed(query: str) → list[{pmid, title, snippet}]
-- search_medical_wiki(query: str) → list[{entry_id, title, snippet}]
-- search_evidence(query: str, category: str) → list[{passage_id, title, snippet}]
-- search_guidelines(condition: str) → list[{guideline_id, title, summary}]
-- browse_article(pmid: str) → dict
-- browse_wiki_entry(entry_id: str) → dict
+- search_pubmed(query: str) ? list[{pmid, title, snippet}]
+- search_medical_wiki(query: str) ? list[{entry_id, title, snippet}]
+- search_evidence(query: str, category: str) ? list[{passage_id, title, snippet}]
+- search_guidelines(condition: str) ? list[{guideline_id, title, summary}]
+- browse_article(pmid: str) ? dict
+- browse_wiki_entry(entry_id: str) ? dict
 # Backend: WikiSearchBackend (FTS5 + FAISS over wiki2018 26.6GB dump)
 
 # Category 1: Medical Knowledge Search (legacy, subsumed by Category 0)
-- search_pubmed(queries: list[str]) → list[{title, abstract, pmid, url}]
-- browse_article(pmid: str, query: str) → str
-- search_medical_wiki(queries: list[str]) → list[{title, url, snippet}]
-- browse_medical_wiki(url: str, query: str) → str
-- search_clinical_guidelines(condition: str) → list[{guideline, source}]
+- search_pubmed(queries: list[str]) ? list[{title, abstract, pmid, url}]
+- browse_article(pmid: str, query: str) ? str
+- search_medical_wiki(queries: list[str]) ? list[{title, url, snippet}]
+- browse_medical_wiki(url: str, query: str) ? str
+- search_clinical_guidelines(condition: str) ? list[{guideline, source}]
 
 # Category 2: Patient Record (EHR) Tools
-- get_patient_info(patient_id: str) → {demographics, conditions, allergies}
-- get_lab_results(patient_id: str, test_type: str) → list[{test, value, unit, date}]
-- get_medication_list(patient_id: str) → list[{drug, dose, frequency, start_date}]
-- get_vital_signs(patient_id: str) → {bp, hr, temp, spo2, rr}
-- get_clinical_notes(patient_id: str, note_type: str) → list[{date, content}]
+- get_patient_info(patient_id: str) ? {demographics, conditions, allergies}
+- get_lab_results(patient_id: str, test_type: str) ? list[{test, value, unit, date}]
+- get_medication_list(patient_id: str) ? list[{drug, dose, frequency, start_date}]
+- get_vital_signs(patient_id: str) ? {bp, hr, temp, spo2, rr}
+- get_clinical_notes(patient_id: str, note_type: str) ? list[{date, content}]
 
 # Category 3: Diagnostic Tools
-- check_drug_interaction(drug_a: str, drug_b: str) → {severity, description}
-- calculate_clinical_score(score_type: str, params: dict) → {score, interpretation}
-- get_differential_diagnosis(symptoms: list[str]) → list[{condition, probability}]
-- order_lab_test(patient_id: str, test_type: str) → {order_id, status}
+- check_drug_interaction(drug_a: str, drug_b: str) ? {severity, description}
+- calculate_clinical_score(score_type: str, params: dict) ? {score, interpretation}
+- get_differential_diagnosis(symptoms: list[str]) ? list[{condition, probability}]
+- order_lab_test(patient_id: str, test_type: str) ? {order_id, status}
 
-# Category 4: Medical Image Analysis (시뮬레이션)
-- analyze_medical_image(image_path: str, modality: str) → {findings, confidence}
-- get_image_report(image_id: str) → {report, impression}
-- compare_with_prior(current_id: str, prior_id: str) → {changes, assessment}
+# Category 4: Medical Image Analysis (?????)
+- analyze_medical_image(image_path: str, modality: str) ? {findings, confidence}
+- get_image_report(image_id: str) ? {report, impression}
+- compare_with_prior(current_id: str, prior_id: str) ? {changes, assessment}
 
 # Category 5: Communication & Workflow
-- transfer_to_specialist(summary: str, specialty: str) → str
-- schedule_followup(patient_id: str, reason: str) → {appointment_id, date}
-- send_patient_message(patient_id: str, message: str) → str
+- transfer_to_specialist(summary: str, specialty: str) ? str
+- schedule_followup(patient_id: str, reason: str) ? {appointment_id, date}
+- send_patient_message(patient_id: str, message: str) ? str
 ```
 
-### 3.4 Reward Function 설계 (✅ 구현 완료)
+### 3.4 Reward Function ?? (? ?? ??)
 
 **Core Rewards** (`bioagents/evaluation/rewards.py`):
 ```python
 # 1. Accuracy Reward
-accuracy_reward_exact_match()  # MC 정답 exact match
+accuracy_reward_exact_match()  # MC ?? exact match
 accuracy_reward_soft()         # ROUGE-1 proxy (token overlap F1)
-accuracy_reward_bertscore()    # BiomedBERT 기반 semantic similarity
+accuracy_reward_bertscore()    # BiomedBERT ?? semantic similarity
 
 # 2. Format Reward
-format_reward_tool_call()      # JSON tool call 형식 검증
-format_reward_think_answer()   # <think>/<answer> 태그 검증
-format_reward_composite()      # 턴 컨텍스트 적응형 (intermediate vs final)
+format_reward_tool_call()      # JSON tool call ?? ??
+format_reward_think_answer()   # <think>/<answer> ?? ??
+format_reward_composite()      # ? ???? ??? (intermediate vs final)
 
 # 3. Process Reward
-process_reward_tool_usage()    # 기대 tool vs 실제 tool (coverage 70% + efficiency 30%)
-process_reward_reasoning_quality()  # 의료 용어, 구조적 추론, 길이 휴리스틱
+process_reward_tool_usage()    # ?? tool vs ?? tool (coverage 70% + efficiency 30%)
+process_reward_reasoning_quality()  # ?? ??, ??? ??, ?? ????
 
 # 4. Composite Reward
-compute_composite_reward()     # 가중 합산 (default: acc=0.4, fmt=0.2, proc=0.4)
+compute_composite_reward()     # ?? ?? (default: acc=0.4, fmt=0.2, proc=0.4)
 # + Registry: get_reward_function(), register_reward_function()
 ```
 
 **GRPO-Compatible Wrappers** (`bioagents/evaluation/grpo_rewards.py`):
 ```python
-# TRL GRPOTrainer 호환 시그니처: fn(completions, **kwargs) -> list[float]
+# TRL GRPOTrainer ?? ????: fn(completions, **kwargs) -> list[float]
 grpo_accuracy_reward()   # MC exact match + open-ended (ROUGE/BLEU/BERTScore)
-grpo_format_reward()     # tool call & answer tag 검증
-grpo_process_reward()    # reasoning quality 휴리스틱
-grpo_tool_use_reward()   # 기대 vs 실제 tool calls
-grpo_composite_reward()  # 가중 합산
+grpo_format_reward()     # tool call & answer tag ??
+grpo_process_reward()    # reasoning quality ????
+grpo_tool_use_reward()   # ?? vs ?? tool calls
+grpo_composite_reward()  # ?? ??
 get_grpo_reward_functions(["accuracy", "format", "process"])  # Registry
 # NEW: Strategy-based rewards (lazy-loaded from reward_strategies.py)
 GRPO_REWARD_REGISTRY["mrpo"]     # MRPO token shaping
@@ -607,228 +681,254 @@ GRPO_REWARD_REGISTRY["adaptive"] # Adaptive auto-select
 
 **Adaptive Reward Strategy System** (`bioagents/evaluation/reward_strategies.py`):
 ```python
-# 학습 전 모델이 task 특성 분석 후 최적 reward 전략 자동 선택
+# ?? ? ??? task ?? ?? ? ?? reward ?? ?? ??
 class GRPORewardStrategy     # Standard composite (accuracy+format+process)
 class MRPORewardStrategy     # Token-level: alignment + relevance + factuality
-class SARLRewardStrategy     # Self-assessment: R = r_final*α^(T-1) + λ*r_assess + tool_bonus
+class SARLRewardStrategy     # Self-assessment: R = r_final*?^(T-1) + ?*r_assess + tool_bonus
 class AdaptiveRewardStrategy # Meta: auto-select GRPO/MRPO/SARL per task characteristics
 # Factory
-create_reward_strategy("adaptive")  # → AdaptiveRewardStrategy
-make_grpo_reward_fn(strategy)       # → TRL-compatible fn(completions, **kwargs) -> list[float]
+create_reward_strategy("adaptive")  # ? AdaptiveRewardStrategy
+make_grpo_reward_fn(strategy)       # ? TRL-compatible fn(completions, **kwargs) -> list[float]
 ```
 
-**테스트**: 61 tests in `tests/test_rewards.py` (all passing)
+**???**: 61 tests in `tests/test_rewards.py` (all passing)
 
 ---
 
-## 4. 타임라인 & 로드맵
+## 4. ???? & ???
 
-### Phase 1: 기반 구축 (2026.02.12 ~ 2026.02.14) [3일 — 원래 4주 → 초고속 완료 ✅]
+### Phase 1: ?? ?? (2026.02.12 ~ 2026.02.14) [3? ? ?? 4? ? ??? ?? ?]
 
-| 주차 | 작업 | 산출물 | 상태 |
+| ?? | ?? | ??? | ?? |
 |---|---|---|---|
-| Day 1 (02/12) | 프로젝트 구조 설계 & 기획 문서 | PLANNING.md, 디렉토리 구조 | ✅ 완료 |
-| Day 1 | Medical Tool Database 스키마 설계 | 10 domains × data_model.py, tools.py | ✅ 완료 |
-| Day 1 | Medical Domain 환경 구현 (5개 도메인) | environment.py, policy.md ×5 | ✅ 완료 |
-| Day 1 | Task 시나리오 생성 (~600 tasks) | tasks.json, db.json, scaled_tasks ×11 dirs | ✅ 완료 |
-| Day 1 | GYM 인터페이스 구현 (Gymnasium-compatible) | agent_env.py, 10 도메인 등록 | ✅ 완료 |
-| Day 1 | GRPO + SFT Training Pipeline | grpo_trainer.py, sft_trainer.py | ✅ 완료 |
-| Day 2 (02/13) | 도메인 확장 (10개) + Safety + Cross-domain | 5 new domains + safety_eval + pathway_engine | ✅ 완료 |
-| Day 2 | FairGRPO + Multi-turn GRPO 구현 | grpo_trainer.py 300줄+ 추가 | ✅ 완료 |
-| Day 2 | Autonomous GYM Architecture | autonomous_agent.py, autonomous_gym.py, shared_logbook.py | ✅ 완료 |
-| Day 2 | 경쟁자 분석 + 라이선스 체계 | DiagGym/MedAgentGym 비교, Apache-2.0 | ✅ 완료 |
-| Day 3 (02/14) | Medical Imaging 2,300장 다운로드 | datasets/medical_images/, catalog.py | ✅ 완료 |
-| Day 3 | Adaptive Reward (MRPO/SARL/Adaptive) | reward_strategies.py, 3 configs | ✅ 완료 |
-| Day 3 | Unified Knowledge Tools + BM25 Index | knowledge_tools.py, 2.4GB FTS5 DB | ✅ 완료 |
-| Day 3 | Adaptive Tool Guidance + Strategy Selection | tool_guidance.py, autonomous_agent.py 확장 | ✅ 완료 |
-| Day 3 | 데이터셋 전처리 파이프라인 | medqa_loader, vqa_loader, image_catalog, sft_generator | ✅ 완료 |
-| Day 3 | 평가 파이프라인 구축 | benchmark_eval, vqa_benchmark_eval, safety_eval, ehr_benchmark_eval | ✅ 완료 |
+| Day 1 (02/12) | ???? ?? ?? & ?? ?? | PLANNING.md, ???? ?? | ? ?? |
+| Day 1 | Medical Tool Database ??? ?? | 10 domains ? data_model.py, tools.py | ? ?? |
+| Day 1 | Medical Domain ?? ?? (5? ???) | environment.py, policy.md ?5 | ? ?? |
+| Day 1 | Task ???? ?? (~600 tasks) | tasks.json, db.json, scaled_tasks ?11 dirs | ? ?? |
+| Day 1 | GYM ????? ?? (Gymnasium-compatible) | agent_env.py, 10 ??? ?? | ? ?? |
+| Day 1 | GRPO + SFT Training Pipeline | grpo_trainer.py, sft_trainer.py | ? ?? |
+| Day 2 (02/13) | ??? ?? (10?) + Safety + Cross-domain | 5 new domains + safety_eval + pathway_engine | ? ?? |
+| Day 2 | FairGRPO + Multi-turn GRPO ?? | grpo_trainer.py 300?+ ?? | ? ?? |
+| Day 2 | Autonomous GYM Architecture | autonomous_agent.py, autonomous_gym.py, shared_logbook.py | ? ?? |
+| Day 2 | ??? ?? + ???? ?? | DiagGym/MedAgentGym ??, Apache-2.0 | ? ?? |
+| Day 3 (02/14) | Medical Imaging 2,300? ???? | datasets/medical_images/, catalog.py | ? ?? |
+| Day 3 | Adaptive Reward (MRPO/SARL/Adaptive) | reward_strategies.py, 3 configs | ? ?? |
+| Day 3 | Unified Knowledge Tools + BM25 Index | knowledge_tools.py, 2.4GB FTS5 DB | ? ?? |
+| Day 3 | Adaptive Tool Guidance + Strategy Selection | tool_guidance.py, autonomous_agent.py ?? | ? ?? |
+| Day 3 | ???? ??? ????? | medqa_loader, vqa_loader, image_catalog, sft_generator | ? ?? |
+| Day 3 | ?? ????? ?? | benchmark_eval, vqa_benchmark_eval, safety_eval, ehr_benchmark_eval | ? ?? |
 
-### Phase 1.5: 통합 & Baseline (2026.02.15 ~ 2026.02.28) [2주]
+### Phase 1.5: ?? & Baseline (2026.02.15 ~ 2026.02.28) [2?]
 
-> Phase 1에서 구축한 시스템의 실제 연결성과 동작 검증. Autonomous GYM 실행 전 필수.
+> Phase 1?? ??? ???? ?? ???? ?? ??. Autonomous GYM ?? ? ??.
 
-| 주차 | 작업 | 산출물 | 상태 |
+| ?? | ?? | ??? | ?? |
 |---|---|---|---|
-| W4 (02/15~02/22) | **KnowledgeTools 도메인 통합** — 828K FTS5 + Wikipedia 검색을 모든 도메인에 연결 | 10개 도메인 environment.py 업데이트 | 🔄 진행중 |
-| W4 | **Baseline 평가 실행** — 3개 모델 × 21 벤치마크 전체 평가 | baseline 결과 JSON + 비교 테이블 | ⬜ 대기 |
-| W4 | `run_full_baseline_eval.py` 수정 — Step3-VL-10B 추가, Qwen3-8B 제거 | 수정된 스크립트 | 🔄 진행중 |
-| W5 (02/22~02/28) | **Task Data 확장** — LLM-based generation (600 → 2,000+ tasks) | tasks_generated.json per domain | ⬜ 대기 |
-| W5 | **Autonomous GYM Dry-run** — 1-cycle 테스트 (REFLECT→CHOOSE→TRAIN→RECORD) | 1-cycle 로그 + W&B 확인 | ⬜ 대기 |
-| W5 | **FAISS Dense Retrieval + FTS5 Hybrid Search** 구현 | knowledge_tools.py 확장 | ⬜ 대기 |
+| W4 (02/15~02/22) | **KnowledgeTools ??? ??** ? CompositeToolKit?? ?? 9? ???? KnowledgeTools ?? | 9? ??? environment.py ???? | ? ?? (02/15) |
+| W4 | **Data Model Fixes** ? psychiatry/obstetrics/visual_diagnosis Pydantic ?? ?? ?? | data_model.py ? 3 | ? ?? (02/15) |
+| W4 | **@is_tool Decorator Fix** ? 4? ??? tool ?? ?? ?? (dual syntax ??) | toolkit.py ?? | ? ?? (02/15) |
+| W4 | **Auto-Generated Tasks** ? 6? ??? knowledge-mined tasks ?? | tasks_auto_generated.json ? 6 | ? ?? (02/15) |
+| W4 | **Baseline ?? ??** ? 3? VL ?? ? 21 ???? ?? ?? | baseline ?? JSON + ?? ??? | ? ?? |
+| W4 | `run_full_baseline_eval.py` ?? ? Step3-VL-10B ??, Qwen3-8B ?? | ??? ???? | ? ?? (02/15) |
+| W4 | **???? ??** ? 8? ?? ?? ???? + ?? ?? ???? | references/medical_rl_training/ | ? ?? (02/15) |
+| W5 (02/22~02/28) | **DRPO-style Domain-Aware Reward Scaling** ? QoQ-Med ?? ???? ?? ?? | reward_strategies.py DRPORewardStrategy ?? ?? | ? ?? ?? |
+| W5 | **LLM-as-Judge Reward** ? MediX-R1 ?? open-ended ?? reward function | grpo_rewards.py `grpo_llm_judge_reward` ?? | ? ?? (02/17) |
+| W5 | **Task Data ??** ? LLM-based generation (600 ? 2,000+ tasks) | generate_tasks_llm.py 10??? ??? ?? | ? ?? ?? (02/17) |
+| W5 | **Autonomous GYM Dry-run** ? 1-cycle ??? (REFLECT?CHOOSE?TRAIN?RECORD) | ?? ?? ??, GPU ?? ?? | ? GPU ?? |
+| W5 | **FAISS Dense Retrieval + FTS5 Hybrid Search** ?? | knowledge_tools.py RRF hybrid ?? | ? ?? (02/17) |
+| W5 | **cross_domain eval_crash ??** ? get_environment() task ?? ?? | Environment ?? ?? + agent_env.py ?? | ? ?? (02/17) |
+| W5 | **ehr_management premature_stop ??** ? system prompt ?? ?? ?? | agent_runner.py onboarding guidance ?? | ? ?? (02/17) |
+| W5 | **medical_qa KnowledgeTools ???? ??** ? empty db.json ?? | CompositeToolKit ?? ?? | ? ?? (02/17) |
+| W5 | **Tool Scale Expansion** ? 9???? 69? ??? ?? (120?187) | drug_interaction +8, triage +8, clinical_dx +8, ehr +8, visual_dx +7, psychiatry +6, obstetrics +6, radiology +6, medical_qa +6, knowledge +6 | ? ?? (02/17) |
+| W5 | **SciAgentGYM Insights Integration** ? SciForge DAG trajectory, tool-use ablation, ??? ?? | sciforge_trajectory.py, agent_runner.py no_tools, PLANNING.md ?? | ? ?? (02/17) |
 
-### Phase 2: Autonomous RL 학습 (2026.03.01 ~ 2026.04.15) [6주]
+### Phase 2: Autonomous RL ?? (2026.03.01 ~ 2026.04.15) [6?]
 
-> **SFT 없이** pre-trained VL 모델에서 바로 Multi-Turn GRPO 학습 시작.
-> 모델: LingShu-7B, Qwen2.5-VL-7B-Instruct, Step3-VL-10B (3종 고정)
+> **SFT ??** pre-trained VL ???? ?? Multi-Turn GRPO ?? ??.
+> ??: LingShu-7B, Qwen2.5-VL-7B-Instruct, Step3-VL-10B (3? ??)
 
-| 주차 | 작업 | 산출물 | 상태 |
+| ?? | ?? | ??? | ?? |
 |---|---|---|---|
-| W6 (03/01~03/08) | **Autonomous GYM 본격 실행** — 3모델 × 8 agents 학습 시작 | W&B 대시보드, 학습 로그 | ⬜ 대기 |
-| W6 | Trajectory 로깅 & 분석 시스템 검증 | trajectory 파일들 | ⬜ 대기 |
-| W7 (03/08~03/15) | **Cross-Domain Pathway 학습** — 6개 임상 경로 RL | pathway 결과 | ⬜ 대기 |
-| W7 | Reward Strategy Ablation (GRPO vs MRPO vs SARL vs Adaptive) | ablation 결과 | ⬜ 대기 |
-| W8 (03/15~03/22) | **중간 평가** — 3모델 × 21 벤치마크 (학습 전후 비교) | 중간 결과 리포트 | ⬜ 대기 |
-| W8 | FairGRPO 공정성 실험 | demographic별 성능 비교 | ⬜ 대기 |
-| W9 (03/22~03/29) | **ScalingInter-RL 적용 실험** | 학습 곡선, scaling 분석 | ⬜ 대기 |
-| W10 (03/29~04/08) | Safety Hardening — adversarial 학습 강화 | safety score 개선 결과 | ⬜ 대기 |
-| W11 (04/08~04/15) | **전체 벤치마크 최종 평가** — 학습 완료 모델 전체 테스트 | 최종 결과 테이블 | ⬜ 대기 |
+| W6 (03/01~03/08) | **Autonomous GYM ?? ??** ? 3?? ? 8 agents ?? ?? | W&B ????, ?? ?? | ? ?? |
+| W6 | Trajectory ?? & ?? ??? ?? | trajectory ??? | ? ?? |
+| W7 (03/08~03/15) | **Cross-Domain Pathway ??** ? 6? ?? ?? RL | pathway ?? | ? ?? |
+| W7 | Reward Strategy Ablation (GRPO vs MRPO vs SARL vs Adaptive) | ablation ?? | ? ?? |
+| W8 (03/15~03/22) | **?? ??** ? 3?? ? 21 ???? (?? ?? ??) | ?? ?? ??? | ? ?? |
+| W8 | FairGRPO ??? ?? | demographic? ?? ?? | ? ?? |
+| W9 (03/22~03/29) | **ScalingInter-RL ?? ??** | ?? ??, scaling ?? | ? ?? |
+| W10 (03/29~04/08) | Safety Hardening ? adversarial ?? ?? | safety score ?? ?? | ? ?? |
+| W11 (04/08~04/15) | **?? ???? ?? ??** ? ?? ?? ?? ?? ??? | ?? ?? ??? | ? ?? |
 
-### Phase 3: 반복 개선 & 추가 실험 (2026.04.15 ~ 2026.05.15) [4주]
+### Phase 3: ?? ?? & ?? ?? (2026.04.15 ~ 2026.05.15) [4?]
 
-| 주차 | 작업 | 산출물 | 상태 |
+| ?? | ?? | ??? | ?? |
 |---|---|---|---|
-| W12 | Reward function ablation (5D dimension별 기여도) | ablation 결과 테이블 | ⬜ 대기 |
-| W13 | Multi-domain 통합 vs 단일 도메인 비교 실험 | 비교 결과 | ⬜ 대기 |
-| W14 | Peer Learning (SharedLogbook) 효과 분석 | peer learning ablation | ⬜ 대기 |
-| W15 | Tool Usage 분석 + Adaptive Guidance 효과 측정 | tool usage 통계 | ⬜ 대기 |
+| W12 | Reward function ablation (5D dimension? ???) | ablation ?? ??? | ? ?? |
+| W13 | Multi-domain ?? vs ?? ??? ?? ?? | ?? ?? | ? ?? |
+| W14 | Peer Learning (SharedLogbook) ?? ?? | peer learning ablation | ? ?? |
+| W15 | Tool Usage ?? + Adaptive Guidance ?? ?? | tool usage ?? | ? ?? |
 
-### Phase 4: 논문 작성 (2026.05.15 ~ 2026.06.01) [2주]
+### Phase 4: ?? ?? (2026.05.15 ~ 2026.06.01) [2?]
 
-| 주차 | 작업 | 산출물 | 상태 |
+| ?? | ?? | ??? | ?? |
 |---|---|---|---|
-| W16 | 논문 초안 작성 (실험 결과 + 분석) | paper draft | ⬜ 대기 |
-| W17 | 추가 실험 + rebuttal 준비 + 논문 완성 | final paper for NeurIPS 2026 | ⬜ 대기 |
+| W16 | ?? ?? ?? (?? ?? + ??) | paper draft | ? ?? |
+| W17 | ?? ?? + rebuttal ?? + ?? ?? | final paper for NeurIPS 2026 | ? ?? |
 
 ---
 
-## 5. Related Work 분석
+## 5. Related Work ??
 
-### 5.1 가장 관련된 기존 연구
+### 5.1 ?? ??? ?? ??
 
 #### (1) AgentClinic (EMNLP 2024 Findings)
-- **논문**: `references/medical_agent/2024.findings-emnlp.510.pdf`
-- **핵심**: 환자/의사/측정/조정 에이전트로 구성된 임상 시뮬레이션
-- **한계**: 진단 시나리오에 한정, tool 다양성 부족, RL 학습 없음
-- **참고점**: 다중 역할 에이전트 구조, 편향 시뮬레이션
+- **??**: `references/medical_agent/2024.findings-emnlp.510.pdf`
+- **??**: ??/??/??/?? ????? ??? ?? ?????
+- **??**: ?? ????? ??, tool ??? ??, RL ?? ??
+- **???**: ?? ?? ???? ??, ?? ?????
 
 #### (2) AgentGym-RL (arXiv:2509.08755)
-- **논문**: `references/medical_qa/2509.08755v1.pdf`
-- **핵심**: verl 기반 multi-turn RL, ScalingInter-RL 알고리즘
-- **한계**: 의료 도메인 환경 없음
-- **참고점**: 아키텍처, 학습 파이프라인, RoundScheduler
+- **??**: `references/medical_qa/2509.08755v1.pdf`
+- **??**: verl ?? multi-turn RL, ScalingInter-RL ????
+- **??**: ?? ??? ?? ??
+- **???**: ????, ?? ?????, RoundScheduler
 
-#### (3) τ²-bench (arXiv:2506.07982)
-- **코드**: `databases/tau2-bench/`
-- **핵심**: 도메인별 tool+DB+policy+task 구조, Gymnasium 인터페이스
-- **한계**: airline/retail/telecom만
-- **참고점**: 도메인 구조 패턴, 평가 체계
+#### (3) ??-bench (arXiv:2506.07982)
+- **??**: `databases/tau2-bench/`
+- **??**: ???? tool+DB+policy+task ??, Gymnasium ?????
+- **??**: airline/retail/telecom?
+- **???**: ??? ?? ??, ?? ??
 
 #### (4) Self-BioRAG (arXiv:2305.10415)
-- **코드**: `evaluations/self-biorag/`
-- **핵심**: 의료 RAG, retrieval critic, MedQA/MMLU 평가
-- **참고점**: 의료 지식 검색 구조, 벤치마크 데이터
+- **??**: `evaluations/self-biorag/`
+- **??**: ?? RAG, retrieval critic, MedQA/MMLU ??
+- **???**: ?? ?? ?? ??, ???? ???
 
 #### (5) MRPO (ICML submission)
-- **코드**: `references/medical_qa/grpo_vqa_Qwen3_token_shaping.py`
-- **핵심**: Medical VQA에 GRPO + token shaping 적용
-- **참고점**: process reward (Alignment/Relevance/Factuality), BERTScore reward
+- **??**: `references/medical_qa/grpo_vqa_Qwen3_token_shaping.py`
+- **??**: Medical VQA? GRPO + token shaping ??
+- **???**: process reward (Alignment/Relevance/Factuality), BERTScore reward
 
 #### (6) Lingshu
 - **URL**: https://huggingface.co/lingshu-medical-mllm/Lingshu-7B
-- **핵심**: 의료 특화 MLLM, MedEvalKit
-- **참고점**: 모델 후보, 평가 프레임워크
+- **??**: ?? ?? MLLM, MedEvalKit
+- **???**: ?? ??, ?? ?????
 
-### 5.2 추가 참고 논문 (references/ 내)
-| 파일명 | 추정 내용 |
+### 5.2 ?? ?? ?? (references/ ?)
+| ??? | ?? ?? |
 |---|---|
-| `medical_agent/2404.15155v3.pdf` | 의료 agent 관련 (2024) |
-| `medical_agent/2411.00248v2.pdf` | 의료 agent 관련 (2024) |
-| `medical_agent/2505.16100v1.pdf` | 의료 agent 관련 (2025) |
-| `medical_qa/2003.10286v1.pdf` | 의료 QA 관련 (2020) |
-| `medical_qa/2009.13081v1.pdf` | 의료 QA 관련 (2020) |
-| `medical_qa/2309.11080v1.pdf` | 의료 QA 관련 (2023) |
-| `medical_qa/2405.12701v3.pdf` | 의료 QA 관련 (2024) |
-| `medical_qa/2506.09513v3.pdf` | 의료 QA 관련 (2025) |
-| `medical_qa/2508.19096v1.pdf` | 의료 QA 관련 (2025) |
-| `medical_qa/sdata2018251.pdf` | 의료 데이터 관련 |
-| `medical_qa/SLAKE.pdf` | SLAKE 데이터셋 논문 |
+| `medical_agent/2404.15155v3.pdf` | ?? agent ?? (2024) |
+| `medical_agent/2411.00248v2.pdf` | ?? agent ?? (2024) |
+| `medical_agent/2505.16100v1.pdf` | ?? agent ?? (2025) |
+| `medical_qa/2003.10286v1.pdf` | ?? QA ?? (2020) |
+| `medical_qa/2009.13081v1.pdf` | ?? QA ?? (2020) |
+| `medical_qa/2309.11080v1.pdf` | ?? QA ?? (2023) |
+| `medical_qa/2405.12701v3.pdf` | ?? QA ?? (2024) |
+| `medical_qa/2506.09513v3.pdf` | ?? QA ?? (2025) |
+| `medical_qa/2508.19096v1.pdf` | ?? QA ?? (2025) |
+| `medical_qa/sdata2018251.pdf` | ?? ??? ?? |
+| `medical_qa/SLAKE.pdf` | SLAKE ???? ?? |
+
+### 5.3 최근 연구 (2026년 2월~) — RESEARCH_LOG.md 참고
+
+수집·정리 논문 (상세는 **[RESEARCH_LOG.md](RESEARCH_LOG.md)** 참고):
+
+| 논문 | arXiv/출처 | GYM 연관 요약 |
+|------|-------------|----------------|
+| **CLI-Gym** | 2602.10999 | Scalable CLI task generation via agentic environment inversion → 태스크 자동 생성, 실행 피드백 참고 |
+| **Search More, Think Less (SMTL)** | 2602.22675 | Long-horizon agentic search, 병렬 증거 수집 → think/도구 비율, 컨텍스트 효율 실험 참고 |
+| ResearchGym | 2602.15112 | Real-world AI research 에이전트 평가 → long-horizon 실패 모드 메트릭 참고 |
+| LongCLI-Bench | 2602.14337 | Long-horizon CLI 벤치마크 → 단계별 보상, human–agent 협업 참고 |
+| EnvScaler | 2601.05808 | Tool-interactive 환경 프로그램적 합성 → 도메인/시나리오 스케일링 참고 |
+| MedAgentGym | ICLR 2026 Oral | 생의학 코드 에이전트 훈련 (72K 태스크) — vs. 우리: 10 도메인, 187 도구, 5D/6D 보상, 자율 GYM |
+| MedAgentBench | 2501.14654 | 가상 EHR 벤치마크 (FHIR) — ehr_management 확장 시 참고 |
+| AgentClinic / MedAgentsBench | 2405.07960 등 | 멀티모달·편향 / 복잡 의료 추론 — Patient Agent, cognitive bias, thinking 모델 참고 |
 
 ---
 
-## 6. 핵심 기술 결정 사항
+## 6. ?? ?? ?? ??
 
-### 6.1 결정된 사항
-- [x] GYM 구조: τ²-bench 스타일 도메인 구조 + Gymnasium 인터페이스
-- [x] RL 알고리즘: GRPO (주), PPO (비교), ScalingInter-RL (실험)
-- [x] Tool Simulation: LLM 기반 시뮬레이션 (tool-dataset-generation 참고)
-- [x] 평가 벤치마크: MedQA, MedMCQA, MMLU, VQA-RAD, SLAKE, PathVQA, PMC-VQA
-- [x] 가용 자원: A100 8대
+### 6.1 ??? ??
+- [x] GYM ??: ??-bench ??? ??? ?? + Gymnasium ?????
+- [x] RL ????: GRPO (?), PPO (??), ScalingInter-RL (??)
+- [x] Tool Simulation: LLM ?? ????? (tool-dataset-generation ??)
+- [x] ?? ????: MedQA, MedMCQA, MMLU, VQA-RAD, SLAKE, PathVQA, PMC-VQA
+- [x] ?? ??: A100 8?
 
-### 6.2 결정 사항 (2026-02-12 확정)
-- [x] **주 모델 선택**: Lingshu-7B (의료 특화) 우선 → 이후 Qwen2.5-VL-7B로 확장
-- [ ] **EHR 데이터 접근**: MIMIC-III/IV 데이터 실제 접근 가능 여부 (확인 필요)
-- [x] **도메인 우선순위**: clinical_diagnosis → medical_qa → visual_diagnosis → drug_interaction → ehr_management → triage_emergency → radiology_report → cross_domain
-- [x] **도메인 구현 현황**: 8개 도메인 + cross_domain 전체 완료 ✅
-- [ ] **Tool Simulation vs Real API**: 어디까지 시뮬레이션, 어디부터 실제 API?
-- [x] **논문 포지셔닝**: Framework paper (BIOAgents GYM 자체가 contribution)
-- [x] **논문 작성**: 사용자가 직접 작성, AI는 모든 실험/구현/분석 수행 및 기록
-- [x] **VQA 평가**: 6개 VQA 벤치마크 통합 (VQA-RAD, SLAKE, PathVQA, PMC-VQA, VQA-Med-2021, Quilt-VQA)
-- [x] **Task Scalability**: Scaled tasks GYM 통합 + LLM-based generation pipeline
-- [x] **스키마 통일**: 모든 도메인 evaluation_criteria 표준 포맷 자동 변환
-- [x] **Safety Evaluation**: 5개 safety reward + 12 adversarial tests + severity taxonomy
-- [x] **Cross-Domain Pathways**: 6개 임상 경로 (25 phase tasks across 5 domains)
-- [x] **DB 정합성**: visual_diagnosis + drug_interaction 모든 참조 무결성 해소
-- [x] **split_tasks.json**: 모든 8개 도메인 + cross_domain 100% 커버리지
-- [x] **Reward Strategy Selection**: GRPO/MRPO/SARL/Adaptive 4가지 전략 → 학습 전 모델이 선택 ✅
-- [x] **Unified Knowledge Tools**: PubMed + Wiki + Evidence + Wikipedia(26M) 통합 search/browse ✅
-- [x] **wiki2018 FTS5 연동**: 26.6GB Wikipedia dump → SQLite FTS5 BM25 검색 ✅
+### 6.2 ?? ?? (2026-02-12 ??)
+- [x] **? ?? ??**: Lingshu-7B (?? ??) ?? ? ?? Qwen2.5-VL-7B? ??
+- [ ] **EHR ??? ??**: MIMIC-III/IV ??? ?? ?? ?? ?? (?? ??)
+- [x] **??? ????**: clinical_diagnosis ? medical_qa ? visual_diagnosis ? drug_interaction ? ehr_management ? triage_emergency ? radiology_report ? cross_domain
+- [x] **??? ?? ??**: 8? ??? + cross_domain ?? ?? ?
+- [ ] **Tool Simulation vs Real API**: ???? ?????, ???? ?? API?
+- [x] **?? ????**: Framework paper (BIOAgents GYM ??? contribution)
+- [x] **?? ??**: ???? ?? ??, AI? ?? ??/??/?? ?? ? ??
+- [x] **VQA ??**: 6? VQA ???? ?? (VQA-RAD, SLAKE, PathVQA, PMC-VQA, VQA-Med-2021, Quilt-VQA)
+- [x] **Task Scalability**: Scaled tasks GYM ?? + LLM-based generation pipeline
+- [x] **??? ??**: ?? ??? evaluation_criteria ?? ?? ?? ??
+- [x] **Safety Evaluation**: 5? safety reward + 12 adversarial tests + severity taxonomy
+- [x] **Cross-Domain Pathways**: 6? ?? ?? (25 phase tasks across 5 domains)
+- [x] **DB ???**: visual_diagnosis + drug_interaction ?? ?? ??? ??
+- [x] **split_tasks.json**: ?? 8? ??? + cross_domain 100% ????
+- [x] **Reward Strategy Selection**: GRPO/MRPO/SARL/Adaptive 4?? ?? ? ?? ? ??? ?? ?
+- [x] **Unified Knowledge Tools**: PubMed + Wiki + Evidence + Wikipedia(26M) ?? search/browse ?
+- [x] **wiki2018 FTS5 ??**: 26.6GB Wikipedia dump ? SQLite FTS5 BM25 ?? ?
 
 ---
 
-## 7. 실험 로그 (Experiment Log)
+## 7. ?? ?? (Experiment Log)
 
-### [2026-02-12] 프로젝트 시작
-- 프로젝트 구조 분석 완료
-- 기획 문서 초안 작성
-- 보유 리소스 전수 조사 완료
-- Related work 서베이 시작
+### [2026-02-12] ???? ??
+- ???? ?? ?? ??
+- ?? ?? ?? ??
+- ?? ??? ?? ?? ??
+- Related work ??? ??
 
-### [2026-02-12] Phase 1: GYM 환경 구축 완료
-- **작업 내용**:
-  1. **Dataset Pipeline 강화**: MedQA(1,273) + MedMCQA(4,183) + MMLU(1,089) = 6,545문제를 자동 변환하는 파이프라인 구축
-     - `bioagents/data_pipeline/medqa_loader.py`: JSONL → unified task format 변환기
-     - `scripts/generate_gym_data.py`: 벤치마크 데이터 → tasks.json + db.json + split_tasks.json 자동 생성
-     - 50 tasks (balanced) + 200 tasks (large) 데이터셋 생성 완료
-     - Evidence 데이터 연동: 10,584 articles + 21,810 evidence passages
-  2. **Visual Diagnosis 도메인 구축**: 10 images, 8 reports, 10 questions, 8 tasks
-     - `bioagents/domains/visual_diagnosis/` — data_model.py, tools.py, environment.py
-     - Tools: analyze_medical_image, get_image_report, compare_with_prior, search_similar_cases, search_imaging_knowledge, submit_answer, think 등 9개
+### [2026-02-12] Phase 1: GYM ?? ?? ??
+- **?? ??**:
+  1. **Dataset Pipeline ??**: MedQA(1,273) + MedMCQA(4,183) + MMLU(1,089) = 6,545??? ?? ???? ????? ??
+     - `bioagents/data_pipeline/medqa_loader.py`: JSONL ? unified task format ???
+     - `scripts/generate_gym_data.py`: ???? ??? ? tasks.json + db.json + split_tasks.json ?? ??
+     - 50 tasks (balanced) + 200 tasks (large) ???? ?? ??
+     - Evidence ??? ??: 10,584 articles + 21,810 evidence passages
+  2. **Visual Diagnosis ??? ??**: 10 images, 8 reports, 10 questions, 8 tasks
+     - `bioagents/domains/visual_diagnosis/` ? data_model.py, tools.py, environment.py
+     - Tools: analyze_medical_image, get_image_report, compare_with_prior, search_similar_cases, search_imaging_knowledge, submit_answer, think ? 9?
      - Tasks: chest X-ray, CT stroke, pathology, dermoscopy, fundus, MRI, breast (easy~hard)
-  3. **Drug Interaction 도메인 구축**: 12 drugs, 10 interactions, 4 patient profiles, 5 tasks
-     - `bioagents/domains/drug_interaction/` — data_model.py, tools.py, environment.py
-     - Tools: get_drug_info, check_interaction, check_all_interactions, get_patient_medications, search_alternatives, check_dosage, search_drugs_by_class, submit_answer, think 등 9개
-     - 약물: warfarin, aspirin, fluoxetine, tramadol, metformin, lisinopril, spironolactone, phenytoin, simvastatin, amiodarone, clopidogrel, omeprazole
-     - 시나리오: warfarin+aspirin 출혈 위험, serotonin syndrome, 다약제 polypharmacy, clopidogrel+PPI 상호작용, 안전한 조합 확인
-  4. **GRPO Training Pipeline**: TRL GRPOTrainer 연동 완료
-     - `bioagents/training/grpo_trainer.py`: YAML 설정 → dataset 빌드 → reward function 연결 → TRL GRPOTrainer 실행
-     - `configs/grpo_medical_qa.yaml`: Medical QA GRPO 설정 (Qwen3-1.7B + LoRA r=16)
-     - `configs/grpo_drug_interaction.yaml`: Drug Interaction GRPO 설정
+  3. **Drug Interaction ??? ??**: 12 drugs, 10 interactions, 4 patient profiles, 5 tasks
+     - `bioagents/domains/drug_interaction/` ? data_model.py, tools.py, environment.py
+     - Tools: get_drug_info, check_interaction, check_all_interactions, get_patient_medications, search_alternatives, check_dosage, search_drugs_by_class, submit_answer, think ? 9?
+     - ??: warfarin, aspirin, fluoxetine, tramadol, metformin, lisinopril, spironolactone, phenytoin, simvastatin, amiodarone, clopidogrel, omeprazole
+     - ????: warfarin+aspirin ?? ??, serotonin syndrome, ??? polypharmacy, clopidogrel+PPI ????, ??? ?? ??
+  4. **GRPO Training Pipeline**: TRL GRPOTrainer ?? ??
+     - `bioagents/training/grpo_trainer.py`: YAML ?? ? dataset ?? ? reward function ?? ? TRL GRPOTrainer ??
+     - `configs/grpo_medical_qa.yaml`: Medical QA GRPO ?? (Qwen3-1.7B + LoRA r=16)
+     - `configs/grpo_drug_interaction.yaml`: Drug Interaction GRPO ??
      - Reward functions: accuracy(0.4) + format(0.2) + process(0.4) composite
-     - Dry-run 검증 완료: 35 train tasks, 3 reward functions 정상 동작
-  5. **SFT Training Pipeline**: TRL SFTTrainer 연동 완료
+     - Dry-run ?? ??: 35 train tasks, 3 reward functions ?? ??
+  5. **SFT Training Pipeline**: TRL SFTTrainer ?? ??
      - `bioagents/training/sft_trainer.py`: trajectory-based SFT + direct QA SFT + instruction SFT
-     - `configs/sft_medical_qa.yaml`: SFT 설정
-     - sft_generator.py 옵션 포맷 호환성 개선 (dict/list 양쪽 지원)
-     - Dry-run 검증 완료: 45 train + 5 eval, 7-turn tool-use demonstration
-  6. **GYM 통합**: 4개 도메인 Gymnasium 등록 완료
+     - `configs/sft_medical_qa.yaml`: SFT ??
+     - sft_generator.py ?? ?? ??? ?? (dict/list ?? ??)
+     - Dry-run ?? ??: 45 train + 5 eval, 7-turn tool-use demonstration
+  6. **GYM ??**: 4? ??? Gymnasium ?? ??
      - clinical_diagnosis (17 tools), medical_qa (8 tools), visual_diagnosis (9 tools), drug_interaction (9 tools)
-     - `bioagents/gym/agent_env.py`: 도메인별 초기 관측(observation) 커스터마이징
-  7. **통합 테스트**: 4개 테스트 스위트 전체 통과
-     - `tests/test_drug_interaction.py`: DB 로딩, 9개 도구 실행, 환경, GYM 인터페이스 (Final reward: 1.0)
-     - `tests/test_visual_diagnosis.py`: DB 로딩, 도구 실행, 환경, GYM 인터페이스 (Final reward: 0.667)
-     - `tests/test_training_pipeline.py`: GRPO/SFT 설정, 데이터셋, 보상 함수, cross-domain GYM
-     - `tests/test_clinical_diagnosis.py`, `tests/test_medical_qa.py`, `tests/test_rewards.py` (기존)
-- **결과 요약**:
-  - 총 4개 의료 도메인, 43개 도구, 6,545+ 문제 규모의 GYM 환경 구축
-  - GRPO/SFT 학습 파이프라인 TRL 연동 완료 (dry-run 검증)
-  - 전체 테스트 통과율: 100%
-- **다음 단계**:
-  - Phase 2: 실제 GRPO 학습 실행 (Qwen3-1.7B → 7B)
-  - SFT warmup → GRPO fine-tuning 파이프라인 실행
-  - Agent evaluation: 학습된 에이전트 벤치마크 평가
-  - EHR Management 도메인 추가 (MIMIC 데이터 접근 확인 후)
-- **관련 파일**:
+     - `bioagents/gym/agent_env.py`: ???? ?? ??(observation) ??????
+  7. **?? ???**: 4? ??? ??? ?? ??
+     - `tests/test_drug_interaction.py`: DB ??, 9? ?? ??, ??, GYM ????? (Final reward: 1.0)
+     - `tests/test_visual_diagnosis.py`: DB ??, ?? ??, ??, GYM ????? (Final reward: 0.667)
+     - `tests/test_training_pipeline.py`: GRPO/SFT ??, ????, ?? ??, cross-domain GYM
+     - `tests/test_clinical_diagnosis.py`, `tests/test_medical_qa.py`, `tests/test_rewards.py` (??)
+- **?? ??**:
+  - ? 4? ?? ???, 43? ??, 6,545+ ?? ??? GYM ?? ??
+  - GRPO/SFT ?? ????? TRL ?? ?? (dry-run ??)
+  - ?? ??? ???: 100%
+- **?? ??**:
+  - Phase 2: ?? GRPO ?? ?? (Qwen3-1.7B ? 7B)
+  - SFT warmup ? GRPO fine-tuning ????? ??
+  - Agent evaluation: ??? ???? ???? ??
+  - EHR Management ??? ?? (MIMIC ??? ?? ?? ?)
+- **?? ??**:
   - `bioagents/domains/drug_interaction/` (data_model, tools, environment)
   - `bioagents/domains/visual_diagnosis/` (data_model, tools, environment)
   - `bioagents/training/grpo_trainer.py`, `bioagents/training/sft_trainer.py`
@@ -836,30 +936,30 @@ make_grpo_reward_fn(strategy)       # → TRL-compatible fn(completions, **kwarg
   - `scripts/generate_gym_data.py`
   - `tests/test_drug_interaction.py`, `tests/test_visual_diagnosis.py`, `tests/test_training_pipeline.py`
 
-### [2026-02-12] Phase 2 시작: EHR Management 도메인 구축 완료
-- **작업 내용**:
-  1. **EHR Management 도메인 구축**: MIMIC-III/IV 스타일 합성 EHR 데이터 기반 5번째 도메인 완성
-     - `bioagents/domains/ehr_management/` — data_model.py, tools.py, environment.py, __init__.py
-     - **Data Model (MIMIC 호환)**: Demographics, Admission, ICUStay, LabEvent, VitalEvent, MedicationOrder, Procedure, DischargeSummary, ClinicalScore, QualityIndicator → EHRRecord → EHRDB
-     - **합성 데이터**: 3명 환자, 4 admissions (1 readmission, 1 active ICU, 1 STEMI post-PCI)
-       - P2001 Robert Chen: HFrEF (LVEF 25%), HTN, DM2, CKD3 — 재입원 환자
-       - P2002 Maria Santos: Septic shock (E. coli UTI/bacteremia), AKI Stage 3 — 현재 MICU 입원중
-       - P2003 James Williams: Acute anterior STEMI, primary PCI with LAD stenting — 퇴원 완료
-     - **Tools 14개**: get_patient_summary, get_admission_history, get_lab_results, get_lab_trend, get_vital_signs, detect_vital_alerts, get_medication_orders, get_clinical_scores, get_quality_indicators, get_procedures, get_discharge_summary, lookup_icd_code, think, submit_answer
-     - **Tasks 15개** (8 train / 7 test): chart_review, critical_value_identification, medication_reconciliation, readmission_risk, clinical_scoring, discharge_planning, antibiotic_stewardship, quality_measure, icu_assessment, multi_patient_triage, drug_interaction, procedure_interpretation, aki_management, icu_to_floor_transfer, longitudinal_analysis
-     - **Clinical Scores**: SOFA, qSOFA, NEWS2, GRACE — 각 점수 components 및 interpretation 포함
+### [2026-02-12] Phase 2 ??: EHR Management ??? ?? ??
+- **?? ??**:
+  1. **EHR Management ??? ??**: MIMIC-III/IV ??? ?? EHR ??? ?? 5?? ??? ??
+     - `bioagents/domains/ehr_management/` ? data_model.py, tools.py, environment.py, __init__.py
+     - **Data Model (MIMIC ??)**: Demographics, Admission, ICUStay, LabEvent, VitalEvent, MedicationOrder, Procedure, DischargeSummary, ClinicalScore, QualityIndicator ? EHRRecord ? EHRDB
+     - **?? ???**: 3? ??, 4 admissions (1 readmission, 1 active ICU, 1 STEMI post-PCI)
+       - P2001 Robert Chen: HFrEF (LVEF 25%), HTN, DM2, CKD3 ? ??? ??
+       - P2002 Maria Santos: Septic shock (E. coli UTI/bacteremia), AKI Stage 3 ? ?? MICU ???
+       - P2003 James Williams: Acute anterior STEMI, primary PCI with LAD stenting ? ?? ??
+     - **Tools 14?**: get_patient_summary, get_admission_history, get_lab_results, get_lab_trend, get_vital_signs, detect_vital_alerts, get_medication_orders, get_clinical_scores, get_quality_indicators, get_procedures, get_discharge_summary, lookup_icd_code, think, submit_answer
+     - **Tasks 15?** (8 train / 7 test): chart_review, critical_value_identification, medication_reconciliation, readmission_risk, clinical_scoring, discharge_planning, antibiotic_stewardship, quality_measure, icu_assessment, multi_patient_triage, drug_interaction, procedure_interpretation, aki_management, icu_to_floor_transfer, longitudinal_analysis
+     - **Clinical Scores**: SOFA, qSOFA, NEWS2, GRACE ? ? ?? components ? interpretation ??
      - **Quality Indicators**: readmission_risk, mortality_risk, expected_los, sepsis_flag, aki_stage
-  2. **Gymnasium 통합**: `agent_env.py`에 ehr_management 도메인 등록, EHR-specific observation builder 추가
-  3. **테스트 스위트**: `tests/test_ehr_management.py` — DB 로딩, 14개 도구 실행, 환경, Task split 필터링, GYM 인터페이스 (5/5 passing)
-- **결과 요약**:
-  - 총 **5개 의료 도메인**, **57개 도구**, **6,560+ 문제** 규모의 GYM 환경 구축 완료
-  - EHR 도메인: MIMIC-IV 스키마 호환, 시간열 lab/vital 데이터, 임상 점수, 품질 지표 포함
-  - 테스트 전체 통과: EHR 도메인 5/5, 기존 도메인 정상 유지
-- **관련 파일**:
+  2. **Gymnasium ??**: `agent_env.py`? ehr_management ??? ??, EHR-specific observation builder ??
+  3. **??? ???**: `tests/test_ehr_management.py` ? DB ??, 14? ?? ??, ??, Task split ???, GYM ????? (5/5 passing)
+- **?? ??**:
+  - ? **5? ?? ???**, **57? ??**, **6,560+ ??** ??? GYM ?? ?? ??
+  - EHR ???: MIMIC-IV ??? ??, ??? lab/vital ???, ?? ??, ?? ?? ??
+  - ??? ?? ??: EHR ??? 5/5, ?? ??? ?? ??
+- **?? ??**:
   - `bioagents/domains/ehr_management/` (data_model.py, tools.py, environment.py, __init__.py)
   - `data/domains/ehr_management/` (db.json, policy.md, tasks.json)
   - `tests/test_ehr_management.py`
-  - `bioagents/gym/agent_env.py` (ehr_management 등록 추가)
+  - `bioagents/gym/agent_env.py` (ehr_management ?? ??)
 
 ### [2026-02-12] Phase 2: Multi-Model Training and Ablation (8 GPU Parallel)
 - **P2 Agent Task Action Score**: SFT=0.504, Ablation-Attn=0.564, Ablation-r32=0.476, **Qwen3 GRPO=0.865**
@@ -867,481 +967,481 @@ make_grpo_reward_fn(strategy)       # → TRL-compatible fn(completions, **kwarg
 - **Self-Play Loop**: 25 trajectories collected, 23 filtered, SFT trained, eval completed
 - **New Files**: self_play.py, benchmark_eval.py, scale_tasks.py, 211 scaled tasks
 
-### [2026-02-12] Healthcare AI GYM 대규모 확장
-- **작업 내용**:
-  1. **Visual QA Pipeline 완전 구축** (Priority 1 — 가장 큰 gap 해소)
-     - `bioagents/data_pipeline/vqa_loader.py`: 6개 VQA 데이터셋 통합 로더
+### [2026-02-12] Healthcare AI GYM ??? ??
+- **?? ??**:
+  1. **Visual QA Pipeline ?? ??** (Priority 1 ? ?? ? gap ??)
+     - `bioagents/data_pipeline/vqa_loader.py`: 6? VQA ???? ?? ??
        - VQA-RAD (HuggingFace), SLAKE (local + HF), PathVQA (local + HF)
        - PMC-VQA (HF), VQA-Med-2021 (local), Quilt-VQA (local + HF)
-       - 통합 포맷: {image_path, question, answer, answer_type, modality, category}
-       - VQA_DATASET_REGISTRY: 6개 데이터셋 메타데이터 + 로더 레지스트리
-     - `bioagents/evaluation/vqa_benchmark_eval.py`: VL 모델 지원 VQA 평가기
-       - Qwen2.5-VL 네이티브 멀티모달 추론 지원
-       - Text-only 폴백 (이미지 없는 모델용)
-       - 4종 VQA 메트릭: Exact Match, Token F1, BLEU-1, Contains Match + BERTScore
-       - per-dataset & per-answer-type 리포팅
-     - `benchmark_eval.py` 통합: CLI에서 --benchmarks vqa_rad slake pathvqa 등으로 VQA 평가 가능
-  2. **Scaled Tasks GYM 통합** (Priority 2)
-     - `agent_env.py` 대폭 업그레이드:
-       - `use_scaled_tasks=True` 옵션으로 tasks_scaled.json 자동 로드
-       - 7개 도메인 자동 등록 (lazy loading, importlib 기반)
-       - `get_gym_stats()`: 전체 GYM 통계 (도메인별 task/tool 수)
-       - `get_registered_domains()`: 등록된 도메인 목록 조회
-     - EHR 스키마 정규화: `_normalize_task_schema()` 함수
-       - expected_actions/rubric → evaluation_criteria 자동 변환
-       - 모든 도메인 동일 평가 스키마 사용 가능
-  3. **Triage & Emergency 도메인 신규 구축** (Domain 6)
-     - `bioagents/domains/triage_emergency/` — data_model, tools, environment
+       - ?? ??: {image_path, question, answer, answer_type, modality, category}
+       - VQA_DATASET_REGISTRY: 6? ???? ????? + ?? ?????
+     - `bioagents/evaluation/vqa_benchmark_eval.py`: VL ?? ?? VQA ???
+       - Qwen2.5-VL ???? ???? ?? ??
+       - Text-only ?? (??? ?? ???)
+       - 4? VQA ???: Exact Match, Token F1, BLEU-1, Contains Match + BERTScore
+       - per-dataset & per-answer-type ???
+     - `benchmark_eval.py` ??: CLI?? --benchmarks vqa_rad slake pathvqa ??? VQA ?? ??
+  2. **Scaled Tasks GYM ??** (Priority 2)
+     - `agent_env.py` ?? ?????:
+       - `use_scaled_tasks=True` ???? tasks_scaled.json ?? ??
+       - 7? ??? ?? ?? (lazy loading, importlib ??)
+       - `get_gym_stats()`: ?? GYM ?? (???? task/tool ?)
+       - `get_registered_domains()`: ??? ??? ?? ??
+     - EHR ??? ???: `_normalize_task_schema()` ??
+       - expected_actions/rubric ? evaluation_criteria ?? ??
+       - ?? ??? ?? ?? ??? ?? ??
+  3. **Triage & Emergency ??? ?? ??** (Domain 6)
+     - `bioagents/domains/triage_emergency/` ? data_model, tools, environment
      - Data Model: EmergencyPatient, EDResource, EmergencyProtocol, TriageDecision, EDStatus
-     - Tools 12개: get_patient_presentation, get_vital_signs, assess_airway_breathing,
+     - Tools 12?: get_patient_presentation, get_vital_signs, assess_airway_breathing,
        get_medical_history, calculate_gcs, calculate_esi_level, get_ed_status,
        check_protocol, order_stat_labs, order_imaging, think, submit_answer
-     - DB: 10명 환자 (STEMI, SAH, stroke, sepsis, fracture, CHF, ankle, acute abdomen, med refill, anaphylaxis)
+     - DB: 10? ?? (STEMI, SAH, stroke, sepsis, fracture, CHF, ankle, acute abdomen, med refill, anaphylaxis)
      - Protocols: STEMI Alert, Stroke Alert, Sepsis 1-Hour Bundle, Anaphylaxis
-     - Tasks: 10개 (ESI 1~5 모든 레벨 커버)
-  4. **Radiology Report Generation 도메인 신규 구축** (Domain 7)
-     - `bioagents/domains/radiology_report/` — data_model, tools, environment
+     - Tasks: 10? (ESI 1~5 ?? ?? ??)
+  4. **Radiology Report Generation ??? ?? ??** (Domain 7)
+     - `bioagents/domains/radiology_report/` ? data_model, tools, environment
      - Data Model: RadiologyStudy, ReportTemplate, PriorReport, RadiologyKnowledge
-     - Tools 11개: get_study_info, get_clinical_history, get_prior_reports,
+     - Tools 11?: get_study_info, get_clinical_history, get_prior_reports,
        get_report_template, analyze_findings, search_radiology_knowledge,
        get_reporting_checklist, calculate_measurements, think, submit_report, submit_answer
-     - DB: 8개 study (CXR pneumonia, CT stroke, CT abdomen, MRI brain tumor,
+     - DB: 8? study (CXR pneumonia, CT stroke, CT abdomen, MRI brain tumor,
        CT lung nodule, CXR normal, Mammogram BI-RADS 5, US thyroid TI-RADS 5)
      - Knowledge Base: Fleischner, BI-RADS, TI-RADS, Acute Stroke CT, Pneumonia CXR
-     - Tasks: 8개 (radiology reporting across modalities)
+     - Tasks: 8? (radiology reporting across modalities)
   5. **LLM-based Task Generation Pipeline**
-     - `scripts/generate_tasks_llm.py`: OpenAI/Anthropic API 기반 task 자동 생성
-     - 도메인별 프롬프트 템플릿: clinical_diagnosis, triage_emergency, drug_interaction, radiology_report
-     - 생성 → 검증 → 저장 → split 자동화
-     - `scripts/scale_tasks.py` 업데이트: triage_emergency, radiology_report 템플릿 추가
-- **결과 요약**:
-  - 총 **7개 의료 도메인**, **~80개 도구**, 확장 가능한 GYM 환경
-  - 6개 VQA 벤치마크 평가 파이프라인 완성 (기존 0개 → 6개)
-  - Scaled tasks가 GYM에 통합 (use_scaled_tasks=True)
-  - 모든 도메인 통일된 evaluation_criteria 스키마
-  - LLM 기반 task 자동 생성 파이프라인
-- **관련 파일**:
-  - `bioagents/data_pipeline/vqa_loader.py` (6개 VQA 통합 로더)
-  - `bioagents/evaluation/vqa_benchmark_eval.py` (VQA 평가기)
-  - `bioagents/evaluation/benchmark_eval.py` (VQA 통합 업데이트)
-  - `bioagents/gym/agent_env.py` (scaled tasks + 7 도메인 + 스키마 정규화)
-  - `bioagents/domains/triage_emergency/` (전체 도메인)
-  - `bioagents/domains/radiology_report/` (전체 도메인)
+     - `scripts/generate_tasks_llm.py`: OpenAI/Anthropic API ?? task ?? ??
+     - ???? ???? ???: clinical_diagnosis, triage_emergency, drug_interaction, radiology_report
+     - ?? ? ?? ? ?? ? split ???
+     - `scripts/scale_tasks.py` ????: triage_emergency, radiology_report ??? ??
+- **?? ??**:
+  - ? **7? ?? ???**, **~80? ??**, ?? ??? GYM ??
+  - 6? VQA ???? ?? ????? ?? (?? 0? ? 6?)
+  - Scaled tasks? GYM? ?? (use_scaled_tasks=True)
+  - ?? ??? ??? evaluation_criteria ???
+  - LLM ?? task ?? ?? ?????
+- **?? ??**:
+  - `bioagents/data_pipeline/vqa_loader.py` (6? VQA ?? ??)
+  - `bioagents/evaluation/vqa_benchmark_eval.py` (VQA ???)
+  - `bioagents/evaluation/benchmark_eval.py` (VQA ?? ????)
+  - `bioagents/gym/agent_env.py` (scaled tasks + 7 ??? + ??? ???)
+  - `bioagents/domains/triage_emergency/` (?? ???)
+  - `bioagents/domains/radiology_report/` (?? ???)
   - `data/domains/triage_emergency/` (db, policy, tasks, split)
   - `data/domains/radiology_report/` (db, policy, tasks, split)
-  - `scripts/generate_tasks_llm.py` (LLM task 생성)
-  - `scripts/scale_tasks.py` (새 도메인 템플릿 추가)
+  - `scripts/generate_tasks_llm.py` (LLM task ??)
+  - `scripts/scale_tasks.py` (? ??? ??? ??)
 
 ### [2026-02-12] Healthcare AI GYM v2: Safety, Cross-Domain, Complete System
-- **작업 내용**:
-  1. **DB 정합성 완전 수정**
-     - `visual_diagnosis`: IMG_XXX → IMG0XX 포맷 통일, 21개 이미지(IMG011-IMG031) + 리포트 + 질문 + 환자 컨텍스트 추가
-     - `drug_interaction`: 9종 누락 약물 추가 (methotrexate, ciprofloxacin, theophylline, digoxin, lithium, rifampin, oral_contraceptives, contrast_dye, NSAIDs) + 6개 상호작용 추가
-     - 4개 도메인 `split_tasks.json` 생성 (clinical_diagnosis, drug_interaction, ehr_management, visual_diagnosis)
-  2. **Safety Evaluation 모듈 구축** (`bioagents/evaluation/safety_eval.py`)
-     - 5개 Safety Reward Functions: contraindication, emergency_recognition, uncertainty, scope, composite
-     - SafetyViolation 분류 체계 (severity 1-5, 13 categories)
-     - 12개 Adversarial Test Cases: harmful_instruction(4), jailbreak(2), misinformation(2), bias_probe(2), scope_test(2)
+- **?? ??**:
+  1. **DB ??? ?? ??**
+     - `visual_diagnosis`: IMG_XXX ? IMG0XX ?? ??, 21? ???(IMG011-IMG031) + ??? + ?? + ?? ???? ??
+     - `drug_interaction`: 9? ?? ?? ?? (methotrexate, ciprofloxacin, theophylline, digoxin, lithium, rifampin, oral_contraceptives, contrast_dye, NSAIDs) + 6? ???? ??
+     - 4? ??? `split_tasks.json` ?? (clinical_diagnosis, drug_interaction, ehr_management, visual_diagnosis)
+  2. **Safety Evaluation ?? ??** (`bioagents/evaluation/safety_eval.py`)
+     - 5? Safety Reward Functions: contraindication, emergency_recognition, uncertainty, scope, composite
+     - SafetyViolation ?? ?? (severity 1-5, 13 categories)
+     - 12? Adversarial Test Cases: harmful_instruction(4), jailbreak(2), misinformation(2), bias_probe(2), scope_test(2)
      - GRPO-compatible safety reward wrapper (`grpo_safety_reward`)
-     - 약물 교차반응성(cross-reactivity) 체크, 임신 Category D/X 약물 검증
-     - rewards.py 레지스트리에 safety 함수 등록
-  3. **Cross-Domain Clinical Pathway 시스템** (`bioagents/domains/cross_domain/`)
-     - Pathway Engine: 다단계 환자 여정 오케스트레이션
-     - 6개 Clinical Pathways: Chest Pain(ED), DKA, Stroke Code, Sepsis Bundle, Post-op PE, Pediatric Kawasaki
-     - 25개 phase-level tasks spanning 5 domains
-     - 각 pathway에 patient_data, time_pressure, safety_critical 메타데이터
-     - PathwayResult 평가 체계: phase scores + safety + coherence + time compliance
-     - GYM 환경 등록 (8번째 도메인)
-  4. **Training Configs 확장**
-     - `configs/grpo_triage_emergency.yaml`: safety 30%, 낮은 temperature, 높은 KL penalty
-     - `configs/grpo_radiology_report.yaml`: format 30%, 긴 completion, 구조화된 출력
+     - ?? ?????(cross-reactivity) ??, ?? Category D/X ?? ??
+     - rewards.py ?????? safety ?? ??
+  3. **Cross-Domain Clinical Pathway ???** (`bioagents/domains/cross_domain/`)
+     - Pathway Engine: ??? ?? ?? ???????
+     - 6? Clinical Pathways: Chest Pain(ED), DKA, Stroke Code, Sepsis Bundle, Post-op PE, Pediatric Kawasaki
+     - 25? phase-level tasks spanning 5 domains
+     - ? pathway? patient_data, time_pressure, safety_critical ?????
+     - PathwayResult ?? ??: phase scores + safety + coherence + time compliance
+     - GYM ?? ?? (8?? ???)
+  4. **Training Configs ??**
+     - `configs/grpo_triage_emergency.yaml`: safety 30%, ?? temperature, ?? KL penalty
+     - `configs/grpo_radiology_report.yaml`: format 30%, ? completion, ???? ??
      - `configs/grpo_cross_domain.yaml`: flagship config, 5D reward (accuracy+format+process+safety+coherence)
-     - `configs/grpo_p2_multidomain.yaml`: 8 도메인으로 업데이트
-  5. **README.md 전면 재작성**: 프로젝트 포탈 수준으로 완전히 재구성
-- **결과 요약**:
-  - 총 **8개 의료 도메인 + 1 cross-domain**, **88개 도구**, **537개 tasks**
-  - **5차원 보상 체계**: Accuracy + Format + Process + Safety + Coherence
-  - **12개 adversarial test cases** 포함한 safety evaluation 완성
-  - **6개 cross-domain pathways** (25 phase tasks): 실제 임상 환자 여정 시뮬레이션
-  - 모든 도메인 DB 정합성 100%, split_tasks.json 100% 커버리지
-  - **17개 training configs** (SFT, GRPO, Self-Play, Cross-Domain, 도메인별)
-- **관련 파일**:
-  - `bioagents/evaluation/safety_eval.py` (Safety 모듈)
+     - `configs/grpo_p2_multidomain.yaml`: 8 ????? ????
+  5. **README.md ?? ???**: ???? ?? ???? ??? ???
+- **?? ??**:
+  - ? **8? ?? ??? + 1 cross-domain**, **88? ??**, **537? tasks**
+  - **5?? ?? ??**: Accuracy + Format + Process + Safety + Coherence
+  - **12? adversarial test cases** ??? safety evaluation ??
+  - **6? cross-domain pathways** (25 phase tasks): ?? ?? ?? ?? ?????
+  - ?? ??? DB ??? 100%, split_tasks.json 100% ????
+  - **17? training configs** (SFT, GRPO, Self-Play, Cross-Domain, ????)
+- **?? ??**:
+  - `bioagents/evaluation/safety_eval.py` (Safety ??)
   - `bioagents/domains/cross_domain/` (pathway_engine, environment)
   - `data/domains/cross_domain/` (tasks.json, split_tasks.json, policy.md)
   - `configs/grpo_triage_emergency.yaml`, `configs/grpo_radiology_report.yaml`, `configs/grpo_cross_domain.yaml`
-  - `README.md` (전면 재작성)
-  - `data/domains/visual_diagnosis/db.json` (21개 이미지 추가)
-  - `data/domains/drug_interaction/db.json` (9개 약물 + 6개 상호작용 추가)
+  - `README.md` (?? ???)
+  - `data/domains/visual_diagnosis/db.json` (21? ??? ??)
+  - `data/domains/drug_interaction/db.json` (9? ?? + 6? ???? ??)
 
-### [2026-02-13] Session 2: 시스템 완성도 대폭 강화
-- **작업 내용**:
-  1. **FairGRPO 메커니즘 구현** (`grpo_rewards.py`, `grpo_trainer.py`, `gym_coach.py`)
-     - FairnessTracker: 인구통계 그룹별 보상 추적 (age_group/sex/ethnicity)
-     - Representation-aware + Performance-aware 적응형 가중치
-     - `grpo_fairness_reward`, `grpo_fair_composite_reward` 함수
-     - `FairGRPOConfig` + `train_fair_grpo()` — TRL 기반 공정성 인식 학습
-     - GymCoach `_train_fair_grpo()` 통합
-  2. **Multi-turn GRPO 완전 구현** (`grpo_trainer.py`)
-     - Placeholder → 환경-인-더-루프 실제 학습 루프 구현 (~300줄)
-     - `_run_single_rollout()`: GYM 환경에서 다회전 에이전트-환경 상호작용
-     - `_grpo_policy_update()`: Group-relative advantage 계산 + 정책 경사 업데이트
-     - `_save_trajectories()`: 궤적 저장 + 분석
-     - `MultiTurnGRPOConfig`: rollouts_per_task, max_turns, trajectory_epochs 등
-  3. **Agent Runner 도메인별 프롬프트** (`agent_runner.py`)
-     - 10개 도메인 전문 시스템 프롬프트 추가 (기존: medical_qa만)
-     - 도메인별 역할, 도구 사용 가이드, 최종 응답 형식 커스터마이징
-  4. **태스크 도메인 확장**
-     - triage_emergency: 10 → 20 (DKA, 긴장성기흉, 수막염, 충수염, 과량복용, 화상, 자궁외임신, 간질중첩, 급성사지허혈, 정신과응급)
-     - radiology_report: 8 → 20 (무릎MRI, 경추CT, COVID CT, 담낭US, PE CTA, 간MRI, V/Q, 신장CT, 어깨MRI, 뇌MS MRI, 골반US, 심장CTA)
-     - psychiatry: 12 → 20 (섭식장애, OCD, 양극성혼합, BPD, 성인자폐, 불면증, 복잡사별, 법정신의학)
-     - obstetrics: 12 → 20 (조기진통, 쌍둥이, 전치태반, HELLP, 제대탈출, GBS, IUGR, 양수색전)
-  5. **누락 GRPO configs 추가** (5개)
+### [2026-02-13] Session 2: ??? ??? ?? ??
+- **?? ??**:
+  1. **FairGRPO ???? ??** (`grpo_rewards.py`, `grpo_trainer.py`, `gym_coach.py`)
+     - FairnessTracker: ???? ??? ?? ?? (age_group/sex/ethnicity)
+     - Representation-aware + Performance-aware ??? ???
+     - `grpo_fairness_reward`, `grpo_fair_composite_reward` ??
+     - `FairGRPOConfig` + `train_fair_grpo()` ? TRL ?? ??? ?? ??
+     - GymCoach `_train_fair_grpo()` ??
+  2. **Multi-turn GRPO ?? ??** (`grpo_trainer.py`)
+     - Placeholder ? ??-?-?-?? ?? ?? ?? ?? (~300?)
+     - `_run_single_rollout()`: GYM ???? ??? ????-?? ????
+     - `_grpo_policy_update()`: Group-relative advantage ?? + ?? ?? ????
+     - `_save_trajectories()`: ?? ?? + ??
+     - `MultiTurnGRPOConfig`: rollouts_per_task, max_turns, trajectory_epochs ?
+  3. **Agent Runner ???? ????** (`agent_runner.py`)
+     - 10? ??? ?? ??? ???? ?? (??: medical_qa?)
+     - ???? ??, ?? ?? ???, ?? ?? ?? ??????
+  4. **??? ??? ??**
+     - triage_emergency: 10 ? 20 (DKA, ?????, ???, ???, ????, ??, ?????, ????, ??????, ?????)
+     - radiology_report: 8 ? 20 (??MRI, ??CT, COVID CT, ??US, PE CTA, ?MRI, V/Q, ??CT, ??MRI, ?MS MRI, ??US, ??CTA)
+     - psychiatry: 12 ? 20 (????, OCD, ?????, BPD, ????, ???, ????, ?????)
+     - obstetrics: 12 ? 20 (????, ???, ????, HELLP, ????, GBS, IUGR, ????)
+  5. **?? GRPO configs ??** (5?)
      - grpo_clinical_diagnosis.yaml (safety 0.2)
      - grpo_visual_diagnosis.yaml (format 0.3)
      - grpo_ehr_management.yaml (process 0.5, max_prompt 3072)
      - grpo_psychiatry.yaml (safety 0.25)
      - grpo_obstetrics.yaml (safety 0.2)
-  6. **경쟁자 심층 분석** — DiagGym vs MedAgentGym 상세 비교표 + rebuttal 준비
-  7. **환자 데이터 25건 추가** — 5개 도메인 (clinical_diagnosis, drug_interaction, triage, ehr, radiology)
-  8. **라이선스 체계 수립** — Apache-2.0 + NOTICE + THIRD_PARTY_LICENSES.md (40+ 컴포넌트)
-  9. **Git Submodule 연결** — AgentGym-RL, tau2-bench
-- **결과 요약**:
-  - 총 **10개 의료 도메인**, **126+ 도구**, **~600 tasks** (scaled 포함)
-  - **모든 도메인 GRPO config 완비** (10/10)
-  - **Multi-turn GRPO 완전 구현** — 환경 루프 + GRPO 정책 업데이트
-  - **FairGRPO** — 세계 최초 의료 AI 공정성 인식 RL 학습
-  - **Agent Runner** 10개 도메인 전문 프롬프트 완성
-  - Apache-2.0 라이선스 + AI 생성 코드 공시 + 써드파티 라이선스 완전 정리
-- **다음 단계**:
-  - 실제 GPU 학습 실행 (SFT warmup → Multi-turn GRPO)
-  - 전체 벤치마크 baseline 평가 (10개 도메인 + external benchmarks)
-  - 결과 테이블 작성 → 논문 초안
+  6. **??? ?? ??** ? DiagGym vs MedAgentGym ?? ??? + rebuttal ??
+  7. **?? ??? 25? ??** ? 5? ??? (clinical_diagnosis, drug_interaction, triage, ehr, radiology)
+  8. **???? ?? ??** ? Apache-2.0 + NOTICE + THIRD_PARTY_LICENSES.md (40+ ????)
+  9. **Git Submodule ??** ? AgentGym-RL, tau2-bench
+- **?? ??**:
+  - ? **10? ?? ???**, **126+ ??**, **~600 tasks** (scaled ??)
+  - **?? ??? GRPO config ??** (10/10)
+  - **Multi-turn GRPO ?? ??** ? ?? ?? + GRPO ?? ????
+  - **FairGRPO** ? ?? ?? ?? AI ??? ?? RL ??
+  - **Agent Runner** 10? ??? ?? ???? ??
+  - Apache-2.0 ???? + AI ?? ?? ?? + ???? ???? ?? ??
+- **?? ??**:
+  - ?? GPU ?? ?? (SFT warmup ? Multi-turn GRPO)
+  - ?? ???? baseline ?? (10? ??? + external benchmarks)
+  - ?? ??? ?? ? ?? ??
 
-### [2026-02-14] 전체 작업 통합 요약
+### [2026-02-14] ?? ?? ?? ??
 
-> 오늘 수행한 3개 세션의 작업을 하나로 통합 정리
+> ?? ??? 3? ??? ??? ??? ?? ??
 
-#### Session 1: Medical Imaging Dataset 다운로드 (RL Tool Simulation용)
-- **7개 데이터셋**: VQA-RAD(500), SLAKE(500), PathVQA(300), Chest X-ray(300), Brain Tumor MRI(300), Skin Cancer ISIC(300), MedMNIST v2 12 subsets(600)
-- **Unified Catalog**: `bioagents/data_pipeline/medical_image_catalog.py` — 10개 modality × 13개 body part
-- **결과**: 총 **2,300개 medical images** (690MB), 800개 VQA QA pair
+#### Session 1: Medical Imaging Dataset ???? (RL Tool Simulation?)
+- **7? ????**: VQA-RAD(500), SLAKE(500), PathVQA(300), Chest X-ray(300), Brain Tumor MRI(300), Skin Cancer ISIC(300), MedMNIST v2 12 subsets(600)
+- **Unified Catalog**: `bioagents/data_pipeline/medical_image_catalog.py` ? 10? modality ? 13? body part
+- **??**: ? **2,300? medical images** (690MB), 800? VQA QA pair
 
 #### Session 2: Adaptive Reward Strategy + Unified Knowledge Tools
-- **4가지 Reward 전략 구현**: GRPO, MRPO (token shaping), SARL (search agent), Adaptive (auto-select)
+- **4?? Reward ?? ??**: GRPO, MRPO (token shaping), SARL (search agent), Adaptive (auto-select)
   - `bioagents/evaluation/reward_strategies.py`: `GRPORewardStrategy`, `MRPORewardStrategy`, `SARLRewardStrategy`, `AdaptiveRewardStrategy`
-  - Factory: `create_reward_strategy("adaptive")` → `make_grpo_reward_fn(strategy)` → TRL-compatible
+  - Factory: `create_reward_strategy("adaptive")` ? `make_grpo_reward_fn(strategy)` ? TRL-compatible
 - **Unified Knowledge Tools**: `bioagents/tools/knowledge_tools.py`
-  - 모든 search & browse 도구를 `KnowledgeTools` 하나로 통합
-  - `WikiSearchBackend`: wiki2018 FTS5 + FAISS 연동 (26.6GB, 26M vectors)
+  - ?? search & browse ??? `KnowledgeTools` ??? ??
+  - `WikiSearchBackend`: wiki2018 FTS5 + FAISS ?? (26.6GB, 26M vectors)
   - Source-specific aliases: `search_pubmed()`, `search_medical_wiki()`, `search_evidence()`, `search_guidelines()`
-- **GRPO Trainer 업데이트**: `reward_strategy` 필드, `--strategy` CLI, `_build_strategy_reward_functions()`
-- **GRPO Reward Registry**: "mrpo", "sarl", "adaptive" lazy-load 등록 (총 11개 reward functions)
+- **GRPO Trainer ????**: `reward_strategy` ??, `--strategy` CLI, `_build_strategy_reward_functions()`
+- **GRPO Reward Registry**: "mrpo", "sarl", "adaptive" lazy-load ?? (? 11? reward functions)
 - **Training Configs**: `grpo_adaptive_strategy.yaml`, `grpo_mrpo_strategy.yaml`, `grpo_sarl_strategy.yaml`
-- **Knowledge Base 현황 조사 완료**: wiki2018/2026 symlink ✅, MedCPT 581K ✅, Self-BioRAG ✅
+- **Knowledge Base ?? ?? ??**: wiki2018/2026 symlink ?, MedCPT 581K ?, Self-BioRAG ?
 
 #### Session 3: Medical Knowledge BM25 Index + Adaptive Tool Guidance
-- **Medical Knowledge BM25 FTS5 Index** (`scripts/build_medical_fts_index.py` → `databases/medical_knowledge_fts.sqlite`)
+- **Medical Knowledge BM25 FTS5 Index** (`scripts/build_medical_fts_index.py` ? `databases/medical_knowledge_fts.sqlite`)
   - MedCPT Evidence 581K + Biomedical Instructions 122K + Generator 83K + MedInstruct 52K
-  - **총 1,532,464 entries, 2.4GB** SQLite FTS5 database (BM25 + porter stemming + snippet)
-  - 3개 테이블: `passages_fts` (828K), `evidence_fts` (581K), `instruction_fts` (122K)
+  - **? 1,532,464 entries, 2.4GB** SQLite FTS5 database (BM25 + porter stemming + snippet)
+  - 3? ???: `passages_fts` (828K), `evidence_fts` (581K), `instruction_fts` (122K)
 - **MedicalKnowledgeBackend** (`knowledge_tools.py`)
-  - `search_passages()`: 828K unified passages BM25 검색
-  - `search_evidence()`: 581K MedCPT PubMed/PMC 전용 검색
-  - `KnowledgeTools.search()` + `search_evidence()` 통합
+  - `search_passages()`: 828K unified passages BM25 ??
+  - `search_evidence()`: 581K MedCPT PubMed/PMC ?? ??
+  - `KnowledgeTools.search()` + `search_evidence()` ??
 - **Adaptive Tool Guidance System** (`bioagents/gym/tool_guidance.py`, NEW)
-  - `TaskAnalyzer`: 태스크 특성 분석 (MC/open-ended, multi-step, difficulty, topic keywords)
-  - `ToolGuidance`: 6개 섹션 자동 생성 (전략, 도구 우선순위, 검색 팁, 약점 보완, 리워드 힌트, 안티패턴)
-  - `GuidanceInjector`: system prompt에 자동 주입
+  - `TaskAnalyzer`: ??? ?? ?? (MC/open-ended, multi-step, difficulty, topic keywords)
+  - `ToolGuidance`: 6? ?? ?? ?? (??, ?? ????, ?? ?, ?? ??, ??? ??, ????)
+  - `GuidanceInjector`: system prompt? ?? ??
 - **Adaptive Reward Strategy Selection** (`autonomous_agent.py`)
-  - `StrategySelector._select_reward_strategy()`: 도메인/약점/에러패턴 기반 자동 선택
-    - New/untried → adaptive | Tool-heavy + weak → SARL | Knowledge-heavy + weak → MRPO
-    - Reasoning errors → MRPO | Premature stops → SARL | Strong performer → GRPO
-  - `AgentDecision.reward_strategy` 필드 추가, GRPO trainer 연동
+  - `StrategySelector._select_reward_strategy()`: ???/??/???? ?? ?? ??
+    - New/untried ? adaptive | Tool-heavy + weak ? SARL | Knowledge-heavy + weak ? MRPO
+    - Reasoning errors ? MRPO | Premature stops ? SARL | Strong performer ? GRPO
+  - `AgentDecision.reward_strategy` ?? ??, GRPO trainer ??
 - **System Prompt Enhancement** (`agent_runner.py`)
-  - `build_system_prompt()` 확장: task, agent_profile, reward_strategy 파라미터
-  - `run_task()`에서 자동 guidance 주입
+  - `build_system_prompt()` ??: task, agent_profile, reward_strategy ????
+  - `run_task()`?? ?? guidance ??
 
-#### 오늘(2/14) 전체 결과 요약
+#### ??(2/14) ?? ?? ??
 
-| 항목 | Before (02/13 종료) | After (02/14 종료) | 변화 |
+| ?? | Before (02/13 ??) | After (02/14 ??) | ?? |
 |------|---------------------|--------------------| -----|
-| Reward 전략 | GRPO + FairGRPO (2개) | GRPO + FairGRPO + MRPO + SARL + Adaptive (5개) | +3 전략 |
+| Reward ?? | GRPO + FairGRPO (2?) | GRPO + FairGRPO + MRPO + SARL + Adaptive (5?) | +3 ?? |
 | Reward functions | 8 | 11 | +3 (mrpo, sarl, adaptive) |
 | Training configs | 24 | 27 | +3 (strategy configs) |
 | Knowledge search | Wiki FTS5 only | Wiki + MedCPT 581K + Instructions 122K + Generator 83K | +828K passages |
-| FTS5 인덱스 | wiki2018 (35GB, external) | + medical_knowledge_fts (2.4GB, 내부) | +2.4GB |
-| Tool guidance | 없음 (static prompts) | Adaptive per-task guidance | NEW |
-| Strategy selection | 없음 (always GRPO) | Adaptive per-domain auto-select | NEW |
+| FTS5 ??? | wiki2018 (35GB, external) | + medical_knowledge_fts (2.4GB, ??) | +2.4GB |
+| Tool guidance | ?? (static prompts) | Adaptive per-task guidance | NEW |
+| Strategy selection | ?? (always GRPO) | Adaptive per-domain auto-select | NEW |
 | Medical images | 0 | 2,300 images (10 modalities) | +2,300 |
-| System prompt | Static domain-only | Dynamic task+weakness+strategy-aware | 강화 |
+| System prompt | Static domain-only | Dynamic task+weakness+strategy-aware | ?? |
 
-#### 신규 및 수정 파일
+#### ?? ? ?? ??
 
-| 파일 | 유형 | 설명 |
+| ?? | ?? | ?? |
 |------|------|------|
 | `bioagents/evaluation/reward_strategies.py` | NEW | Adaptive Reward Strategy System (GRPO/MRPO/SARL/Adaptive) |
-| `bioagents/tools/knowledge_tools.py` | NEW → 수정 | Unified Knowledge Tools + WikiSearchBackend + MedicalKnowledgeBackend |
+| `bioagents/tools/knowledge_tools.py` | NEW ? ?? | Unified Knowledge Tools + WikiSearchBackend + MedicalKnowledgeBackend |
 | `bioagents/gym/tool_guidance.py` | NEW | TaskAnalyzer + ToolGuidance + GuidanceInjector |
 | `bioagents/data_pipeline/medical_image_catalog.py` | NEW | Medical image unified catalog (2,300 images) |
-| `bioagents/gym/autonomous_agent.py` | 수정 | `_select_reward_strategy()`, `AgentDecision.reward_strategy` 추가 |
-| `bioagents/evaluation/agent_runner.py` | 수정 | `build_system_prompt()` guidance 주입, `run_task()` task info 전달 |
-| `bioagents/evaluation/grpo_rewards.py` | 수정 | MRPO/SARL/Adaptive lazy-load registry 등록 |
-| `bioagents/training/grpo_trainer.py` | 수정 | reward_strategy 지원, `--strategy` CLI, strategy-based reward builder |
-| `scripts/build_medical_fts_index.py` | NEW | BM25 FTS5 인덱스 빌더 (1.5M entries) |
+| `bioagents/gym/autonomous_agent.py` | ?? | `_select_reward_strategy()`, `AgentDecision.reward_strategy` ?? |
+| `bioagents/evaluation/agent_runner.py` | ?? | `build_system_prompt()` guidance ??, `run_task()` task info ?? |
+| `bioagents/evaluation/grpo_rewards.py` | ?? | MRPO/SARL/Adaptive lazy-load registry ?? |
+| `bioagents/training/grpo_trainer.py` | ?? | reward_strategy ??, `--strategy` CLI, strategy-based reward builder |
+| `scripts/build_medical_fts_index.py` | NEW | BM25 FTS5 ??? ?? (1.5M entries) |
 | `scripts/download_medical_images.py` | NEW | Medical image downloader (HF + MedMNIST) |
 | `databases/medical_knowledge_fts.sqlite` | NEW | 2.4GB FTS5 database |
 | `configs/grpo_adaptive_strategy.yaml` | NEW | Adaptive reward strategy config |
 | `configs/grpo_mrpo_strategy.yaml` | NEW | MRPO token shaping config |
 | `configs/grpo_sarl_strategy.yaml` | NEW | SARL search agent config |
 
-### [2026-02-14 Session 2] W&B 연동 + Adaptive RL 통합 + Gap Analysis
+### [2026-02-14 Session 2] W&B ?? + Adaptive RL ?? + Gap Analysis
 
-- **작업 내용**:
-  1. **W&B 통합 로깅 시스템** (`bioagents/utils/wandb_logger.py` NEW)
-     - Project: `pt2-minstar-gym-rl` (전체 시스템 통합)
-     - `GymWandbLogger`: 중앙화된 로거 — init_run, log_step, log_epoch, log_cycle, log_benchmark
-     - 구조화된 run naming: `{agent_id}/{domain}/{strategy}/{run_type}/{timestamp}`
-     - Agent, GYM session, GRPO training 3계층 로깅
-     - Graceful fallback (wandb 미설치 시 no-op)
-  2. **GRPO Trainer W&B 연동** (`grpo_trainer.py` 수정)
-     - `train_multiturn()`: epoch별 reward, trajectory count, loss 자동 W&B 로깅
-     - `train()` (single-turn TRL): `WANDB_PROJECT` env var 설정으로 TRL 내장 로깅 활용
-     - Default project: `pt2-minstar-gym-rl` (기존 `bioagents-grpo` → 변경)
-     - 전체 27개 config 파일 project name 일괄 업데이트
-     - Observation type safety: dict/list → string 정규화
-  3. **AutonomousAgent W&B 연동** (`autonomous_agent.py` 수정)
+- **?? ??**:
+  1. **W&B ?? ?? ???** (`bioagents/utils/wandb_logger.py` NEW)
+     - Project: `pt2-minstar-gym-rl` (?? ??? ??)
+     - `GymWandbLogger`: ???? ?? ? init_run, log_step, log_epoch, log_cycle, log_benchmark
+     - ???? run naming: `{agent_id}/{domain}/{strategy}/{run_type}/{timestamp}`
+     - Agent, GYM session, GRPO training 3?? ??
+     - Graceful fallback (wandb ??? ? no-op)
+  2. **GRPO Trainer W&B ??** (`grpo_trainer.py` ??)
+     - `train_multiturn()`: epoch? reward, trajectory count, loss ?? W&B ??
+     - `train()` (single-turn TRL): `WANDB_PROJECT` env var ???? TRL ?? ?? ??
+     - Default project: `pt2-minstar-gym-rl` (?? `bioagents-grpo` ? ??)
+     - ?? 27? config ?? project name ?? ????
+     - Observation type safety: dict/list ? string ???
+  3. **AutonomousAgent W&B ??** (`autonomous_agent.py` ??)
      - Agent lifecycle W&B run: `autonomous_agent` type
-     - 매 cycle마다 자동 로깅: reflection scores, decision, workout pre/post, benchmark results
-     - GRPO training에서 `use_wandb=True` 활성화 (기존 `False` → `True`)
-  4. **AutonomousGym W&B 연동** (`autonomous_gym.py` 수정)
+     - ? cycle?? ?? ??: reflection scores, decision, workout pre/post, benchmark results
+     - GRPO training?? `use_wandb=True` ??? (?? `False` ? `True`)
+  4. **AutonomousGym W&B ??** (`autonomous_gym.py` ??)
      - GYM session-level W&B run
-     - 에이전트별 pre/post score, GPU utilization, queue depth 실시간 로깅
-     - Session 종료 시 summary 자동 기록
-  5. **5D GRPO Composite Reward 완성** (`grpo_rewards.py` 수정)
-     - `grpo_coherence_reward()` 함수 추가 + Registry 등록
-     - `grpo_composite_reward()`: 3D(accuracy+format+process) → **5D** (+ safety + coherence) 업그레이드
-     - Safety reward graceful fallback (import 실패 시 1.0)
+     - ????? pre/post score, GPU utilization, queue depth ??? ??
+     - Session ?? ? summary ?? ??
+  5. **5D GRPO Composite Reward ??** (`grpo_rewards.py` ??)
+     - `grpo_coherence_reward()` ?? ?? + Registry ??
+     - `grpo_composite_reward()`: 3D(accuracy+format+process) ? **5D** (+ safety + coherence) ?????
+     - Safety reward graceful fallback (import ?? ? 1.0)
      - Default weights: accuracy=0.30, format=0.15, process=0.25, safety=0.20, coherence=0.10
-  6. **<10B 모델 Gap Analysis & Fix**
-     - Observation type safety: agent_runner.py, grpo_trainer.py에 dict→string 정규화 추가
-     - `grpo_trainer.py` 중복 `main()` 호출 제거 (line 1436-1437)
-     - cross_domain: tools.py 없음 → 의도된 설계 (environment.py가 phase별 도메인 위임)
-     - Wiki FTS DB 미확인 → symlink 확인 필요 (databases/wiki2018_en/)
+  6. **<10B ?? Gap Analysis & Fix**
+     - Observation type safety: agent_runner.py, grpo_trainer.py? dict?string ??? ??
+     - `grpo_trainer.py` ?? `main()` ?? ?? (line 1436-1437)
+     - cross_domain: tools.py ?? ? ??? ?? (environment.py? phase? ??? ??)
+     - Wiki FTS DB ??? ? symlink ?? ?? (databases/wiki2018_en/)
 
-- **Gap Analysis 결과**:
+- **Gap Analysis ??**:
 
-| 항목 | 상태 | 심각도 | 조치 |
+| ?? | ?? | ??? | ?? |
 |------|------|--------|------|
-| Coherence reward not in GRPO | ✅ **해결** | CRITICAL | `grpo_coherence_reward()` + Registry 등록 |
-| Safety reward not in composite | ✅ **해결** | HIGH | `grpo_composite_reward()` 5D 업그레이드 |
-| Observation type crash risk | ✅ **해결** | MEDIUM | dict→string 정규화 |
-| cross_domain/tools.py 없음 | ✅ 정상 | N/A | 의도된 설계 (환경이 phase별 도메인 위임) |
-| W&B 미연동 | ✅ **해결** | HIGH | 3계층 통합 (trainer+agent+gym) |
-| use_wandb=False 하드코딩 | ✅ **해결** | HIGH | True로 변경 + project name 설정 |
-| Total tasks 188개 (적음) | ⚠️ 확인 | MEDIUM | LLM-based task generation으로 확장 가능 |
-| Wiki FTS DB symlink 미확인 | ⚠️ 확인 | LOW | runtime fallback 있음 |
+| Coherence reward not in GRPO | ? **??** | CRITICAL | `grpo_coherence_reward()` + Registry ?? |
+| Safety reward not in composite | ? **??** | HIGH | `grpo_composite_reward()` 5D ????? |
+| Observation type crash risk | ? **??** | MEDIUM | dict?string ??? |
+| cross_domain/tools.py ?? | ? ?? | N/A | ??? ?? (??? phase? ??? ??) |
+| W&B ??? | ? **??** | HIGH | 3?? ?? (trainer+agent+gym) |
+| use_wandb=False ???? | ? **??** | HIGH | True? ?? + project name ?? |
+| Total tasks 188? (??) | ?? ?? | MEDIUM | LLM-based task generation?? ?? ?? |
+| Wiki FTS DB symlink ??? | ?? ?? | LOW | runtime fallback ?? |
 
-- **모델 가용성 확인 (4종 <10B)**:
+- **?? ??? ?? (4? <10B)**:
 
-| 모델 | 크기 | 상태 | 모달리티 |
+| ?? | ?? | ?? | ???? |
 |------|------|------|----------|
-| Qwen3-8B-Base | 8B (hidden=4096, 36 layers) | ✅ READY | Text |
-| Lingshu-7B | 7B (hidden=3584, 28 layers) | ✅ READY | Vision+Text (VL) |
-| Step3-VL-10B | ~10B | ✅ READY | Vision+Text (VL) |
-| Qwen2.5-VL-7B-Instruct | 7B (hidden=3584, 28 layers) | ✅ READY | Vision+Text (VL) |
+| Qwen3-8B-Base | 8B (hidden=4096, 36 layers) | ? READY | Text |
+| Lingshu-7B | 7B (hidden=3584, 28 layers) | ? READY | Vision+Text (VL) |
+| Step3-VL-10B | ~10B | ? READY | Vision+Text (VL) |
+| Qwen2.5-VL-7B-Instruct | 7B (hidden=3584, 28 layers) | ? READY | Vision+Text (VL) |
 
-- **신규 및 수정 파일**:
+- **?? ? ?? ??**:
 
-| 파일 | 상태 | 변경 내용 |
+| ?? | ?? | ?? ?? |
 |------|------|----------|
-| `bioagents/utils/wandb_logger.py` | NEW | GymWandbLogger 중앙 로거 |
-| `bioagents/training/grpo_trainer.py` | 수정 | W&B logging + obs type safety + 5D project |
-| `bioagents/gym/autonomous_agent.py` | 수정 | W&B cycle logging + use_wandb=True |
-| `bioagents/gym/autonomous_gym.py` | 수정 | W&B session logging |
-| `bioagents/evaluation/grpo_rewards.py` | 수정 | coherence reward + 5D composite |
-| `bioagents/evaluation/agent_runner.py` | 수정 | observation type safety |
-| `configs/*.yaml` (27개) | 수정 | project → `pt2-minstar-gym-rl` |
-| `configs/autonomous_gym.yaml` | 수정 | wandb_project 추가 |
+| `bioagents/utils/wandb_logger.py` | NEW | GymWandbLogger ?? ?? |
+| `bioagents/training/grpo_trainer.py` | ?? | W&B logging + obs type safety + 5D project |
+| `bioagents/gym/autonomous_agent.py` | ?? | W&B cycle logging + use_wandb=True |
+| `bioagents/gym/autonomous_gym.py` | ?? | W&B session logging |
+| `bioagents/evaluation/grpo_rewards.py` | ?? | coherence reward + 5D composite |
+| `bioagents/evaluation/agent_runner.py` | ?? | observation type safety |
+| `configs/*.yaml` (27?) | ?? | project ? `pt2-minstar-gym-rl` |
+| `configs/autonomous_gym.yaml` | ?? | wandb_project ?? |
 
-#### 다음 단계 (우선순위순)
+#### ?? ?? (?????)
 
-1. **실제 GPU 학습 실행**: `python -m bioagents.gym.autonomous_gym --config configs/autonomous_gym.yaml`
+1. **?? GPU ?? ??**: `python -m bioagents.gym.autonomous_gym --config configs/autonomous_gym.yaml`
    - W&B Dashboard: https://wandb.ai/{entity}/pt2-minstar-gym-rl
-2. **Baseline 평가**: Qwen3-8B / LingShu-7B / Step3-VL-10B / Qwen2.5-VL-7B 전체 벤치마크 baseline
-3. **Task Data 확장**: `scripts/generate_tasks_llm.py` 활용, 188 → 1000+ tasks
-4. **KnowledgeTools 도메인 통합**: 기존 도메인별 search tool → KnowledgeTools로 교체
-5. **FAISS dense retrieval + FTS5 hybrid search** 구현
-6. **논문 결과 테이블 작성**: 학습 전/후 비교, 전략별 비교, 도메인별 비교
+2. **Baseline ??**: Qwen3-8B / LingShu-7B / Step3-VL-10B / Qwen2.5-VL-7B ?? ???? baseline
+3. **Task Data ??**: `scripts/generate_tasks_llm.py` ??, 188 ? 1000+ tasks
+4. **KnowledgeTools ??? ??**: ?? ???? search tool ? KnowledgeTools? ??
+5. **FAISS dense retrieval + FTS5 hybrid search** ??
+6. **?? ?? ??? ??**: ?? ?/? ??, ??? ??, ???? ??
 
-### 향후 기록 형식
+### ?? ?? ??
 ```
-### [YYYY-MM-DD] 작업 제목
-- **작업 내용**: 수행한 작업 상세
-- **사용 모델/데이터**: 
-- **결과 요약**: 
-- **다음 단계**: 
-- **관련 파일**: 경로 목록
+### [YYYY-MM-DD] ?? ??
+- **?? ??**: ??? ?? ??
+- **?? ??/???**: 
+- **?? ??**: 
+- **?? ??**: 
+- **?? ??**: ?? ??
 ```
 
 ---
 
-## 7.5 일자별 작업 요약 (Daily Summary)
+## 7.5 ??? ?? ?? (Daily Summary)
 
-| 날짜 | 주요 작업 | 핵심 산출물 |
+| ?? | ?? ?? | ?? ??? |
 |------|----------|------------|
-| **02/12 (Day 1)** | 프로젝트 기획 + 5개 도메인 구축 + GRPO/SFT 파이프라인 + Scaled tasks + VQA pipeline + Triage/Radiology 도메인 + Safety/Cross-domain + DB 정합성 | 8 domains, 88 tools, 537 tasks, 5D rewards, 6 pathways, 12 adversarial tests |
-| **02/13 (Day 2)** | FairGRPO + Multi-turn GRPO 완전 구현 + Psychiatry/Obstetrics 도메인 + 80 tasks 확장 + Autonomous GYM 아키텍처 + 경쟁자 분석 + 라이선스 | 10 domains, 126 tools, ~600 tasks, SharedLogbook, AutonomousAgent |
-| **02/14 (Day 3)** | Medical Images 2,300장 + MRPO/SARL/Adaptive 전략 + Unified Knowledge + BM25 Index 2.4GB + Tool Guidance + Strategy Selection + **W&B 통합** + **5D GRPO Composite** + **Gap Analysis** | +3 reward strategies, 828K FTS5 passages, adaptive guidance/selection, W&B `pt2-minstar-gym-rl`, 12 reward functions, 4 models verified |
+| **02/12 (Day 1)** | ???? ?? + 5? ??? ?? + GRPO/SFT ????? + Scaled tasks + VQA pipeline + Triage/Radiology ??? + Safety/Cross-domain + DB ??? | 8 domains, 88 tools, 537 tasks, 5D rewards, 6 pathways, 12 adversarial tests |
+| **02/13 (Day 2)** | FairGRPO + Multi-turn GRPO ?? ?? + Psychiatry/Obstetrics ??? + 80 tasks ?? + Autonomous GYM ???? + ??? ?? + ???? | 10 domains, 126 tools, ~600 tasks, SharedLogbook, AutonomousAgent |
+| **02/14 (Day 3)** | Medical Images 2,300? + MRPO/SARL/Adaptive ?? + Unified Knowledge + BM25 Index 2.4GB + Tool Guidance + Strategy Selection + **W&B ??** + **5D GRPO Composite** + **Gap Analysis** | +3 reward strategies, 828K FTS5 passages, adaptive guidance/selection, W&B `pt2-minstar-gym-rl`, 12 reward functions, 4 models verified |
 
-### 3일간 총 성과
+### 3?? ? ??
 
-| 카테고리 | 구현 완료 항목 |
+| ???? | ?? ?? ?? |
 |----------|--------------|
-| **도메인** | 10개 의료 도메인 + cross_domain pathways |
-| **도구** | 126+ 임상 도구 (14개 도구 카테고리) |
-| **태스크** | ~600 GYM 태스크 (LLM 기반 무한 확장 가능) |
-| **데이터** | 6,545 text QA + 2,300 images + 828K knowledge passages |
-| **학습** | GRPO + SFT + FairGRPO + Multi-turn GRPO (4종 trainer) |
-| **보상** | 5D reward + MRPO + SARL + Adaptive + FairGRPO (**12** reward functions, coherence 포함) |
-| **평가** | Text QA + VQA(6종) + EHR + Safety(12 adversarial) + Cognitive bias(24) |
-| **자율학습** | AutonomousGym + SharedLogbook + Adaptive strategy selection |
-| **지식검색** | Wikipedia FTS5+FAISS(26M) + Medical BM25(828K) → Unified search |
-| **설정** | 27 training configs (project: `pt2-minstar-gym-rl`) |
-| **로깅** | **W&B 3계층 통합** (Trainer + Agent + GYM session) |
-| **모델** | 4종 검증 완료: Qwen3-8B, Lingshu-7B, Step3-VL-10B, Qwen2.5-VL-7B |
-| **테스트** | 7 test suites (61+ test cases) |
-| **문서** | PLANNING.md, README.md, LICENSE, NOTICE, THIRD_PARTY_LICENSES |
+| **???** | 10? ?? ??? + cross_domain pathways |
+| **??** | **187** ?? ?? (9???? 69? ???? ?? ??) |
+| **???** | ~600 GYM ??? (LLM ?? ?? ?? ??) |
+| **???** | 6,545 text QA + 2,300 images + 828K knowledge passages |
+| **??** | GRPO + SFT + FairGRPO + Multi-turn GRPO (4? trainer) |
+| **??** | 5D reward + MRPO + SARL + Adaptive + FairGRPO + LLM-Judge + Medical Embedding (**18** reward functions) |
+| **??** | Text QA + VQA(6?) + EHR + Safety(12 adversarial) + Cognitive bias(24) |
+| **????** | AutonomousGym + SharedLogbook + Adaptive strategy selection |
+| **????** | Wikipedia FTS5+FAISS(26M) + Medical BM25(828K) ? Unified search |
+| **??** | 27 training configs (project: `pt2-minstar-gym-rl`) |
+| **??** | **W&B 3?? ??** (Trainer + Agent + GYM session) |
+| **??** | 4? ?? ??: Qwen3-8B, Lingshu-7B, Step3-VL-10B, Qwen2.5-VL-7B |
+| **???** | 7 test suites (61+ test cases) |
+| **??** | PLANNING.md, README.md, LICENSE, NOTICE, THIRD_PARTY_LICENSES |
 
 ---
 
-## 8. 리스크 & 대응 전략
+## 8. ??? & ?? ??
 
-| 리스크 | 영향 | 확률 | 대응 |
+| ??? | ?? | ?? | ?? |
 |---|---|---|---|
-| MIMIC 데이터 접근 불가 | EHR 도메인 구현 불가 | 중 | 합성 EHR 데이터로 대체 |
-| RL 학습 불안정 | 성능 저하 | 고 | SFT warmup + KL penalty + ScalingInter |
-| A100 8대 리소스 부족 | 대형 모델 학습 불가 | 중 | 7B 모델 집중, LoRA/QLoRA 적용 |
-| NeurIPS 마감 (6월) | 시간 부족 | 중 | Phase 1-2 엄격 관리, MVP 우선 |
-| Tool simulation 품질 | 비현실적 결과 | 중 | GPT-5/Claude로 고품질 simulation |
+| MIMIC ??? ?? ?? | EHR ??? ?? ?? | ? | ?? EHR ???? ?? |
+| RL ?? ??? | ?? ?? | ? | SFT warmup + KL penalty + ScalingInter |
+| A100 8? ??? ?? | ?? ?? ?? ?? | ? | 7B ?? ??, LoRA/QLoRA ?? |
+| NeurIPS ?? (6?) | ?? ?? | ? | Phase 1-2 ?? ??, MVP ?? |
+| Tool simulation ?? | ???? ?? | ? | GPT-5/Claude? ??? simulation |
 
 ---
 
-## 9. 코드 컨벤션 & 로깅 규칙
+## 9. ?? ??? & ?? ??
 
-### 9.1 디렉토리 규칙
-- 모든 실험 결과는 `logs/` 디렉토리에 날짜별 저장
-- 체크포인트는 `checkpoints/` 디렉토리에 실험명_날짜로 저장
-- 학습 설정은 `configs/` 디렉토리에 YAML로 관리
+### 9.1 ???? ??
+- ?? ?? ??? `logs/` ????? ??? ??
+- ?????? `checkpoints/` ????? ???_??? ??
+- ?? ??? `configs/` ????? YAML? ??
 
-### 9.2 로깅 규칙
-- 모든 학습은 W&B (Weights & Biases)에 기록
-- Trajectory는 JSON 형식으로 전체 저장
-- 평가 결과는 표준 JSON 형식으로 저장
-- 코드 변경은 Git commit으로 추적
+### 9.2 ?? ??
+- ?? ??? W&B (Weights & Biases)? ??
+- Trajectory? JSON ???? ?? ??
+- ?? ??? ?? JSON ???? ??
+- ?? ??? Git commit?? ??
 
-### 9.3 파일 명명 규칙
-- 데이터: `{domain}_{split}_{version}.json`
-- 설정: `{model}_{method}_{date}.yaml`
-- 로그: `{experiment_name}_{date}_log.txt`
-- 체크포인트: `{model}_{method}_{step}/`
+### 9.3 ?? ?? ??
+- ???: `{domain}_{split}_{version}.json`
+- ??: `{model}_{method}_{date}.yaml`
+- ??: `{experiment_name}_{date}_log.txt`
+- ?????: `{model}_{method}_{step}/`
 
 ---
 
 ## 10. Autonomous GYM Architecture (v3)
 
-> **추가일**: 2026-02-13
+> **???**: 2026-02-13
 
-### 10.1 핵심 변화: Coach-Driven → Agent-Driven
+### 10.1 ?? ??: Coach-Driven ? Agent-Driven
 
-기존 GymCoach는 **탑다운** 구조였다:
-- GymCoach가 모든 커리큘럼을 결정
-- 모든 에이전트가 같은 루프를 따름
-- GPU는 순차적으로 사용
+?? GymCoach? **???** ????:
+- GymCoach? ?? ????? ??
+- ?? ????? ?? ??? ??
+- GPU? ????? ??
 
-새로운 Autonomous GYM은 **바텀업** 구조:
-- 에이전트가 **스스로** 약점을 인지하고 학습 방향을 결정
-- 여러 에이전트가 **동시에** GPU를 활용하여 비동기 학습
-- SharedLogbook을 통해 **서로의 기록을 참조**하며 상호 학습
-- GYM은 자원 관리만 담당, 학습 방향은 에이전트가 결정
+??? Autonomous GYM? **???** ??:
+- ????? **???** ??? ???? ?? ??? ??
+- ?? ????? **???** GPU? ???? ??? ??
+- SharedLogbook? ?? **??? ??? ??**?? ?? ??
+- GYM? ?? ??? ??, ?? ??? ????? ??
 
 ### 10.2 Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    AutonomousGym (Shared Space)                   │
-│                                                                   │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐   │
-│  │  Station 1    │  │  Station 2    │  │  Station N            │  │
-│  │ Clinical Dx   │  │ Drug Safety   │  │ Emergency             │  │
-│  │  (GPU 0-1)    │  │  (GPU 2-3)    │  │  (GPU 4-5)            │  │
-│  └──────┬────────┘  └──────┬────────┘  └──────┬─────────────┘   │
-│         │                  │                   │                  │
-│  ┌──────▼──────────────────▼───────────────────▼──────────────┐  │
-│  │                  SharedLogbook                               │  │
-│  │  - Agent A: "drug interaction에서 3번 실패"                  │  │
-│  │  - Agent B: "emergency triage 정확도 92%"                   │  │
-│  │  - Agent C: "obstetrics에서 safety 위반"                    │  │
-│  │  - Leaderboard + InsightEngine + Herding Detection          │  │
-│  └──────┬──────────────────┬───────────────────┬──────────────┘  │
-│         │                  │                   │                  │
-│  ┌──────▼───────┐  ┌──────▼───────┐  ┌────────▼──────────┐     │
-│  │  Agent A      │  │  Agent B      │  │  Agent C           │    │
-│  │ (Qwen3-8B)   │  │(LingShu-8B)  │  │ (Qwen3-8B         │    │
-│  │              │  │              │  │  safety variant)   │    │
-│  │ REFLECT →    │  │ REFLECT →    │  │ REFLECT →          │    │
-│  │ CHOOSE →     │  │ CHOOSE →     │  │ CHOOSE →           │    │
-│  │ TRAIN →      │  │ TRAIN →      │  │ TRAIN →            │    │
-│  │ RECORD       │  │ RECORD       │  │ RECORD             │    │
-│  └──────────────┘  └──────────────┘  └────────────────────┘     │
-│                                                                   │
-│  ┌────────────────────────────────────────────────────────────┐  │
-│  │            GymScheduler + SafetyGuardrail                    │  │
-│  │  - GPU 할당/해제 (자원 관리만)                               │  │
-│  │  - Safety score floor 모니터링                               │  │
-│  │  - Consecutive failure 감지 → cooldown                      │  │
-│  └────────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
+???????????????????????????????????????????????????????????????????
+?                    AutonomousGym (Shared Space)                   ?
+?                                                                   ?
+?  ????????????????  ????????????????  ????????????????????????   ?
+?  ?  Station 1    ?  ?  Station 2    ?  ?  Station N            ?  ?
+?  ? Clinical Dx   ?  ? Drug Safety   ?  ? Emergency             ?  ?
+?  ?  (GPU 0-1)    ?  ?  (GPU 2-3)    ?  ?  (GPU 4-5)            ?  ?
+?  ?????????????????  ?????????????????  ??????????????????????   ?
+?         ?                  ?                   ?                  ?
+?  ??????????????????????????????????????????????????????????????  ?
+?  ?                  SharedLogbook                               ?  ?
+?  ?  - Agent A: "drug interaction?? 3? ??"                  ?  ?
+?  ?  - Agent B: "emergency triage ??? 92%"                   ?  ?
+?  ?  - Agent C: "obstetrics?? safety ??"                    ?  ?
+?  ?  - Leaderboard + InsightEngine + Herding Detection          ?  ?
+?  ??????????????????????????????????????????????????????????????  ?
+?         ?                  ?                   ?                  ?
+?  ????????????????  ????????????????  ?????????????????????     ?
+?  ?  Agent A      ?  ?  Agent B      ?  ?  Agent C           ?    ?
+?  ? (Qwen3-8B)   ?  ?(LingShu-8B)  ?  ? (Qwen3-8B         ?    ?
+?  ?              ?  ?              ?  ?  safety variant)   ?    ?
+?  ? REFLECT ?    ?  ? REFLECT ?    ?  ? REFLECT ?          ?    ?
+?  ? CHOOSE ?     ?  ? CHOOSE ?     ?  ? CHOOSE ?           ?    ?
+?  ? TRAIN ?      ?  ? TRAIN ?      ?  ? TRAIN ?            ?    ?
+?  ? RECORD       ?  ? RECORD       ?  ? RECORD             ?    ?
+?  ????????????????  ????????????????  ??????????????????????     ?
+?                                                                   ?
+?  ??????????????????????????????????????????????????????????????  ?
+?  ?            GymScheduler + SafetyGuardrail                    ?  ?
+?  ?  - GPU ??/?? (?? ???)                               ?  ?
+?  ?  - Safety score floor ????                               ?  ?
+?  ?  - Consecutive failure ?? ? cooldown                      ?  ?
+?  ??????????????????????????????????????????????????????????????  ?
+???????????????????????????????????????????????????????????????????
 ```
 
 ### 10.3 New Modules
 
-| 모듈 | 파일 | 역할 |
+| ?? | ?? | ?? |
 |------|------|------|
-| **SharedLogbook** | `bioagents/gym/shared_logbook.py` | 모든 에이전트의 기록을 공유. Workout logging, Profile 관리, Leaderboard, Herding 감지, Cross-agent 인사이트 |
-| **AutonomousAgent** | `bioagents/gym/autonomous_agent.py` | 자기 인식(SelfAwareness) + 전략 선택(StrategySelector) + 운동 실행(WorkoutExecutor). 6가지 동기(Motivation): curiosity, weakness, peer_learning, diversity, mastery_push, safety |
-| **AutonomousGym** | `bioagents/gym/autonomous_gym.py` | GymScheduler(GPU 관리) + SafetyGuardrail + AgentWorker pool. 에이전트들이 비동기적으로 출입하는 공유 공간 |
+| **SharedLogbook** | `bioagents/gym/shared_logbook.py` | ?? ????? ??? ??. Workout logging, Profile ??, Leaderboard, Herding ??, Cross-agent ???? |
+| **AutonomousAgent** | `bioagents/gym/autonomous_agent.py` | ?? ??(SelfAwareness) + ?? ??(StrategySelector) + ?? ??(WorkoutExecutor). 6?? ??(Motivation): curiosity, weakness, peer_learning, diversity, mastery_push, safety |
+| **AutonomousGym** | `bioagents/gym/autonomous_gym.py` | GymScheduler(GPU ??) + SafetyGuardrail + AgentWorker pool. ?????? ?????? ???? ?? ?? |
 
 ### 10.4 Agent Decision Flow
 
 ```
 AutonomousAgent.run_one_cycle():
   1. REFLECT
-     └─ SelfAwareness.reflect()
-        ├─ 내 최근 기록 분석 (strengths, weaknesses)
-        ├─ Plateau 감지
-        └─ Improvement rate 계산
+     ?? SelfAwareness.reflect()
+        ?? ? ?? ?? ?? (strengths, weaknesses)
+        ?? Plateau ??
+        ?? Improvement rate ??
 
   2. CHOOSE
-     └─ StrategySelector.choose_next_action()
-        ├─ 각 도메인에 6가지 motivation factor로 점수 계산
-        │   ├─ weakness_weight × (내 약점 도메인인가?)
-        │   ├─ curiosity_weight × (안 해본 도메인인가?)
-        │   ├─ peer_learning_weight × (다른 에이전트가 잘하는데 나는 못하나?)
-        │   ├─ diversity_weight × (herding 방지 - 덜 방문된 도메인인가?)
-        │   ├─ mastery_push_weight × (거의 정복 직전인가?)
-        │   └─ safety_weight × (safety 위반 이력이 있나?)
-        ├─ ε-greedy: 10% 확률로 차선책 선택 (exploration)
-        └─ Plateau 도메인에는 점수 감소 (diversity 유도)
+     ?? StrategySelector.choose_next_action()
+        ?? ? ???? 6?? motivation factor? ?? ??
+        ?   ?? weakness_weight ? (? ?? ??????)
+        ?   ?? curiosity_weight ? (? ?? ??????)
+        ?   ?? peer_learning_weight ? (?? ????? ???? ?? ????)
+        ?   ?? diversity_weight ? (herding ?? - ? ??? ??????)
+        ?   ?? mastery_push_weight ? (?? ?? ?????)
+        ?   ?? safety_weight ? (safety ?? ??? ???)
+        ?? ?-greedy: 10% ??? ??? ?? (exploration)
+        ?? Plateau ????? ?? ?? (diversity ??)
 
   3. TRAIN
-     └─ WorkoutExecutor.execute_workout()
-        ├─ Evaluate → Analyze errors → Generate data → Train
-        └─ 결과를 SharedLogbook에 기록
+     ?? WorkoutExecutor.execute_workout()
+        ?? Evaluate ? Analyze errors ? Generate data ? Train
+        ?? ??? SharedLogbook? ??
 
   4. RECORD
-     └─ SharedLogbook.record_workout()
-        └─ 다른 에이전트가 이 기록을 읽고 자기 전략에 반영
+     ?? SharedLogbook.record_workout()
+        ?? ?? ????? ? ??? ?? ?? ??? ??
 ```
 
 ### 10.5 Config
@@ -1355,27 +1455,318 @@ gym:
 
 agents:
   - agent_id: "qwen3_8b_v1"
-    weakness_weight: 0.35      # 약점 집중
+    weakness_weight: 0.35      # ?? ??
     curiosity_weight: 0.15
 
   - agent_id: "qwen3_8b_explorer"
     weakness_weight: 0.20
-    curiosity_weight: 0.30     # 탐험 집중
+    curiosity_weight: 0.30     # ?? ??
 
   - agent_id: "lingshu_8b_v1"
-    peer_learning_weight: 0.25 # 동료 학습 집중
+    peer_learning_weight: 0.25 # ?? ?? ??
 
   - agent_id: "qwen3_8b_safety"
-    safety_weight: 0.35        # Safety 전문가
+    safety_weight: 0.35        # Safety ???
 ```
 
-### 10.6 기존 GymCoach와의 관계
+### 10.6 ?? GymCoach?? ??
 
-Autonomous GYM은 GymCoach를 **대체**하는 것이 아니라 **발전**시킨 것:
-- GymCoach의 ErrorAnalyzer, TargetedDataGenerator, CurriculumScheduler는 그대로 재사용
-- SelfPlayLoop, TrainingMemory도 AutonomousAgent 내부에서 활용
-- 차이점: 오케스트레이션이 GymCoach(중앙 통제) → AutonomousGym(자율 분산)
+Autonomous GYM? GymCoach? **??**?? ?? ??? **??**?? ?:
+- GymCoach? ErrorAnalyzer, TargetedDataGenerator, CurriculumScheduler? ??? ???
+- SelfPlayLoop, TrainingMemory? AutonomousAgent ???? ??
+- ???: ???????? GymCoach(?? ??) ? AutonomousGym(?? ??)
+
+---
+
+## 11. ?? ?? ????? (Action Items ? 2026-02-15 ??)
+
+> ????: ?? Critical (?? ?) | ?? High (?? ?) | ?? Medium (Phase 2 ?) | ? Low (Phase 2 ?)
+
+### ?? Phase 1.5 ?? ?? (02/15~02/22)
+
+- [x] **KnowledgeTools ??? ??** ? CompositeToolKit?? 9? ??? ?? ?
+- [x] **Data Model Fixes** ? psychiatry/obstetrics/visual_diagnosis Pydantic ?? ?? ?
+- [x] **@is_tool Decorator Fix** ? tool ?? dual syntax ?? ?
+- [x] **Auto-Generated Tasks** ? 6? ??? knowledge-mined tasks ?? ?
+- [x] **Reference Survey Update** ? 8? ?? ?? ????, ?? ?? ???? ?
+- [x] **Git Push** ? Phase 1.5 ???? GitHub ?? ?
+- [x] **RESEARCH_LOG.md 갱신** (2026-03-03): 2026-02~ 최근 연구(CLI-Gym, SMTL, ResearchGym, LongCLI-Bench, EnvScaler, MedAgentGym 등) 수집·기록, §5.3 연동, 못다한 업무 정리 반영
+- [ ] **?? Baseline ?? ??** ? 3? VL ??(LingShu-7B, Qwen2.5-VL-7B, Step3-VL-10B) ? 21 ????
+  - `python scripts/run_full_baseline_eval.py --parallel`
+  - ?? ??: GPU 8? ?? ~4-6??
+- [ ] **?? Autonomous GYM 1-Cycle Dry-run** ? ?? GPU?? REFLECT?CHOOSE?TRAIN?RECORD ??
+  - `python -m bioagents.gym.autonomous_gym --config configs/autonomous_gym.yaml`
+  - W&B ?? ??: `pt2-minstar-gym-rl`
+
+### ?? Phase 1.5 ?? (02/22~02/28)
+
+- [x] **DRPO-style Domain-Aware Reward** ? QoQ-Med ??, ??? rarity/modality difficulty ?? ?? ???? ? (?? ??)
+  - `reward_strategies.py`? `DRPORewardStrategy` ?? ??
+  - rarity scaling (freq^-exp) + modality scaling (text/vision/multi-modal) + domain difficulty ?? ??
+- [x] **LLM-as-Judge Reward Function** ? MediX-R1 ??, open-ended ?? ?? ?? ? (02/17)
+  - `grpo_rewards.py`? `grpo_llm_judge_reward()` ?? + GRPO_REWARD_REGISTRY ??
+  - OpenAI/vLLM ??? ??, 4D ?? (accuracy/completeness/reasoning/safety)
+- [ ] **Task Data ??** ? LLM-based generation (600 ? 2,000+ tasks)
+  - `scripts/generate_tasks_llm.py` ?? (OpenAI/Anthropic API)
+  - ???? ?? 200 tasks ??
+- [x] **FAISS Dense Retrieval + FTS5 Hybrid Search** ?? ? (02/17)
+  - WikiSearchBackend? dense_search() + hybrid_search() ??
+  - Reciprocal Rank Fusion (RRF, k=60)?? BM25 + dense ??
+  - sentence-transformers lazy-load ??
+- [x] **medical_qa/db.json ??** ? CompositeToolKit ?? ???? ?? ? (02/17)
+  - KnowledgeTools first ? domain tools second (FTS5 828K ??)
+
+### ?? Phase 2 ?? (02/28 ?)
+
+- [x] **Reasoning Chain Length Experiment** ? Med-R1 No-Thinking variant ?? ? (02/17)
+  - RunConfig.no_think: think() tool ?? ??/?? ablation ??
+  - agent_runner.py? tool definition filtering ??
+- [x] **Medical Embedding Reward** ? BiomedBERT/MedCPT ?? semantic reward ? (02/17)
+  - grpo_rewards.py? grpo_medical_embedding_reward() ?? + REGISTRY ??
+  - BiomedBERT base + sentence-transformers fallback + word-overlap fallback
+- [ ] **Clinician-Validated Evaluation** ? MTBBench ??
+  - nl_assertions ?? ?? ?? ?? ??
+  - Safety violation taxonomy ??
+- [x] **PatientAgent ??** ? DoctorAgent-RL ?? dynamic progression ? (02/17)
+  - Dynamic Symptom Progression: vital deterioration + ??? ??
+  - Time Pressure Score: time-critical case? ?? ???? ??
+  - Evaluation? time_pressure metric ??
+
+### ? Phase 2 ? (03/01~04/15)
+
+- [ ] GPU ?? ??: 3 ?? ? Autonomous GYM
+- [ ] Cross-Domain Pathway RL ??
+- [ ] Reward Strategy Ablation (GRPO vs MRPO vs SARL vs DRPO vs Adaptive)
+- [ ] FairGRPO ??? ??
+- [ ] ScalingInter-RL ??
+- [ ] ?? ??: ?? ?? ???? ??
+- [ ] Safety Hardening: adversarial ?? ??
+
+### ? Phase 3-4 (04/15~06/01)
+
+- [ ] Reward function dimension? ablation
+- [ ] Multi-domain vs single-domain ??
+- [ ] Peer Learning (SharedLogbook) ?? ??
+- [ ] Tool Usage ?? ??
+- [ ] ?? ?? ?? (NeurIPS 2026)
+- [ ] ?? ?? + Rebuttal ??
+
+---
+
+### [2026-02-15] Phase 1.5 ?? + ???? ??
+
+- **?? ??**:
+  1. **KnowledgeTools ??? ?? ??** ? CompositeToolKit? ???? 9? ??? environment.py? KnowledgeTools ?? (medical_qa ??, ?? ??? ??)
+  2. **Data Model Fixes** ? psychiatry, obstetrics, visual_diagnosis? data_model.py Pydantic ?? ?? ?? ?? ??
+  3. **@is_tool Decorator Fix** ? toolkit.py?? dual syntax ???? 4? ??? tool ?? ?? ??
+  4. **Auto-Generated Tasks** ? 6? ???? knowledge-mined tasks ?? ?? (tasks_auto_generated.json)
+  5. **AGENT_GUIDELINE.md ????** ? Live Intelligence ??, ?? tool reference, ??? ?? ??
+  6. **Git Push** ? 23 files, +16,684 / -387,887 lines ? GitHub (minstar/Healthcare_GYM)
+  7. **???? ?? & ????** ? 8? ?? ?? PDF ???? (references/medical_rl_training/)
+     - Med-R1, QoQ-Med (NeurIPS 2025 Oral), MediX-R1 (ICLR 2026), MTBBench (NeurIPS 2025)
+     - LA-CDM, HealthFlow, RL Healthcare Survey, RadOnc-GPT
+  8. **?? ?? ????** ? 7? ?? ??? ?? ??, ??? ??? ??
+  9. **?? ?? ?????** ? Phase 1.5~4 ?? action items ??
+
+- **?? ?? (???? ??)**:
+  - **DRPO > GRPO**: QoQ-Med (NeurIPS 2025)? Domain-aware RPO? multi-domain?? macro-F1 +43% ? ?? ??
+  - **LLM-as-Judge**: MediX-R1? LLM judge reward? string-overlap?? ??? ? ?? reward function ??
+  - **No-Thinking Variant**: Med-R1?? reasoning chain ?? ? ?? generalization ? ablation ?? ??
+  - **FairGRPO ??**: ICLR 2026 submitted ??? ?? FairGRPO ?? ?? ??
+  - **???? ??? ??**: Tool-use + Multi-domain + Safety + Fairness + Autonomous = ?? ??? ???? ??? ??
+
+- **?? ??**:
+  - `references/medical_rl_training/` (8? ?? PDF + README.md)
+  - `PLANNING.md` (?? ?? + Phase 1.5 + ????? ????)
+  - 23? ?? ?? (9 environment.py, 3 data_model.py, toolkit.py, agent_runner.py, ?)
+
+---
+
+### [2026-02-26] Phase 1.5 Completion + Phase 2 Preparation
+
+- **작업 내역**:
+  1. **Clinician-Validated Evaluation 체계 구축** (MTBBench 참고)
+     - `rewards.py`에 `nl_assertion_reward()` 함수 구현: 다중 방법 평가 (evidence matching + concept extraction + token overlap)
+     - `compute_composite_reward()` 5D → **6D** 확장: accuracy + format + process + safety + coherence + **assertion**
+     - Default weights: accuracy=0.25, format=0.10, process=0.20, safety=0.20, coherence=0.10, assertion=0.15
+     - `agent_runner.py`에서 `nl_assertions` 추출 및 reward 계산 연결
+     - `grpo_rewards.py`에 `grpo_assertion_reward()` + GRPO_REWARD_REGISTRY 등록
+     - 태스크에 정의된 `nl_assertions`가 **실제 평가되도록** gap 해소 완료
+  2. **Safety Violation Taxonomy 강화** (AMA 의료 윤리 원칙 기반)
+     - 13 → **22 safety categories** 확장 (5단계 severity)
+     - 신규: `wrong_procedure` (5), `fabricated_evidence` (4), `confidentiality_breach` (4), `informed_consent_omission` (3), `guideline_noncompliance` (3), `premature_closure` (3), `suboptimal_monitoring` (2), `incomplete_documentation` (2), `style_issue` (1)
+     - AMA 원칙 매핑: nonmaleficence, beneficence, autonomy, justice, veracity, confidentiality
+     - `SafetyViolation` dataclass에 `ama_principle` 필드 추가
+  3. **Baseline 평가 실행** (백그라운드, 8 GPU 병렬)
+     - 3개 VL 모델: Lingshu-7B, Qwen2.5-VL-7B-Instruct, Step3-VL-10B
+     - 8개 벤치마크: MedQA, MedMCQA, MMLU x6
+     - `scripts/run_full_baseline_eval.py --parallel` 실행 중
+  4. **Autonomous GYM Dry-run 설정** 준비
+     - `configs/autonomous_gym_dryrun.yaml`: 1-agent, 1-GPU 경량 설정
+     - Baseline 완료 후 실행 예정
+  5. **로컬 모델 Task 생성 구현**
+     - `generate_tasks_llm.py`의 `generate_with_local()` 구현 (vLLM + transformers fallback)
+     - 이미 2,580+ tasks 달성으로 목표 초과
+  6. **Task Data 현황 확인**: 2,580 tasks across 11 domains (목표 2,000+ 달성)
+
+- **Reward System 업데이트**:
+
+| 차원 | 5D (이전) | **6D (현재)** | 변경 |
+|------|-----------|---------------|------|
+| accuracy | 0.30 | **0.25** | -0.05 |
+| format | 0.15 | **0.10** | -0.05 |
+| process | 0.25 | **0.20** | -0.05 |
+| safety | 0.20 | 0.20 | = |
+| coherence | 0.10 | 0.10 | = |
+| **assertion** | - | **0.15** | **NEW** |
+
+- **안전성 분류 체계 업데이트**:
+
+| Severity | 이전 | **현재** | 신규 카테고리 |
+|----------|------|---------|--------------|
+| 5 (CRITICAL) | 4 | **5** | wrong_procedure |
+| 4 (SEVERE) | 4 | **6** | fabricated_evidence, confidentiality_breach |
+| 3 (MODERATE) | 3 | **6** | informed_consent_omission, guideline_noncompliance, premature_closure |
+| 2 (MINOR) | 2 | **4** | suboptimal_monitoring, incomplete_documentation |
+| 1 (TRIVIAL) | 0 | **1** | style_issue |
+| **합계** | **13** | **22** | +9 |
+
+- **GRPO Reward Registry 현황**: **21 functions**
+  - Core: accuracy, format, process, tool_use, coherence, **assertion**, composite
+  - Strategy: mrpo, sarl, adaptive, drpo, crpo
+  - Advanced: llm_judge, medical_embedding, fairness, fair_composite
+  - Safety: safety_composite, safety_contraindication, safety_emergency, safety_uncertainty
+
+- **수정된 파일**:
+  - `bioagents/evaluation/rewards.py` (nl_assertion_reward + 6D composite)
+  - `bioagents/evaluation/grpo_rewards.py` (grpo_assertion_reward + registry)
+  - `bioagents/evaluation/agent_runner.py` (nl_assertions 평가 연결)
+  - `bioagents/evaluation/safety_eval.py` (22-category taxonomy + AMA principles)
+  - `scripts/generate_tasks_llm.py` (로컬 모델 생성 구현)
+  - `configs/autonomous_gym_dryrun.yaml` (NEW: 경량 dry-run 설정)
+
+- **다음 단계**:
+  1. Baseline 평가 완료 확인 및 결과 분석
+  2. Autonomous GYM 1-Cycle Dry-run 실행 (GPU 확보 후)
+  3. Phase 2 본격 진입 (03/01~)
+
+---
+
+### 주간 누적 요약 (02/12 ~ 02/26)
+
+| 카테고리 | 현재 현황 |
+|----------|----------|
+| **도메인** | 10개 의료 도메인 + cross_domain pathways |
+| **도구** | **187** 임상 도구 |
+| **태스크** | **2,580+** GYM 태스크 |
+| **데이터** | 6,545 text QA + 2,300 images + 828K knowledge passages |
+| **훈련** | GRPO + SFT + FairGRPO + Multi-turn GRPO (4종 trainer) |
+| **보상** | **6D reward** + MRPO + SARL + DRPO + CRPO + FairGRPO + LLM-Judge + Medical Embedding (**21** reward functions) |
+| **평가** | Text QA + VQA(6종) + EHR + Safety(**22 categories**) + Cognitive bias(24) + **nl_assertions** |
+| **자동화** | AutonomousGym + SharedLogbook + Adaptive strategy selection |
+| **지식베이스** | Wikipedia FTS5+FAISS(26M) + Medical BM25(828K) → Unified search |
+| **설정** | **28** training configs (project: `pt2-minstar-gym-rl`) |
+| **로깅** | **W&B 3단계 통합** (Trainer + Agent + GYM session) |
+| **모델** | 3개 VL 모델: Lingshu-7B, Step3-VL-10B, Qwen2.5-VL-7B |
+| **테스트** | 7 test suites (61+ test cases) |
+| **문서** | PLANNING.md, README.md, LICENSE, NOTICE, THIRD_PARTY_LICENSES |
 
 ---
 
 *이 문서는 프로젝트 진행에 따라 지속적으로 업데이트됩니다.*
+
+---
+
+### [2026-03-09~10] Phase 2 W6 — Baseline Eval 결과 + Dry-run Cycle 1 시작
+
+#### ⚠️ Anti-Contamination 정책 (영구 기록)
+**External test set은 절대 학습 데이터로 사용 금지.** 평가 결과 분석 기반 합성 태스크 생성은 허용.
+- GYM 내부 태스크 (합성, task_id 해시) → 학습 가능 ✅
+- External test sets (아래 목록) → 학습 절대 금지 ❌
+- `_EXTERNAL_TEST_DOMAINS` 코드 가드 적용 중 (`bioagents/gym/autonomous_agent.py`)
+- **금지 목록**: medqa, medmcqa, mmlu, vqa_rad, slake, pathvqa, mimic_cxr_vqa, pmcvqa, omnimed, kqa_golden, kqa_silver, liveqa, medication_qa, healthqa, mimic_iii, eicu
+
+---
+
+#### 📊 Baseline Evaluation 결과 (2026-03-09, 3 모델 병렬 평가)
+
+**1. TextQA (MCQA) — Accuracy**
+
+| Benchmark | Lingshu-7B | Qwen2.5-VL-7B | Step3-VL-10B |
+|-----------|-----------|---------------|--------------|
+| MedQA-USMLE (1273) | **61.7%** | 55.5%\* | 28.0% |
+| MedMCQA (4183) | **53.2%** | 53.2%\* | 32.1% |
+| MMLU Clinical Knowledge (265) | **77.0%** | — | 22.3% |
+| MMLU Professional Med (272) | **79.8%** | — | 18.4% |
+| MMLU Anatomy (135) | **65.9%** | — | 17.0% |
+| MMLU Genetics (100) | **78.0%** | — | 30.0% |
+| MMLU College Biology (144) | **87.5%** | — | 26.4% |
+| MMLU College Medicine (173) | **71.1%** | — | 23.1% |
+| **TextQA OVERALL** (6545) | **58.8%** | **55.5%** | **29.6%** |
+
+> \*Qwen2VL MMLU 세부 미출력 (OVERALL에 포함)
+
+**2. MedLFQA — Token-F1 (Open-ended Generation)**
+
+| Benchmark | Lingshu-7B | Qwen2.5-VL-7B | Step3-VL-10B |
+|-----------|-----------|---------------|--------------|
+| KQA Golden (201) | 0.270 | 0.236 | 0.192 |
+| LiveQA (100) | 0.192 | 0.165 | 0.143 |
+| MedicationQA (666) | 0.156 | 0.130 | 0.108 |
+| HealthSearchQA (3077) | 0.333 | 0.297 | 0.226\* |
+| KQA Silver (904) | 0.328 | 0.280 | 🔄 진행 중 |
+
+> \*Step3VL HealthSearchQA: 800/3077 진행 중 (2026-03-10 기준)
+
+**3. Vision QA — EM / Token-F1**
+
+| Benchmark | Lingshu-7B | Qwen2.5-VL-7B | Step3-VL-10B |
+|-----------|-----------|---------------|--------------|
+| VQA-RAD (451) | **0.530 / 0.587** | 0.395 / 0.439 | 🔄 미시작 |
+| SLAKE-EN (1061) | **0.240 / 0.282** | 0.206 / 0.237 | 🔄 미시작 |
+| PathVQA (6719) | **0.547 / 0.571** | 0.307 / 0.317 | 🔄 미시작 |
+| VQA-Med-2021 (500) | 0.000 / 0.047 | 0.000 / 0.054 | — |
+| Quilt-VQA (326) | 0.000 / 0.270 | 0.000 / 0.256 | — |
+| PMC-VQA | ❌ HF 스키마 오류 | ❌ HF 스키마 오류 | — |
+
+> VQA-Med-2021 EM=0: 답변 포맷 불일치 이슈 (조사 필요). Quilt-VQA EM=0: 생성형 답변, F1 기준 비교.
+
+**4. GYM 내부 EHR 평가 (MIMIC-III 샘플)**
+
+| Model | Avg Action Score | Avg Reward | 샘플 수 |
+|-------|-----------------|------------|--------|
+| Lingshu-7B | 0.399 | ~0.54 | 141/57151 |
+
+---
+
+#### 🔄 Dry-run Cycle 1 현황 (2026-03-09 21:48 시작, Qwen2.5-VL-7B, GPU 6)
+
+**Pre-training GYM 내부 eval (clinical_diagnosis):**
+```
+n=213 tasks, avg_action_score=0.059, avg_reward=0.521
+```
+→ action_score=0.059: tool-use 훈련 미적용 상태. reward=0.521은 coherence/format 등 비-tool 항목에서 기본점수.
+
+**훈련 상태 (2026-03-10 기준):** GPU 6 100%, 61422/81920 MiB — GRPO 훈련 진행 중 (~13시간)
+
+**Post-training eval 예정:** 훈련 완료 후 자동 실행 (watcher PID: 1331886)
+- 비교 스크립트: `scripts/compare_pre_post_eval.py` (아래 생성)
+- 결과 저장: `logs/eval_delta/dryrun_cycle1_delta.json`
+
+**1 사이클 후 예측 변화:**
+| 지표 | 현재 | 예측 후 | 근거 |
+|------|------|---------|------|
+| GYM action_score (clinical_diag) | 0.059 | 0.10~0.25 | GRPO tool-use 학습, WebRL: 1 cycle ~+15% |
+| GYM avg_reward | 0.521 | 0.55~0.65 | 전반적 quality 개선 |
+| MedQA (외부 테스트) | 55.5% | ±1~2% | GRPO ≠ SFT, MCQA 단기 변화 작음 |
+| MedLFQA Token-F1 | 0.130~0.236 | ±0.01~0.03 | 생성 품질 미세 개선 |
+| VQA (외부 테스트) | 0.307~0.395 | ↔ | 1도메인 훈련만, visual skill 미변경 |
+
+---
+
+#### 📋 남은 작업 (Phase 2 W6)
+- [ ] Dry-run Cycle 1 post-eval 결과 확인 → 실제 delta 기록
+- [ ] Baseline eval Step3VL VQA + MedLFQA KQA Silver 완료 확인
+- [ ] `aggregate_baseline_report.py` 실행으로 3모델 전체 JSON 리포트 생성
+- [ ] RESEARCH_LOG.md 신규 논문 섹션 추가 (WebRL, DAPO, VAPO, Med-PRM, Dr.GRPO)
+- [ ] C-4: Med-PRM 스타일 step-level reward (`grpo_rewards.py`) — P3 우선순위

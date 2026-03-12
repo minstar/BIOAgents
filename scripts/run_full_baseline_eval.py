@@ -23,6 +23,14 @@ import json
 import os
 import re
 import subprocess
+# ── venv-aware Python detection ──────────────────────────────────
+# IMPORTANT: Always use PYTHON_EXE for subprocesses to ensure the
+# project .venv is used (not conda base or system python).
+from pathlib import Path as _Path
+_PROJECT_ROOT = _Path(__file__).resolve().parent.parent
+_VENV_PY = _PROJECT_ROOT / ".venv" / "bin" / "python"
+import sys
+PYTHON_EXE = str(_VENV_PY) if _VENV_PY.exists() else sys.executable
 import sys
 import time
 from concurrent.futures import ProcessPoolExecutor
@@ -39,19 +47,19 @@ MODELS = {
     "lingshu": {
         "name": "Lingshu-7B",
         "path": str(PROJECT_ROOT / "checkpoints/models/Lingshu-7B"),
-        "gpus": "0,1",
+        "gpus": "0,1",          # 7B → 2 GPUs
         "type": "vlm",
     },
     "qwen2vl": {
         "name": "Qwen2.5-VL-7B-Instruct",
         "path": str(PROJECT_ROOT / "checkpoints/models/Qwen2.5-VL-7B-Instruct"),
-        "gpus": "2,3",
+        "gpus": "2,3",          # 7B → 2 GPUs
         "type": "vlm",
     },
     "step3vl": {
         "name": "Step3-VL-10B",
         "path": str(PROJECT_ROOT / "checkpoints/models/Step3-VL-10B"),
-        "gpus": "4,5",
+        "gpus": "4,5,6,7",      # 10B → 4 GPUs (larger model, faster inference)
         "type": "vlm",
     },
 }
@@ -367,8 +375,8 @@ def evaluate_model_transformers(model_key: str, benchmarks: list[str], output_di
     t0 = time.time()
 
     model_config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
-    model_type = getattr(model_config, "model_type", "")
-    is_qwen_vl = model_type in ("qwen2_5_vl", "qwen2_vl")
+    model_type = getattr(model_config, "model_type", "").lower()
+    is_qwen_vl = "qwen2" in model_type and "vl" in model_type
 
     load_kwargs = dict(
         torch_dtype=torch.bfloat16,
@@ -557,8 +565,9 @@ def main():
             model_info = MODELS[model_key]
             env = os.environ.copy()
             env["CUDA_VISIBLE_DEVICES"] = model_info["gpus"]
+            env["PYTHONUNBUFFERED"] = "1"
             cmd = [
-                sys.executable, __file__,
+                PYTHON_EXE, __file__,
                 "--model", model_key,
                 "--benchmarks", *args.benchmarks,
                 "--output-dir", args.output_dir,

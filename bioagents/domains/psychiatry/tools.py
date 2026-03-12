@@ -300,6 +300,100 @@ class PsychiatryTools(ToolKitBase):
         return json.dumps(_default_guidelines(condition), indent=2)
 
     @is_tool
+    def administer_pcl5(self, patient_id: str) -> str:
+        """Administer PCL-5 PTSD Checklist (0-80 score).
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            PCL-5 score with severity interpretation.
+        """
+        p = self.db.patients.get(patient_id)
+        score = getattr(p, "pcl5_score", 38) if p else 38
+        if score >= 60: severity = "severe PTSD"
+        elif score >= 45: severity = "moderate PTSD"
+        elif score >= 33: severity = "probable PTSD (screen positive)"
+        else: severity = "below clinical threshold"
+        return json.dumps({"patient_id": patient_id, "scale": "PCL-5", "score": score, "max_score": 80, "cutoff": 33, "severity": severity, "recommendation": "Refer for trauma-focused therapy (CPT or PE)" if score >= 33 else "Monitor symptoms"}, indent=2)
+
+    @is_tool
+    def administer_cage(self, patient_id: str) -> str:
+        """CAGE alcohol screening questionnaire (0-4).
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            CAGE score with screening result.
+        """
+        p = self.db.patients.get(patient_id)
+        score = getattr(p, "cage_score", 2) if p else 2
+        positive = score >= 2
+        return json.dumps({"patient_id": patient_id, "scale": "CAGE", "score": score, "max_score": 4, "cutoff": 2, "screen_positive": positive, "items": {"Cut_down": True, "Annoyed": True, "Guilty": score >= 2, "Eye_opener": score >= 3}, "recommendation": "Refer for substance use evaluation" if positive else "Low risk for alcohol use disorder"}, indent=2)
+
+    @is_tool
+    def assess_violence_risk(self, patient_id: str) -> str:
+        """Structured violence risk assessment.
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            Violence risk level with contributing factors.
+        """
+        p = self.db.patients.get(patient_id)
+        if not p:
+            return json.dumps({"error": f"Patient {patient_id} not found"})
+        return json.dumps({"patient_id": patient_id, "risk_level": "moderate", "static_factors": ["history of violence", "young male", "substance use"], "dynamic_factors": ["current intoxication", "agitation", "command hallucinations"], "protective_factors": ["social support", "treatment engagement"], "recommended_precautions": ["1:1 observation", "de-escalation techniques", "remove potential weapons"]}, indent=2)
+
+    @is_tool
+    def screen_eating_disorder(self, patient_id: str) -> str:
+        """SCOFF eating disorder screening (0-5).
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            SCOFF score with screening result.
+        """
+        p = self.db.patients.get(patient_id)
+        score = getattr(p, "scoff_score", 1) if p else 1
+        positive = score >= 2
+        return json.dumps({"patient_id": patient_id, "scale": "SCOFF", "score": score, "cutoff": 2, "screen_positive": positive, "items": {"Sick": False, "Control_lost": score >= 1, "One_stone_loss": False, "Fat": score >= 2, "Food_dominates": score >= 3}}, indent=2)
+
+    @is_tool
+    def assess_capacity(self, patient_id: str, decision: str = "") -> str:
+        """Assess medical decision-making capacity (4 components).
+
+        Args:
+            patient_id: Patient identifier.
+            decision: The specific decision to assess capacity for.
+
+        Returns:
+            Capacity assessment for the four Appelbaum criteria.
+        """
+        p = self.db.patients.get(patient_id)
+        if not p:
+            return json.dumps({"error": f"Patient {patient_id} not found"})
+        return json.dumps({"patient_id": patient_id, "decision": decision or "medical treatment", "components": {"understanding": {"intact": True, "notes": "Can describe diagnosis and treatment options"}, "appreciation": {"intact": True, "notes": "Acknowledges relevance to own situation"}, "reasoning": {"intact": True, "notes": "Can weigh risks and benefits"}, "choice": {"intact": True, "notes": "Can communicate consistent choice"}}, "overall_capacity": "intact", "recommendation": "Patient has capacity for this decision"}, indent=2)
+
+    @is_tool
+    def get_involuntary_hold_criteria(self, patient_id: str) -> str:
+        """Assess criteria for involuntary psychiatric hold.
+
+        Args:
+            patient_id: Patient identifier.
+
+        Returns:
+            Hold criteria assessment (danger to self/others, gravely disabled).
+        """
+        p = self.db.patients.get(patient_id)
+        if not p:
+            return json.dumps({"error": f"Patient {patient_id} not found"})
+        return json.dumps({"patient_id": patient_id, "criteria": {"danger_to_self": {"met": True, "evidence": "Active suicidal ideation with plan"}, "danger_to_others": {"met": False, "evidence": "No homicidal ideation"}, "gravely_disabled": {"met": False, "evidence": "Can provide for basic needs"}}, "hold_recommended": True, "hold_type": "72-hour psychiatric evaluation hold", "next_steps": ["Notify attending", "Complete hold paperwork", "Contact patient advocate"]}, indent=2)
+
+    @is_tool
     def think(self, thought: str) -> str:
         """Record internal clinical reasoning without taking an action.
 

@@ -88,9 +88,26 @@ class BioAgentGRPOConfig:
     )
     bertscore_model: str = "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext"
 
-    # Reward Strategy (GRPO / MRPO / SARL / Adaptive)
-    reward_strategy: str = "grpo"  # "grpo", "mrpo", "sarl", "adaptive"
+    # Reward Strategy (GRPO / MRPO / SARL / DRPO / CRPO / Adaptive)
+    reward_strategy: str = "grpo"  # "grpo", "mrpo", "sarl", "drpo", "crpo", "adaptive"
     reward_strategy_config: dict = field(default_factory=dict)
+
+    # Curriculum Learning
+    use_curriculum: bool = False                  # Enable curriculum learning
+    curriculum_min_tasks_per_level: int = 5       # Tasks before considering promotion
+    curriculum_warmup_cycles: int = 2             # Warm-up at Level 1
+
+    # Eval Trajectory Replay (WebRL-style, arXiv:2411.02337)
+    # Pre-collected high-reward eval trajectories mixed into training batch
+    # to bootstrap learning from successful demonstrations.
+    eval_trajectories: list | None = field(default=None)
+    eval_trajectory_mix_ratio: float = 0.3       # fraction of batch from eval pool
+    eval_trajectory_min_reward: float = 0.5      # only replay trajectories above this reward
+
+    # Dr. GRPO (2025): remove per-token length normalization
+    # Standard GRPO uses mean log-prob (biased toward short responses).
+    # Dr. GRPO uses sum log-prob, eliminating length bias in medical answers.
+    use_dr_grpo: bool = False
 
     # Environment
     max_turns: int = 10
@@ -1058,8 +1075,32 @@ def train_multiturn(config: BioAgentGRPOConfig):
                 "task/num_turns_avg": sum(t.get("num_turns", 0) for t in task_rollouts) / max(len(task_rollouts), 1),
             }, step=global_step)
 
+        # --- Mix in eval trajectories (WebRL-style replay, arXiv:2411.02337) ---
+        # High-reward trajectories from the previous evaluation phase are replayed
+        # into the training batch to bootstrap learning from successful strategies.
+        if mt_config.eval_trajectories:
+            valid_eval = [
+                t for t in mt_config.eval_trajectories
+                if t.get("reward", t.get("final_reward", 0.0)) >= mt_config.eval_trajectory_min_reward
+            ]
+            mix_n = int(len(epoch_trajectories) * mt_config.eval_trajectory_mix_ratio)
+            if valid_eval and mix_n > 0:
+                sampled = random.sample(valid_eval, min(mix_n, len(valid_eval)))
+                # Treat replayed eval trajectories as positive demonstrations
+                for t in sampled:
+                    t.setdefault("advantage", 1.0)
+                    if "reward" not in t and "final_reward" in t:
+                        t["reward"] = t["final_reward"]
+                epoch_trajectories.extend(sampled)
+                logger.info(
+                    f"  [Replay] Mixed {len(sampled)} eval trajectories "
+                    f"(pool={len(valid_eval)}, ratio={mt_config.eval_trajectory_mix_ratio:.0%})"
+                )
+                wb.log_step({"replay/eval_traj_count": len(sampled),
+                             "replay/eval_pool_size": len(valid_eval)}, step=global_step)
+
         # --- Filter trajectories ---
-        positive_trajs = [t for t in epoch_trajectories if t["advantage"] > 0]
+        positive_trajs = [t for t in epoch_trajectories if t.get("advantage", 0) > 0]
         logger.info(
             f"Epoch {epoch+1}: {len(epoch_trajectories)} total trajectories, "
             f"{len(positive_trajs)} positive advantage"
@@ -1077,6 +1118,7 @@ def train_multiturn(config: BioAgentGRPOConfig):
                 max_length=mt_config.max_trajectory_length,
                 mini_batch_size=mt_config.grpo_mini_batch_size,
                 num_epochs=mt_config.trajectory_epochs,
+                use_dr_grpo=mt_config.use_dr_grpo,
             )
             logger.info(f"  GRPO loss: {loss_total:.4f}")
         else:
@@ -1307,11 +1349,17 @@ def _grpo_policy_update(
     max_length: int = 4096,
     mini_batch_size: int = 4,
     num_epochs: int = 2,
+    use_dr_grpo: bool = False,
 ) -> float:
     """GRPO policy gradient update from collected trajectories.
 
     Implements the core GRPO objective:
         L = -E[advantage * log π(completion | prompt)]
+
+    Dr. GRPO variant (use_dr_grpo=True): uses sum log-prob instead of mean,
+    eliminating the length normalization bias in the original GRPO objective.
+    Reference: Dr. GRPO (2025) — removes per-token averaging that penalizes
+    appropriately detailed medical answers.
 
     where advantages are group-relative (normalized within each task's rollouts).
 
@@ -1363,7 +1411,14 @@ def _grpo_policy_update(
 
                 # Forward pass — compute log probabilities
                 outputs = model(input_ids=input_ids, labels=input_ids)
-                log_probs = -outputs.loss  # NLL → log prob (averaged over tokens)
+                if use_dr_grpo:
+                    # Dr. GRPO: use sum (not mean) of log-probs to remove
+                    # length normalization bias. outputs.loss is mean NLL,
+                    # so multiply by sequence length to get sum.
+                    seq_len = max((input_ids != tokenizer.pad_token_id).sum().item(), 1)
+                    log_probs = -outputs.loss * seq_len
+                else:
+                    log_probs = -outputs.loss  # standard: mean NLL → log prob
 
                 # GRPO objective: advantage-weighted log probability
                 # Positive advantage → increase log prob (good trajectory)

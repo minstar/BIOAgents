@@ -81,6 +81,10 @@ class AutonomousGymConfig:
     # Continuous mode
     continuous: bool = True
 
+    # Subprocess timeouts (seconds)
+    eval_timeout_seconds: int = 86400   # Default: 24h for full eval; set lower for dryrun
+    train_timeout_seconds: int = 7200   # Default: 2h for training
+
 
 # ============================================================
 # 2. GPU Scheduler
@@ -607,6 +611,8 @@ class AgentWorker(threading.Thread):
         guardrail: SafetyGuardrail,
         logbook_dir: str,
         result_callback=None,
+        eval_timeout: int = 86400,
+        train_timeout: int = 7200,
     ):
         super().__init__(daemon=True)
         self.agent = agent
@@ -617,6 +623,8 @@ class AgentWorker(threading.Thread):
         self.logbook_dir = logbook_dir
         self.result_callback = result_callback
         self._result = None
+        self.eval_timeout = eval_timeout
+        self.train_timeout = train_timeout
 
         # GPU requirements from config
         self.gpus_for_eval = getattr(agent_config, "gpus_for_eval", 1)
@@ -647,7 +655,7 @@ class AgentWorker(threading.Thread):
             )
 
             script = self._build_cycle_script(phase="eval")
-            result = self._run_subprocess(script, cuda_str, agent_id, timeout=3600)
+            result = self._run_subprocess(script, cuda_str, agent_id, timeout=self.eval_timeout)
 
             # Check if training is needed and requires more GPUs
             needs_training = result.get("workout", {}).get("success", False)
@@ -681,7 +689,7 @@ class AgentWorker(threading.Thread):
                     # Run training subprocess
                     train_script = self._build_cycle_script(phase="train")
                     train_result = self._run_subprocess(
-                        train_script, cuda_str, agent_id, timeout=7200
+                        train_script, cuda_str, agent_id, timeout=self.train_timeout
                     )
 
                     # Merge results
@@ -775,13 +783,14 @@ class AgentWorker(threading.Thread):
         env = dict(os.environ)
         env["CUDA_VISIBLE_DEVICES"] = cuda_devices
 
+        from bioagents import PYTHON_EXE, PROJECT_ROOT
         proc = sp.run(
-            [sys.executable, "-u", str(script_path)],
+            [PYTHON_EXE, "-u", str(script_path)],
             env=env,
             capture_output=True,
             text=True,
             timeout=timeout,
-            cwd=str(Path(__file__).parent.parent.parent),
+            cwd=str(PROJECT_ROOT),
         )
 
         result = {"agent_id": agent_id, "gpu_ids": cuda_devices}
@@ -1219,6 +1228,8 @@ class AutonomousGym:
                 guardrail=self.guardrail,
                 logbook_dir=self.config.logbook_dir,
                 result_callback=self._on_result,
+                eval_timeout=self.config.eval_timeout_seconds,
+                train_timeout=self.config.train_timeout_seconds,
             )
             worker.start()
             self._active_workers.append(worker)

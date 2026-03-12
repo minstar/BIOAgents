@@ -379,26 +379,81 @@ def grpo_coherence_reward(
     return rewards
 
 
+def grpo_assertion_reward(
+    completions: list,
+    nl_assertions: list = None,
+    tool_call_logs: list = None,
+    **kwargs,
+) -> list[float]:
+    """GRPO-compatible clinical assertion reward.
+
+    Evaluates how well each completion satisfies clinician-defined
+    natural language assertions from evaluation_criteria.
+
+    Args:
+        completions: List of model completions (TRL format).
+        nl_assertions: List of assertion lists (one per completion).
+            If a single list is passed, it applies to all completions.
+        tool_call_logs: Per-completion tool call logs.
+
+    Returns:
+        List of assertion scores in [0, 1].
+    """
+    from bioagents.evaluation.rewards import nl_assertion_reward
+
+    rewards = []
+    for i, completion in enumerate(completions):
+        if isinstance(completion, list):
+            text = completion[-1].get("content", "") if completion else ""
+        elif isinstance(completion, dict):
+            text = completion.get("content", "")
+        else:
+            text = str(completion)
+
+        assertions_i = None
+        if nl_assertions:
+            if isinstance(nl_assertions, list) and nl_assertions:
+                if isinstance(nl_assertions[0], list):
+                    assertions_i = nl_assertions[i] if i < len(nl_assertions) else []
+                else:
+                    assertions_i = nl_assertions
+
+        tc_log = []
+        if tool_call_logs and i < len(tool_call_logs):
+            tc_log = tool_call_logs[i] or []
+
+        result = nl_assertion_reward(
+            response=text,
+            nl_assertions=assertions_i,
+            tool_call_log=tc_log,
+        )
+        rewards.append(result["total"])
+
+    return rewards
+
+
 def grpo_composite_reward(
     completions: list,
     solution: list = None,
     answer: list = None,
     expected_actions: list = None,
+    nl_assertions: list = None,
     tool_call_logs: list = None,
     bert_scorer=None,
     weights: dict = None,
     **kwargs,
 ) -> list[float]:
-    """GRPO-compatible 5D composite reward combining all signals.
+    """GRPO-compatible 6D composite reward combining all signals.
 
-    Default weights: accuracy=0.30, format=0.15, process=0.25, safety=0.20, coherence=0.10
-    (matches the 5D system in rewards.py)
+    Default weights: accuracy=0.25, format=0.10, process=0.20,
+                     safety=0.20, coherence=0.10, assertion=0.15
 
     Args:
         completions: List of model completions (TRL format)
         solution: Ground truth answers
         answer: Alternative key for answers
         expected_actions: Expected tool call sequences
+        nl_assertions: Clinician-defined assertions per completion
         tool_call_logs: Actual tool call logs
         bert_scorer: Pre-initialized BERTScorer
         weights: Custom weights dict
@@ -408,11 +463,12 @@ def grpo_composite_reward(
     """
     if weights is None:
         weights = {
-            "accuracy": 0.30,
-            "format": 0.15,
-            "process": 0.25,
+            "accuracy": 0.25,
+            "format": 0.10,
+            "process": 0.20,
             "safety": 0.20,
             "coherence": 0.10,
+            "assertion": 0.15,
         }
 
     accuracy_scores = grpo_accuracy_reward(
@@ -437,6 +493,17 @@ def grpo_composite_reward(
     if weights.get("coherence", 0) > 0:
         coherence_scores = grpo_coherence_reward(completions, **kwargs)
 
+    # Clinical assertion reward
+    assertion_scores = None
+    if weights.get("assertion", 0) > 0 and nl_assertions:
+        try:
+            assertion_scores = grpo_assertion_reward(
+                completions, nl_assertions=nl_assertions,
+                tool_call_logs=tool_call_logs, **kwargs,
+            )
+        except Exception:
+            assertion_scores = [0.5] * len(completions)
+
     rewards = []
     for i in range(len(completions)):
         acc = accuracy_scores[i] if i < len(accuracy_scores) else 0.0
@@ -444,13 +511,15 @@ def grpo_composite_reward(
         proc = process_scores[i] if i < len(process_scores) else 0.0
         safe = safety_scores[i] if safety_scores and i < len(safety_scores) else 1.0
         coh = coherence_scores[i] if coherence_scores and i < len(coherence_scores) else 0.5
+        asrt = assertion_scores[i] if assertion_scores and i < len(assertion_scores) else 0.5
 
         total = (
-            weights.get("accuracy", 0.30) * acc
-            + weights.get("format", 0.15) * fmt
-            + weights.get("process", 0.25) * proc
+            weights.get("accuracy", 0.25) * acc
+            + weights.get("format", 0.10) * fmt
+            + weights.get("process", 0.20) * proc
             + weights.get("safety", 0.20) * safe
             + weights.get("coherence", 0.10) * coh
+            + weights.get("assertion", 0.15) * asrt
         )
         rewards.append(total)
 
@@ -831,6 +900,157 @@ class _LazyRewardRegistry(dict):
         return list(super().keys()) + list(self._lazy_loaders.keys())
 
 
+# ============================================================
+# LLM-as-Judge Reward (MediX-R1 inspired)
+# ============================================================
+
+_LLM_JUDGE_PROMPT = """\
+You are an expert medical evaluator. Score the following medical response on a scale of 0-10.
+
+## Reference Answer
+{reference}
+
+## Model Response
+{response}
+
+## Evaluation Criteria
+1. **Accuracy (0-10)**: Is the response medically correct? Does it match the reference?
+2. **Completeness (0-10)**: Does it cover all key clinical points from the reference?
+3. **Reasoning (0-10)**: Does it show logical, evidence-based clinical reasoning?
+4. **Safety (0-10)**: Does it avoid harmful advice, check contraindications?
+
+Respond with ONLY a JSON object:
+{{"accuracy": <0-10>, "completeness": <0-10>, "reasoning": <0-10>, "safety": <0-10>}}"""
+
+_llm_judge_client = None
+
+
+def _get_llm_judge_client():
+    """Get or create LLM judge client. Supports OpenAI API or local vLLM."""
+    global _llm_judge_client
+    if _llm_judge_client is not None:
+        return _llm_judge_client
+
+    judge_backend = os.environ.get("LLM_JUDGE_BACKEND", "openai")
+    judge_model = os.environ.get("LLM_JUDGE_MODEL", "gpt-4o-mini")
+    judge_api_key = os.environ.get("LLM_JUDGE_API_KEY", os.environ.get("OPENAI_API_KEY", ""))
+    judge_base_url = os.environ.get("LLM_JUDGE_BASE_URL", "")
+
+    if judge_backend == "openai":
+        try:
+            import openai
+            client_kwargs = {"api_key": judge_api_key}
+            if judge_base_url:
+                client_kwargs["base_url"] = judge_base_url
+            _llm_judge_client = {
+                "type": "openai",
+                "client": openai.OpenAI(**client_kwargs),
+                "model": judge_model,
+            }
+        except ImportError:
+            logger.warning("openai not installed. LLM-as-Judge reward disabled.")
+            _llm_judge_client = {"type": "none"}
+    elif judge_backend == "vllm":
+        try:
+            import openai
+            base_url = judge_base_url or "http://localhost:8000/v1"
+            _llm_judge_client = {
+                "type": "openai",
+                "client": openai.OpenAI(api_key="none", base_url=base_url),
+                "model": judge_model,
+            }
+        except ImportError:
+            _llm_judge_client = {"type": "none"}
+    else:
+        _llm_judge_client = {"type": "none"}
+
+    return _llm_judge_client
+
+
+def _llm_judge_score(response_text: str, reference_text: str) -> float:
+    """Score a single response using LLM-as-Judge.
+
+    Returns a float in [0, 1] (average of 4 criteria, each normalized to 0-1).
+    Falls back to 0.5 on any error.
+    """
+    client_info = _get_llm_judge_client()
+    if client_info.get("type") == "none":
+        return 0.5
+
+    prompt = _LLM_JUDGE_PROMPT.format(
+        reference=reference_text[:2000],
+        response=response_text[:2000],
+    )
+
+    try:
+        client = client_info["client"]
+        resp = client.chat.completions.create(
+            model=client_info["model"],
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.0,
+            max_tokens=200,
+        )
+        raw = resp.choices[0].message.content.strip()
+
+        # Parse JSON from response (handle markdown code blocks)
+        json_match = re.search(r"\{[^}]+\}", raw)
+        if json_match:
+            scores = json.loads(json_match.group())
+            avg = sum(
+                float(scores.get(k, 5))
+                for k in ("accuracy", "completeness", "reasoning", "safety")
+            ) / 4.0
+            return max(0.0, min(1.0, avg / 10.0))
+    except Exception as e:
+        logger.debug(f"LLM-as-Judge error: {e}")
+
+    return 0.5
+
+
+def grpo_llm_judge_reward(
+    completions: list,
+    solution: list = None,
+    answer: list = None,
+    **kwargs,
+) -> list[float]:
+    """GRPO-compatible LLM-as-Judge reward for open-ended medical responses.
+
+    Uses an external LLM (GPT-4o-mini by default, or local vLLM) to evaluate
+    the quality of model-generated medical responses against reference answers.
+
+    Inspired by MediX-R1 (ICLR 2026) LLM-as-judge accuracy reward.
+
+    Environment variables:
+        LLM_JUDGE_BACKEND: "openai" (default) | "vllm"
+        LLM_JUDGE_MODEL: Model name (default "gpt-4o-mini")
+        LLM_JUDGE_API_KEY: API key (falls back to OPENAI_API_KEY)
+        LLM_JUDGE_BASE_URL: Custom base URL (for vLLM or Azure)
+
+    Args:
+        completions: Model completions (TRL format)
+        solution: Reference answers
+        answer: Alternative key for reference answers
+
+    Returns:
+        List of float scores in [0, 1]
+    """
+    refs = solution or answer or []
+    rewards = []
+
+    for i, completion in enumerate(completions):
+        text = _extract_text(completion)
+        ref = refs[i] if i < len(refs) else ""
+
+        if not ref or not text:
+            rewards.append(0.5)
+            continue
+
+        score = _llm_judge_score(text, str(ref))
+        rewards.append(score)
+
+    return rewards
+
+
 def _get_mrpo_strategy_reward():
     """Lazy-load MRPO strategy reward."""
     from bioagents.evaluation.reward_strategies import create_reward_strategy, make_grpo_reward_fn
@@ -852,22 +1072,316 @@ def _get_adaptive_strategy_reward():
     return make_grpo_reward_fn(strategy)
 
 
+# ============================================================
+# Medical Embedding Reward (BiomedBERT / MedCPT semantic similarity)
+# ============================================================
+
+
+def grpo_medical_embedding_reward(
+    completions: list,
+    solution: list = None,
+    answer: list = None,
+    **kwargs,
+) -> list[float]:
+    """GRPO-compatible semantic similarity reward using medical embeddings.
+
+    Computes cosine similarity between model response and reference answer
+    using a medical domain-specific embedding model (BiomedBERT or MedCPT).
+
+    Falls back to sentence-transformers all-MiniLM-L6-v2 if medical models
+    are unavailable.
+
+    Inspired by MediX-R1 medical embedding reward.
+
+    Environment variables:
+        MEDICAL_EMBED_MODEL: Model name (default "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract")
+        MEDICAL_EMBED_DEVICE: Device (default "cpu")
+
+    Args:
+        completions: Model completions (TRL format).
+        solution: Reference answers.
+        answer: Alternative key for reference answers.
+
+    Returns:
+        List of float scores in [0, 1].
+    """
+    refs = solution or answer or kwargs.get("solution", [])
+    if not refs:
+        return [0.5] * len(completions)
+
+    # Extract response text from completions
+    responses = []
+    for c in completions:
+        if isinstance(c, dict):
+            text = c.get("content", "") or c.get("text", "")
+        elif isinstance(c, list):
+            text = c[-1].get("content", "") if c else ""
+        else:
+            text = str(c)
+        responses.append(_extract_answer_from_response(text) or text[:500])
+
+    ref_texts = []
+    for r in refs:
+        ref_texts.append(str(r) if r else "")
+
+    # Pad if needed
+    while len(ref_texts) < len(responses):
+        ref_texts.append(ref_texts[-1] if ref_texts else "")
+
+    try:
+        return _compute_embedding_similarity(responses, ref_texts[:len(responses)])
+    except Exception as e:
+        logger.warning(f"Medical embedding reward failed: {e}, falling back to 0.5")
+        return [0.5] * len(completions)
+
+
+def _compute_embedding_similarity(responses: list, references: list) -> list:
+    """Compute cosine similarity using sentence-transformers.
+
+    Lazily loads the embedding model on first call.
+    """
+    global _EMBED_MODEL, _EMBED_TOKENIZER
+
+    if "_EMBED_MODEL" not in globals() or _EMBED_MODEL is None:
+        model_name = os.environ.get(
+            "MEDICAL_EMBED_MODEL",
+            "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract",
+        )
+        device = os.environ.get("MEDICAL_EMBED_DEVICE", "cpu")
+
+        try:
+            from sentence_transformers import SentenceTransformer
+            _EMBED_MODEL = SentenceTransformer(model_name, device=device)
+            _EMBED_TOKENIZER = None
+            logger.info(f"Loaded medical embedding model: {model_name}")
+        except Exception:
+            try:
+                from sentence_transformers import SentenceTransformer
+                fallback = "all-MiniLM-L6-v2"
+                _EMBED_MODEL = SentenceTransformer(fallback, device=device)
+                _EMBED_TOKENIZER = None
+                logger.info(f"Loaded fallback embedding model: {fallback}")
+            except ImportError:
+                logger.warning("sentence-transformers not installed, using simple overlap")
+                _EMBED_MODEL = "FALLBACK"
+                _EMBED_TOKENIZER = None
+
+    if _EMBED_MODEL == "FALLBACK":
+        # Simple word-overlap fallback
+        scores = []
+        for resp, ref in zip(responses, references):
+            resp_tokens = set(resp.lower().split())
+            ref_tokens = set(ref.lower().split())
+            if not ref_tokens:
+                scores.append(0.5)
+                continue
+            overlap = len(resp_tokens & ref_tokens) / max(len(ref_tokens), 1)
+            scores.append(min(overlap, 1.0))
+        return scores
+
+    import numpy as np
+
+    resp_embeddings = _EMBED_MODEL.encode(responses, show_progress_bar=False)
+    ref_embeddings = _EMBED_MODEL.encode(references, show_progress_bar=False)
+
+    scores = []
+    for r_emb, ref_emb in zip(resp_embeddings, ref_embeddings):
+        cosine_sim = float(
+            np.dot(r_emb, ref_emb)
+            / (np.linalg.norm(r_emb) * np.linalg.norm(ref_emb) + 1e-8)
+        )
+        # Map from [-1, 1] to [0, 1]
+        score = (cosine_sim + 1.0) / 2.0
+        scores.append(max(0.0, min(1.0, score)))
+
+    return scores
+
+
+# Initialize global embedding model cache
+_EMBED_MODEL = None
+_EMBED_TOKENIZER = None
+
+
+def _get_drpo_strategy_reward():
+    """Lazy-load DRPO strategy reward."""
+    from bioagents.evaluation.reward_strategies import create_reward_strategy, make_grpo_reward_fn
+    strategy = create_reward_strategy("drpo")
+    return make_grpo_reward_fn(strategy)
+
+
+def _get_crpo_strategy_reward():
+    """Lazy-load CRPO strategy reward."""
+    from bioagents.evaluation.reward_strategies import create_reward_strategy, make_grpo_reward_fn
+    strategy = create_reward_strategy("crpo")
+    return make_grpo_reward_fn(strategy)
+
+
+# ============================================================
+# C-4: Med-PRM Style Step-level Process Reward
+# Reference: Med-PRM (EMNLP 2025, arXiv:2506.11474)
+#   "Medical Process Reward Model" — guideline-verifiable intermediate
+#   reasoning steps in clinical trajectories are rewarded at each turn,
+#   not just at final answer. Complements existing 5D final reward.
+#
+# Also inspired by DAPO (arXiv:2412.18279, NeurIPS 2025) dense step reward.
+# ============================================================
+
+# Clinical reasoning step order for medical diagnosis tasks
+_CLINICAL_STEP_ORDER = [
+    # Stage 1: Information gathering
+    ("symptom", ["get_symptoms", "get_chief_complaint", "get_history", "get_vitals",
+                  "get_patient_info", "get_lab_results", "get_lab_trend"]),
+    # Stage 2: Investigation
+    ("investigation", ["order_labs", "order_imaging", "get_imaging_results",
+                        "search_literature", "search_pubmed", "get_guidelines"]),
+    # Stage 3: Differential diagnosis
+    ("differential", ["generate_differential", "rank_differential", "check_criteria",
+                       "assess_risk", "calculate_score"]),
+    # Stage 4: Treatment / management plan
+    ("treatment", ["prescribe_medication", "recommend_treatment", "get_drug_info",
+                    "check_drug_interaction", "create_care_plan", "submit_answer"]),
+]
+
+_STEP_STAGE_MAP: dict[str, int] = {}
+for _stage_idx, (_stage_name, _tools) in enumerate(_CLINICAL_STEP_ORDER):
+    for _tool in _tools:
+        _STEP_STAGE_MAP[_tool.lower()] = _stage_idx
+
+
+def _score_trajectory_steps(tool_calls: list[str], domain: str = "") -> float:
+    """Score a trajectory's step ordering quality (0.0-1.0).
+
+    Rewards trajectories that follow the expected clinical reasoning order
+    (symptom → investigation → differential → treatment). Out-of-order
+    transitions are penalized.
+
+    Args:
+        tool_calls: Ordered list of tool names called in the trajectory.
+        domain: Optional domain hint (currently unused, for future extension).
+
+    Returns:
+        Step-order score in [0, 1].
+    """
+    if not tool_calls:
+        return 0.5  # neutral for missing data
+
+    stages_used = []
+    for tool in tool_calls:
+        stage = _STEP_STAGE_MAP.get(tool.lower().strip())
+        if stage is not None:
+            stages_used.append(stage)
+
+    if not stages_used:
+        return 0.5  # no recognizable clinical tools → neutral
+
+    # Reward: fraction of consecutive pairs that are non-decreasing (ordered)
+    ordered_pairs = sum(
+        1 for a, b in zip(stages_used, stages_used[1:]) if b >= a
+    )
+    total_pairs = len(stages_used) - 1
+    if total_pairs <= 0:
+        return 0.7  # single-step trajectory gets mild reward
+
+    ordering_score = ordered_pairs / total_pairs  # [0, 1]
+
+    # Bonus: trajectory reaches the treatment/submit stage
+    reach_bonus = 0.15 if stages_used[-1] == len(_CLINICAL_STEP_ORDER) - 1 else 0.0
+
+    return min(1.0, ordering_score * 0.85 + reach_bonus)
+
+
+def grpo_stepwise_medical_reward(
+    completions: list,
+    tool_call_logs: list = None,
+    domain: list = None,
+    step_reward_weight: float = 0.1,
+    base_reward_fn: str = "composite",
+    **kwargs,
+) -> list[float]:
+    """Med-PRM style step-level reward combined with base outcome reward.
+
+    Evaluates each trajectory turn-by-turn for clinical reasoning order
+    (symptom → investigation → differential → treatment), following the
+    Med-PRM (EMNLP 2025) principle that intermediate step quality should
+    be rewarded, not just final answer correctness.
+
+    Args:
+        completions: List of model completions (TRL format).
+        tool_call_logs: Per-completion list of tool call dicts.
+            Each entry: list of {"name": str, "arguments": dict} or str.
+        domain: Optional per-completion domain names (for future use).
+        step_reward_weight: Weight of step-level reward vs base reward.
+            Final = (1 - w) * base_reward + w * step_reward.
+            Default 0.10 (conservative: 90% outcome, 10% process).
+        base_reward_fn: Base reward to combine with step reward.
+            One of: "composite", "accuracy", "tool_use".
+
+    Returns:
+        List of combined rewards in [0, 1].
+    """
+    # Compute base rewards
+    if base_reward_fn == "composite":
+        base_rewards = grpo_composite_reward(completions, **kwargs)
+    elif base_reward_fn == "tool_use":
+        base_rewards = grpo_tool_use_reward(completions, **kwargs)
+    else:
+        base_rewards = grpo_accuracy_reward(completions, **kwargs)
+
+    step_rewards = []
+    for i, completion in enumerate(completions):
+        # Extract tool call sequence for this completion
+        tc_log = []
+        if tool_call_logs and i < len(tool_call_logs):
+            raw = tool_call_logs[i] or []
+            for entry in raw:
+                if isinstance(entry, dict):
+                    name = entry.get("name") or entry.get("tool") or ""
+                    if name:
+                        tc_log.append(name)
+                elif isinstance(entry, str):
+                    tc_log.append(entry)
+
+        dom = ""
+        if domain and i < len(domain):
+            dom = domain[i] or ""
+
+        step_score = _score_trajectory_steps(tc_log, dom)
+        step_rewards.append(step_score)
+
+    # Combine: weighted sum
+    w = max(0.0, min(0.5, step_reward_weight))  # cap at 0.5 for safety
+    combined = [
+        (1.0 - w) * br + w * sr
+        for br, sr in zip(base_rewards, step_rewards)
+    ]
+    return combined
+
+
 GRPO_REWARD_REGISTRY: Dict[str, Callable] = _LazyRewardRegistry({
     "accuracy": grpo_accuracy_reward,
     "format": grpo_format_reward,
     "process": grpo_process_reward,
     "tool_use": grpo_tool_use_reward,
     "coherence": grpo_coherence_reward,
+    "assertion": grpo_assertion_reward,
     "composite": grpo_composite_reward,
+    # LLM-as-Judge reward (MediX-R1 inspired)
+    "llm_judge": grpo_llm_judge_reward,
+    # Medical embedding semantic similarity reward
+    "medical_embedding": grpo_medical_embedding_reward,
     # FairGRPO reward functions
     "fairness": grpo_fairness_reward,
     "fair_composite": grpo_fair_composite_reward,
+    # Med-PRM style step-level process reward (C-4, arXiv:2506.11474)
+    "stepwise_medical": grpo_stepwise_medical_reward,
 })
 
 # Register strategy-based rewards (lazy-loaded to avoid circular imports)
 GRPO_REWARD_REGISTRY._lazy_loaders["mrpo"] = _get_mrpo_strategy_reward
 GRPO_REWARD_REGISTRY._lazy_loaders["sarl"] = _get_sarl_strategy_reward
 GRPO_REWARD_REGISTRY._lazy_loaders["adaptive"] = _get_adaptive_strategy_reward
+GRPO_REWARD_REGISTRY._lazy_loaders["drpo"] = _get_drpo_strategy_reward
+GRPO_REWARD_REGISTRY._lazy_loaders["crpo"] = _get_crpo_strategy_reward
 
 
 def get_grpo_reward_functions(names: list[str]) -> list[Callable]:

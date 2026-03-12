@@ -27,11 +27,11 @@ from typing import Optional
 PROJECT_ROOT = Path(__file__).parent.parent
 
 MODELS = {
-    "qwen3": {
-        "name": "Qwen3-8B-Base",
-        "path": "/data/project/private/minstar/models/Qwen3-8B-Base",
-        "type": "causal",
-        "supports_vision": False,
+    "lingshu": {
+        "name": "Lingshu-7B",
+        "path": str(PROJECT_ROOT / "checkpoints/models/Lingshu-7B"),
+        "type": "vlm",
+        "supports_vision": True,
     },
     "qwen2vl": {
         "name": "Qwen2.5-VL-7B-Instruct",
@@ -39,9 +39,9 @@ MODELS = {
         "type": "vlm",
         "supports_vision": True,
     },
-    "lingshu": {
-        "name": "Lingshu-7B",
-        "path": str(PROJECT_ROOT / "checkpoints/models/Lingshu-7B"),
+    "step3vl": {
+        "name": "Step3-VL-10B",
+        "path": str(PROJECT_ROOT / "checkpoints/models/Step3-VL-10B"),
         "type": "vlm",
         "supports_vision": True,
     },

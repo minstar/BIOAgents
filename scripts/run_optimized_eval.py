@@ -23,6 +23,13 @@ import re
 import subprocess
 import sys
 import time
+# ── venv-aware Python detection ──────────────────────────────────
+# IMPORTANT: Always use PYTHON_EXE for subprocesses to ensure the
+# project .venv is used (not conda base or system python).
+from pathlib import Path as _Path
+_PROJECT_ROOT = _Path(__file__).resolve().parent.parent
+_VENV_PY = _PROJECT_ROOT / ".venv" / "bin" / "python"
+PYTHON_EXE = str(_VENV_PY) if _VENV_PY.exists() else sys.executable
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
@@ -385,7 +392,7 @@ def main():
             env["CUDA_VISIBLE_DEVICES"] = gpus
             env["PYTHONUNBUFFERED"] = "1"
             cmd = [
-                sys.executable, __file__,
+                PYTHON_EXE, __file__,
                 "--mode", "single",
                 "--category", category,
                 "--model", model,
@@ -408,7 +415,7 @@ def main():
             env["CUDA_VISIBLE_DEVICES"] = gpus
             env["PYTHONUNBUFFERED"] = "1"
             cmd = [
-                sys.executable, __file__,
+                PYTHON_EXE, __file__,
                 "--mode", "single",
                 "--category", category,
                 "--model", model,

@@ -40,7 +40,11 @@ from pathlib import Path
 from typing import Optional
 
 PROJECT_ROOT = Path(__file__).parent.parent
-PYTHON = "/data/project/private/minstar/miniconda3/envs/llm/bin/python"
+# ── venv-aware Python detection ──────────────────────────────────
+# IMPORTANT: Always use the project .venv — not conda envs or system python.
+# All deps (bioagents, vllm, flash-attn, etc.) are only in .venv/.
+_VENV_PY = PROJECT_ROOT / ".venv" / "bin" / "python"
+PYTHON = str(_VENV_PY) if _VENV_PY.exists() else sys.executable
 
 # ============================================================
 # Model Registry

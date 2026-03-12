@@ -32,12 +32,16 @@ def get_environment(
     if db is None:
         db = MedicalQADB.load(DB_PATH)
 
-    # MedicalQATools already has search_pubmed, search_medical_wiki, etc.
-    # KnowledgeTools adds 828K FTS5 medical passages + Wikipedia search.
-    # CompositeToolKit merges them: domain tools take precedence on name conflicts.
+    # KnowledgeTools provides search backed by 828K FTS5 medical passages +
+    # 26M Wikipedia articles.  MedicalQATools adds domain-specific helpers
+    # (analyze_answer_options, think, submit_answer).
+    #
+    # Order matters: KnowledgeTools goes FIRST so its search_pubmed /
+    # search_medical_wiki etc. (backed by real data) take precedence over
+    # MedicalQATools' local-db versions (db.json is intentionally minimal).
     domain_tools = MedicalQATools(db)
     knowledge_tools = KnowledgeTools(db=db)
-    tools = CompositeToolKit(domain_tools, knowledge_tools)
+    tools = CompositeToolKit(knowledge_tools, domain_tools)
 
     with open(POLICY_PATH, "r", encoding="utf-8") as f:
         policy = f.read()

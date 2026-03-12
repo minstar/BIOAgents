@@ -1,6 +1,6 @@
 # Healthcare AI GYM — Agent Guideline
 
-> **Last Updated**: 2026-02-15 17:31 (auto-updated by GYM system)
+> **Last Updated**: 2026-03-12 20:42 (auto-updated by GYM system)
 > **Version**: 1.0
 > **For**: Any model (7B-10B+) entering the Healthcare AI GYM
 
@@ -16,9 +16,58 @@ You will be evaluated across **10 medical domains** and **21 benchmarks**. Your 
 
 ---
 
-## 2. Quick Start — Bring Your Own Model
+## 2. Environment Setup (CRITICAL)
 
-### 2.1 Requirements
+> **⚠ ALWAYS use the project `.venv` — NEVER conda base or system Python.**
+
+This project uses a **dedicated virtual environment** at `.venv/` managed by `uv`.
+All dependencies (bioagents, torch, transformers, vllm, flash-attn, peft, trl, etc.)
+are installed ONLY in this venv.
+
+### Activate the venv
+
+```bash
+# Option A: activate (recommended for interactive use)
+source .venv/bin/activate
+
+# Option B: run directly (recommended for scripts & subprocesses)
+.venv/bin/python your_script.py
+```
+
+### Environment comparison — why this matters
+
+| | `.venv` (CORRECT) | conda `base` (WRONG) |
+|---|---|---|
+| torch | 2.9.1+cu128 | 2.4.0 |
+| transformers | 4.57.6 | 5.1.0 |
+| **bioagents** | **0.1.0** | **NOT INSTALLED** |
+| **vllm** | **installed** | **NOT INSTALLED** |
+| flash-attn | installed | NOT INSTALLED |
+| peft / trl | installed | installed |
+
+### In Python subprocesses — use `PYTHON_EXE`
+
+```python
+from bioagents import PYTHON_EXE  # auto-detects .venv/bin/python
+import subprocess
+subprocess.run([PYTHON_EXE, "my_script.py"])
+```
+
+### In shell scripts — always activate first
+
+```bash
+#!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$PROJECT_ROOT/.venv/bin/activate"
+python -m bioagents.gym.autonomous_gym "$@"
+```
+
+---
+
+## 3. Quick Start — Bring Your Own Model
+
+### 3.1 Requirements
 
 | Requirement | Minimum | Recommended |
 |------------|---------|-------------|
@@ -36,7 +85,7 @@ You will be evaluated across **10 medical domains** and **21 benchmarks**. Your 
 - Step3-VL (custom, `trust_remote_code`)
 - Any `AutoModelForCausalLM` compatible model
 
-### 2.2 Register Your Model
+### 3.2 Register Your Model
 
 Add to `configs/autonomous_gym.yaml`:
 
@@ -91,7 +140,7 @@ The system will:
 
 ---
 
-## 3. The 10 Medical Domains
+## 4. The 10 Medical Domains
 
 ### 3.1 Domain Overview
 
@@ -315,7 +364,7 @@ Cross-domain pathways delegate to the appropriate domain for each phase. For exa
 
 ---
 
-## 4. How You Are Scored — 5D Reward System
+## 5. How You Are Scored — 5D Reward System
 
 Every response is scored across **5 dimensions**:
 
@@ -362,7 +411,7 @@ Every response is scored across **5 dimensions**:
 
 ---
 
-## 5. Recommended Agent Behavior
+## 6. Recommended Agent Behavior
 
 ### 5.1 Ideal Tool-Use Pattern
 
@@ -445,7 +494,7 @@ All formats are automatically normalized to `{"name": ..., "arguments": ...}`.
 
 ---
 
-## 6. Training Strategies
+## 7. Training Strategies
 
 The GYM uses **adaptive RL** — the training strategy is automatically selected based on your performance pattern.
 
@@ -454,23 +503,72 @@ The GYM uses **adaptive RL** — the training strategy is automatically selected
 | **GRPO** | Default, stable performance | Group Relative Policy Optimization |
 | **MRPO** | Reasoning errors > 3 | Token-level reward shaping for quality |
 | **SARL** | Premature stops > 2, tool-heavy domains | Encourages search + self-assessment |
-| **Adaptive** | New/untried domains | Dynamically selects based on task |
+| **DRPO** | VL domains, cross-domain, imbalanced data | Domain-aware scaling (rarity + modality difficulty) |
+| **CRPO** | Complex clinical cases, patient safety | Multi-objective: accuracy + faithfulness + completeness + safety |
+| **Adaptive** | New/untried domains | Dynamically selects GRPO/MRPO/SARL/DRPO/CRPO per task |
 
 ### 6.1 Strategy Selection Logic
 
 ```
-IF new domain or first visit           → Adaptive
-IF many reasoning_error                → MRPO (token-level quality)
-IF many premature_stop                 → SARL (encourages tool usage)
-IF tool-heavy domain + score < 70%     → SARL
-IF knowledge-heavy domain + score < 70% → MRPO
-IF score >= 80%                        → GRPO (don't change what works)
-ELSE                                   → Adaptive
+IF VL domain (visual_diagnosis, radiology)  → DRPO (domain-aware scaling)
+IF cross_domain pathway                     → DRPO (multi-modal difficulty)
+IF heavy search/browse tools expected       → SARL (encourages tool usage)
+IF complex patient case (3+ tools)          → CRPO (clinical multi-objective)
+IF hard open-ended clinical task            → CRPO (faithfulness + completeness)
+IF simple MC with few tools                 → GRPO (standard composite)
+IF multi-turn search task                   → SARL (self-assessment tracking)
+IF hard MC task                             → MRPO (token-level shaping)
+IF new domain or first visit                → Adaptive (auto-selects)
+IF score >= 80%                             → GRPO (don't change what works)
+ELSE                                        → Adaptive
 ```
+
+### 6.2 DRPO — Domain-Aware Reward Scaling
+
+DRPO (QoQ-Med, NeurIPS 2025 Oral, arXiv:2506.00711) prevents over-fitting to easy/frequent domains:
+
+```
+DRPO_reward = base_reward × rarity_scale × modality_scale × difficulty_scale
+```
+
+| Domain | Modality Scale | Difficulty Scale |
+|--------|---------------|-----------------|
+| medical_qa | 1.0 (text) | 0.8 |
+| clinical_diagnosis | 1.0 (text) | 1.0 |
+| visual_diagnosis | 1.3 (vision) | 1.3 |
+| radiology_report | 1.3 (vision) | 1.4 |
+| cross_domain | 1.5 (multi-modal) | 1.5 |
+
+### 6.3 CRPO — Clinical Multi-Objective Optimization
+
+CRPO (Clinical-R1, arXiv:2512.00601) jointly optimizes four clinical objectives:
+
+| Objective | Weight | What It Measures |
+|-----------|--------|-----------------|
+| Accuracy | 35% | Correctness of final answer |
+| Faithfulness | 30% | Grounded in evidence, no hallucinations |
+| Completeness | 20% | Covers all clinically relevant aspects |
+| Safety | 15% | No harmful recommendations |
+
+### 6.4 Curriculum Learning
+
+The GYM supports **progressive difficulty training** with 5 levels:
+
+| Level | Name | Description | Promotion Threshold |
+|-------|------|------------|-------------------|
+| 1 | Foundation | Simple MCQA, single tool | 50% |
+| 2 | Developing | Multi-step, 2-3 tools | 55% |
+| 3 | Competent | Complex cases, 4-6 tools | 60% |
+| 4 | Proficient | Cross-domain, safety-critical | 65% |
+| 5 | Expert | Adversarial, bias tests | — |
+
+Task mixing at each level: 60% current + 25% review + 15% challenge.
+The agent must achieve the threshold score at the current level before
+unlocking the next difficulty level.
 
 ---
 
-## 7. Autonomous Data Generation
+## 8. Autonomous Data Generation
 
 The GYM automatically generates training data based on your weaknesses. After each evaluation, the system analyses your errors and decides what data to mine.
 
@@ -518,7 +616,7 @@ Your Evaluation Results
 
 ---
 
-## 8. Benchmarks — How You're Officially Evaluated
+## 9. Benchmarks — How You're Officially Evaluated
 
 External benchmarks run every **3 cycles** (configurable). These produce paper-ready numbers.
 
@@ -565,7 +663,7 @@ External benchmarks run every **3 cycles** (configurable). These produce paper-r
 
 ---
 
-## 9. Peer Learning — SharedLogbook
+## 10. Peer Learning — SharedLogbook
 
 You are not alone in the GYM. Other agents train alongside you and share their experiences through the **SharedLogbook**.
 
@@ -589,7 +687,7 @@ You are not alone in the GYM. Other agents train alongside you and share their e
 
 ---
 
-## 10. Model Auto-Profiling
+## 11. Model Auto-Profiling
 
 When your model enters the GYM, it is automatically profiled:
 
@@ -609,7 +707,7 @@ When your model enters the GYM, it is automatically profiled:
 
 ---
 
-## 11. Configuration Reference
+## 12. Configuration Reference
 
 ### 11.1 Strategy Personality Weights
 
@@ -654,7 +752,7 @@ gym:
 
 ---
 
-## 12. W&B Monitoring
+## 13. W&B Monitoring
 
 All training is logged to Weights & Biases under project `pt2-minstar-gym-rl`.
 
@@ -702,10 +800,14 @@ BIOAgents/
 │   │   ├── autonomous_gym.py         # GYM orchestrator
 │   │   ├── agent_env.py              # GYM environment
 │   │   ├── model_profile.py          # Auto-profiling
-│   │   └── shared_logbook.py         # Peer learning
+│   │   ├── shared_logbook.py         # Peer learning
+│   │   └── curriculum.py             # Curriculum learning scheduler (5 levels)
 │   ├── evaluation/
 │   │   ├── agent_runner.py           # Task execution + scoring
-│   │   ├── grpo_rewards.py           # 5D reward system
+│   │   ├── grpo_rewards.py           # 5D reward system + DRPO/CRPO
+│   │   ├── reward_strategies.py      # GRPO/MRPO/SARL/DRPO/CRPO/Adaptive
+│   │   ├── safety_eval.py            # Safety evaluation (50 adversarial)
+│   │   ├── cognitive_bias.py         # 11 cognitive bias tests
 │   │   └── benchmark_eval.py         # External benchmarks
 │   ├── training/
 │   │   └── grpo_trainer.py           # GRPO training loop
@@ -731,9 +833,9 @@ BIOAgents/
 
 
 
-## 13. Live Intelligence (Auto-Updated)
+## 14. Live Intelligence (Auto-Updated)
 
-> Last auto-update: 2026-02-15 17:50 | System reset after Phase 1.5 integration
+> Last auto-update: 2026-02-16 | Phase 1.5 — DRPO + CRPO + Curriculum + Rubric Reward integrated
 
 ### 13.1 Current Domain Status
 
@@ -775,12 +877,28 @@ BIOAgents/
 | KnowledgeTools disconnected from domains | ✅ Fixed | `CompositeToolKit` integrates into all 9 domains |
 | `premature_stop` in ehr_management (28x) | ⚠️ Monitor | Agents need SARL strategy to encourage tool use |
 | `medical_qa/db.json` empty | ⚠️ Known | Data file needs regeneration |
+| Missing domain-aware reward scaling | ✅ Fixed | DRPO strategy implemented (QoQ-Med) |
+| No clinical multi-objective optimization | ✅ Fixed | CRPO strategy implemented (Clinical-R1) |
+| No curriculum/progressive difficulty | ✅ Fixed | CurriculumScheduler with 5 difficulty levels |
+| Process reward heuristic-only | ✅ Fixed | Rubric-based process reward (RaR-inspired) |
 
-### 13.5 Recommended Next Steps
+### 13.5 New Features (Phase 1.5 Update — 2026-02-16)
+
+| Feature | Module | Description |
+|---------|--------|-------------|
+| **DRPO** | `reward_strategies.py` | Domain-aware Relative PO — rarity × modality × difficulty scaling (QoQ-Med) |
+| **CRPO** | `reward_strategies.py` | Clinical-objective Relative PO — accuracy + faithfulness + completeness + safety (Clinical-R1) |
+| **Curriculum Learning** | `gym/curriculum.py` | 5-level progressive difficulty with competence gating and anti-regression |
+| **Rubric-based Process Reward** | `rewards.py` | RaR-inspired rubric matching + systematic clinical workflow scoring |
+| **Enhanced Adaptive Strategy** | `reward_strategies.py` | Auto-selects from 6 strategies (GRPO/MRPO/SARL/DRPO/CRPO) per task |
+
+### 13.6 Recommended Next Steps
 
 1. Run `python scripts/run_full_baseline_eval.py --parallel` for all 3 models
 2. Start Autonomous GYM: `python -m bioagents.gym.autonomous_gym --config configs/autonomous_gym.yaml`
 3. Monitor W&B dashboard: `pt2-minstar-gym-rl`
+4. Consider DRPO for VL domains and CRPO for clinical diagnosis/triage
+5. Enable curriculum learning for phased agent development
 
 ### 13.6 Peer Leaderboard
 
@@ -789,6 +907,94 @@ BIOAgents/
 | Rank | Agent | Avg Score | Best Domain | Trend |
 |------|-------|-----------|-------------|-------|
 | - | - | - | - | - |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 13. Live Intelligence (Auto-Updated)
+
+> Last auto-update: 2026-03-12 20:42 | Based on 50 recent cycles
+
+### 13.1 Current Score Baselines
+
+| Domain | Avg Score | Best Agent | Common Errors |
+|--------|-----------|------------|---------------|
+| clinical_diagnosis | 6.7% | dryrun_qwen25vl (44.1%) | premature_stop(85) |
+| cross_domain | 27.5% | lingshu_weakness_fixer (40.6%) | premature_stop(15), reasoning_error(1) |
+| drug_interaction | 29.1% | dryrun_qwen25vl (31.7%) | premature_stop(20), tool_use_failure(4) |
+| ehr_management | 0.0% |  (0.0%) | premature_stop(25) |
+| obstetrics | 24.9% | qwen25vl_weakness_fixer (24.9%) | tool_use_failure(2), premature_stop(1) |
+| psychiatry | 9.5% | lingshu_weakness_fixer (19.4%) | premature_stop(38), reasoning_error(2), tool_use_failure(1) |
+
+### 13.2 Discovered Best Practices
+
+**What works (from successful training cycles):**
+
+- **dryrun_qwen25vl** improved **5.5%** on `drug_interaction` (tasks: 2)
+
+### 13.3 Known Pitfalls (from real agent experience)
+
+- **`premature_stop`** (184 occurrences): Most common in `clinical_diagnosis` (85x)
+- **`tool_use_failure`** (7 occurrences): Most common in `drug_interaction` (4x)
+- **`reasoning_error`** (3 occurrences): Most common in `psychiatry` (2x)
+
+### 13.4 Peer Leaderboard
+
+| Rank | Agent | Avg Score | Domains | Trend |
+|------|-------|-----------|---------|-------|
+### 13.5 Recommended Focus Areas
+
+- `ehr_management` (avg: 0.0%) — needs more training
+- `clinical_diagnosis` (avg: 6.7%) — needs more training
+- `psychiatry` (avg: 9.5%) — needs more training
+
 
 ---
 

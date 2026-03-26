@@ -38,7 +38,7 @@ from bioagents.training.sft_trainer import BioAgentSFTConfig
 
 
 def run_sft_warmup(sft_config: BioAgentSFTConfig) -> str:
-    """Run SFT warmup stage and return path to best checkpoint."""
+    """Run SFT warmup stage, merge LoRA, and return path to merged model."""
     from bioagents.training.sft_trainer import train as sft_train
 
     logger.info("=" * 60)
@@ -49,21 +49,84 @@ def run_sft_warmup(sft_config: BioAgentSFTConfig) -> str:
 
     sft_train(sft_config)
 
-    # Find the final/best checkpoint
+    # Find the LoRA adapter checkpoint
     final_path = os.path.join(sft_config.output_dir, "final")
-    if os.path.exists(final_path):
-        logger.info(f"SFT warmup complete. Checkpoint: {final_path}")
-        return final_path
+    if not os.path.exists(final_path):
+        checkpoints = sorted(Path(sft_config.output_dir).glob("checkpoint-*"))
+        if checkpoints:
+            final_path = str(checkpoints[-1])
+        else:
+            final_path = sft_config.output_dir
 
-    # Fall back to last checkpoint
-    checkpoints = sorted(Path(sft_config.output_dir).glob("checkpoint-*"))
-    if checkpoints:
-        best = str(checkpoints[-1])
-        logger.info(f"SFT warmup complete. Using last checkpoint: {best}")
-        return best
+    # Merge LoRA adapter into base model for RL stage
+    merged_path = os.path.join(sft_config.output_dir, "merged")
+    if not os.path.exists(merged_path):
+        merged_path = _merge_lora_checkpoint(
+            base_model_path=sft_config.model_name_or_path,
+            adapter_path=final_path,
+            output_path=merged_path,
+            torch_dtype=sft_config.torch_dtype,
+        )
 
-    logger.warning("No checkpoint found after SFT. Using output_dir directly.")
-    return sft_config.output_dir
+    logger.info(f"SFT warmup complete. Merged model: {merged_path}")
+    return merged_path
+
+
+def _merge_lora_checkpoint(
+    base_model_path: str,
+    adapter_path: str,
+    output_path: str,
+    torch_dtype: str = "bfloat16",
+) -> str:
+    """Merge LoRA adapter into base model and save full model.
+
+    This is necessary because TRL's GRPOTrainer needs a full model
+    with proper config.json (including model_type), not just a LoRA adapter.
+    """
+    from peft import PeftModel
+    from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
+
+    logger.info("Merging LoRA adapter into base model...")
+    logger.info(f"  Base: {base_model_path}")
+    logger.info(f"  Adapter: {adapter_path}")
+
+    dtype_map = {"bfloat16": torch.bfloat16, "float16": torch.float16}
+    model_dtype = dtype_map.get(torch_dtype, torch.bfloat16)
+
+    # Check if it's a VL model
+    config = AutoConfig.from_pretrained(base_model_path, trust_remote_code=True)
+    model_type = getattr(config, "model_type", "")
+    is_vl = model_type in ("qwen2_5_vl", "qwen2_vl")
+
+    if is_vl:
+        from transformers import Qwen2_5_VLForConditionalGeneration
+        base_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            base_model_path, torch_dtype=model_dtype, trust_remote_code=True,
+        )
+    else:
+        base_model = AutoModelForCausalLM.from_pretrained(
+            base_model_path, torch_dtype=model_dtype, trust_remote_code=True,
+        )
+
+    # Load and merge LoRA
+    model = PeftModel.from_pretrained(base_model, adapter_path)
+    model = model.merge_and_unload()
+
+    # Save merged model
+    os.makedirs(output_path, exist_ok=True)
+    model.save_pretrained(output_path)
+
+    # Save tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(base_model_path, trust_remote_code=True)
+    tokenizer.save_pretrained(output_path)
+
+    logger.info(f"  Merged model saved to: {output_path}")
+
+    # Free memory
+    del model, base_model
+    torch.cuda.empty_cache()
+
+    return output_path
 
 
 def run_rif_rft_filtering(
@@ -201,6 +264,22 @@ def main():
 
     # Use SFT checkpoint as starting point for RL
     if sft_checkpoint:
+        # Check if it's a LoRA adapter (has adapter_config.json) and merge if needed
+        adapter_config_path = os.path.join(sft_checkpoint, "adapter_config.json")
+        if os.path.exists(adapter_config_path):
+            merged_path = os.path.join(os.path.dirname(sft_checkpoint), "merged")
+            if not os.path.exists(os.path.join(merged_path, "config.json")):
+                logger.info("SFT checkpoint is a LoRA adapter — merging into base model...")
+                sft_checkpoint = _merge_lora_checkpoint(
+                    base_model_path=rl_config.model_name_or_path,
+                    adapter_path=sft_checkpoint,
+                    output_path=merged_path,
+                    torch_dtype=rl_config.torch_dtype,
+                )
+            else:
+                sft_checkpoint = merged_path
+                logger.info(f"Using existing merged model: {merged_path}")
+
         logger.info(f"Using SFT checkpoint for RL: {sft_checkpoint}")
         rl_config.model_name_or_path = sft_checkpoint
 

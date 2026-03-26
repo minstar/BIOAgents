@@ -18,8 +18,8 @@ gym:
   logbook_dir: logs/shared_logbook_dryrun
   wandb_project: pt2-minstar-gym-rl
   continuous: false
-  eval_timeout_seconds: 3600    # 1h max for dryrun (eval_tasks_per_domain=2 → should take ~10-30min)
-  train_timeout_seconds: 3600   # 1h max for dryrun training (1 epoch)
+  eval_timeout_seconds: 7200    # 2h — full cycle (pre-eval + train + post-eval) needs ~100min
+  train_timeout_seconds: 7200   # 2h — matches eval timeout for full cycle
 
 benchmark:
   every_n_cycles: 0
@@ -41,7 +41,8 @@ agents:
   max_turns: 5
   eval_tasks_per_domain: 2
   training_epochs: 1
-  learning_rate: 0.00002
+  learning_rate: 5.0e-06
+  max_train_tasks: 10
   quality_threshold: 0.3
   mastery_threshold: 0.90
   output_dir: checkpoints/autonomous/dryrun_qwen25vl

@@ -6,7 +6,7 @@
 
 ---
 
-## Last Updated: 2026-03-12 21:00 KST
+## Last Updated: 2026-03-20 16:00 KST
 
 ---
 
@@ -25,7 +25,8 @@
 | Phase 1: 인프라 구축 | 02/12~02/15 | ✅ 완료 | 100% |
 | Phase 1.5: 고도화 | 02/15~02/28 | ✅ 완료 | 95% |
 | Phase 2-B2: Baseline 평가 (21 bench × 3 model) | 03/01~03/15 | 🔄 진행 중 | 65% |
-| Phase 2-B3: Autonomous GYM (3 agents) | 03/10~ | 🔄 GPU5/6/7 사이클 순환 중 | 25% |
+| Phase 2-B3: Autonomous GYM (3 agents) | 03/10~ | ⏸️ 외부 벤치마크 검증 위해 일시 중단 | 25% |
+| **Phase 2.5: GYM External Validation** | **03/20** | **⚠️ 완료 — mixed/negative 결과, 전략 결정 필요** | **80%** |
 | Phase 3: Ablation + 결과 집계 | 03/15~03/25 | ⏳ 미시작 | 0% |
 | Phase 4: 논문 작성 | 03/25~04/20 | ⏳ 미시작 | 0% |
 
@@ -56,18 +57,24 @@
 | Adaptive Quality Filtering (ZPD 기반 trajectory 선택) | ✅ NEW (03-12) | `autonomous_agent.py:_evaluate()` lines ~1159-1195 |
 | Step3-VL key_mapping + think-strip | ✅ NEW (03-12) | `vqa_benchmark_eval.py` |
 | EHR max_samples 기본값 5000 | ✅ NEW (03-12) | `ehr_benchmark_eval.py`, `baseline_eval.yaml` |
+| **GRPO v2: KL penalty (reference model)** | ✅ NEW (03-14) | `grpo_trainer.py:_compute_ref_log_probs()`, `_grpo_policy_update()` |
+| **GRPO v2: task cap (max_train_tasks=20)** | ✅ NEW (03-14) | `grpo_trainer.py:MultiTurnGRPOConfig` |
+| **GRPO v2: cosine LR scheduler** | ✅ NEW (03-14) | `grpo_trainer.py:train_multiturn()` |
+| **GRPO v2: pre/post eval 동일 task (eval_seed)** | ✅ NEW (03-14) | `autonomous_agent.py:_evaluate()` |
+| **GRPO v2: accuracy-dominant reward (50%)** | ✅ NEW (03-14) | `autonomous_agent.py:_get_reward_weights_from_benchmarks()` |
 
 ---
 
-## 현재 실행 중인 실험 (2026-03-12 21:00 기준)
+## 현재 실행 중인 실험 (2026-03-20 15:30 기준)
 
 | 실험 | 모델 | GPU | 상태 | PID |
 |------|------|-----|------|-----|
-| EHR baseline (5K stratified) | Lingshu+Qwen+Step3 | 0-4 | 🔄 진행 중 (10h+) | 1727391 |
-| Step3-VL VQA v3 (B024+B025 수정) | Step3-VL-10B | 4 | 🔄 실행 중 (9h+) | 1744651 |
-| GYM Lingshu weakness_fixer | Lingshu-7B | 5 | 🔄 lease_0010 eval, adaptive_quality ON | **1831616** |
-| GYM Dryrun | Qwen2.5-VL-7B | 6 | ✅ 정상 순환 (lease_0039+) | 1323866 |
-| GYM Qwen2VL weakness_fixer | Qwen2.5-VL-7B | 7 | 🔄 lease_0008 eval, adaptive_quality ON | **1832074** |
+| EHR baseline (5K stratified) | Lingshu+Qwen | 0-3 | 🔄 Lingshu 89%, Qwen 74% | 1727391 |
+| Step3-VL TextQA 재실행 (B039 fix) | Step3-VL-10B | 4 | 🔄 진행 중 | **3305001** |
+| GYM External Eval: TextQA | GYM-Lingshu-7B | 5 | ✅ 완료 — MedQA 56.9%, MedMCQA 60.8%, MMLU 66.8% | — |
+| GYM External Eval: TextQA | GYM-Qwen2.5-VL-7B (late) | 6 | ❌ 중단 — MedQA 10.7% (모델 파괴, B041) | — |
+| GYM External Eval: TextQA | GYM-Qwen2.5-VL-7B (early) | 7 | ❌ 중단 — MedQA 10.5% (첫 merge부터 파괴) | — |
+| GPU 5/6/7 | — | 5,6,7 | ⏸️ 유휴 — 전략 결정 대기 중 | — |
 
 ---
 
@@ -75,13 +82,20 @@
 
 | 이슈 | 영향 | 상태 |
 |------|------|------|
-| ~~Step3-VL EM=0~~ | ~~baseline 결과 신뢰도 저하~~ | ✅ B024+B025 FIXED — key_mapping 전달 + `<think>` 제거, VQA v3 실행 중 (EM=0.200@50) |
-| ~~VQA-Med-2021 / Quilt-VQA EM=0~~ | ~~2 benchmark 결과 없음~~ | ℹ️ B020 WON'T FIX — open-ended VQA 특성, token_F1 사용 |
-| ~~MIMIC-III 진행 느림~~ | ~~EHR baseline 몇 주 소요~~ | ✅ B016 FIXED — stratified 5K로 재시작됨 (03-12) |
-| ~~GPU5/7 gym stuck~~ | ~~self-evolving loop 멈춤~~ | ✅ B021 FIXED — timeout 설정 후 재시작됨 (03-12) |
-| ~~GPU5/7 학습 데이터 0건~~ | ~~quality_threshold 미달~~ | ✅ B026 FIXED — adaptive quality filtering 구현 (03-12 20:20) |
-| Qwen MedLFQA 미완료 | 5개 중 일부 미완료 | ⚠️ 기존 프로세스 killed — 별도 재실행 필요할 수 있음 |
-| Step3-VL VQA + EHR GPU 4 충돌 가능 | 동시 실행 시 OOM | ⚠️ 모니터링 필요 (A100 80GB이므로 가능할 수도 있음) |
+| ~~GRPO degradation~~ | ~~자율 학습 루프 동작 불가~~ | ✅ B027 FIXED (03-14) |
+| ~~GRPO training silent fail~~ | ~~03-14~16 training 0건 실행~~ | ✅ B028+B029 FIXED (03-16) |
+| ~~Step3 TextQA/MedLFQA import 누락~~ | ~~NameError 크래시~~ | ✅ B034 FIXED (03-17) |
+| ~~Domain herding (85% 단일 도메인)~~ | ~~학습 루프 다양성 상실~~ | ✅ B035 FIXED (03-17) |
+| ~~Step3-VL BATCH_SIZE 크래시~~ | ~~4D tensor crash~~ | ✅ B036 FIXED (03-18) |
+| ~~Step3-VL TextQA thinking 잘림~~ | ~~MedMCQA 21% < random~~ | ✅ B037 FIXED (03-18) |
+| ~~model_profile Step3 key_mapping 누락~~ | ~~EHR action_score=0.000~~ | ✅ B038 FIXED (03-18) |
+| ~~Step3-VL TextQA B037 regression~~ | ~~51%→10% 붕괴~~ | ✅ B039 FIXED (03-20) — `<think>\n` strip + max_new_tokens=64 + `</think>` fallback |
+| ~~PMC-VQA HuggingFace 로딩 실패~~ | ~~Step3 VQA 1개 결과 없음~~ | ✅ B040 FIXED (03-20) — data_files 파라미터 추가 |
+| Step3-VL TextQA 재실행 중 | B039 fix 적용 결과 확인 필요 | 🔄 GPU 4 실행 중 (PID 3305001) |
+| Step3-VL EHR 미시작 | B038 fix 적용 후 실행 필요 | ⏳ TextQA 완료 후 |
+| GPU7 Qwen v5 net negative | clinical_diagnosis 과다 선택 | ⚠️ 모니터링 중 |
+| **B041: GRPO merge Qwen 모델 파괴** | **Qwen MedQA 54%→10%, early ckpt도 동일** | **🔴 CRITICAL — merge 프로세스 디버깅 필요** |
+| **B041: Lingshu catastrophic forgetting** | **MedMCQA +7.6% 향상, MedQA -4.8%, MMLU -10.1%** | **⚠️ KL penalty 강화 또는 EWC 필요** |
 
 ---
 
@@ -93,6 +107,51 @@
 - ✅ 기존 baseline eval 프로세스 종료 (EHR만 남아있었음)
 - ✅ EHR baseline 재시작 (stratified 5K, 3모델)
 - ✅ Step3-VL VQA 재실행 (수정된 model_type 감지 코드 적용)
+
+### [CRITICAL, 03-20] Phase 2.5: GYM External Validation — 완료, 전략 결정 필요
+
+#### 결과 테이블
+
+| 모델 | Benchmark | Baseline | GYM-trained | Delta | 판정 |
+|------|-----------|----------|-------------|-------|------|
+| Lingshu | MedQA (1273) | 61.7% | 56.9% | -4.8% | ❌ |
+| Lingshu | MedMCQA (4183) | 53.2% | 60.8% | **+7.6%** | ✅ |
+| Lingshu | MMLU 6-subset (1089) | 76.9% | 66.8% | -10.1% | ❌ |
+| Qwen (late, 110 cycles) | MedQA | 54.0% | 10.7% | -43.3% | 💀 |
+| Qwen (early, 1st merge) | MedQA | 54.0% | 10.5% | -43.5% | 💀 |
+
+#### 핵심 진단
+1. **Qwen GRPO merge 완전 파괴 (B041)**: 첫 번째 merge부터 10% → merge 프로세스 자체 버그
+2. **Lingshu catastrophic forgetting**: MedMCQA만 +7.6%, MedQA/MMLU는 대폭 하락 → KL penalty 부족
+
+#### 대안 (03-21 결정 예정)
+
+**대안 A: GRPO merge 버그 수정 후 재실험 (2~3주)**
+- Qwen LoRA target_modules 확인 → vision encoder에 LoRA 적용되고 있으면 제거
+- merge alpha/scaling 검증, KL penalty 10x 강화 또는 EWC 추가
+- 수정 후 짧은 GYM run (10 cycles) → 외부 벤치마크 즉시 검증
+- 장점: self-evolving loop contribution 살릴 수 있음
+- 단점: 시간 리스크, 수정해도 개선 보장 없음
+
+**대안 B: 논문 scope 축소 — "환경 + 벤치마크" contribution만 (가장 안전)**
+- Healthcare AI GYM (10 domains × 171 tools × 2,580+ tasks) + 5D Reward + FairGRPO
+- 21 external benchmark × 3 model baseline 결과만으로 논문 작성
+- self-evolving loop은 "future work"으로 → MedMCQA +7.6% 등 preliminary result만 언급
+- 장점: 지금 데이터로 즉시 논문 작성 가능, deadline 안전
+- 단점: contribution 약화 가능성 (환경 논문 = "incremental" 리스크)
+
+**대안 C: LoRA adapter 원본으로 평가 (빠른 1시간 실험)**
+- `best_merged` 대신 LoRA adapter 원본을 PeftModel로 로드하여 평가
+- merge 과정 버그 vs 학습 자체 문제 1시간 안에 판별
+- merge 버그 맞으면 → 수정해서 대안 A 진행
+- 학습 자체 문제면 → 대안 B로 전환
+
+**대안 D: 가중치 수정 없는 접근 — Few-shot / RAG (방향 전환)**
+- GYM 성공 trajectory를 few-shot example로 활용 (ICL)
+- catastrophic forgetting 원천 차단
+- 단점: "self-evolving RL loop" narrative와 안 맞음
+
+**추천 순서**: C(진단) → A 또는 B(결정) — 내일(03-21) 결정
 
 ### [이번 주, ~3/15] Phase A 완료
 - [ ] Dryrun 1사이클 완주 확인 → SharedLogbook 데이터 확인

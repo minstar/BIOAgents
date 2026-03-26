@@ -807,6 +807,13 @@ class AgentWorker(threading.Thread):
             for line in lines[-20:]:
                 if line.strip():
                     logger.info(f"  [{agent_id}] {line}")
+
+            # Also log stderr on success to catch suppressed warnings/errors
+            if proc.stderr:
+                stderr_tail = proc.stderr[-1000:]
+                for sline in stderr_tail.strip().split("\n")[-10:]:
+                    if sline.strip():
+                        logger.warning(f"  [{agent_id}] stderr: {sline}")
         else:
             logger.error(
                 f"[AgentWorker] {agent_id} exited with "
@@ -864,6 +871,14 @@ config = AutonomousAgentConfig(
     gpu_memory_utilization={cfg.gpu_memory_utilization},
     benchmark_every_n_cycles={cfg.benchmark_every_n_cycles},
     benchmark_max_samples={cfg.benchmark_max_samples},
+    max_train_tasks={cfg.max_train_tasks},
+    adaptive_quality={cfg.adaptive_quality},
+    adaptive_quality_lo={cfg.adaptive_quality_lo},
+    adaptive_quality_hi={cfg.adaptive_quality_hi},
+    use_dr_grpo={cfg.use_dr_grpo},
+    use_fair_grpo={cfg.use_fair_grpo},
+    fairness_weight={cfg.fairness_weight},
+    max_fairness_gap={cfg.max_fairness_gap},
     output_dir="{cfg.output_dir}",
     log_dir="{cfg.log_dir}",
 )

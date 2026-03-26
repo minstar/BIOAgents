@@ -367,7 +367,14 @@ def load_pmc_vqa(
     # Try HuggingFace first (may include images)
     try:
         from datasets import load_dataset
-        ds = load_dataset("RadGenome/PMC-VQA", split=split, trust_remote_code=True)
+        # B039: train_2.csv has mismatched schema (extra columns, missing Answer_label)
+        # Specify data_files to load only train.csv and test.csv
+        ds = load_dataset(
+            "RadGenome/PMC-VQA",
+            split=split,
+            data_files={"test": "test.csv", "train": "train.csv"},
+            trust_remote_code=True,
+        )
         logger.info(f"[PMC-VQA] Loaded {len(ds)} samples from HuggingFace ({split})")
 
         image_dir = _DATA_DIR / "pmc_vqa" / "images"

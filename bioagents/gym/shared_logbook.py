@@ -273,7 +273,9 @@ class ProfileManager:
         if not profile.domain_scores:
             return
         avg = profile.avg_score
-        threshold = 0.1
+        # B035 fix: use relative threshold (15% of avg) instead of absolute 0.1
+        # With scores in 0.3-0.5 range, absolute 0.1 is too loose to detect weaknesses
+        threshold = max(avg * 0.15, 0.02)
         profile.strengths = [
             d for d, s in sorted(profile.domain_scores.items(), key=lambda x: -x[1])
             if s > avg + threshold

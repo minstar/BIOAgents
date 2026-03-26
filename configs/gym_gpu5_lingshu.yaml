@@ -36,8 +36,9 @@ agents:
   safety_weight: 0.10
   max_turns: 8
   eval_tasks_per_domain: 5       # 5 tasks/domain → 빠른 iteration (~50 tasks/cycle)
-  training_epochs: 2
-  learning_rate: 2.0e-05
+  training_epochs: 1             # Reduced: prevent overfitting (was 2)
+  learning_rate: 5.0e-06         # Reduced: conservative with KL penalty (was 2e-5)
+  max_train_tasks: 20            # Cap tasks per GRPO cycle
   quality_threshold: 0.1         # fallback (adaptive_quality가 우선)
   adaptive_quality: true          # 점수 분포 기반 적응적 필터링
   adaptive_quality_lo: 0.2        # 하위 20% 제외 (너무 어려움)

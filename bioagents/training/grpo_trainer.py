@@ -104,6 +104,10 @@ class BioAgentGRPOConfig:
     eval_trajectory_mix_ratio: float = 0.3       # fraction of batch from eval pool
     eval_trajectory_min_reward: float = 0.5      # only replay trajectories above this reward
 
+    # Task cap: limit number of training tasks per GRPO cycle to prevent
+    # overfitting on small domain datasets. 0 = use all tasks.
+    max_train_tasks: int = 20
+
     # Dr. GRPO (2025): remove per-token length normalization
     # Standard GRPO uses mean log-prob (biased toward short responses).
     # Dr. GRPO uses sum log-prob, eliminating length bias in medical answers.
@@ -809,6 +813,8 @@ class MultiTurnGRPOConfig(BioAgentGRPOConfig):
     # Training from trajectories
     trajectory_epochs: int = 2          # Epochs over collected trajectories
     grpo_mini_batch_size: int = 4       # Mini-batch for GRPO update
+    # Task sampling — cap tasks per training cycle to prevent overfitting
+    max_train_tasks: int = 20           # 0 = use all tasks (original behavior)
     # Logging
     save_trajectories: bool = True      # Save all trajectories to disk
 
@@ -921,14 +927,31 @@ def train_multiturn(config: BioAgentGRPOConfig):
                 valid_ids = set(splits[mt_config.train_split])
                 all_tasks = [t for t in all_tasks if t["id"] in valid_ids]
 
+    # Cap training tasks to prevent overfitting on small domains
+    if mt_config.max_train_tasks > 0 and len(all_tasks) > mt_config.max_train_tasks:
+        import random as _rng
+        original_count = len(all_tasks)
+        all_tasks = _rng.sample(all_tasks, mt_config.max_train_tasks)
+        logger.info(f"Capped training tasks to {mt_config.max_train_tasks} (from {original_count})")
+
     logger.info(f"Training on {len(all_tasks)} tasks, {mt_config.num_rollouts_per_task} rollouts each")
 
-    # --- Optimizer ---
+    # --- Optimizer + LR Scheduler ---
     optimizer = torch.optim.AdamW(
         model.parameters(),
         lr=mt_config.learning_rate,
         weight_decay=mt_config.weight_decay,
     )
+    # Estimate total training steps for cosine scheduler
+    _est_tasks = min(len(all_tasks), mt_config.max_train_tasks) if mt_config.max_train_tasks > 0 else len(all_tasks)
+    _est_steps_per_epoch = max(_est_tasks * mt_config.num_rollouts_per_task // mt_config.grpo_mini_batch_size, 1)
+    _est_total_steps = _est_steps_per_epoch * mt_config.num_train_epochs * mt_config.trajectory_epochs
+    _warmup_steps = max(int(_est_total_steps * 0.1), 1)
+    from torch.optim.lr_scheduler import CosineAnnealingLR, SequentialLR, LinearLR
+    _warmup_scheduler = LinearLR(optimizer, start_factor=0.1, total_iters=_warmup_steps)
+    _cosine_scheduler = CosineAnnealingLR(optimizer, T_max=max(_est_total_steps - _warmup_steps, 1))
+    lr_scheduler = SequentialLR(optimizer, schedulers=[_warmup_scheduler, _cosine_scheduler], milestones=[_warmup_steps])
+    logger.info(f"LR scheduler: warmup {_warmup_steps} steps → cosine decay over {_est_total_steps} total steps")
 
     # --- Reward function (with adaptive weights from config) ---
     from bioagents.evaluation.rewards import compute_composite_reward
@@ -1086,18 +1109,30 @@ def train_multiturn(config: BioAgentGRPOConfig):
             mix_n = int(len(epoch_trajectories) * mt_config.eval_trajectory_mix_ratio)
             if valid_eval and mix_n > 0:
                 sampled = random.sample(valid_eval, min(mix_n, len(valid_eval)))
-                # Treat replayed eval trajectories as positive demonstrations
+                # Set replay advantages to match the positive advantage
+                # distribution of the current GRPO batch. Fixed advantage=1.0
+                # creates a scale mismatch with normalized GRPO advantages.
+                rollout_advantages = [
+                    t.get("advantage", 0.0) for t in epoch_trajectories
+                    if t.get("advantage", 0.0) > 0
+                ]
+                replay_advantage = (
+                    sum(rollout_advantages) / len(rollout_advantages)
+                    if rollout_advantages else 1.0
+                )
                 for t in sampled:
-                    t.setdefault("advantage", 1.0)
+                    t["advantage"] = replay_advantage
                     if "reward" not in t and "final_reward" in t:
                         t["reward"] = t["final_reward"]
                 epoch_trajectories.extend(sampled)
                 logger.info(
                     f"  [Replay] Mixed {len(sampled)} eval trajectories "
-                    f"(pool={len(valid_eval)}, ratio={mt_config.eval_trajectory_mix_ratio:.0%})"
+                    f"(pool={len(valid_eval)}, ratio={mt_config.eval_trajectory_mix_ratio:.0%}, "
+                    f"replay_adv={replay_advantage:.3f})"
                 )
                 wb.log_step({"replay/eval_traj_count": len(sampled),
-                             "replay/eval_pool_size": len(valid_eval)}, step=global_step)
+                             "replay/eval_pool_size": len(valid_eval),
+                             "replay/advantage": replay_advantage}, step=global_step)
 
         # --- Filter trajectories ---
         positive_trajs = [t for t in epoch_trajectories if t.get("advantage", 0) > 0]
@@ -1105,6 +1140,24 @@ def train_multiturn(config: BioAgentGRPOConfig):
             f"Epoch {epoch+1}: {len(epoch_trajectories)} total trajectories, "
             f"{len(positive_trajs)} positive advantage"
         )
+
+        # --- Compute reference log-probs (KL anchor) ---
+        # Use the base model (LoRA adapters disabled) as the reference.
+        # This prevents catastrophic forgetting by penalizing policy drift.
+        ref_log_probs = None
+        if mt_config.peft_enabled and hasattr(model, "disable_adapter_layers"):
+            logger.info("  Computing reference log-probs (LoRA disabled)...")
+            model.disable_adapter_layers()
+            ref_log_probs = _compute_ref_log_probs(
+                ref_model=model,
+                tokenizer=tokenizer,
+                trajectories=epoch_trajectories,
+                device=device,
+                max_length=mt_config.max_trajectory_length,
+                use_dr_grpo=mt_config.use_dr_grpo,
+            )
+            model.enable_adapter_layers()
+            logger.info(f"  Reference log-probs computed for {len(ref_log_probs)} trajectories")
 
         # --- GRPO Policy Update ---
         if positive_trajs:
@@ -1119,6 +1172,8 @@ def train_multiturn(config: BioAgentGRPOConfig):
                 mini_batch_size=mt_config.grpo_mini_batch_size,
                 num_epochs=mt_config.trajectory_epochs,
                 use_dr_grpo=mt_config.use_dr_grpo,
+                ref_log_probs=ref_log_probs,
+                lr_scheduler=lr_scheduler,
             )
             logger.info(f"  GRPO loss: {loss_total:.4f}")
         else:
@@ -1339,6 +1394,46 @@ def _parse_tool_call_from_response(text: str) -> Optional[dict]:
     return None
 
 
+def _compute_ref_log_probs(
+    ref_model,
+    tokenizer,
+    trajectories: list[dict],
+    device,
+    max_length: int = 4096,
+    use_dr_grpo: bool = False,
+) -> dict[int, float]:
+    """Pre-compute log-probabilities under the frozen reference model.
+
+    Returns a dict mapping trajectory index → reference log-prob.
+    This is used for the KL divergence penalty in the GRPO objective:
+        KL(π_θ || π_ref) ≈ log π_θ(y|x) - log π_ref(y|x)
+    """
+    ref_log_probs = {}
+    ref_model.eval()
+    with torch.no_grad():
+        for idx, traj in enumerate(trajectories):
+            full_text = traj.get("full_text", "")
+            if not full_text:
+                continue
+            encoding = tokenizer(
+                full_text,
+                return_tensors="pt",
+                truncation=True,
+                max_length=max_length,
+                padding=False,
+            )
+            input_ids = encoding["input_ids"].to(device)
+            if input_ids.shape[1] < 2:
+                continue
+            outputs = ref_model(input_ids=input_ids, labels=input_ids)
+            if use_dr_grpo:
+                seq_len = max((input_ids != tokenizer.pad_token_id).sum().item(), 1)
+                ref_log_probs[idx] = (-outputs.loss * seq_len).item()
+            else:
+                ref_log_probs[idx] = (-outputs.loss).item()
+    return ref_log_probs
+
+
 def _grpo_policy_update(
     model,
     tokenizer,
@@ -1350,11 +1445,16 @@ def _grpo_policy_update(
     mini_batch_size: int = 4,
     num_epochs: int = 2,
     use_dr_grpo: bool = False,
+    ref_log_probs: dict[int, float] | None = None,
+    lr_scheduler=None,
 ) -> float:
     """GRPO policy gradient update from collected trajectories.
 
-    Implements the core GRPO objective:
-        L = -E[advantage * log π(completion | prompt)]
+    Implements the core GRPO objective with proper KL penalty:
+        L = -E[advantage * log π_θ(y|x)] + β * E[log π_θ(y|x) - log π_ref(y|x)]
+
+    The KL term anchors the policy to the reference (pretrained) model,
+    preventing catastrophic forgetting during RL fine-tuning.
 
     Dr. GRPO variant (use_dr_grpo=True): uses sum log-prob instead of mean,
     eliminating the length normalization bias in the original GRPO objective.
@@ -1365,12 +1465,12 @@ def _grpo_policy_update(
 
     For trajectories with positive advantage, we increase log probability.
     For those with negative advantage, we decrease it.
-    KL penalty prevents the policy from straying too far from the initial model.
     """
     import torch.nn.functional as F
 
     model.train()
     total_loss = 0.0
+    total_kl = 0.0
     num_updates = 0
 
     for epoch in range(num_epochs):
@@ -1382,6 +1482,7 @@ def _grpo_policy_update(
         for batch_start in range(0, len(indices), mini_batch_size):
             batch_indices = indices[batch_start:batch_start + mini_batch_size]
             batch_loss = torch.tensor(0.0, device=device, requires_grad=True)
+            batch_kl = 0.0
             valid_samples = 0
 
             for idx in batch_indices:
@@ -1423,10 +1524,19 @@ def _grpo_policy_update(
                 # GRPO objective: advantage-weighted log probability
                 # Positive advantage → increase log prob (good trajectory)
                 # Negative advantage → decrease log prob (bad trajectory)
-                sample_loss = -advantage * log_probs
+                policy_loss = -advantage * log_probs
 
-                # KL penalty (implicit via advantage normalization + beta scaling)
-                sample_loss = sample_loss * beta
+                # KL divergence penalty: KL(π_θ || π_ref) ≈ log π_θ - log π_ref
+                # This prevents the policy from drifting too far from the
+                # pretrained model, avoiding catastrophic forgetting.
+                kl_penalty = torch.tensor(0.0, device=device)
+                if ref_log_probs is not None and idx in ref_log_probs:
+                    ref_lp = ref_log_probs[idx]
+                    kl_penalty = log_probs - ref_lp  # approx KL per sample
+                    batch_kl += kl_penalty.item()
+
+                # Combined loss: policy gradient + β * KL penalty
+                sample_loss = policy_loss + beta * kl_penalty
 
                 batch_loss = batch_loss + sample_loss
                 valid_samples += 1
@@ -1437,12 +1547,19 @@ def _grpo_policy_update(
                 batch_loss.backward()
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                 optimizer.step()
+                if lr_scheduler is not None:
+                    lr_scheduler.step()
 
                 total_loss += batch_loss.item()
+                total_kl += batch_kl / valid_samples
                 num_updates += 1
 
     model.eval()
-    return total_loss / max(num_updates, 1)
+    avg_loss = total_loss / max(num_updates, 1)
+    avg_kl = total_kl / max(num_updates, 1)
+    if num_updates > 0:
+        logger.info(f"  GRPO update: {num_updates} steps, avg_loss={avg_loss:.4f}, avg_kl={avg_kl:.4f}")
+    return avg_loss
 
 
 def _save_trajectories(trajectories: list[dict], path: str):

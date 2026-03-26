@@ -253,9 +253,24 @@ class ModelProfile:
         """
         import torch
 
+        dtype = getattr(torch, self.torch_dtype, torch.bfloat16)
+
+        # B038: Step3-VL (model_type=step_robotics) requires manual loading
+        # because Qwen3Model.__init__ hangs in transformers 4.57.x (B032)
+        # and key_mapping is not auto-applied (B024).
+        if self.model_type == "step_robotics":
+            use_cpu = extra_kwargs.get("device_map") == "cpu"
+            logger.info(
+                f"[ModelProfile] Loading {self.model_name} with "
+                f"manual safetensors loader (Step3-VL workaround, "
+                f"device={'cpu' if use_cpu else 'cuda'})"
+            )
+            model = self._load_step3vl_manual(dtype=dtype, cpu_only=use_cpu)
+            return model
+
         # Merge loading kwargs
         kw = {
-            "torch_dtype": getattr(torch, self.torch_dtype, torch.bfloat16),
+            "torch_dtype": dtype,
             "trust_remote_code": True,
             **self.load_kwargs,
             **extra_kwargs,
@@ -271,6 +286,62 @@ class ModelProfile:
 
         model = model_cls.from_pretrained(self.model_path, **kw)
         model.eval()
+        return model
+
+    def _load_step3vl_manual(self, dtype=None, cpu_only: bool = False):
+        """Load Step3-VL using no_init_weights + manual safetensors loading.
+
+        Workaround for B032 (Qwen3 init hang) + B024 (key_mapping not auto-applied).
+        """
+        import re as _re
+
+        import torch
+        from safetensors import safe_open
+        from transformers import AutoConfig, AutoModelForCausalLM
+        from transformers.modeling_utils import no_init_weights
+
+        if dtype is None:
+            dtype = torch.bfloat16
+
+        config = AutoConfig.from_pretrained(
+            self.model_path, trust_remote_code=True
+        )
+        with no_init_weights():
+            model = AutoModelForCausalLM.from_config(
+                config, trust_remote_code=True, torch_dtype=dtype,
+            )
+
+        # Key remapping (matches _checkpoint_conversion_mapping in modeling_step_vl.py)
+        _mapping = {
+            r'^vision_model': 'model.vision_model',
+            r'^model(?!\.(language_model|vision_model))': 'model.language_model',
+            r'^vit_large_projector': 'model.vit_large_projector',
+        }
+
+        def _remap(key):
+            for pat, repl in _mapping.items():
+                new = _re.sub(pat, repl, key)
+                if new != key:
+                    return new
+            return key
+
+        sd = dict(model.named_parameters())
+        for name, buf in model.named_buffers():
+            sd[name] = buf
+
+        shard_dir = Path(self.model_path)
+        shard_files = sorted(shard_dir.glob("model-*.safetensors"))
+        for sf in shard_files:
+            with safe_open(str(sf), framework="pt", device="cpu") as f:
+                for ckpt_key in f.keys():
+                    mapped = _remap(ckpt_key)
+                    if mapped in sd:
+                        sd[mapped].data.copy_(f.get_tensor(ckpt_key))
+
+        if cpu_only:
+            model = model.eval()
+        else:
+            model = model.cuda().eval()
         return model
 
     def load_tokenizer(self):

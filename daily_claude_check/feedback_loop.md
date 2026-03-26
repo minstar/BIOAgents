@@ -6,7 +6,7 @@
 
 ---
 
-## Last Updated: 2026-03-12 09:30 KST
+## Last Updated: 2026-03-20 16:00 KST
 
 ---
 
@@ -272,3 +272,14 @@ cd /data/project/private/minstar/workspace/BIOAgents
 | 2026-03-12 | WORKER_SCRIPT 이스케이프 수정 (B-3) | 1~5 통과 | {EHR_MAX_SAMPLES} 미이스케이프 (B022) | {{}} 이스케이프 + dry-run 테스트 확인 |
 | 2026-03-12 | EHR/Step3-VL 재실행 | 1~4 통과 | GPU 4 충돌 가능성 확인 | 모니터링 중 |
 | 2026-03-12 | Step3-VL EM=0 근본 원인 수정 (B-5,6) | 1~5 통과 | B024: key_mapping 미적용, B025: `<think>` 미제거 | key_mapping 전달 + think-strip, EM=0.200 확인 |
+| 2026-03-16 | GRPO training silent fail 수정 (B028/B029) | 1~5 통과 | B028: max_train_tasks 필드 누락→TypeError, B029: stderr 무시 | 필드 추가 + stderr 로깅 + dry-run 테스트 + 재시작 |
+| 2026-03-16 | B030~B033 일괄 수정 | 1~5 통과 | B030: worker config 7필드 누락, B031: dryrun timeout, B032: Step3 TextQA/MedLFQA key_mapping 누락, B033: 8-agent GYM 충돌 | config 필드 추가 + timeout 증가 + key_mapping/think-strip + 프로세스 정리 + 재시작 |
+| 2026-03-16 | B032 최종 해결: Qwen3 init hang | 1~5 통과 | `from_pretrained()` 자체가 Qwen3Model full-size init에서 hang (transformers 4.57.6). CPU/GPU 무관. safetensors 파일 정상. | `_load_step3vl_manual()` 헬퍼: `no_init_weights()` + 수동 safetensors 로딩. 테스트: 14s load + 정상 생성. TextQA/MedLFQA 양쪽 적용 |
+| 2026-03-17 | B034 수정: Step3 import 누락 | 1~5 통과 | `_load_step3vl_manual()`에서 `AutoConfig` 사용하지만 함수 내 import 없음 | 함수 내 import 추가. 구문 검증 + TextQA 실행 성공 확인 |
+| 2026-03-17 | B035 수정: Domain herding 근본 수정 | 1~5 통과 | 3가지 동시 원인: 절대 threshold(0.1), 동일 weakness 점수(0.8), recency penalty 없음 | 상대 threshold(avg*0.15), 연속 weakness 점수, recency penalty 추가. math 검증 통과. GPU 5/6/7 v5 재시작 |
+| 2026-03-18 | B036 수정: Step3-VL batch size 크래시 | 1~5 통과 | `get_input_embeddings()` squeeze/unsqueeze가 batch>1에서 4D tensor 생성 → apply_rotary_pos_emb 크래시 | `BATCH_SIZE = 1 if is_step3 else 8` (TextQA+MedLFQA 두 곳). 구문 검증 + batch=1 shapes 정상 확인 |
+| 2026-03-18 | B037 수정: Step3 TextQA thinking 잘림 | 1~5 통과 | `<think>\n` generation prompt + max_new_tokens=32 → thinking 잘림 → MedMCQA 21%/MMLU 31.5% (below random) | `<think>\n` 제거 + max_new_tokens=64 (Step3만). MedLFQA에도 thinking 비활성화. 구문 검증 통과 |
+| 2026-03-18 | B038 수정: model_profile Step3 manual loading | 1~5 통과 | `load_model()` → `from_pretrained()` → Step3 key_mapping 미적용 + Qwen3 init hang → EHR action_score=0.000 | `_load_step3vl_manual()` 메서드 추가, `device_map="cpu"` 지원(LoRA merge). ModelProfile 테스트 + 구문 검증 통과 |
+| 2026-03-20 | B039 수정: Step3 TextQA B037 regression | 1~5 통과 | B037 fix 잘못 적용: `<think>\n` strip 누락 + max_new_tokens=512 → 생성 thinking text에서 잘못된 답 추출 → ~10% | `<think>\n` strip(TextQA+MedLFQA) + max_new_tokens 64 + `</think>` fallback strip. 구문 검증 + 10-sample test (MedMCQA/MMLU 30% > random 25%) |
+| 2026-03-20 | B040 수정: PMC-VQA HF 로딩 | 1~5 통과 | train_2.csv 스키마 불일치 (extra columns, missing Answer_label) | `data_files` 파라미터로 train.csv/test.csv만 지정 |
+| 2026-03-20 | GYM External Validation (B041 발견) | N/A (eval only) | **Qwen GRPO merge 모델 완전 파괴** (MedQA 54%→10%, early/late 모두 동일). **Lingshu catastrophic forgetting** (MedMCQA +7.6% 향상, MedQA -4.8%, MMLU -10.1% 하락). | B041 bug report 작성. 대안 A(merge 수정)/B(scope 축소)/C(LoRA adapter 진단)/D(Few-shot/RAG) 정리. 03-21 결정 예정 |

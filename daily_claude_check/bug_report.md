@@ -6,7 +6,7 @@
 
 ---
 
-## Last Updated: 2026-03-12 21:00 KST
+## Last Updated: 2026-03-20 14:00 KST
 
 ---
 
@@ -40,6 +40,21 @@
 | B024 | Model Loading | Step3-VL _checkpoint_conversion_mapping 미적용 → 가중치 랜덤 초기화 → EM=0 | 03-12 | ✅ FIXED |
 | B025 | Evaluation | Step3-VL `<think>...</think>` 추론 텍스트가 예측에 포함되어 EM=0 | 03-12 | ✅ FIXED |
 | B026 | Autonomous GYM | quality_threshold 고정값 → 학습 데이터 0건 (점수 미달) | 03-12 | ✅ FIXED |
+| B027 | GRPO Training | GRPO 학습 후 성능 degradation (7개 원인 동시 수정) | 03-14 | ✅ FIXED |
+| B028 | GRPO Training | `max_train_tasks` 필드 누락 → BioAgentGRPOConfig TypeError → training 100% 실패 | 03-16 | ✅ FIXED |
+| B029 | Subprocess | `_run_subprocess` stderr 무시 → training 실패 silent (로그 없음) | 03-16 | ✅ FIXED |
+| B030 | Autonomous GYM | `_build_cycle_script()`에 max_train_tasks/adaptive_quality/use_dr_grpo 등 7개 필드 누락 → worker에 기본값만 전달 | 03-16 | ✅ FIXED |
+| B031 | Config | Dryrun eval_timeout_seconds=3600 → 전체 사이클(~100분)보다 짧아 매시간 timeout → 결과 0건 | 03-16 | ✅ FIXED |
+| B032 | Evaluation | Step3-VL TextQA/MedLFQA: Qwen3 init hang (transformers 4.57.x) → `_load_step3vl_manual()` workaround | 03-16 | ✅ FIXED (final) |
+| B033 | Resource Conflict | autonomous_gym.yaml (8-agent)이 per-GPU config과 동시 실행 → GPU 0-3 EHR baseline과 충돌, GPU 1 OOM 위험 | 03-16 | ✅ FIXED (프로세스 종료) |
+| B034 | Model Loading | `_load_step3vl_manual()` 내 `AutoConfig`, `AutoModelForCausalLM`, `torch` import 누락 → NameError | 03-17 | ✅ FIXED |
+| B035 | Autonomous GYM | Domain herding: 절대적 weakness threshold(0.1) + 동일 weakness 점수(0.8) + recency penalty 없음 → 85% 단일 도메인 반복 | 03-17 | ✅ FIXED |
+| B036 | Evaluation | Step3-VL TextQA/MedLFQA BATCH_SIZE=8 → 4D tensor crash in apply_rotary_pos_emb (get_input_embeddings batch_size=1 전용) | 03-18 | ✅ FIXED |
+| B037 | Evaluation | Step3-VL TextQA `max_new_tokens=32` + `<think>` generation prompt → thinking 잘림 → below-random MedMCQA(21%)/MMLU(31.5%) | 03-18 | ✅ FIXED |
+| B038 | Model Loading | `model_profile.py:load_model()` Step3 key_mapping + manual loading 누락 → EHR eval action_score=0.000 | 03-18 | ✅ FIXED |
+| B039 | Evaluation | Step3-VL TextQA B037 regression: `add_generation_prompt=True`의 `<think>\n` 미제거 + max_new_tokens=512 → thinking text에서 잘못된 답 추출 → 10% (51%에서 붕괴) | 03-20 | ✅ FIXED |
+| B040 | Data Loading | PMC-VQA HuggingFace train_2.csv 스키마 불일치 → dataset generation 에러 | 03-20 | ✅ FIXED |
+| B041 | GRPO Training | GRPO merge가 Qwen2.5-VL 모델을 완전히 파괴 → 외부 벤치마크 10% (baseline 54%) | 03-20 | 🔴 CRITICAL |
 
 ---
 
@@ -432,6 +447,354 @@ adaptive_quality_hi: 0.8        # 상위 20% 제외
 
 ---
 
+### B027: GRPO 학습 후 성능 degradation (7개 근본 원인 동시 수정) → FIXED (03-14)
+**심각도**: CRITICAL (자율 학습 루프 자체가 동작하지 않음 — 논문 핵심 contribution)
+
+**증상**: 모든 GYM agent (dryrun, GPU5, GPU7)에서 GRPO 학습 후 post_score < pre_score.
+Dryrun lease 55~60에서 100% improvement 음수. GPU7은 post_score=0.0 빈발.
+
+**근본 원인 (7개)**:
+1. **KL penalty 부재**: `_grpo_policy_update()`에서 `beta*loss`만 하고 reference model 없음 → catastrophic forgetting
+2. **전체 task 학습**: 도메인 모든 task를 매 epoch 학습 → 소수 데이터에 overfitting
+3. **Pre/post eval 다른 task**: 랜덤 5개 task 비교 → 샘플링 분산이 improvement로 오인
+4. **Reward hacking**: accuracy 25~30%뿐, format/process/safety가 70%+ → 길고 의료 용어 많은 응답 학습
+5. **Replay advantage=1.0 고정**: GRPO rollout advantage 분포와 불일치
+6. **LR scheduler 없음**: 상수 LR로 full gradient step → 불안정
+7. **LR 2e-5 과다**: KL anchor 없이 높은 LR → 빠른 drift
+
+**수정**:
+- `_compute_ref_log_probs()`: LoRA disable → reference log-probs 계산
+- `_grpo_policy_update()`: `L = -adv * log_π + β * (log_π - log_π_ref)` 실제 KL 항
+- `max_train_tasks=20`: task cap으로 overfitting 방지
+- `eval_seed`: pre/post eval 동일 task 보장
+- accuracy reward: 0.30→0.50, format: 0.15→0.05
+- replay advantage: rollout positive advantage 평균으로 정규화
+- cosine LR scheduler (warmup 10% + decay)
+- LR 2e-5→5e-6, training_epochs 2→1
+
+**재발 방지**:
+> GRPO/RL 학습 시 반드시 reference model KL penalty 포함.
+> `beta * loss`는 KL penalty가 아님 — 반드시 `log π_θ - log π_ref` 계산.
+> Pre/post eval은 반드시 동일 task set으로 비교.
+> Reward에서 accuracy가 최소 50% 이상 차지하도록 설정.
+> 새 RL 실험 시작 전 첫 사이클 improvement 부호 반드시 확인.
+
+---
+
+### B028: `max_train_tasks` 필드 BioAgentGRPOConfig에 누락 → TypeError → training 100% silent fail → FIXED (03-16)
+**심각도**: CRITICAL (03-14부터 모든 GYM agent의 training이 0% 실행됨 — GPU 5/6/7 2일간 eval만 반복)
+
+**증상**: 3개 GYM agent (dryrun lease_0001~0467, GPU5 lease_0001~0164, GPU7 lease_0001~0114) 모두
+`improvement: 0.0`, `pre_score == post_score` 100% 발생. Eval만 반복, 학습 진행 없음.
+
+**근본 원인**: 03-14 GRPO v2 작업(B027)에서 `max_train_tasks` 필드를 `MultiTurnGRPOConfig`(line 817)에만 추가.
+`_train_grpo()` (autonomous_agent.py line 1772)에서 `_common_kwargs`에 `max_train_tasks=20`을 넣고
+`BioAgentGRPOConfig(**_common_kwargs)` (line 1806) 호출 시 `TypeError: __init__() got an unexpected keyword argument 'max_train_tasks'` 발생.
+Exception은 line 1831의 `except Exception` 에서 catch되어 `None` 반환 → training skip → `post_score = pre_score`.
+
+**추가 원인 (B029)**: `_run_subprocess()` (autonomous_gym.py)가 `returncode==0`일 때 stderr를 무시.
+Training exception의 traceback이 stderr로 출력되지만 부모 프로세스가 이를 읽지 않아 로그에 전혀 기록되지 않음.
+
+**수정**:
+- `BioAgentGRPOConfig` (grpo_trainer.py line 109)에 `max_train_tasks: int = 20` 추가
+- `_run_subprocess()` (autonomous_gym.py)에 returncode==0일 때도 stderr 마지막 10줄 로깅 추가
+
+**검증**: dry-run test 통과 — `BioAgentGRPOConfig(**_common_kwargs)` 정상 생성 확인.
+GPU 5/6/7 프로세스 재시작 (PID 2514243/2514552/2514932).
+
+**재발 방지**:
+> 부모 dataclass에 필드를 추가할 때, 해당 필드를 kwargs로 전달하는 모든 caller 확인.
+> `@dataclass` 상속 체인에서 새 필드는 반드시 **base class**에 추가 (child에만 추가하면 base 생성 시 TypeError).
+> Subprocess의 stderr는 항상 로깅 (returncode 무관) — silent failure 방지.
+> `_train_grpo()`의 except block에서 `logger.error()` + traceback 사용 (warning → error 격상).
+
+---
+
+### B029: `_run_subprocess` stderr 무시 → FIXED (03-16)
+**심각도**: HIGH (B028의 2일간 미발견 직접 원인)
+
+**증상**: GYM subprocess의 training exception traceback이 로그에 전혀 나타나지 않음.
+
+**근본 원인**: `_run_subprocess()` (autonomous_gym.py line 797-817)에서 `proc.returncode == 0`일 때
+stdout 마지막 20줄만 로깅하고 stderr를 완전 무시. subprocess 내 `_train_grpo()` exception은
+`except Exception`으로 catch되어 정상 종료(exit code 0)하므로 stderr 로깅 경로를 타지 않음.
+
+**수정**: returncode==0일 때도 stderr 마지막 10줄을 `logger.warning`으로 출력.
+
+**재발 방지**:
+> Subprocess stderr는 항상 로깅 — exit code가 0이어도 경고/에러가 stderr에 출력될 수 있음.
+> `capture_output=True` 사용 시 proc.stderr를 반드시 확인하는 패턴 적용.
+
+---
+
+### B030: `_build_cycle_script()` 7개 config 필드 누락 → FIXED (03-16)
+**심각도**: HIGH (use_dr_grpo=True가 GPU5/7에서 무시됨 — 2일간 Dr.GRPO 미적용)
+
+**증상**: GPU5 lingshu의 `use_dr_grpo: true` (YAML) 설정이 worker script에 반영되지 않음 → 기본값 `False`로 실행.
+`max_train_tasks`, `adaptive_quality`, `adaptive_quality_lo/hi`, `use_fair_grpo`, `fairness_weight`, `max_fairness_gap` 동일 현상.
+
+**근본 원인**: `autonomous_gym.py:_build_cycle_script()` (line 832-910)에서 `AutonomousAgentConfig` 생성 시
+03-12~14에 추가된 7개 필드가 worker script 템플릿에 포함되지 않음.
+기본값이 reasonably safe하여 (max_train_tasks=20, adaptive_quality=True) 동작은 했으나 `use_dr_grpo` 같은 필드는 효과 없었음.
+
+**수정**: `_build_cycle_script()` 템플릿에 7개 필드 추가. GPU 5/6/7 프로세스 재시작.
+
+**재발 방지**:
+> `AutonomousAgentConfig`에 새 필드 추가 시 반드시 `_build_cycle_script()` 템플릿도 함께 업데이트.
+> Worker script 생성 후 `/tmp/gym_worker_*.py`에서 새 필드 존재 확인.
+
+---
+
+### B031: Dryrun eval_timeout_seconds=3600 → timeout으로 결과 0건 → FIXED (03-16)
+**심각도**: HIGH (dryrun이 5시간 동안 결과 0건 생산)
+
+**증상**: Dryrun(GPU 6)이 lease_0005까지 진행했지만 `_run_subprocess` 완료 결과 0건.
+매 1시간마다 subprocess가 timeout으로 kill되어 새 lease 할당.
+
+**근본 원인**: `eval_timeout_seconds: 3600`(1시간)이 전체 사이클 소요 시간보다 짧음.
+3 domains × 2 tasks/domain × ~7min/task × 2(pre+post eval) + training = ~100분.
+`_run_subprocess(timeout=3600)` → 60분에 subprocess kill → JSON 출력 없음 → 결과 손실.
+
+**수정**: `eval_timeout_seconds: 7200` (2시간)으로 변경.
+
+**재발 방지**:
+> 전체 사이클 소요 시간 계산: `domains × tasks/domain × min_per_task × 2 + training_min`
+> `eval_timeout_seconds`는 예상 소요 시간의 최소 1.5배 이상으로 설정.
+> 새 dryrun config 작성 시 eval_tasks_per_domain과 timeout의 관계 반드시 확인.
+
+---
+
+### B032: Step3-VL TextQA/MedLFQA에 key_mapping + think-strip 누락 → FIXED (03-16)
+**심각도**: HIGH (B024/B025의 반복 — run_full_benchmark_suite.py에 미적용)
+
+**증상**: Step3-VL TextQA 실행 시 "weights were not initialized" 경고 후
+`RuntimeError: tensor size mismatch (32 vs 370)` 크래시.
+
+**근본 원인**: `run_full_benchmark_suite.py`의 TextQA/MedLFQA 모델 로딩 코드에
+B024(key_mapping)와 B025(think-strip) 수정이 적용되지 않음.
+VQA 코드(`vqa_benchmark_eval.py`)에만 수정되어 있었음.
+
+**수정**:
+1. TextQA/MedLFQA 모델 로딩에 `is_step3` 분기 추가 + key_mapping 전달
+2. `<think>...</think>` 제거 후처리 추가
+3. Step3-VL에 `attn_implementation="sdpa"` 제외 — `__lock_page_killable`에서 hang 발생
+4. **최종 root cause (03-16 16:30)**: `from_pretrained()` 자체가 hang — Qwen3Model의 random weight 초기화(`__init__` → `post_init()`)가 full-size(4096 hidden, 36 layers)에서 무한 hang (transformers 4.57.6). CPU-only, device_map=None/auto/cpu 모두 동일. safetensors 파일 자체는 정상 접근 가능.
+5. **최종 해결**: `_load_step3vl_manual()` 헬퍼 함수 — `no_init_weights()` + 수동 safetensors 로딩 + GPU 이동. 로딩 시간: ~14s (기존 from_pretrained: 무한 hang). `run_full_benchmark_suite.py`에 공통 함수로 추출 완료.
+
+**재발 방지**:
+> Step3-VL(Qwen3 backbone) 모델은 `from_pretrained()` 사용 금지 — `_load_step3vl_manual()` 사용.
+> transformers 업데이트 시 Qwen3Model full-size init hang 해결 여부 재확인.
+> 모델 로딩 코드를 공통 유틸 함수로 추출 완료 (`_load_step3vl_manual()`).
+> Step3-VL은 `attn_implementation="sdpa"` 비호환 — custom attention 구현 사용.
+
+---
+
+### B033: autonomous_gym.yaml (8-agent) + per-GPU config 동시 실행 → 리소스 충돌 → FIXED (03-16)
+**심각도**: CRITICAL (GPU 1 OOM 위험, EHR baseline 불안정)
+
+**증상**: GPU 1 메모리 81092/81920 MiB (99.0%). GPU 0-3에서 EHR baseline + GYM worker 이중 실행.
+
+**근본 원인**: `autonomous_gym.yaml` (8-agent, 8 GPU) 프로세스(PID 2510494)가 per-GPU config 프로세스와 동시에 실행됨.
+메인 GYM이 GPU 0-7에 worker를 spawn하면서 EHR baseline(GPU 0-3), per-GPU GYM(GPU 5/6/7)과 충돌.
+
+**수정**: 메인 GYM 프로세스 및 모든 orphaned worker 종료. per-GPU config만 유지.
+
+**재발 방지**:
+> `autonomous_gym.yaml` (전체 GPU)과 per-GPU config는 절대 동시 실행 금지.
+> 프로세스 시작 전 `ps aux | grep run_autonomous_gym`으로 기존 프로세스 확인 필수.
+> 8-agent 풀 GYM은 Phase D (30-day run)에서만 사용.
+
+---
+
+### B034: `_load_step3vl_manual()` import 누락 → NameError → Step3 TextQA/MedLFQA 실행 불가 → FIXED (03-17)
+**심각도**: HIGH (Step3-VL baseline 평가 차단)
+
+**증상**: Step3-VL TextQA 및 MedLFQA 실행 시 `NameError: name 'AutoConfig' is not defined` 즉시 크래시.
+
+**근본 원인**: B032 최종 수정 시 `_load_step3vl_manual()` 함수(line 91-134)에 `AutoConfig`, `AutoModelForCausalLM`, `torch`를 사용하지만 함수 내 import를 누락. 이 함수를 호출하는 `evaluate_medlfqa()`와 `evaluate_textqa()`는 각자 함수 로컬에서 import하지만, 이는 `_load_step3vl_manual` scope에서 접근 불가.
+
+**수정**: 함수 내에 `import torch`, `from transformers import AutoConfig, AutoModelForCausalLM` 추가.
+
+**재발 방지**:
+> 공통 유틸 함수 추출 시 해당 함수 내에서 필요한 모든 import를 명시적으로 포함할 것.
+> 단순 syntax import test: `python -c "from module import func"` 로는 runtime import 누락 발견 불가 — 실제 호출 테스트 필수.
+
+---
+
+### B035: Domain herding — weakness threshold + 차별화 부재 + recency penalty 없음 → 85% 단일 도메인 반복 → FIXED (03-17)
+**심각도**: HIGH (GYM 자율 학습 루프의 도메인 다양성 완전 상실 — 논문 실험 유효성 저하)
+
+**증상**:
+- Dryrun (GPU 6): lease_0001~0040 중 85%가 drug_interaction
+- GPU5 Lingshu: triage_emergency 연속 10+ cycle
+- GPU7 Qwen: triage_emergency 연속 7+ cycle
+- `HERDING WARNING` 로그 지속 출력되지만 실제 행동 변화 없음
+
+**근본 원인 (3가지 동시)**:
+1. **절대적 weakness threshold**: `shared_logbook.py:276` — `threshold = 0.1` 고정. 모든 도메인 점수가 0.30~0.45 범위일 때, avg - 0.1 = 0.31~0.35로 대부분 도메인이 weakness로 분류 안됨 → weakness 리스트 빈 상태
+2. **동일 weakness 점수 fallback**: `autonomous_agent.py:441` — weakness 리스트에 없으면 `my_score < 0.5` → `weakness = 0.8` 일괄 적용. 모든 도메인이 score < 0.5이면 차별화 불가
+3. **recency penalty 없음**: 최근 연속 선택된 도메인에 대한 페널티가 없어 한번 선택되면 계속 반복
+
+**수정 (3가지)**:
+1. `shared_logbook.py:276`: 절대 threshold 0.1 → 상대 threshold `max(avg * 0.15, 0.02)` 변경
+2. `autonomous_agent.py:_score_domain()`: 연속 weakness 점수 → `0.5 + (avg - my_score) / avg` 비례 점수로 교체
+3. `autonomous_agent.py:_score_domain()`: 최근 5회 중 동일 도메인 3회 이상 → 0.3배 penalty, 2회 → 0.6배 penalty 추가
+
+**GPU 5/6/7 프로세스 재시작**: PID 2759172/2759173/2759174 (v5)
+
+**재발 방지**:
+> Threshold 설정은 항상 **상대적** (비율 기반)으로 — 절대값은 점수 분포 변화에 취약.
+> StrategySelector에 도메인 선택 분포를 로그로 출력하여 herding 조기 감지.
+> `detect_herding()` 결과를 경고만이 아닌 domain selection에 직접 반영할 것.
+
+### B036: Step3-VL TextQA/MedLFQA BATCH_SIZE=8 → 4D tensor crash in apply_rotary_pos_emb → FIXED (03-18)
+**심각도**: HIGH (Step3-VL TextQA/MedLFQA baseline 평가 완전 차단 — GPU 4 죽은 상태)
+
+**증상**: Step3-VL TextQA 및 MedLFQA 실행 시 `RuntimeError: The size of tensor a (32) must match the size of tensor b (370) at non-singleton dimension 3` 크래시.
+모델 로딩은 성공하지만 첫 번째 batch 추론에서 `apply_rotary_pos_emb()`에서 실패.
+
+**근본 원인**: `StepRoboticsModel.get_input_embeddings()` (modeling_step_vl.py line 199-221)이 batch_size=1 전용으로 설계됨.
+`input_ids.squeeze(0)` + `inputs_embeds.unsqueeze(0)` 패턴이 batch_size>1일 때 4D tensor를 생성.
+- batch_size=8, seq_len=370 → squeeze(0) 효과 없음 → embed_tokens → (8, 370, 4096) → unsqueeze(0) → **(1, 8, 370, 4096)** 4D
+- Qwen3Model이 3D tensor를 기대하므로 attention reshape에서 dim mismatch
+- q 텐서 dim3=32 (num_heads가 head_dim 위치에), cos dim3=370 (seq_len이 head_dim 위치에) → 크래시
+
+`run_full_benchmark_suite.py`의 TextQA (line 499)와 MedLFQA (line 257) 모두 `BATCH_SIZE=8` 사용.
+
+**수정**: `BATCH_SIZE = 1 if is_step3 else 8` — Step3-VL 모델일 때만 batch_size=1 적용 (두 곳 모두).
+
+**재발 방지**:
+> Step3-VL 모델의 get_input_embeddings()는 squeeze(0)/unsqueeze(0)로 batch_size=1 전용.
+> Step3-VL 사용하는 모든 eval 코드에서 BATCH_SIZE=1 강제.
+> 새 VL 모델 추가 시 get_input_embeddings()의 batch 처리 방식 반드시 확인.
+
+### B037: Step3-VL TextQA `max_new_tokens=32` + `<think>` generation prompt → below-random MedMCQA/MMLU → FIXED (03-18)
+**심각도**: HIGH (Step3-VL TextQA 결과 전체 무효 — MedMCQA 21% < random 25%, MMLU 31.5%)
+
+**증상**: Step3-VL TextQA에서 MedQA=51.5% (합리적)이지만 MedMCQA=21.0% (random 25% 이하), MMLU=31.5% (타 모델 65~87% 대비 극히 낮음).
+
+**근본 원인**: Step3 chat template의 `add_generation_prompt=True`가 `<think>\n`을 generation prompt 끝에 삽입.
+`max_new_tokens=32`로는 thinking이 끝나기 전에 잘림 → `</think>` 없이 truncate → think-strip regex 미매칭.
+첫 번째 A/B/C/D 문자가 thinking text에서 추출되어 잘못된 답 반환.
+MedQA는 thinking이 짧거나 우연히 맞는 답이 나와 51.5% 기록.
+
+**수정**:
+1. Step3에서 `<think>\n`을 prompt 끝에서 제거 (`text[:-len("<think>\n")]`) — thinking 비활성화
+2. `max_new_tokens`를 32→64로 증가 (안전 마진, Step3만)
+3. MedLFQA에도 동일한 thinking 비활성화 적용 (max_new_tokens=512는 유지)
+
+**재발 방지**:
+> Step3-VL(Qwen3 계열)의 chat template은 `<think>` 태그를 자동 삽입함.
+> MC 답변 등 짧은 생성이 필요한 경우 반드시 `<think>\n`을 제거하거나 max_new_tokens를 충분히 늘릴 것.
+> 새 reasoning 모델 추가 시 chat template의 generation prompt 확인 필수.
+
+---
+
+### B038: `model_profile.py:load_model()` — Step3 key_mapping + manual loading 누락 → EHR eval 가중치 랜덤 초기화 → FIXED (03-18)
+**심각도**: CRITICAL (Step3-VL EHR baseline 결과 전체 무효 — action_score=0.000)
+
+**증상**: `agent_runner.py`가 `profile.load_model()`을 통해 Step3 로딩 시 `Some weights were not initialized` 경고 후 action_score=0.000.
+
+**근본 원인**: `model_profile.py:load_model()`이 `from_pretrained()` 직접 호출.
+Step3-VL은 두 가지 이유로 `from_pretrained()` 사용 불가:
+1. B032: Qwen3Model `__init__` hang (transformers 4.57.x)
+2. B024: `_checkpoint_conversion_mapping` 미자동 적용 → key mismatch → random weights
+VQA/TextQA/MedLFQA는 `run_full_benchmark_suite.py`의 `_load_step3vl_manual()` 사용하지만,
+EHR eval은 `agent_runner.py` → `model_profile.py:load_model()` 경로를 타므로 수정 누락.
+
+**수정**: `model_profile.py:load_model()`에 `model_type == "step_robotics"` 분기 추가.
+`_load_step3vl_manual()` 메서드를 `ModelProfile` 클래스 내에 구현 (key_mapping + no_init_weights + safetensors 수동 로딩).
+`device_map="cpu"` 호출 시 `cpu_only=True` 파라미터로 GPU 이동 방지 (LoRA merge 경로).
+
+**재발 방지**:
+> Step3-VL 관련 수정 시 모든 모델 로딩 경로 확인: `run_full_benchmark_suite.py`, `vqa_benchmark_eval.py`, `agent_runner.py` → `model_profile.py`.
+> `model_profile.py:load_model()`은 모든 eval 경로의 공통 진입점 — 여기에 모델별 workaround 반드시 적용.
+
+### B039: Step3-VL TextQA B037 regression — `<think>\n` 미제거 + max_new_tokens=512 → ~10% 정확도 → FIXED (03-20)
+**심각도**: CRITICAL (Step3-VL TextQA 결과 전체 무효 — MedQA 51%→10%, MedMCQA 21%→10%, MMLU 31%→10%)
+
+**증상**: B037 수정 후 재실행한 03-19 TextQA 결과가 모든 벤치마크에서 ~10%로 붕괴.
+Random 25% (4지선다)보다 낮음.
+
+**근본 원인**: B037 fix가 잘못 적용됨 (3가지 동시 원인):
+1. `add_generation_prompt=True`가 Step3 chat template에서 `<think>\n`을 prompt 끝에 삽입 — 이를 strip하는 코드가 누락됨
+2. `gen_max_tokens`를 계획(64)과 달리 512로 설정 — 512 토큰 thinking 생성
+3. `outputs[j][input_len:]`은 생성 부분만 추출하므로 opening `<think>` 태그가 없음 → `re.sub(r"<think>.*?</think>", ...)` regex 불매칭 → thinking text 전체가 answer extraction 대상
+4. `for ch in response: if ch in "ABCD"` — thinking text의 첫 A/B/C/D를 답으로 잘못 추출 → ~10% (random 이하)
+
+**수정** (`scripts/run_full_benchmark_suite.py`):
+1. TextQA line 525-527: `<think>\n` prompt strip 추가
+2. TextQA line 540: `gen_max_tokens = 64 if is_step3 else 32`
+3. TextQA line 550-552: `</think>` fallback strip 추가
+4. MedLFQA line 278-280: 동일 `<think>\n` strip
+5. MedLFQA line 303-305: 동일 `</think>` fallback
+
+**재발 방지**:
+> Step3-VL(Qwen3 계열) `add_generation_prompt=True`는 항상 `<think>\n`을 삽입함.
+> MC QA 등 짧은 답변 시 반드시 prompt에서 `<think>\n` strip할 것.
+> 생성 텍스트의 `</think>` fallback strip을 항상 적용 (regex만으로 불충분 — opening tag가 prompt 측에 있을 수 있음).
+> RL fix 시 max_new_tokens 변경은 계획 값과 정확히 일치시킬 것 (512 vs 64 같은 임의 변경 금지).
+
+---
+
+### B040: PMC-VQA HuggingFace train_2.csv 스키마 불일치 → dataset generation 에러 → FIXED (03-20)
+**심각도**: MEDIUM (Step3 VQA 6개 중 1개 결과 없음)
+
+**증상**: `load_dataset("RadGenome/PMC-VQA")` 호출 시 `All the data files must have the same columns` 에러.
+
+**근본 원인**: HF dataset의 `train_2.csv`가 `train.csv`와 다른 스키마 사용.
+- `train_2.csv`에 `{'index', 'split', 'Caption'}` 추가 컬럼, `{'Answer_label'}` 누락
+- `load_dataset`이 모든 CSV를 합치려다 실패
+
+**수정**: `bioagents/data_pipeline/vqa_loader.py` line 370에 `data_files` 파라미터 추가:
+```python
+ds = load_dataset("RadGenome/PMC-VQA", split=split,
+                  data_files={"test": "test.csv", "train": "train.csv"})
+```
+
+**재발 방지**:
+> HuggingFace dataset 로딩 시 multi-file dataset는 스키마 일관성 확인.
+> 불일치 시 `data_files` 파라미터로 특정 파일만 로드.
+
+---
+
+### B041: GRPO merge가 Qwen2.5-VL 모델 완전 파괴 + Lingshu catastrophic forgetting → CRITICAL (03-20)
+**심각도**: CRITICAL (논문 핵심 claim 무력화)
+
+**증상**: GYM 학습 후 외부 벤치마크(TextQA) 평가 결과:
+
+| 모델 | Benchmark | Baseline | GYM-trained | Delta |
+|------|-----------|----------|-------------|-------|
+| **Lingshu** | MedQA | 61.7% | 56.9% | **-4.8%** |
+| **Lingshu** | MedMCQA | 53.2% | 60.8% | **+7.6%** ✅ |
+| **Lingshu** | MMLU(6) | 76.9% | 66.8% | **-10.1%** |
+| **Qwen2.5-VL** | MedQA | 54.0% | 10.5% | **-43.5%** 💀 |
+| **Qwen2.5-VL (early ckpt)** | MedQA | 54.0% | 12.5% | **-41.5%** 💀 |
+
+**근본 원인** (추정):
+1. **Qwen 모델 파괴**: GRPO LoRA merge 과정에서 모델 가중치가 손상됨. Early checkpoint(첫 GRPO merge)부터 이미 10% → merge 프로세스 자체의 문제.
+   - 가능한 원인: LoRA rank 불일치, merge alpha 설정 오류, VL model의 vision encoder까지 LoRA 적용
+2. **Lingshu catastrophic forgetting**: MedMCQA는 +7.6% 향상되었지만, MedQA(-4.8%)와 MMLU(-10.1%)에서 대폭 하락.
+   - GYM internal task가 특정 도메인(clinical_diagnosis, drug_interaction)에 편향
+   - KL penalty가 forgetting을 충분히 방지하지 못함
+
+**영향**:
+- 논문 "Autonomous self-evolving loop" contribution의 실증적 근거 약화
+- 현재 GYM 학습은 외부 벤치마크 기준으로 net negative (Qwen) 또는 mixed (Lingshu)
+
+**수정 방향** (미수정):
+1. GRPO merge 코드 디버깅 — Qwen LoRA target_modules 확인, vision encoder 제외 여부
+2. KL penalty 강화 또는 EWC(Elastic Weight Consolidation) 추가
+3. GYM internal eval에 외부 벤치마크 subset을 validation set으로 추가 (anti-contamination 유지)
+4. 학습 빈도 감소 (매 cycle → 매 5 cycles)
+
+**재발 방지**:
+> GYM 학습 후 반드시 외부 벤치마크로 검증 (internal eval만으로 판단 금지).
+> LoRA merge 후 간단한 sanity check (MedQA 100개) 실행.
+> 모든 GRPO checkpoint에 대해 merge 전후 weight norm 비교.
+
+---
+
 ## Prevention Checklist
 
 Claude가 코드를 작성/수정할 때 반드시 확인하는 체크리스트.
@@ -453,13 +816,40 @@ Claude가 코드를 작성/수정할 때 반드시 확인하는 체크리스트.
 - [ ] **`_checkpoint_conversion_mapping` 자동 미적용 모델: `key_mapping` 명시적 전달** (B024)
 - [ ] **Reasoning 모델 (`<think>` 태그): 출력 후처리에서 `<think>...</think>` 제거** (B025)
 
+### Model Loading 방지 (추가)
+- [ ] **Step3-VL key_mapping/think-strip은 모든 eval 스크립트에 적용** (B032 — `grep -r "from_pretrained" scripts/ bioagents/evaluation/`)
+- [ ] **모델 로딩 수정 시 vqa_benchmark_eval.py + run_full_benchmark_suite.py + 기타 모두 확인**
+- [ ] **Step3-VL(Qwen3 backbone): `from_pretrained()` 사용 금지 → `_load_step3vl_manual()` 사용** (B032 final — transformers 4.57.x Qwen3 init hang)
+- [ ] **Step3-VL 추론 시 BATCH_SIZE=1 강제** (B036 — get_input_embeddings squeeze(0)/unsqueeze(0)가 batch>1에서 4D tensor 생성)
+- [ ] **Step3-VL MC 평가 시 `<think>` generation prompt 반드시 strip** (B039 — `add_generation_prompt=True`가 자동 삽입, strip 안하면 thinking text에서 잘못된 답 추출)
+- [ ] **Step3-VL 생성 후 `</think>` fallback strip 적용** (B039 — `<think>`가 prompt 측에 있으면 regex 불매칭)
+- [ ] **model_profile.py:load_model() 경로도 Step3 manual loading 적용 확인** (B038 — EHR eval 경로)
+
 ### Autonomous GYM 방지
 - [ ] `RunConfig` 생성 전 `task_ids` 값 확인 (None = 전체 실행)
 - [ ] `eval_tasks_per_domain` 값이 실제로 `RunConfig(task_ids=...)` 에 전달되는지 확인
 - [ ] 모든 subprocess timeout은 YAML config로 노출
 - [ ] Dryrun 재시작 후 첫 사이클이 설정된 task 수만큼만 실행되는지 로그 확인
+- [ ] **`_build_cycle_script()` 필드 동기화**: `AutonomousAgentConfig` 새 필드 추가 시 반드시 포함 (B030)
+- [ ] **`eval_timeout_seconds` = 예상 사이클 소요 시간 × 1.5 이상** (B031)
+- [ ] **autonomous_gym.yaml(전체 GPU)과 per-GPU config 절대 동시 실행 금지** (B033)
 - [ ] **새 gym config: `adaptive_quality: true` 기본 설정, 고정 threshold만 사용 금지** (B026)
 - [ ] **새 gym config 작성 시 `eval_timeout_seconds`, `train_timeout_seconds` 반드시 명시** (B021)
+
+### GRPO/RL Training 방지
+- [ ] `_grpo_policy_update()`에 `ref_log_probs` 전달 여부 확인 (None이면 KL 없음!)
+- [ ] `beta * loss`는 KL penalty가 아님 — 반드시 `log π_θ - log π_ref` 사용
+- [ ] Pre/post eval에 동일 `eval_seed` 전달 여부 확인
+- [ ] `max_train_tasks > 0`으로 task cap 설정 (0=전체 학습 → overfitting 위험)
+- [ ] Reward weights에서 accuracy ≥ 50% 확인
+- [ ] `training_epochs ≤ 1` 확인 (LoRA + 소량 데이터에서 2+ epoch은 overfitting)
+- [ ] `learning_rate ≤ 1e-5` 확인 (KL penalty 있어도 높은 LR은 drift 유발)
+- [ ] 첫 사이클 improvement 부호 반드시 확인 (음수면 즉시 중단)
+
+### Dataclass / Config 방지
+- [ ] 새 필드 추가 시 **base class**에 추가 (child class에만 추가하면 base 생성 시 TypeError)
+- [ ] `**kwargs` 또는 `**_common_kwargs`로 전달되는 모든 키가 target dataclass에 존재하는지 확인
+- [ ] Subprocess stderr는 항상 로깅 (returncode 무관)
 
 ### EHR Evaluation 방지
 - [ ] `max_samples` 반드시 설정 (0은 전체 57K 실행 — 금지)
@@ -486,3 +876,11 @@ Claude가 코드를 작성/수정할 때 반드시 확인하는 체크리스트.
 | 2026-03-12 | EHR stratified sampling dict unhashable 수정 | B023 |
 | 2026-03-12 | Step3-VL 가중치 매핑 + think-strip 수정 | B024, B025 |
 | 2026-03-12 | Adaptive quality filtering 구현 (quality_threshold 고정값 대체) | B026 |
+| 2026-03-14 | GRPO degradation 근본 수정 — KL penalty, task cap, LR 감소, reward rebalance 등 | B027 |
+| 2026-03-16 | max_train_tasks 필드 누락 수정 + subprocess stderr 로깅 추가 | B028, B029 |
+| 2026-03-16 | worker config 필드 누락 + dryrun timeout + Step3 TextQA/MedLFQA key_mapping + 8-agent 충돌 | B030, B031, B032, B033 |
+| 2026-03-17 | Step3 import 누락 + domain herding 근본 수정 (threshold + recency penalty) | B034, B035 |
+| 2026-03-18 | Step3-VL TextQA/MedLFQA batch size 크래시 수정 | B036 |
+| 2026-03-18 | Step3 TextQA thinking 비활성화 + model_profile Step3 manual loading | B037, B038 |
+| 2026-03-20 | Step3 TextQA B037 regression 수정 + PMC-VQA 로딩 수정 | B039, B040 |
+| 2026-03-20 | GYM External Validation → Qwen GRPO merge 모델 파괴 발견 + Lingshu 부분 향상 확인 | B041 |

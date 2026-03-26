@@ -421,7 +421,10 @@ def _build_strategy_reward_functions(config: BioAgentGRPOConfig) -> list:
 # ============================================================
 
 
-class EntropyMonitorCallback:
+from transformers import TrainerCallback
+
+
+class EntropyMonitorCallback(TrainerCallback):
     """Monitors policy entropy during training to detect collapse early.
 
     Based on GTPO (arXiv:2508.03772): tracks generation entropy and
@@ -510,7 +513,7 @@ def _wrap_overlong_reward(reward_funcs, safe_length: int, max_length: int, penal
     return wrapped
 
 
-class DynamicSamplingCallback:
+class DynamicSamplingCallback(TrainerCallback):
     """DAPO Dynamic Sampling (technique #2).
 
     Monitors reward distributions within generation groups and logs

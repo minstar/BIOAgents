@@ -1,0 +1,61 @@
+# ============================================================
+# SFT Warmup Config — Lingshu-7B (Stage 1 of Two-Stage Pipeline)
+# ============================================================
+# Light SFT warmup before GSPO/DAPO RL training.
+# Uses existing SFT data from medical_sft_combined + multidomain.
+# Only 1 epoch with low LR to avoid overfitting on small dataset.
+#
+# Usage:
+#   python scripts/train_two_stage.py \
+#       --sft-config configs/sft_warmup_lingshu7b.yaml \
+#       --rl-config configs/gspo_dapo_lingshu7b.yaml
+# ============================================================
+
+model:
+  name_or_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Lingshu-7B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "flash_attention_2"
+
+peft:
+  enabled: true
+  r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+dataset:
+  sft_path: "datasets/sft/medical_sft_combined.jsonl"
+  min_reward: 0.5
+  max_samples: 1000
+  max_length: 4096
+  train_ratio: 0.9
+
+training:
+  output_dir: "checkpoints/sft_warmup_lingshu7b"
+  num_train_epochs: 1            # Light warmup — 1 epoch only
+  per_device_train_batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 5.0e-6          # Lower than standard SFT (2e-5) to be gentle
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 100
+  eval_steps: 50
+  save_total_limit: 2
+  seed: 42
+
+logging:
+  project: "pt2-minstar-gym-rl"
+  run_name: "sft_warmup_lingshu7b"
+  use_wandb: true
+  log_dir: "logs/runs"

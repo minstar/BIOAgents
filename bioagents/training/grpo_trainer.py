@@ -437,12 +437,14 @@ class EntropyMonitorCallback(TrainerCallback):
 
     def __init__(
         self,
-        warning_threshold: float = 2.0,   # Log warning when entropy drops below this
-        critical_threshold: float = 1.0,   # STOP training when entropy drops below this
+        warning_threshold: float = 0.15,   # Log warning when entropy drops below this
+        critical_threshold: float = 0.05,  # STOP training when entropy drops below this
+        min_steps_before_stop: int = 20,   # Don't auto-stop before this many steps
         window_size: int = 50,             # Smoothing window for entropy tracking
     ):
         self.warning_threshold = warning_threshold
         self.critical_threshold = critical_threshold
+        self.min_steps_before_stop = min_steps_before_stop
         self.window_size = window_size
         self.entropy_history = []
         self.warned = False
@@ -464,11 +466,11 @@ class EntropyMonitorCallback(TrainerCallback):
             logs["entropy_monitor/avg_entropy"] = avg_entropy
             logs["entropy_monitor/min_entropy"] = min(window)
 
-            if avg_entropy < self.critical_threshold:
+            if avg_entropy < self.critical_threshold and len(self.entropy_history) >= self.min_steps_before_stop:
                 logger.error(
                     f"🚨 CRITICAL: Entropy collapsed to {avg_entropy:.4f} "
-                    f"(threshold: {self.critical_threshold}). "
-                    f"Training should be stopped to prevent irreversible damage!"
+                    f"(threshold: {self.critical_threshold}) after {len(self.entropy_history)} steps. "
+                    f"Training stopped to prevent irreversible damage!"
                 )
                 # Signal to stop training
                 if hasattr(control, "should_training_stop"):

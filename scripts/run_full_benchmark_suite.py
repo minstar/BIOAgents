@@ -64,6 +64,13 @@ MODELS = {
         "type": "vlm",
         "supports_vision": True,
     },
+    # GSPO/DAPO trained models (B041 fix)
+    "gspo_lingshu": {
+        "name": "GSPO-DAPO-Lingshu-7B",
+        "path": str(PROJECT_ROOT / "checkpoints/gspo_dapo_lingshu7b/merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
 }
 
 MEDLFQA_DATASETS = {
@@ -491,7 +498,6 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-
     # TextQA benchmark files
     TEXTQA_BENCHMARKS = {
         "medqa": "evaluations/self-biorag/data/benchmark/med_qa_test.jsonl",

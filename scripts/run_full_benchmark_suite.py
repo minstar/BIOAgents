@@ -45,6 +45,25 @@ MODELS = {
         "type": "vlm",
         "supports_vision": True,
     },
+    # GYM-trained models for external benchmark validation
+    "gym_qwen2vl": {
+        "name": "GYM-Qwen2.5-VL-7B (dryrun, 110+ cycles)",
+        "path": str(PROJECT_ROOT / "checkpoints/autonomous/dryrun_qwen25vl/dryrun_qwen25vl/grpo_84291/best_merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
+    "gym_lingshu": {
+        "name": "GYM-Lingshu-7B (weakness_fixer, 60+ cycles)",
+        "path": str(PROJECT_ROOT / "checkpoints/autonomous/lingshu_weakness_fixer/lingshu_weakness_fixer/grpo_81130/best_merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
+    "gym_qwen2vl_early": {
+        "name": "GYM-Qwen2.5-VL-7B (dryrun, early checkpoint)",
+        "path": str(PROJECT_ROOT / "checkpoints/autonomous/dryrun_qwen25vl/dryrun_qwen25vl/grpo_10598/best_merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
 }
 
 MEDLFQA_DATASETS = {
@@ -86,6 +105,54 @@ def load_medlfqa_data(dataset_key, max_samples=0):
     if max_samples > 0:
         data = data[:max_samples]
     return data
+
+
+def _load_step3vl_manual(model_path: str, dtype=None):
+    """Load Step3-VL using no_init_weights + manual safetensors loading.
+
+    Workaround for B032: Qwen3Model.__init__ hangs during random weight
+    initialization in transformers 4.57.x when called from from_pretrained().
+    """
+    import re as _re
+    import torch
+    from safetensors import safe_open
+    from transformers import AutoConfig, AutoModelForCausalLM
+    from transformers.modeling_utils import no_init_weights
+
+    if dtype is None:
+        dtype = torch.bfloat16
+    config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
+    with no_init_weights():
+        model = AutoModelForCausalLM.from_config(
+            config, trust_remote_code=True, torch_dtype=dtype,
+        )
+    # Key remapping (matches _checkpoint_conversion_mapping in modeling_step_vl.py)
+    _mapping = {
+        r'^vision_model': 'model.vision_model',
+        r'^model(?!\.(language_model|vision_model))': 'model.language_model',
+        r'^vit_large_projector': 'model.vit_large_projector',
+    }
+    def _remap(key):
+        for pat, repl in _mapping.items():
+            new = _re.sub(pat, repl, key)
+            if new != key:
+                return new
+        return key
+
+    sd = dict(model.named_parameters())
+    for name, buf in model.named_buffers():
+        sd[name] = buf
+
+    shard_dir = Path(model_path)
+    shard_files = sorted(shard_dir.glob("model-*.safetensors"))
+    for sf in shard_files:
+        with safe_open(str(sf), framework="pt", device="cpu") as f:
+            for ckpt_key in f.keys():
+                mapped = _remap(ckpt_key)
+                if mapped in sd:
+                    sd[mapped].data.copy_(f.get_tensor(ckpt_key))
+    model = model.cuda().eval()
+    return model
 
 
 def compute_rouge_l(prediction, reference):
@@ -170,11 +237,18 @@ def evaluate_medlfqa(model_key, output_dir, max_samples=0):
     model_type = getattr(model_config, "model_type", "")
     is_qwen_vl = model_type in ("qwen2_5_vl", "qwen2_vl") or ("qwen2" in model_type.lower() and "vl" in model_type.lower())
 
-    load_kwargs = dict(torch_dtype=torch.bfloat16, trust_remote_code=True, device_map="auto", attn_implementation="sdpa")
+    is_step3 = "step" in model_type.lower()
+
+    load_kwargs = dict(torch_dtype=torch.bfloat16, trust_remote_code=True, device_map="auto")
+    if not is_step3:
+        load_kwargs["attn_implementation"] = "sdpa"  # Step3-VL hangs with SDPA (B032)
 
     if is_qwen_vl:
         from transformers import Qwen2_5_VLForConditionalGeneration
         model = Qwen2_5_VLForConditionalGeneration.from_pretrained(model_path, **load_kwargs)
+    elif is_step3:
+        # B032 final fix: bypass from_pretrained (Qwen3 init hangs in transformers 4.57.x)
+        model = _load_step3vl_manual(model_path, dtype=torch.bfloat16)
     else:
         model = AutoModelForCausalLM.from_pretrained(model_path, **load_kwargs)
 
@@ -199,7 +273,8 @@ def evaluate_medlfqa(model_key, output_dir, max_samples=0):
         t0 = time.time()
 
         # --- Batched inference for speed (4x-8x faster than sequential) ---
-        BATCH_SIZE = 8
+        # B036: Step3-VL get_input_embeddings uses squeeze(0)/unsqueeze(0) — batch_size>1 causes 4D tensor crash
+        BATCH_SIZE = 1 if is_step3 else 8
         valid_items = [(i, item) for i, item in enumerate(data) if item.get("Question", "")]
 
         for batch_start in range(0, len(valid_items), BATCH_SIZE):
@@ -219,6 +294,9 @@ def evaluate_medlfqa(model_key, output_dir, max_samples=0):
                     {"role": "user", "content": f"Question: {question}\n\nProvide a comprehensive answer."},
                 ]
                 text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                # B039: Strip <think> for Step3 to get clean long-form answers
+                if is_step3 and text.endswith("<think>\n"):
+                    text = text[:-len("<think>\n")]
                 batch_messages.append(text)
 
             # Batch tokenize with padding
@@ -239,6 +317,11 @@ def evaluate_medlfqa(model_key, output_dir, max_samples=0):
                 input_len = inputs["input_ids"].shape[-1]
                 generated = outputs[j][input_len:]
                 response = tokenizer.decode(generated, skip_special_tokens=True).strip()
+                # Strip <think>...</think> reasoning tags (Step3-VL, B032)
+                response = re.sub(r"<think>.*?</think>", "", response, flags=re.DOTALL).strip()
+                # B039: Handle </think> without opening <think> (prompt-side tag)
+                if "</think>" in response:
+                    response = response.split("</think>")[-1].strip()
 
                 rouge_l = compute_rouge_l(response, reference)
                 token_f1 = compute_token_f1(response, reference)
@@ -389,12 +472,18 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
     model_type = getattr(model_config, "model_type", "")
     is_qwen_vl = model_type in ("qwen2_5_vl", "qwen2_vl") or ("qwen2" in model_type.lower() and "vl" in model_type.lower())
 
-    load_kwargs = dict(torch_dtype=torch.bfloat16, trust_remote_code=True,
-                       device_map="auto", attn_implementation="sdpa")
+    is_step3 = "step" in model_type.lower()
+
+    load_kwargs = dict(torch_dtype=torch.bfloat16, trust_remote_code=True, device_map="auto")
+    if not is_step3:
+        load_kwargs["attn_implementation"] = "sdpa"  # Step3-VL hangs with SDPA (B032)
 
     if is_qwen_vl:
         from transformers import Qwen2_5_VLForConditionalGeneration
         model = Qwen2_5_VLForConditionalGeneration.from_pretrained(model_path, **load_kwargs)
+    elif is_step3:
+        # B032 final fix: bypass from_pretrained (Qwen3 init hangs in transformers 4.57.x)
+        model = _load_step3vl_manual(model_path, dtype=torch.bfloat16)
     else:
         model = AutoModelForCausalLM.from_pretrained(model_path, **load_kwargs)
 
@@ -433,7 +522,8 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
         total = 0
         t0 = time.time()
 
-        BATCH_SIZE = 8
+        # B036: Step3-VL get_input_embeddings uses squeeze(0)/unsqueeze(0) — batch_size>1 causes 4D tensor crash
+        BATCH_SIZE = 1 if is_step3 else 8
         for batch_start in range(0, len(data), BATCH_SIZE):
             batch = data[batch_start:batch_start + BATCH_SIZE]
             batch_prompts = []
@@ -451,6 +541,9 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
                     {"role": "user", "content": question},
                 ]
                 text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+                # B039: Step3 chat template appends <think>\n — strip for direct MC answer
+                if is_step3 and text.endswith("<think>\n"):
+                    text = text[:-len("<think>\n")]
                 batch_prompts.append(text)
                 batch_answers.append(answer.strip())
 
@@ -462,13 +555,20 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
             inputs = {k: v.to(model.device) for k, v in inputs.items()}
 
             with torch.no_grad():
-                outputs = model.generate(**inputs, max_new_tokens=32, do_sample=False,
+                # B039: Without <think> prompt, model answers directly. 64 tokens enough for MC.
+                gen_max_tokens = 64 if is_step3 else 32
+                outputs = model.generate(**inputs, max_new_tokens=gen_max_tokens, do_sample=False,
                                         pad_token_id=tokenizer.pad_token_id)
 
             for j in range(len(batch_prompts)):
                 input_len = inputs["input_ids"].shape[-1]
                 generated = outputs[j][input_len:]
                 response = tokenizer.decode(generated, skip_special_tokens=True).strip()
+                # Strip <think>...</think> reasoning tags (Step3-VL, B032)
+                response = re.sub(r"<think>.*?</think>", "", response, flags=re.DOTALL).strip()
+                # B039: Handle </think> without opening <think> (prompt-side tag)
+                if "</think>" in response:
+                    response = response.split("</think>")[-1].strip()
 
                 # Extract answer letter
                 pred = ""

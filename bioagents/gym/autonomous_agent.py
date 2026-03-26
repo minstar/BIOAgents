@@ -108,8 +108,9 @@ class AutonomousAgentConfig:
     eval_tasks_per_domain: int = 20
     benchmark_every_n_cycles: int = 3  # Run external benchmarks every N cycles (0=never)
     benchmark_max_samples: int = 0     # 0 = full benchmark, >0 = sample N questions
-    training_epochs: int = 2
-    learning_rate: float = 2e-5
+    training_epochs: int = 1           # Reduced from 2 to prevent overfitting
+    learning_rate: float = 5e-6        # Reduced from 2e-5 — conservative with KL penalty
+    max_train_tasks: int = 20          # Cap tasks per GRPO cycle (0=all, risks overfitting)
     quality_threshold: float = 0.5
     adaptive_quality: bool = True        # Normalize score distribution → keep 0.2-0.8 range
     adaptive_quality_lo: float = 0.2     # Lower percentile cutoff (too hard, skip)
@@ -434,13 +435,19 @@ class StrategySelector:
         domain_scores = reflection.get("domain_scores", {})
         my_score = domain_scores.get(domain, 0.0)
 
-        # 1. Weakness score: lower my score = higher motivation
+        # 1. Weakness score: proportional to how far below average
+        # B035 fix: use continuous scoring instead of discrete buckets
+        # so domains are differentiated even when all score < 0.5
+        avg_score = reflection.get("overall_score", 0.0)
         if domain in reflection.get("weaknesses", []):
             weakness = 1.0
+        elif avg_score > 0 and my_score < avg_score:
+            # Proportional: further below avg = higher weakness
+            weakness = min(1.0, 0.5 + (avg_score - my_score) / max(avg_score, 0.01))
         elif my_score < 0.5:
-            weakness = 0.8
+            weakness = 0.4
         elif my_score < 0.7:
-            weakness = 0.5
+            weakness = 0.2
         else:
             weakness = 0.1
         scores[Motivation.WEAKNESS_FIXING.value] = (
@@ -506,6 +513,20 @@ class StrategySelector:
         if domain in reflection.get("plateaus", []):
             for key in scores:
                 scores[key] *= 0.5  # Halve all scores for plateaued domains
+
+        # B035 fix: Recency penalty — avoid selecting same domain consecutively
+        # Check how many of the last 5 workouts were on this domain
+        recent_workouts = self.logbook.get_agent_workout_history(
+            self.config.agent_id, last_n=5
+        )
+        recent_same = sum(1 for w in recent_workouts if w.get("domain") == domain)
+        if recent_same >= 3:
+            # Heavy penalty: 3+ of last 5 workouts on same domain
+            for key in scores:
+                scores[key] *= 0.3
+        elif recent_same >= 2:
+            for key in scores:
+                scores[key] *= 0.6
 
         return scores
 
@@ -674,10 +695,13 @@ class WorkoutExecutor:
             self._ensure_task_pool(domain)
 
             # Step 1: Evaluate on internal GYM tasks
+            # Use a fixed seed per workout so pre/post eval use the same tasks
+            import time as _time_mod
+            _eval_seed = int(_time_mod.time()) % 2**31
             logger.info(
-                f"[{self.config.agent_id}] Evaluating on {domain}..."
+                f"[{self.config.agent_id}] Evaluating on {domain} (eval_seed={_eval_seed})..."
             )
-            eval_result = self._evaluate(domain)
+            eval_result = self._evaluate(domain, eval_seed=_eval_seed)
             results["pre_score"] = eval_result.get("action_score", 0.0)
             results["tasks_completed"] = eval_result.get("num_tasks", 0)
             results["errors"] = eval_result.get("error_types", [])
@@ -708,7 +732,7 @@ class WorkoutExecutor:
                 logger.info(
                     f"[{self.config.agent_id}] Re-evaluating after GRPO..."
                 )
-                post_result = self._evaluate(domain)
+                post_result = self._evaluate(domain, eval_seed=_eval_seed)
                 results["post_score"] = post_result.get("action_score", 0.0)
             else:
                 results["post_score"] = results["pre_score"]
@@ -1077,12 +1101,17 @@ class WorkoutExecutor:
         "liveqa", "medication_qa", "healthqa", "mimic_iii", "eicu",
     })
 
-    def _evaluate(self, domain: str) -> dict:
+    def _evaluate(self, domain: str, eval_seed: int | None = None) -> dict:
         """Evaluate current model on GYM-internal domain tasks.
 
         IMPORTANT: Only runs on internal tasks from data/domains/{domain}/.
         External benchmark test sets are NEVER used here — they are only
         accessed via evaluate_external_benchmarks() for reporting purposes.
+
+        Args:
+            eval_seed: If provided, used to seed the task sampling RNG so
+                that pre- and post-training evaluations use the same tasks.
+                This eliminates sampling variance from improvement measurements.
         """
         # Sanity check: domain must not be an external test benchmark
         if domain.lower() in self._EXTERNAL_TEST_DOMAINS:
@@ -1103,15 +1132,18 @@ class WorkoutExecutor:
 
             # Sample eval_tasks_per_domain tasks to avoid running all tasks
             # (eval_tasks_per_domain=0 means run all tasks)
+            # Use eval_seed for deterministic sampling so pre/post eval
+            # compare the same tasks (eliminates sampling variance).
             sampled_task_ids = None
             max_eval = self.config.eval_tasks_per_domain or 0
             if max_eval > 0:
-                import random
+                import random as _eval_rng_mod
                 from bioagents.gym.agent_env import BioAgentGymEnv
                 _tmp_env = BioAgentGymEnv(domain=domain)
-                all_ids = [t["id"] for t in _tmp_env._tasks]
+                all_ids = sorted([t["id"] for t in _tmp_env._tasks])
                 if len(all_ids) > max_eval:
-                    sampled_task_ids = random.sample(all_ids, max_eval)
+                    _eval_rng = _eval_rng_mod.Random(eval_seed)
+                    sampled_task_ids = _eval_rng.sample(all_ids, max_eval)
                 else:
                     sampled_task_ids = all_ids
 
@@ -1757,6 +1789,7 @@ class WorkoutExecutor:
                 bf16=True,
                 num_generations=num_rollouts,
                 beta=0.04,
+                max_train_tasks=getattr(self.config, "max_train_tasks", 20),
                 temperature=0.7,
                 max_turns=self.config.max_turns,
                 use_gym_env=True,
@@ -1837,11 +1870,13 @@ class WorkoutExecutor:
         Returns:
             list of reward function dicts with adaptive weights
         """
-        # Default 5D reward weights
-        accuracy_w = 0.30
-        format_w = 0.15
-        process_w = 0.25
-        safety_w = 0.20
+        # Default 5D reward weights — accuracy-dominant to prevent
+        # reward hacking (model gaming heuristic format/process/safety
+        # rewards at the expense of actual correctness).
+        accuracy_w = 0.50
+        format_w = 0.05
+        process_w = 0.20
+        safety_w = 0.15
         coherence_w = 0.10
 
         # --- Adapt from GYM evaluation errors ---

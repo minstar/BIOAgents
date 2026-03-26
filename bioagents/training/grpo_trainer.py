@@ -810,8 +810,12 @@ def train_fair_grpo(config: FairGRPOConfig):
             **kwargs,
         )
 
-    # --- GRPO Config ---
+    # --- GRPO Config (with GSPO/DAPO support) ---
     os.makedirs(config.output_dir, exist_ok=True)
+    effective_loss_type = config.loss_type
+    if config.use_dr_grpo and effective_loss_type == "grpo":
+        effective_loss_type = "dr_grpo"
+
     grpo_config = GRPOConfig(
         output_dir=config.output_dir,
         num_train_epochs=config.num_train_epochs,
@@ -831,6 +835,12 @@ def train_fair_grpo(config: FairGRPOConfig):
         beta=config.beta,
         temperature=config.temperature,
         max_completion_length=config.max_completion_length,
+        # GSPO/DAPO/Dr.GRPO
+        loss_type=effective_loss_type,
+        epsilon=config.epsilon_low,
+        epsilon_high=config.epsilon_high,
+        importance_sampling_level=config.importance_sampling_level,
+        scale_rewards=config.scale_rewards,
         report_to="wandb" if config.use_wandb else "none",
         run_name=config.run_name + "_fairgrpo",
         logging_dir=config.log_dir,

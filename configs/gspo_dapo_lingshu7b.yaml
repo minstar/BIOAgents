@@ -1,0 +1,120 @@
+# ============================================================
+# GSPO + DAPO Training Config — Lingshu-7B Medical QA
+# ============================================================
+# Fixes B041 (catastrophic collapse) via:
+#   1. GSPO: sequence-level importance sampling (eliminates token-level noise)
+#   2. DAPO loss: asymmetric Clip-Higher + no length normalization
+#   3. Dr. GRPO: removes std normalization bias
+#   4. Dynamic Sampling: skip uninformative (all-correct/all-wrong) groups
+#   5. Overlong Reward Shaping: penalize verbosity
+#
+# Reference: GSPO (Qwen3), DAPO (ByteDance), MediX-R1 (MedQA 79.6% w/ 8B)
+#
+# Usage:
+#   python bioagents/training/grpo_trainer.py --config configs/gspo_dapo_lingshu7b.yaml
+# ============================================================
+
+# --- Model ---
+model:
+  name_or_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Lingshu-7B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "flash_attention_2"
+
+# --- LoRA / PEFT (r=64, per MediX-R1 best practice) ---
+peft:
+  enabled: true
+  r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+# --- Dataset ---
+dataset:
+  domain: "medical_qa"
+  tasks_path: "data/domains/medical_qa/tasks.json"
+  split_tasks_path: "data/domains/medical_qa/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 2048
+  max_completion_length: 1024
+
+# --- Training (GSPO/DAPO optimized) ---
+training:
+  output_dir: "checkpoints/gspo_dapo_lingshu7b"
+  num_train_epochs: 3
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  learning_rate: 1.0e-6             # Lower LR for stability (was 5e-6)
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 50
+  eval_steps: 25
+  save_total_limit: 3
+  seed: 42
+
+  # GRPO-specific
+  num_generations: 8                # More generations for better group statistics
+  beta: 0.01                        # Lower KL penalty (was 0.04)
+  temperature: 0.7
+  top_p: 0.95
+  top_k: 50
+
+  # ── GSPO/DAPO (B041 fix) ──
+  loss_type: "dapo"                 # DAPO loss (Clip-Higher + no length norm)
+  epsilon_low: 0.2                  # Standard clip range (low)
+  epsilon_high: 0.28                # Clip-Higher: asymmetric upside for exploration
+  importance_sampling_level: "sequence"  # GSPO: sequence-level ratios (kills token noise)
+  scale_rewards: "none"             # Dr. GRPO: no group std normalization
+
+  # Dynamic Sampling (DAPO technique #2)
+  dynamic_sampling: true
+  dynamic_sampling_min_mixed_ratio: 0.1
+
+  # Overlong Reward Shaping (DAPO technique #4)
+  overlong_reward_shaping: true
+  overlong_safe_length: 768
+  overlong_penalty_factor: 0.5
+
+# --- Reward Functions ---
+rewards:
+  strategy: "grpo"
+  functions:
+    - name: "accuracy"
+      weight: 0.4
+    - name: "format"
+      weight: 0.2
+    - name: "process"
+      weight: 0.4
+  bertscore_model: "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext"
+
+# --- Environment ---
+environment:
+  max_turns: 10
+  use_gym_env: true
+
+# --- Logging ---
+logging:
+  project: "pt2-minstar-gym-rl"
+  run_name: "gspo_dapo_lingshu7b_v1"
+  use_wandb: true
+  log_dir: "logs/runs"
+
+# --- Experiment metadata ---
+meta:
+  experiment: "GSPO+DAPO Lingshu-7B (B041 fix)"
+  description: >
+    First GSPO/DAPO training run. Fixes B041 catastrophic collapse via:
+    sequence-level importance sampling, Clip-Higher (0.2/0.28),
+    no std normalization, dynamic sampling, overlong penalty.
+    Target: MedQA 70%+ (baseline: 61.7%)

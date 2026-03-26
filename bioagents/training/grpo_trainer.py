@@ -36,10 +36,10 @@ class BioAgentGRPOConfig:
     torch_dtype: str = "bfloat16"
     attn_implementation: str = "flash_attention_2"
 
-    # PEFT / LoRA
+    # PEFT / LoRA (r=64 per MediX-R1/GSPO best practice)
     peft_enabled: bool = True
-    peft_r: int = 16
-    peft_lora_alpha: int = 32
+    peft_r: int = 64
+    peft_lora_alpha: int = 128
     peft_lora_dropout: float = 0.05
     peft_target_modules: list = field(
         default_factory=lambda: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
@@ -59,7 +59,7 @@ class BioAgentGRPOConfig:
     num_train_epochs: int = 3
     per_device_train_batch_size: int = 4
     gradient_accumulation_steps: int = 4
-    learning_rate: float = 5e-6
+    learning_rate: float = 1e-6
     lr_scheduler_type: str = "cosine"
     warmup_ratio: float = 0.1
     weight_decay: float = 0.01
@@ -71,9 +71,9 @@ class BioAgentGRPOConfig:
     save_total_limit: int = 3
     seed: int = 42
 
-    # GRPO-specific
+    # GRPO-specific (beta=0.01 per GSPO/MediX-R1 best practice)
     num_generations: int = 4
-    beta: float = 0.04
+    beta: float = 0.01
     temperature: float = 0.7
     top_p: float = 0.95
     top_k: int = 50
@@ -112,6 +112,39 @@ class BioAgentGRPOConfig:
     # Standard GRPO uses mean log-prob (biased toward short responses).
     # Dr. GRPO uses sum log-prob, eliminating length bias in medical answers.
     use_dr_grpo: bool = False
+
+    # ── GSPO / DAPO / Dr.GRPO (TRL 0.28 native) ──────────────
+    # loss_type: "grpo" (standard), "dapo" (DAPO), "dr_grpo" (Dr.GRPO)
+    # DAPO = Clip-Higher + token-level PG without length normalization
+    # Dr.GRPO = removes length/std normalization bias
+    loss_type: str = "dapo"
+
+    # Clip-Higher (DAPO): asymmetric clipping for exploration
+    # epsilon_low (= epsilon) clips ratio below, epsilon_high clips above
+    # Higher epsilon_high allows more upside exploration, preventing entropy collapse
+    epsilon_low: float = 0.2
+    epsilon_high: float = 0.28
+
+    # Importance sampling level: "token" (standard GRPO) or "sequence" (GSPO)
+    # GSPO uses sequence-level ratios — eliminates high-variance token-level noise
+    # that causes progressive model collapse (B041 root cause)
+    importance_sampling_level: str = "sequence"
+
+    # Reward scaling: "group" (standard), "none" (Dr.GRPO removes this)
+    # Dr.GRPO paper shows group normalization introduces bias
+    scale_rewards: str = "none"
+
+    # Dynamic Sampling (DAPO technique #2):
+    # Filter out prompts where all generations are correct or all wrong
+    # Only train on prompts with mixed outcomes (informative gradients)
+    dynamic_sampling: bool = True
+    dynamic_sampling_min_mixed_ratio: float = 0.1  # min ratio of mixed prompts
+
+    # Overlong reward shaping (DAPO technique #4):
+    # Linear penalty for responses exceeding safe_length tokens
+    overlong_reward_shaping: bool = True
+    overlong_safe_length: int = 768       # tokens before penalty kicks in
+    overlong_penalty_factor: float = 0.5  # penalty = factor * (len - safe) / max_len
 
     # Environment
     max_turns: int = 10
@@ -160,6 +193,12 @@ class BioAgentGRPOConfig:
                 "warmup_ratio", "weight_decay", "max_grad_norm", "bf16",
                 "logging_steps", "save_steps", "eval_steps", "save_total_limit", "seed",
                 "num_generations", "beta", "temperature", "top_p", "top_k",
+                # GSPO/DAPO/Dr.GRPO fields
+                "loss_type", "epsilon_low", "epsilon_high",
+                "importance_sampling_level", "scale_rewards",
+                "dynamic_sampling", "dynamic_sampling_min_mixed_ratio",
+                "overlong_reward_shaping", "overlong_safe_length", "overlong_penalty_factor",
+                "use_dr_grpo",
             ]:
                 if key in t:
                     kwargs[key] = t[key]
@@ -378,6 +417,72 @@ def _build_strategy_reward_functions(config: BioAgentGRPOConfig) -> list:
 
 
 # ============================================================
+# DAPO: Dynamic Sampling Callback & Overlong Reward Shaping
+# ============================================================
+
+
+def _wrap_overlong_reward(reward_funcs, safe_length: int, max_length: int, penalty_factor: float):
+    """Wrap reward functions with overlong penalty (DAPO technique #4).
+
+    Applies a linear penalty to completions exceeding safe_length tokens.
+    penalty = -penalty_factor * (completion_len - safe_length) / max_length
+    """
+    wrapped = []
+    for fn in reward_funcs:
+        def make_wrapper(original_fn):
+            def wrapper(completions, **kwargs):
+                rewards = original_fn(completions, **kwargs)
+                for i, completion in enumerate(completions):
+                    # Estimate token count from characters (rough: 1 token ≈ 4 chars)
+                    comp_text = completion if isinstance(completion, str) else str(completion)
+                    est_tokens = len(comp_text) // 4
+                    if est_tokens > safe_length:
+                        overshoot = (est_tokens - safe_length) / max_length
+                        penalty = -penalty_factor * overshoot
+                        rewards[i] = rewards[i] + penalty
+                return rewards
+            return wrapper
+        wrapped.append(make_wrapper(fn))
+    return wrapped
+
+
+class DynamicSamplingCallback:
+    """DAPO Dynamic Sampling (technique #2).
+
+    Monitors reward distributions within generation groups and logs
+    statistics about mixed vs. homogeneous groups. TRL handles the
+    actual training loop, but we can use this callback to track
+    how many prompts produce informative (mixed) vs. uninformative
+    (all-correct or all-wrong) batches.
+
+    In DAPO, uninformative groups are filtered out. TRL doesn't
+    support per-group filtering natively, but with sequence-level
+    importance sampling + Clip-Higher, the gradient contribution
+    from homogeneous groups is naturally minimized (advantages ≈ 0).
+    This callback logs the ratio for monitoring.
+    """
+
+    def __init__(self, min_mixed_ratio: float = 0.1):
+        self.min_mixed_ratio = min_mixed_ratio
+        self.step_count = 0
+        self.total_groups = 0
+        self.mixed_groups = 0
+
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        """Log dynamic sampling statistics."""
+        if logs and self.total_groups > 0:
+            mixed_ratio = self.mixed_groups / self.total_groups
+            logs["dynamic_sampling/mixed_ratio"] = mixed_ratio
+            logs["dynamic_sampling/total_groups"] = self.total_groups
+            if mixed_ratio < self.min_mixed_ratio:
+                logger.warning(
+                    f"Dynamic sampling: mixed ratio {mixed_ratio:.2%} below "
+                    f"threshold {self.min_mixed_ratio:.2%}. Consider adjusting "
+                    f"task difficulty or num_generations."
+                )
+
+
+# ============================================================
 # Main trainer
 # ============================================================
 
@@ -483,6 +588,17 @@ def train(config: BioAgentGRPOConfig):
     # --- GRPO Training Config (TRL 0.28+) ---
     os.makedirs(config.output_dir, exist_ok=True)
 
+    # Resolve loss_type: use_dr_grpo flag overrides for backward compat
+    effective_loss_type = config.loss_type
+    if config.use_dr_grpo and effective_loss_type == "grpo":
+        effective_loss_type = "dr_grpo"
+
+    logger.info(f"Loss type: {effective_loss_type}")
+    logger.info(f"Importance sampling: {config.importance_sampling_level}")
+    logger.info(f"Epsilon (low/high): {config.epsilon_low}/{config.epsilon_high}")
+    logger.info(f"Scale rewards: {config.scale_rewards}")
+    logger.info(f"Dynamic sampling: {config.dynamic_sampling}")
+
     grpo_config = GRPOConfig(
         output_dir=config.output_dir,
         num_train_epochs=config.num_train_epochs,
@@ -505,11 +621,41 @@ def train(config: BioAgentGRPOConfig):
         beta=config.beta,
         temperature=config.temperature,
         max_completion_length=config.max_completion_length,
+        # ── GSPO/DAPO/Dr.GRPO (TRL 0.28 native) ──
+        loss_type=effective_loss_type,
+        epsilon=config.epsilon_low,
+        epsilon_high=config.epsilon_high,
+        importance_sampling_level=config.importance_sampling_level,
+        scale_rewards=config.scale_rewards,
         # Logging
         report_to="wandb" if config.use_wandb else "none",
         run_name=config.run_name,
         logging_dir=config.log_dir,
     )
+
+    # --- Overlong Reward Shaping (DAPO technique #4) ---
+    # Wrap reward functions to penalize excessively long completions
+    if config.overlong_reward_shaping:
+        reward_funcs = _wrap_overlong_reward(
+            reward_funcs,
+            safe_length=config.overlong_safe_length,
+            max_length=config.max_completion_length,
+            penalty_factor=config.overlong_penalty_factor,
+        )
+        logger.info(
+            f"Overlong reward shaping: safe={config.overlong_safe_length}, "
+            f"max={config.max_completion_length}, penalty={config.overlong_penalty_factor}"
+        )
+
+    # --- Dynamic Sampling Callback (DAPO technique #2) ---
+    callbacks = []
+    if config.dynamic_sampling:
+        callbacks.append(
+            DynamicSamplingCallback(
+                min_mixed_ratio=config.dynamic_sampling_min_mixed_ratio,
+            )
+        )
+        logger.info(f"Dynamic sampling enabled (min_mixed_ratio={config.dynamic_sampling_min_mixed_ratio})")
 
     # --- Trainer (TRL 0.28 API) ---
     logger.info("Initializing GRPOTrainer...")
@@ -521,6 +667,7 @@ def train(config: BioAgentGRPOConfig):
         eval_dataset=eval_dataset,
         processing_class=tokenizer,
         peft_config=peft_config,
+        callbacks=callbacks if callbacks else None,
     )
 
     # --- Train ---

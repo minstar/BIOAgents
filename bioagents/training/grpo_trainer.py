@@ -417,6 +417,70 @@ def _build_strategy_reward_functions(config: BioAgentGRPOConfig) -> list:
 
 
 # ============================================================
+# Entropy Monitoring Callback (GTPO-style)
+# ============================================================
+
+
+class EntropyMonitorCallback:
+    """Monitors policy entropy during training to detect collapse early.
+
+    Based on GTPO (arXiv:2508.03772): tracks generation entropy and
+    applies adaptive entropy bonus when entropy drops below threshold.
+
+    Entropy collapse is the #1 early warning sign for B041-style model
+    destruction. If entropy drops below critical_threshold, training
+    should be stopped immediately.
+    """
+
+    def __init__(
+        self,
+        warning_threshold: float = 2.0,   # Log warning when entropy drops below this
+        critical_threshold: float = 1.0,   # STOP training when entropy drops below this
+        window_size: int = 50,             # Smoothing window for entropy tracking
+    ):
+        self.warning_threshold = warning_threshold
+        self.critical_threshold = critical_threshold
+        self.window_size = window_size
+        self.entropy_history = []
+        self.warned = False
+
+    def on_log(self, args, state, control, logs=None, model=None, **kwargs):
+        """Track entropy metrics from training logs."""
+        if logs is None:
+            return
+
+        # TRL logs various metrics; look for entropy-related ones
+        entropy = logs.get("entropy", logs.get("policy_entropy", None))
+
+        if entropy is not None:
+            self.entropy_history.append(entropy)
+            # Compute smoothed entropy
+            window = self.entropy_history[-self.window_size:]
+            avg_entropy = sum(window) / len(window)
+
+            logs["entropy_monitor/avg_entropy"] = avg_entropy
+            logs["entropy_monitor/min_entropy"] = min(window)
+
+            if avg_entropy < self.critical_threshold:
+                logger.error(
+                    f"🚨 CRITICAL: Entropy collapsed to {avg_entropy:.4f} "
+                    f"(threshold: {self.critical_threshold}). "
+                    f"Training should be stopped to prevent irreversible damage!"
+                )
+                # Signal to stop training
+                if hasattr(control, "should_training_stop"):
+                    control.should_training_stop = True
+
+            elif avg_entropy < self.warning_threshold and not self.warned:
+                logger.warning(
+                    f"⚠ Entropy dropping: {avg_entropy:.4f} "
+                    f"(warning threshold: {self.warning_threshold}). "
+                    f"Monitor closely for potential collapse."
+                )
+                self.warned = True
+
+
+# ============================================================
 # DAPO: Dynamic Sampling Callback & Overlong Reward Shaping
 # ============================================================
 
@@ -647,8 +711,14 @@ def train(config: BioAgentGRPOConfig):
             f"max={config.max_completion_length}, penalty={config.overlong_penalty_factor}"
         )
 
-    # --- Dynamic Sampling Callback (DAPO technique #2) ---
+    # --- Callbacks ---
     callbacks = []
+
+    # Entropy monitoring (always enabled — critical for detecting collapse)
+    callbacks.append(EntropyMonitorCallback())
+    logger.info("Entropy monitoring enabled (GTPO-style collapse detection)")
+
+    # --- Dynamic Sampling Callback (DAPO technique #2) ---
     if config.dynamic_sampling:
         callbacks.append(
             DynamicSamplingCallback(

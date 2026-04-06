@@ -168,6 +168,80 @@ class VQAMetrics:
         return results
 
 
+def _extract_choice_letter(text: str) -> str:
+    """Extract a single choice letter (A/B/C/D) from model output.
+
+    Uses cascading patterns to handle various response formats:
+    - "A", "(A)", "A.", "A:"
+    - "The answer is A"
+    - "Option B is correct"
+    - Free-form text starting with the letter
+    """
+    text = text.strip()
+
+    # Direct single letter
+    if len(text) == 1 and text.upper() in "ABCD":
+        return text.upper()
+
+    # "(A)" or "A." or "A:" or "A)" at the start
+    m = re.match(r"^\(?([A-Da-d])\)?[\.\):\s]", text)
+    if m:
+        return m.group(1).upper()
+
+    # "The answer is (A)" / "answer is A" / "correct answer is B"
+    m = re.search(
+        r"(?:answer|correct|option)\s+(?:is|:)\s*\(?([A-Da-d])\)?",
+        text, re.IGNORECASE,
+    )
+    if m:
+        return m.group(1).upper()
+
+    # "Option A" / "choice A" / "select A"
+    m = re.search(
+        r"(?:option|choice|select)\s+\(?([A-Da-d])\)?",
+        text, re.IGNORECASE,
+    )
+    if m:
+        return m.group(1).upper()
+
+    # Last resort: first occurrence of a standalone A/B/C/D
+    m = re.search(r"\b([A-D])\b", text)
+    if m:
+        return m.group(1)
+
+    return text.strip()
+
+
+def _map_answer_to_letter(
+    answer_text: str,
+    options: list[str],
+) -> str:
+    """Map full answer text to its choice letter by matching against options.
+
+    If answer_text is already a letter (A/B/C/D), return it directly.
+    Otherwise, find which option best matches and return its letter.
+    """
+    answer_text = answer_text.strip()
+
+    # Already a letter
+    if len(answer_text) == 1 and answer_text.upper() in "ABCD":
+        return answer_text.upper()
+
+    # Try exact match against options
+    answer_lower = answer_text.lower().strip()
+    for i, opt in enumerate(options):
+        if opt.lower().strip() == answer_lower:
+            return chr(65 + i)
+
+    # Try substring match
+    for i, opt in enumerate(options):
+        if answer_lower in opt.lower() or opt.lower() in answer_lower:
+            return chr(65 + i)
+
+    # Fallback: return the raw text
+    return answer_text
+
+
 def _normalize_answer(s: str) -> str:
     """Normalize answer string for comparison."""
     s = s.strip().lower()
@@ -350,9 +424,16 @@ class VQABenchmarkEvaluator:
             else:
                 prediction = self._generate_text_answer(prompt)
 
+            # For multiple-choice questions, extract answer letters before comparing
+            pred_for_metrics = prediction
+            ref_for_metrics = reference
+            if answer_type == "choice" and options:
+                pred_for_metrics = _extract_choice_letter(prediction)
+                ref_for_metrics = _map_answer_to_letter(reference, options)
+
             # Compute metrics
             metrics = VQAMetrics.compute_all(
-                prediction, reference, self.config.metrics
+                pred_for_metrics, ref_for_metrics, self.config.metrics
             )
 
             per_sample_results.append({

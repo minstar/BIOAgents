@@ -235,8 +235,11 @@ class BioAgentGymEnv(gym.Env):
         task_id = self.task_id
         if options and "task_id" in options:
             task_id = options["task_id"]
-        
-        if task_id:
+
+        # Allow injecting a full task dict (for multi-domain combined datasets)
+        if options and "task_data" in options:
+            self._current_task = options["task_data"]
+        elif task_id:
             if task_id not in self._task_map:
                 raise ValueError(f"Task '{task_id}' not found. Available: {list(self._task_map.keys())}")
             self._current_task = self._task_map[task_id]

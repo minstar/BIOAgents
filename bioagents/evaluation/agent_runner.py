@@ -380,7 +380,31 @@ def parse_tool_call(text: str) -> Optional[dict]:
                         return norm
             except json.JSONDecodeError:
                 pass
-    
+
+    # ── Try 0b: Qwen3.5 XML tool call format ──
+    # Format: <tool_call><function=name><parameter=key>value</parameter>...</function></tool_call>
+    qwen35_match = re.search(
+        r'<tool_call>\s*<function=([^>]+)>(.*?)</function>\s*</tool_call>',
+        text, re.DOTALL,
+    )
+    if qwen35_match:
+        func_name = qwen35_match.group(1).strip()
+        params_block = qwen35_match.group(2).strip()
+        # Parse <parameter=key>value</parameter> pairs
+        param_pairs = re.findall(
+            r'<parameter=([^>]+)>(.*?)</parameter>', params_block, re.DOTALL
+        )
+        arguments = {}
+        for key, val in param_pairs:
+            val = val.strip()
+            # Try to parse as JSON value (number, bool, object, array)
+            try:
+                arguments[key.strip()] = json.loads(val)
+            except (json.JSONDecodeError, ValueError):
+                arguments[key.strip()] = val
+        if func_name:
+            return {"name": func_name, "arguments": arguments}
+
     # ── Try 1: Extract JSON from code blocks ──
     code_block_match = re.search(r'```(?:json|tool_call)?\s*\n?({.*?})\s*\n?```', text, re.DOTALL)
     if code_block_match:

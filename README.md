@@ -23,7 +23,7 @@ Healthcare AI GYM is an end-to-end infrastructure for training medical AI agents
 | **Training Data** | Adaptive quality filtering (Zone of Proximal Development) + WebRL-style replay |
 | **Knowledge Base** | 828K medical passages + 188 GB Wikipedia (FTS5 + FAISS) |
 | **Modalities** | Text + Vision (VL models supported natively) |
-| **Models Tested** | Qwen2.5-VL-7B, LingShu-7B, Step3-VL-10B |
+| **Models Tested** | Qwen3.5-9B, Qwen2.5-VL-7B, LingShu-7B, Step3-VL-10B |
 
 ---
 
@@ -340,6 +340,33 @@ python bioagents/training/grpo_trainer.py --config configs/grpo_triage_emergency
 # Adaptive strategy (auto-selects GRPO/MRPO/SARL)
 python -m bioagents.training.grpo_trainer --config configs/grpo_adaptive_strategy.yaml
 ```
+
+### Option 4: Multi-Turn Tool-Use GRPO with veRL + SGLang
+
+For Qwen3.5-9B with native multi-turn tool execution using veRL v0.8.0:
+
+```bash
+# Prerequisites:
+# - veRL v0.8.0+ with SGLang backend
+# - 8x A100 80GB
+# - Qwen3.5-9B model at checkpoints/models/Qwen3.5-9B/
+
+# Run multi-turn GRPO training (v6)
+bash scripts/verl/run_qwen35_9b_vlm_grpo_multiturn_v6.sh
+
+# Key features:
+# - 154 medical tools across 8 domains
+# - Multi-turn agent loop with tool execution
+# - SGLang rollout (TP=1, triton attention backend)
+# - FSDP with CPU offload for memory efficiency
+# - Supports VLM (text + image modalities)
+```
+
+**Critical configuration notes:**
+- `default_agent_loop=tool_agent` — MUST use tool_agent, not single_turn_agent
+- `enable_thinking=False` — model uses `<tool_call><function=think>` instead
+- `stop_token_ids=[248059]` injection needed in `tool_agent_loop.py` for `</tool_call>` boundary
+- `entropy_coeff=0` — skips entropy computation to save ~24 GiB VRAM (248K vocab)
 
 ### Benchmark Evaluation
 

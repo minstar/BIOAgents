@@ -1,0 +1,61 @@
+# ============================================================
+# SFT Warmup Config v2 (Merged) — Lingshu-7B
+# ============================================================
+# Uses ALL available SFT data: opensource 20K + tool trajectories
+# + clinical task data = ~21K+ total samples.
+# Samples 8000 for warmup (vs 5K in v2 base).
+#
+# Usage:
+#   python scripts/train_two_stage.py \
+#       --sft-config configs/sft_warmup_lingshu7b_v2_merged.yaml \
+#       --rl-config configs/gspo_dapo_lingshu7b_v2.yaml
+# ============================================================
+
+model:
+  name_or_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Lingshu-7B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "flash_attention_2"
+
+peft:
+  enabled: true
+  r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+dataset:
+  sft_path: "datasets/sft/sft_all_merged.jsonl"
+  min_reward: 0.0
+  max_samples: 8000            # Use more data from merged set
+  max_length: 2048
+  train_ratio: 0.95
+
+training:
+  output_dir: "checkpoints/sft_warmup_lingshu7b_v2_merged"
+  num_train_epochs: 2
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  learning_rate: 5.0e-6
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 10
+  save_steps: 200
+  eval_steps: 100
+  save_total_limit: 2
+  seed: 42
+
+logging:
+  project: "pt2-minstar-gym-rl"
+  run_name: "sft_warmup_lingshu7b_v2_merged"
+  use_wandb: true
+  log_dir: "logs/runs"

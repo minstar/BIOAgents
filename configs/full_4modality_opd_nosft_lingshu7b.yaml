@@ -1,0 +1,138 @@
+# ============================================================
+# Full 4-Modality OPD Training — Lingshu-7B (No SFT warmup)
+# ============================================================
+# HYPOTHESIS: Can OPD (α=0.3) from strong base model (Lingshu-7B)
+# improve across all 4 modalities without SFT warmup?
+#
+# Key design:
+#   - Student: Lingshu-7B base (57% MedQA, already strong)
+#   - Teacher: SFT checkpoint (format-compliant, 39% MedQA)
+#   - α=0.3: 70% RL advantage + 30% teacher distillation
+#   - Data: Full 4-modality (3,267 tasks)
+#
+# This tests whether OPD can combine base model's knowledge
+# with SFT's format compliance WITHOUT the SFT degradation.
+#
+# Usage:
+#   python scripts/train_two_stage.py \
+#       --skip-sft \
+#       --rl-config configs/full_4modality_opd_nosft_lingshu7b.yaml
+# ============================================================
+
+# --- Model (Student: Lingshu-7B base) ---
+model:
+  name_or_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Lingshu-7B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "flash_attention_2"
+
+# --- LoRA / PEFT ---
+peft:
+  enabled: true
+  r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+# --- Dataset: Full 4-modality combined ---
+dataset:
+  domain: "full_4modality"
+  tasks_path: "data/domains/full_4modality_combined/tasks.json"
+  split_tasks_path: "data/domains/full_4modality_combined/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 3072
+  max_completion_length: 1024
+
+# --- Training (GRPO + OPD) ---
+training:
+  output_dir: "checkpoints/full_4modality_opd_nosft_lingshu7b"
+  num_train_epochs: 3
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  learning_rate: 5.0e-7
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 50
+  eval_steps: 50
+  save_total_limit: 10
+  seed: 42
+
+  # GRPO-specific
+  num_generations: 8
+  beta: 0.01
+  temperature: 0.7
+  top_p: 0.95
+  top_k: 50
+
+  loss_type: "grpo"
+  scale_rewards: "none"
+
+  dynamic_sampling: true
+  dynamic_sampling_min_mixed_ratio: 0.1
+
+  overlong_reward_shaping: true
+  overlong_safe_length: 768
+  overlong_penalty_factor: 0.5
+
+# --- Reward ---
+rewards:
+  strategy: "grpo"
+  functions:
+    - name: "accuracy"
+      weight: 0.4
+    - name: "format"
+      weight: 0.2
+    - name: "process"
+      weight: 0.4
+  bertscore_model: "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext"
+
+# --- On-Policy Distillation (α=0.3, Pareto-dominant) ---
+opd:
+  use_opd: true
+  opd_teacher_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/sft_warmup_lingshu7b_v2_merged/merged"
+  opd_mode: "cross_stage"
+  opd_alpha: 0.3          # 70% RL + 30% teacher (bounded KL regime)
+  opd_lambda: 0.5         # Half-strength OPD signal
+  opd_warmup_steps: 50    # Pure RL for first 50 steps before OPD kicks in
+
+# --- Environment ---
+environment:
+  max_turns: 15
+  use_gym_env: true
+  domains:
+    - "medical_qa"
+    - "visual_diagnosis"
+    - "clinical_diagnosis"
+    - "drug_interaction"
+    - "ehr_management"
+    - "triage_emergency"
+    - "psychiatry"
+    - "obstetrics"
+
+# --- Logging ---
+logging:
+  project: "pt2-minstar-gym-rl"
+  run_name: "full_4modality_opd_nosft_lingshu7b"
+  use_wandb: true
+  log_dir: "logs/runs"
+
+# --- Experiment metadata ---
+meta:
+  experiment: "Full 4-Modality OPD — Lingshu-7B (No SFT)"
+  description: >
+    OPD training directly from Lingshu-7B base with SFT as teacher.
+    Tests whether OPD can improve all 4 modalities from a strong
+    base model without the SFT degradation step.
+    α=0.3 (Pareto-dominant from RQ3 findings).
+    3,267 train tasks across 8 domains.

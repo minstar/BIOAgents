@@ -1,0 +1,138 @@
+tools:
+  # Unified medical knowledge search
+  - class_name: "bioagents_tool.BIOAgentsMedicalTool"
+    config:
+      type: native
+      knowledge_db_path: "/data/project/private/minstar/workspace/BIOAgents/data/medical_knowledge.db"
+    tool_schema:
+      type: "function"
+      function:
+        name: "search_medical_knowledge"
+        description: "Search medical knowledge base including PubMed articles, medical encyclopedias, clinical guidelines, and evidence passages. Use this for any medical question requiring literature or evidence support."
+        parameters:
+          type: "object"
+          properties:
+            query:
+              type: "string"
+              description: "The medical search query"
+            max_results:
+              type: "string"
+              description: "Maximum number of results to return (default: 5)"
+          required: ["query"]
+
+  # Patient information retrieval
+  - class_name: "bioagents_tool.BIOAgentsMedicalTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "get_patient_info"
+        description: "Retrieve patient demographics, chief complaint, and basic clinical information. Use this as the first step when evaluating a patient case."
+        parameters:
+          type: "object"
+          properties:
+            patient_id:
+              type: "string"
+              description: "The patient identifier"
+          required: ["patient_id"]
+
+  # Lab results
+  - class_name: "bioagents_tool.BIOAgentsMedicalTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "get_lab_results"
+        description: "Retrieve laboratory test results for a patient. Optionally filter by test category (e.g., CBC, BMP, LFT, coagulation)."
+        parameters:
+          type: "object"
+          properties:
+            patient_id:
+              type: "string"
+              description: "The patient identifier"
+            category:
+              type: "string"
+              description: "Lab category filter (e.g., CBC, BMP, LFT). Empty for all."
+          required: ["patient_id"]
+
+  # Vital signs
+  - class_name: "bioagents_tool.BIOAgentsMedicalTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "get_vital_signs"
+        description: "Retrieve current vital signs (BP, HR, RR, SpO2, temperature) for a patient."
+        parameters:
+          type: "object"
+          properties:
+            patient_id:
+              type: "string"
+              description: "The patient identifier"
+          required: ["patient_id"]
+
+  # Drug interaction check
+  - class_name: "bioagents_tool.BIOAgentsMedicalTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "check_drug_interaction"
+        description: "Check for drug-drug interactions between two medications or check all interactions for a patient's current medication list."
+        parameters:
+          type: "object"
+          properties:
+            drug_a:
+              type: "string"
+              description: "First drug name"
+            drug_b:
+              type: "string"
+              description: "Second drug name (optional if checking patient's full list)"
+            patient_id:
+              type: "string"
+              description: "Patient ID to check all current medications (optional)"
+          required: ["drug_a"]
+
+  # Medical image analysis
+  - class_name: "bioagents_tool.BIOAgentsMedicalTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "analyze_medical_image"
+        description: "Analyze a medical image (X-ray, CT, MRI, pathology, dermatology) and provide structured findings. Use this when the case involves visual diagnosis."
+        parameters:
+          type: "object"
+          properties:
+            image_id:
+              type: "string"
+              description: "The medical image identifier"
+            focus_area:
+              type: "string"
+              description: "Specific area to focus analysis on (e.g., 'lungs', 'cardiac silhouette')"
+          required: ["image_id"]
+
+  # Answer submission (for GRPO reward calculation)
+  - class_name: "bioagents_tool.BIOAgentsMedicalTool"
+    config:
+      type: native
+    tool_schema:
+      type: "function"
+      function:
+        name: "submit_answer"
+        description: "Submit your final answer after gathering evidence and reasoning. For multiple choice, provide the letter (A-E). For open-ended questions, provide a concise answer."
+        parameters:
+          type: "object"
+          properties:
+            answer:
+              type: "string"
+              description: "Your final answer (letter for MC, text for open-ended)"
+            reasoning:
+              type: "string"
+              description: "Brief explanation of your reasoning"
+          required: ["answer"]

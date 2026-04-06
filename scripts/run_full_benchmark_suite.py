@@ -71,6 +71,49 @@ MODELS = {
         "type": "vlm",
         "supports_vision": True,
     },
+    # 4-Modality RL checkpoints (SFT→GRPO pipeline)
+    "rl50": {
+        "name": "4Mod-RL-50",
+        "path": str(PROJECT_ROOT / "checkpoints/full_4modality_lingshu7b/checkpoint-50-merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
+    "rl100": {
+        "name": "4Mod-RL-100",
+        "path": str(PROJECT_ROOT / "checkpoints/full_4modality_lingshu7b/checkpoint-100-merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
+    "rl150": {
+        "name": "4Mod-RL-150",
+        "path": str(PROJECT_ROOT / "checkpoints/full_4modality_lingshu7b/checkpoint-150-merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
+    "rl200": {
+        "name": "4Mod-RL-200",
+        "path": str(PROJECT_ROOT / "checkpoints/full_4modality_lingshu7b/checkpoint-200-merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
+    "rl250": {
+        "name": "4Mod-RL-250",
+        "path": str(PROJECT_ROOT / "checkpoints/full_4modality_lingshu7b/checkpoint-250-merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
+    "rl300": {
+        "name": "4Mod-RL-300",
+        "path": str(PROJECT_ROOT / "checkpoints/full_4modality_lingshu7b/checkpoint-300-merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
+    "sft_v2": {
+        "name": "SFT-Lingshu-7B-v2",
+        "path": str(PROJECT_ROOT / "checkpoints/sft_warmup_lingshu7b_v2_merged/merged"),
+        "type": "vlm",
+        "supports_vision": True,
+    },
 }
 
 MEDLFQA_DATASETS = {
@@ -647,11 +690,20 @@ def main():
     if args.model_path:
         model_key = "custom"
         model_name = Path(args.model_path).name
+        # Auto-detect vision support from config
+        _supports_vision = False
+        _config_path = Path(args.model_path) / "config.json"
+        if _config_path.exists():
+            import json as _json
+            _cfg = _json.load(open(_config_path))
+            _arch = _cfg.get("architectures", [])
+            if any("VL" in a or "Vision" in a for a in _arch):
+                _supports_vision = True
         MODELS["custom"] = {
             "name": model_name,
             "path": args.model_path,
             "type": "causal",
-            "supports_vision": False,
+            "supports_vision": _supports_vision,
         }
         args.model = "custom"
     elif not args.model:

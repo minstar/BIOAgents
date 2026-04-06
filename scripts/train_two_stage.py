@@ -1,11 +1,12 @@
-"""Two-Stage Training Pipeline: SFT Warmup → GSPO/DAPO RL.
+# -*- coding: utf-8 -*-
+"""Two-Stage Training Pipeline: SFT Warmup -> GSPO/DAPO RL.
 
 Implements the training approach proven by MedAgentGym (ICLR 2026)
 and WebRL (ICLR 2025): warm up with supervised fine-tuning on
 successful demonstrations first, then apply RL for further improvement.
 
 Cold-start RL (directly applying GRPO/GSPO to a base model) risks
-catastrophic collapse — the B041 issue.
+catastrophic collapse -- the B041 issue.
 
 Usage:
     python scripts/train_two_stage.py \
@@ -17,8 +18,8 @@ Usage:
         [--rif-rft-k 8]           # Number of rollouts for RIF-RFT filtering
 
 Reference:
-    - MedAgentGym (ICLR 2026): SFT → DPO two-stage
-    - WebRL (ICLR 2025): SFT warmup → Adaptive RL
+    - MedAgentGym (ICLR 2026): SFT -> DPO two-stage
+    - WebRL (ICLR 2025): SFT warmup -> Adaptive RL
     - RIF-RFT: Rollout-based Instance Filtering
 """
 
@@ -33,7 +34,7 @@ from loguru import logger
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from bioagents.training.grpo_trainer import BioAgentGRPOConfig, train
+from bioagents.training.grpo_trainer import BioAgentGRPOConfig, train, train_multiturn
 from bioagents.training.sft_trainer import BioAgentSFTConfig
 
 
@@ -235,7 +236,7 @@ def run_rif_rft_filtering(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Two-stage SFT → RL training pipeline")
+    parser = argparse.ArgumentParser(description="Two-stage SFT -> RL training pipeline")
     parser.add_argument("--sft-config", type=str, help="Path to SFT config YAML")
     parser.add_argument("--rl-config", type=str, required=True, help="Path to GSPO/DAPO RL config YAML")
     parser.add_argument("--skip-sft", action="store_true", help="Skip SFT warmup stage")
@@ -248,7 +249,7 @@ def main():
     if args.gpu:
         os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
-    # ── Stage 1: SFT Warmup ──
+    # -- Stage 1: SFT Warmup --
     sft_checkpoint = args.sft_checkpoint
 
     if not args.skip_sft and not sft_checkpoint:
@@ -259,7 +260,7 @@ def main():
         sft_config = BioAgentSFTConfig.from_yaml(args.sft_config)
         sft_checkpoint = run_sft_warmup(sft_config)
 
-    # ── Stage 2: GSPO/DAPO RL ──
+    # -- Stage 2: GSPO/DAPO RL --
     rl_config = BioAgentGRPOConfig.from_yaml(args.rl_config)
 
     # Use SFT checkpoint as starting point for RL
@@ -269,7 +270,7 @@ def main():
         if os.path.exists(adapter_config_path):
             merged_path = os.path.join(os.path.dirname(sft_checkpoint), "merged")
             if not os.path.exists(os.path.join(merged_path, "config.json")):
-                logger.info("SFT checkpoint is a LoRA adapter — merging into base model...")
+                logger.info("SFT checkpoint is a LoRA adapter -- merging into base model...")
                 sft_checkpoint = _merge_lora_checkpoint(
                     base_model_path=rl_config.model_name_or_path,
                     adapter_path=sft_checkpoint,
@@ -283,12 +284,12 @@ def main():
         logger.info(f"Using SFT checkpoint for RL: {sft_checkpoint}")
         rl_config.model_name_or_path = sft_checkpoint
 
-    # ── Optional: RIF-RFT Filtering ──
+    # -- Optional: RIF-RFT Filtering --
     if args.rif_rft:
         filtered_path = run_rif_rft_filtering(rl_config, k=args.rif_rft_k)
         rl_config.tasks_path = filtered_path
 
-    # ── Run RL Training ──
+    # -- Run RL Training --
     logger.info("=" * 60)
     logger.info("STAGE 2: GSPO/DAPO RL Training")
     logger.info("=" * 60)
@@ -296,7 +297,14 @@ def main():
     logger.info(f"Loss type: {rl_config.loss_type}")
     logger.info(f"Tasks: {rl_config.tasks_path}")
 
-    train(rl_config)
+    if getattr(rl_config, "use_opd", False) or getattr(rl_config, "use_gym_env", False):
+        logger.info("Using train_multiturn() (OPD=%s, GYM=%s)" % (
+            getattr(rl_config, "use_opd", False),
+            getattr(rl_config, "use_gym_env", False),
+        ))
+        train_multiturn(rl_config)
+    else:
+        train(rl_config)
 
     logger.info("=" * 60)
     logger.info("Two-stage training complete!")

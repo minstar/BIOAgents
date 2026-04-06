@@ -844,14 +844,14 @@ def compute_composite_reward(
         assertion_score = assertion_result["total"]
         assertion_details = assertion_result
 
-    # Weighted 6D total
+    # Weighted 6D total — use 0.0 default for dimensions not in config
     total = (
         weights.get("accuracy", 0.25) * accuracy
         + weights.get("format", 0.10) * format_score
         + weights.get("process", 0.20) * process_score
-        + weights.get("safety", 0.20) * safety_score
-        + weights.get("coherence", 0.10) * coherence_score
-        + weights.get("assertion", 0.15) * assertion_score
+        + weights.get("safety", 0.0) * safety_score
+        + weights.get("coherence", 0.0) * coherence_score
+        + weights.get("assertion", 0.0) * assertion_score
     )
 
     result = {
@@ -1008,7 +1008,15 @@ def _extract_answer_from_response(text: str) -> str:
     try:
         parsed = json.loads(text)
         if isinstance(parsed, dict) and parsed.get("name") == "submit_answer":
-            return parsed.get("arguments", {}).get("answer", "")
+            args = parsed.get("arguments", {})
+            if isinstance(args, str):
+                return args
+            if isinstance(args, dict):
+                answer = args.get("answer", "")
+                if isinstance(answer, list):
+                    answer = answer[0] if answer else ""
+                return str(answer)
+            return str(args)
     except json.JSONDecodeError:
         pass
 

@@ -1167,26 +1167,12 @@ def train_multiturn(config: BioAgentGRPOConfig):
     logger.info(f"Max turns: {mt_config.max_turns}")
     logger.info(f"Rollouts per task (G): {mt_config.num_rollouts_per_task}")
 
-    # --- Setup tokenizer (and processor for VL models) ---
+    # --- Setup tokenizer ---
     tokenizer = AutoTokenizer.from_pretrained(
         mt_config.model_name_or_path, trust_remote_code=True,
     )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-
-    # Load processor for VL models (needed for image inputs)
-    _processor = None
-    from transformers import AutoConfig as _AC
-    _pre_config = _AC.from_pretrained(mt_config.model_name_or_path, trust_remote_code=True)
-    _pre_model_type = getattr(_pre_config, "model_type", "")
-    if _pre_model_type in ("qwen2_5_vl", "qwen2_vl", "qwen3_5") or (
-        "qwen2" in _pre_model_type.lower() and "vl" in _pre_model_type.lower()
-    ):
-        from transformers import AutoProcessor
-        _processor = AutoProcessor.from_pretrained(
-            mt_config.model_name_or_path, trust_remote_code=True,
-        )
-        logger.info(f"Loaded VL processor for {_pre_model_type}")
 
     # --- Setup model ---
     dtype_map = {"bfloat16": torch.bfloat16, "float16": torch.float16, "float32": torch.float32}
@@ -1196,6 +1182,7 @@ def train_multiturn(config: BioAgentGRPOConfig):
     from transformers import AutoConfig
     _model_config = AutoConfig.from_pretrained(mt_config.model_name_or_path, trust_remote_code=True)
     _model_type = getattr(_model_config, "model_type", "")
+
     _is_qwen_vl = (
         _model_type in ("qwen2_5_vl", "qwen2_vl", "qwen3_5")
         or ("qwen2" in _model_type.lower() and "vl" in _model_type.lower())
@@ -1205,6 +1192,15 @@ def train_multiturn(config: BioAgentGRPOConfig):
     _is_qwen3_5 = _model_type == "qwen3_5"
     # Qwen3.5 requires eager attention (sdpa causes hangs)
     _attn_impl = "eager" if _is_qwen3_5 else "sdpa"
+
+    # Load processor for VL models (needed for image inputs during rollout + training)
+    _processor = None
+    if _is_qwen_vl:
+        from transformers import AutoProcessor
+        _processor = AutoProcessor.from_pretrained(
+            mt_config.model_name_or_path, trust_remote_code=True,
+        )
+        logger.info(f"Loaded VL processor for {_model_type}")
 
     if _is_qwen3_5:
         from transformers import Qwen3_5ForConditionalGeneration
@@ -2353,15 +2349,26 @@ def _tokenize_trajectory(
                 return_tensors="pt",
                 padding=False,
             )
-            # Truncate if needed
+            # NOTE: Do NOT truncate vision inputs — truncating input_ids can cut
+            # image placeholder tokens (<|vision_start|>...<|vision_end|>) while
+            # pixel_values remains intact, causing shape mismatch in the forward pass.
+            # If the sequence is too long, the model will handle it via its own
+            # context window limit. For extreme cases, skip the trajectory.
             if inputs["input_ids"].shape[1] > max_length:
-                inputs["input_ids"] = inputs["input_ids"][:, :max_length]
-                if "attention_mask" in inputs:
-                    inputs["attention_mask"] = inputs["attention_mask"][:, :max_length]
+                logger.warning(
+                    f"[Vision] Trajectory {traj.get('task_id', '?')} has "
+                    f"{inputs['input_ids'].shape[1]} tokens (max={max_length}), "
+                    f"skipping to avoid vision token truncation"
+                )
+                return None
             return {k: v.to(device) for k, v in inputs.items()}
-        except Exception:
-            # Fall back to text-only on any error
-            pass
+        except Exception as _vision_err:
+            # Fall back to text-only — log warning so we can detect mismatches
+            logger.warning(
+                f"[Vision] Failed to process image {image_path}: {_vision_err}. "
+                f"Falling back to text-only tokenization for trajectory "
+                f"{traj.get('task_id', '?')}"
+            )
 
     # Text-only path
     encoding = tokenizer(
@@ -2398,7 +2405,6 @@ def _compute_ref_log_probs(
                 continue
 
             # Vision-aware tokenization
-            _img_path = traj.get("image_path")
             inputs = _tokenize_trajectory(
                 traj, tokenizer, processor, max_length, device,
             )

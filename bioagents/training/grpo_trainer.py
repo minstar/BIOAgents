@@ -1167,12 +1167,26 @@ def train_multiturn(config: BioAgentGRPOConfig):
     logger.info(f"Max turns: {mt_config.max_turns}")
     logger.info(f"Rollouts per task (G): {mt_config.num_rollouts_per_task}")
 
-    # --- Setup tokenizer ---
+    # --- Setup tokenizer (and processor for VL models) ---
     tokenizer = AutoTokenizer.from_pretrained(
         mt_config.model_name_or_path, trust_remote_code=True,
     )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+
+    # Load processor for VL models (needed for image inputs)
+    _processor = None
+    from transformers import AutoConfig as _AC
+    _pre_config = _AC.from_pretrained(mt_config.model_name_or_path, trust_remote_code=True)
+    _pre_model_type = getattr(_pre_config, "model_type", "")
+    if _pre_model_type in ("qwen2_5_vl", "qwen2_vl", "qwen3_5") or (
+        "qwen2" in _pre_model_type.lower() and "vl" in _pre_model_type.lower()
+    ):
+        from transformers import AutoProcessor
+        _processor = AutoProcessor.from_pretrained(
+            mt_config.model_name_or_path, trust_remote_code=True,
+        )
+        logger.info(f"Loaded VL processor for {_pre_model_type}")
 
     # --- Setup model ---
     dtype_map = {"bfloat16": torch.bfloat16, "float16": torch.float16, "float32": torch.float32}
@@ -1182,16 +1196,33 @@ def train_multiturn(config: BioAgentGRPOConfig):
     from transformers import AutoConfig
     _model_config = AutoConfig.from_pretrained(mt_config.model_name_or_path, trust_remote_code=True)
     _model_type = getattr(_model_config, "model_type", "")
-    _is_qwen_vl = _model_type in ("qwen2_5_vl", "qwen2_vl") or "qwen2" in _model_type.lower() and "vl" in _model_type.lower()
+    _is_qwen_vl = (
+        _model_type in ("qwen2_5_vl", "qwen2_vl", "qwen3_5")
+        or ("qwen2" in _model_type.lower() and "vl" in _model_type.lower())
+    )
 
-    if _is_qwen_vl:
+    # Determine correct model class and attention implementation
+    _is_qwen3_5 = _model_type == "qwen3_5"
+    # Qwen3.5 requires eager attention (sdpa causes hangs)
+    _attn_impl = "eager" if _is_qwen3_5 else "sdpa"
+
+    if _is_qwen3_5:
+        from transformers import Qwen3_5ForConditionalGeneration
+        logger.info(f"Loading VL model ({_model_type}) with Qwen3_5ForConditionalGeneration (attn={_attn_impl})")
+        model = Qwen3_5ForConditionalGeneration.from_pretrained(
+            mt_config.model_name_or_path,
+            torch_dtype=model_dtype,
+            trust_remote_code=True,
+            attn_implementation=_attn_impl,
+        )
+    elif _is_qwen_vl:
         from transformers import Qwen2_5_VLForConditionalGeneration
         logger.info(f"Loading VL model ({_model_type}) with Qwen2_5_VLForConditionalGeneration")
         model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             mt_config.model_name_or_path,
             torch_dtype=model_dtype,
             trust_remote_code=True,
-            attn_implementation="sdpa",
+            attn_implementation=_attn_impl,
         )
     else:
         model = AutoModelForCausalLM.from_pretrained(
@@ -1224,7 +1255,14 @@ def train_multiturn(config: BioAgentGRPOConfig):
     if mt_config.use_opd and mt_config.opd_teacher_path:
         logger.info(f"[OPD] Loading teacher model from: {mt_config.opd_teacher_path}")
         logger.info(f"[OPD] Mode: {mt_config.opd_mode}, alpha: {mt_config.opd_alpha}, lambda: {mt_config.opd_lambda}")
-        if _is_qwen_vl:
+        if _is_qwen3_5:
+            teacher_model = Qwen3_5ForConditionalGeneration.from_pretrained(
+                mt_config.opd_teacher_path,
+                torch_dtype=model_dtype,
+                trust_remote_code=True,
+                attn_implementation=_attn_impl,
+            )
+        elif _is_qwen_vl:
             teacher_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                 mt_config.opd_teacher_path,
                 torch_dtype=model_dtype,
@@ -1528,7 +1566,12 @@ def train_multiturn(config: BioAgentGRPOConfig):
         logger.info(f"[Multi-GPU] Setting up {_num_rollout_gpus} HF replicas for parallel rollouts")
         for gpu_i in range(1, _num_rollout_gpus):
             _dev = torch.device(f"cuda:{gpu_i}")
-            if _is_qwen_vl:
+            if _is_qwen3_5:
+                _replica = Qwen3_5ForConditionalGeneration.from_pretrained(
+                    mt_config.model_name_or_path, torch_dtype=model_dtype,
+                    trust_remote_code=True, attn_implementation=_attn_impl,
+                ).to(_dev)
+            elif _is_qwen_vl:
                 _replica = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                     mt_config.model_name_or_path, torch_dtype=model_dtype,
                     trust_remote_code=True, attn_implementation="sdpa",
@@ -1568,6 +1611,7 @@ def train_multiturn(config: BioAgentGRPOConfig):
                     max_prompt_length=mt_config.max_prompt_length,
                     rollout_timeout=6000.0,
                     vllm_client=_vllm_clients[_vllm_idx],
+                    processor=_processor,
                 )
             else:
                 _model = _rollout_models[gpu_idx]
@@ -1583,6 +1627,7 @@ def train_multiturn(config: BioAgentGRPOConfig):
                     max_completion_length=mt_config.max_completion_length,
                     max_prompt_length=mt_config.max_prompt_length,
                     rollout_timeout=6000.0,
+                    processor=_processor,
                 )
             rollouts.append(trajectory)
             logger.info(f"[GPU{gpu_idx}] Task {task_id} rollout {g+1}/{mt_config.num_rollouts_per_task} done — resp_len={len(trajectory.get('final_response',''))}")
@@ -1791,6 +1836,7 @@ def train_multiturn(config: BioAgentGRPOConfig):
                         device=device,
                         max_length=mt_config.max_trajectory_length,
                         use_dr_grpo=mt_config.use_dr_grpo,
+                        processor=_processor,
                     )
                     model.enable_adapter_layers()
 
@@ -1808,6 +1854,7 @@ def train_multiturn(config: BioAgentGRPOConfig):
                     use_dr_grpo=mt_config.use_dr_grpo,
                     ref_log_probs=_batch_ref_log_probs,
                     lr_scheduler=lr_scheduler,
+                    processor=_processor,
                 )
                 logger.info(
                     f"  [Async] Batch {_grad_batch_num}: "
@@ -1964,6 +2011,7 @@ def _run_single_rollout(
     max_prompt_length: int = 4096,
     rollout_timeout: float = 600.0,
     vllm_client=None,
+    processor=None,
 ) -> dict:
     """Run a single multi-turn rollout through the GYM environment.
 
@@ -1972,6 +2020,7 @@ def _run_single_rollout(
     - tool_calls: list of tool call records
     - final_response: agent's final text response
     - num_turns: number of turns taken
+    - image_path: path to image file if this is a VQA task (for training)
     """
     import gymnasium as gym
     import time as _time_mod
@@ -1999,9 +2048,23 @@ def _run_single_rollout(
     else:
         # Current format: obs is a string containing the full initial observation
         observation_text = str(obs)
+
+    # Build multimodal user content if image is available and processor is loaded
+    _image_path = info.get("image_path") or task.get("_image_path")
+    _has_vision = processor is not None and _image_path and os.path.isfile(_image_path)
+
+    if _has_vision:
+        # Multimodal message: image + text (matches eval format)
+        user_content = [
+            {"type": "image", "image": f"file://{_image_path}"},
+            {"type": "text", "text": observation_text},
+        ]
+    else:
+        user_content = observation_text
+
     messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "user", "content": observation_text},
+        {"role": "user", "content": user_content},
     ]
 
     # --- Extract tool definitions from GYM env for Qwen3.5 tool calling ---
@@ -2090,17 +2153,32 @@ def _run_single_rollout(
                 _gen_len = 0
         else:
             # ── HuggingFace path: direct model.generate() ──
+            _template_fn = processor if (_has_vision and processor is not None) else tokenizer
             try:
-                prompt_text = tokenizer.apply_chat_template(
+                prompt_text = _template_fn.apply_chat_template(
                     messages, tools=_openai_tools if _openai_tools else None,
                     tokenize=False, add_generation_prompt=True,
                 )
             except Exception:
-                prompt_text = tokenizer.apply_chat_template(
+                prompt_text = _template_fn.apply_chat_template(
                     messages, tokenize=False, add_generation_prompt=True,
                 )
-            inputs = tokenizer(prompt_text, return_tensors="pt", truncation=True, max_length=max_prompt_length)
-            inputs = {k: v.to(device) for k, v in inputs.items()}
+
+            if _has_vision and processor is not None:
+                # Vision path: use processor to handle image + text together
+                from qwen_vl_utils import process_vision_info
+                image_inputs, video_inputs = process_vision_info(messages)
+                inputs = processor(
+                    text=[prompt_text],
+                    images=image_inputs,
+                    videos=video_inputs,
+                    return_tensors="pt",
+                    padding=True,
+                )
+                inputs = {k: v.to(device) for k, v in inputs.items()}
+            else:
+                inputs = tokenizer(prompt_text, return_tensors="pt", truncation=True, max_length=max_prompt_length)
+                inputs = {k: v.to(device) for k, v in inputs.items()}
             _input_len = inputs["input_ids"].shape[1]
 
             with torch.no_grad():
@@ -2167,13 +2245,21 @@ def _run_single_rollout(
                 final_response = msg["content"]
                 break
 
+    # Build full_text from assistant messages only (for text-only training path)
+    _assistant_texts = []
+    for m in messages:
+        if m["role"] == "assistant":
+            c = m["content"]
+            _assistant_texts.append(c if isinstance(c, str) else str(c))
+
     return {
         "task_id": task_id,
         "messages": messages,
         "tool_calls": tool_calls,
         "final_response": final_response,
         "num_turns": len(tool_calls) + 1,
-        "full_text": "\n".join(m["content"] for m in messages if m["role"] == "assistant"),
+        "full_text": "\n".join(_assistant_texts),
+        "image_path": _image_path if _has_vision else None,
     }
 
 
@@ -2230,6 +2316,64 @@ def _parse_tool_call_from_response(text: str) -> Optional[dict]:
     return None
 
 
+def _tokenize_trajectory(
+    traj: dict,
+    tokenizer,
+    processor,
+    max_length: int,
+    device,
+) -> Optional[dict]:
+    """Tokenize a trajectory, handling vision inputs when available.
+
+    For VQA trajectories with images, uses the processor to create inputs
+    with pixel_values. For text-only trajectories, uses the tokenizer.
+
+    Returns a dict with input_ids (and optionally pixel_values, image_grid_thw)
+    on the target device, or None if the trajectory is empty.
+    """
+    full_text = traj.get("full_text", "")
+    if not full_text:
+        return None
+
+    image_path = traj.get("image_path")
+    if processor is not None and image_path and os.path.isfile(image_path):
+        # Vision path: rebuild messages and process with images
+        try:
+            from qwen_vl_utils import process_vision_info
+            messages = traj.get("messages", [])
+            # Re-apply chat template with processor
+            text = processor.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=False,
+            )
+            image_inputs, video_inputs = process_vision_info(messages)
+            inputs = processor(
+                text=[text],
+                images=image_inputs,
+                videos=video_inputs,
+                return_tensors="pt",
+                padding=False,
+            )
+            # Truncate if needed
+            if inputs["input_ids"].shape[1] > max_length:
+                inputs["input_ids"] = inputs["input_ids"][:, :max_length]
+                if "attention_mask" in inputs:
+                    inputs["attention_mask"] = inputs["attention_mask"][:, :max_length]
+            return {k: v.to(device) for k, v in inputs.items()}
+        except Exception:
+            # Fall back to text-only on any error
+            pass
+
+    # Text-only path
+    encoding = tokenizer(
+        full_text,
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_length,
+        padding=False,
+    )
+    return {k: v.to(device) for k, v in encoding.items()}
+
+
 def _compute_ref_log_probs(
     ref_model,
     tokenizer,
@@ -2237,6 +2381,7 @@ def _compute_ref_log_probs(
     device,
     max_length: int = 4096,
     use_dr_grpo: bool = False,
+    processor=None,
 ) -> dict[int, float]:
     """Pre-compute log-probabilities under the frozen reference model.
 
@@ -2251,17 +2396,26 @@ def _compute_ref_log_probs(
             full_text = traj.get("full_text", "")
             if not full_text:
                 continue
-            encoding = tokenizer(
-                full_text,
-                return_tensors="pt",
-                truncation=True,
-                max_length=max_length,
-                padding=False,
+
+            # Vision-aware tokenization
+            _img_path = traj.get("image_path")
+            inputs = _tokenize_trajectory(
+                traj, tokenizer, processor, max_length, device,
             )
-            input_ids = encoding["input_ids"].to(device)
+            if inputs is None:
+                continue
+            input_ids = inputs["input_ids"]
             if input_ids.shape[1] < 2:
                 continue
-            outputs = ref_model(input_ids=input_ids, labels=input_ids)
+
+            # Pass vision inputs if available
+            _fwd_kwargs = {"input_ids": input_ids, "labels": input_ids}
+            if "pixel_values" in inputs:
+                _fwd_kwargs["pixel_values"] = inputs["pixel_values"]
+            if "image_grid_thw" in inputs:
+                _fwd_kwargs["image_grid_thw"] = inputs["image_grid_thw"]
+
+            outputs = ref_model(**_fwd_kwargs)
             if use_dr_grpo:
                 seq_len = max((input_ids != tokenizer.pad_token_id).sum().item(), 1)
                 ref_log_probs[idx] = (-outputs.loss * seq_len).item()
@@ -2270,7 +2424,9 @@ def _compute_ref_log_probs(
     return ref_log_probs
 
 
-def _get_per_token_log_probs(model, input_ids: torch.Tensor) -> torch.Tensor:
+def _get_per_token_log_probs(
+    model, input_ids: torch.Tensor, pixel_values=None, image_grid_thw=None,
+) -> torch.Tensor:
     """Extract per-token log-probabilities from model logits.
 
     Given input_ids [1, seq_len], compute log p(y_t | y_{<t}, x) for each
@@ -2282,7 +2438,13 @@ def _get_per_token_log_probs(model, input_ids: torch.Tensor) -> torch.Tensor:
     """
     import torch.nn.functional as F
 
-    outputs = model(input_ids=input_ids)
+    _fwd_kwargs = {"input_ids": input_ids}
+    if pixel_values is not None:
+        _fwd_kwargs["pixel_values"] = pixel_values
+    if image_grid_thw is not None:
+        _fwd_kwargs["image_grid_thw"] = image_grid_thw
+
+    outputs = model(**_fwd_kwargs)
     logits = outputs.logits                        # [1, seq_len, vocab_size]
     shift_logits = logits[:, :-1, :]               # [1, seq_len-1, vocab_size]
     shift_labels = input_ids[:, 1:]                # [1, seq_len-1]
@@ -2304,6 +2466,7 @@ def _compute_per_token_log_probs_batch(
     trajectories: list[dict],
     device,
     max_length: int = 4096,
+    processor=None,
 ) -> dict[int, torch.Tensor]:
     """Pre-compute per-token log-probs for all trajectories under a model.
 
@@ -2319,17 +2482,15 @@ def _compute_per_token_log_probs_batch(
             full_text = traj.get("full_text", "")
             if not full_text:
                 continue
-            encoding = tokenizer(
-                full_text,
-                return_tensors="pt",
-                truncation=True,
-                max_length=max_length,
-                padding=False,
-            )
-            input_ids = encoding["input_ids"].to(device)
+            inputs = _tokenize_trajectory(traj, tokenizer, processor, max_length, device)
+            if inputs is None:
+                continue
+            input_ids = inputs["input_ids"]
             if input_ids.shape[1] < 2:
                 continue
-            per_token = _get_per_token_log_probs(model, input_ids)
+            _pv = inputs.get("pixel_values")
+            _igt = inputs.get("image_grid_thw")
+            per_token = _get_per_token_log_probs(model, input_ids, _pv, _igt)
             token_lps[idx] = per_token.cpu()  # store on CPU to save VRAM
     return token_lps
 
@@ -2351,6 +2512,7 @@ def _grpo_policy_update(
     ref_token_log_probs: dict[int, torch.Tensor] | None = None,
     opd_alpha: float = 0.5,
     opd_lambda: float = 1.0,
+    processor=None,
 ) -> float:
     """GRPO policy gradient update from collected trajectories.
 
@@ -2405,15 +2567,13 @@ def _grpo_policy_update(
                 if not full_text:
                     continue
 
-                # Tokenize
-                encoding = tokenizer(
-                    full_text,
-                    return_tensors="pt",
-                    truncation=True,
-                    max_length=max_length,
-                    padding=False,
-                )
-                input_ids = encoding["input_ids"].to(device)
+                # Tokenize (vision-aware)
+                inputs = _tokenize_trajectory(traj, tokenizer, processor, max_length, device)
+                if inputs is None:
+                    continue
+                input_ids = inputs["input_ids"]
+                _pv = inputs.get("pixel_values")
+                _igt = inputs.get("image_grid_thw")
 
                 if input_ids.shape[1] < 2:
                     continue
@@ -2431,7 +2591,7 @@ def _grpo_policy_update(
 
                 if has_opd:
                     # Per-token student log-probs (with gradient)
-                    student_token_lps = _get_per_token_log_probs(model, input_ids)
+                    student_token_lps = _get_per_token_log_probs(model, input_ids, _pv, _igt)
                     # [seq_len - 1], gradient flows through this
 
                     # Pre-computed teacher & ref per-token log-probs (no gradient)
@@ -2469,7 +2629,12 @@ def _grpo_policy_update(
 
                 else:
                     # ── Original sequence-level path (no OPD) ──
-                    outputs = model(input_ids=input_ids, labels=input_ids)
+                    _fwd_kwargs = {"input_ids": input_ids, "labels": input_ids}
+                    if _pv is not None:
+                        _fwd_kwargs["pixel_values"] = _pv
+                    if _igt is not None:
+                        _fwd_kwargs["image_grid_thw"] = _igt
+                    outputs = model(**_fwd_kwargs)
                     if use_dr_grpo:
                         seq_len = max((input_ids != tokenizer.pad_token_id).sum().item(), 1)
                         log_probs = -outputs.loss * seq_len

@@ -270,6 +270,7 @@ class BioAgentGymEnv(gym.Env):
             "policy": self._env.policy,
             "tools": self._env.get_tool_definitions(),
             "max_turns": self.max_turns,
+            "image_path": self._current_task.get("_image_path"),
         }
         
         return initial_obs, info

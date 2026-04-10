@@ -9,16 +9,20 @@ _debug_count = 0
 
 
 def extract_answer_letter(text: str) -> Optional[str]:
-    """Extract answer letter from model response."""
-    # Pattern 1: "Answer: X" at end
-    match = re.search(r"Answer:\s*([A-E])\b", text, re.IGNORECASE)
-    if match:
-        return match.group(1).upper()
+    """Extract answer letter from model response.
 
-    # Pattern 2: "the answer is X"
-    match = re.search(r"the answer is\s*([A-E])\b", text, re.IGNORECASE)
-    if match:
-        return match.group(1).upper()
+    Uses the LAST match in multi-turn responses to avoid picking up
+    intermediate tool responses or earlier reasoning attempts.
+    """
+    # Pattern 1: "Answer: X" — use last match (critical for multi-turn)
+    matches = re.findall(r"Answer:\s*([A-E])\b", text, re.IGNORECASE)
+    if matches:
+        return matches[-1].upper()
+
+    # Pattern 2: "the answer is X" — use last match
+    matches = re.findall(r"the answer is\s*([A-E])\b", text, re.IGNORECASE)
+    if matches:
+        return matches[-1].upper()
 
     # Pattern 3: standalone letter at end "D" or "(D)"
     match = re.search(r"\(?([A-E])\)?\s*$", text.strip())
@@ -47,6 +51,16 @@ def compute_score(
     if isinstance(extra_info, str):
         extra_info = json.loads(extra_info)
 
+    # Normalize ground_truth: extract answer letter from formats like "ANSWER: (D)", "(D)", "D"
+    if ground_truth:
+        gt_stripped = ground_truth.strip()
+        # Try explicit patterns first: "ANSWER: (X)" or "(X)" at end
+        gt_match = re.search(r"(?:ANSWER:\s*)?[\(]([A-E])[\)]", gt_stripped, re.IGNORECASE)
+        if gt_match:
+            ground_truth = gt_match.group(1).upper()
+        elif len(gt_stripped) == 1 and gt_stripped.upper() in "ABCDE":
+            ground_truth = gt_stripped.upper()
+
     has_options = extra_info.get("has_options", bool(ground_truth and len(ground_truth) == 1))
 
     if has_options:
@@ -72,10 +86,10 @@ def compute_score(
         if predicted is None:
             return 0.0  # no answer extracted = 0
 
-        # Format bonus: model used "Answer: X" format
-        format_bonus = 0.1 if re.search(r"Answer:\s*[A-E]", solution_str) else 0.0
-
         accuracy = 1.0 if predicted == correct else 0.0
+
+        # Format bonus: only for correct answers to avoid rewarding wrong-but-formatted
+        format_bonus = 0.1 if (accuracy > 0 and re.search(r"Answer:\s*[A-E]", solution_str)) else 0.0
         return accuracy + format_bonus
     else:
         # Open-ended: simple keyword overlap scoring

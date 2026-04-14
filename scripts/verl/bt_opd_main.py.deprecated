@@ -1,0 +1,16 @@
+"""BT-OPD entry point for veRL training.
+
+Imports the custom BT-OPD distillation loss to register it in veRL's
+loss registry, then delegates to veRL's standard main_ppo entry point.
+
+Usage:
+    python3 scripts/verl/bt_opd_main.py [hydra overrides...]
+"""
+
+# Register BT-OPD loss before veRL initializes
+import bt_opd_distillation  # noqa: F401
+
+from verl.trainer.main_ppo import main
+
+if __name__ == "__main__":
+    main()

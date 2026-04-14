@@ -1,0 +1,123 @@
+# ============================================================
+# Full 4-Modality GRPO v2 — Lingshu-7B (No SFT, No OPD)
+# ============================================================
+# Ablation baseline: same v2 reward fixes as OPD config,
+# but WITHOUT OPD teacher distillation.
+# Uses train() (TRL single-turn) → ~5h completion time.
+#
+# Usage:
+#   python scripts/train_two_stage.py \
+#       --skip-sft \
+#       --rl-config configs/full_4modality_grpo_nosft_v2.yaml
+# ============================================================
+
+# --- Model (Student: Lingshu-7B base) ---
+model:
+  name_or_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Lingshu-7B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "flash_attention_2"
+
+# --- LoRA / PEFT ---
+peft:
+  enabled: true
+  r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+# --- Dataset: Full 4-modality combined ---
+dataset:
+  domain: "full_4modality"
+  tasks_path: "data/domains/full_4modality_combined/tasks.json"
+  split_tasks_path: "data/domains/full_4modality_combined/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 3072
+  max_completion_length: 1024
+
+# --- Training (GRPO only, no OPD) — v2 fixes ---
+training:
+  output_dir: "checkpoints/full_4modality_grpo_nosft_v2"
+  num_train_epochs: 3
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  learning_rate: 5.0e-6          # v2: 10x increase (was 5e-7)
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.03             # v2: faster warmup (was 0.05)
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 50
+  eval_steps: 50
+  save_total_limit: 10
+  seed: 42
+
+  # GRPO-specific — v2 tuned
+  num_generations: 8
+  beta: 0.04                     # v2: stronger KL penalty (was 0.01)
+  temperature: 0.9               # v2: more diverse completions (was 0.7)
+  top_p: 0.95
+  top_k: 50
+
+  loss_type: "grpo"
+  scale_rewards: "none"
+
+  dynamic_sampling: true
+  dynamic_sampling_min_mixed_ratio: 0.1
+
+  overlong_reward_shaping: true
+  overlong_safe_length: 768
+  overlong_penalty_factor: 0.5
+
+# --- Reward — v2 with BERTScore fix ---
+rewards:
+  strategy: "grpo"
+  functions:
+    - name: "accuracy"
+      weight: 0.4
+    - name: "format"
+      weight: 0.2
+    - name: "process"
+      weight: 0.4
+  bertscore_model: "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext"
+  bertscore_max_length: 512
+
+# --- NO OPD (ablation baseline) ---
+# opd section intentionally omitted
+
+# --- Environment ---
+environment:
+  max_turns: 15
+  use_gym_env: true
+  domains:
+    - "medical_qa"
+    - "visual_diagnosis"
+    - "clinical_diagnosis"
+    - "drug_interaction"
+    - "ehr_management"
+    - "triage_emergency"
+    - "psychiatry"
+    - "obstetrics"
+
+# --- Logging ---
+logging:
+  project: "pt2-minstar-gym-rl"
+  run_name: "full_4modality_grpo_nosft_v2"
+  use_wandb: true
+  log_dir: "logs/runs"
+
+# --- Experiment metadata ---
+meta:
+  experiment: "Full 4-Modality GRPO v2 — Lingshu-7B (No SFT, No OPD, ablation)"
+  description: >
+    Pure GRPO v2 ablation baseline: same reward fixes as OPD v2
+    but without teacher distillation. Uses TRL single-turn trainer
+    for fast (~5h) training. For comparing OPD contribution.

@@ -158,6 +158,14 @@ ARCHITECTURE_REGISTRY: dict[str, ArchitectureSpec] = {
         modalities=("text", "image"),
         load_kwargs={"trust_remote_code": True},
     ),
+    "Qwen3_5ForConditionalGeneration": ArchitectureSpec(
+        model_class="Qwen3_5ForConditionalGeneration",
+        model_import_path="transformers",
+        tokenizer_class="AutoTokenizer",
+        requires_processor=True,
+        processor_class="AutoProcessor",
+        modalities=("text", "image", "video"),
+    ),
 }
 
 # Map model_type -> default architecture name (fallback)
@@ -170,6 +178,7 @@ MODEL_TYPE_TO_ARCH: dict[str, str] = {
     "llama": "LlamaForCausalLM",
     "mistral": "MistralForCausalLM",
     "gemma2": "Gemma2ForCausalLM",
+    "qwen3_5": "Qwen3_5ForConditionalGeneration",
 }
 
 

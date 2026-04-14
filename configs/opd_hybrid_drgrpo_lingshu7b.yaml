@@ -1,0 +1,124 @@
+# ============================================================
+# OPD Option 3: Hybrid Dr.GRPO + Dual-Teacher OPD
+# ============================================================
+# Two teachers providing complementary dense supervision:
+#   Teacher 1 (SFT): text QA knowledge preservation
+#   Teacher 2 (Dr.GRPO step 950): agentic competence
+# Combined with RL advantage for three-signal training.
+#
+# Novel contribution: Dr.GRPO's per-token normalization naturally
+# complements OPD's per-token teacher supervision.
+#
+# Reference: MiMo-V2-Flash MOPD (arXiv:2601.02780)
+#
+# Usage:
+#   python scripts/train_two_stage.py \
+#       --skip-sft \
+#       --sft-checkpoint checkpoints/drgrpo_lingshu7b/checkpoint-950-merged \
+#       --rl-config configs/opd_hybrid_drgrpo_lingshu7b.yaml
+# ============================================================
+
+# --- Model ---
+model:
+  name_or_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Lingshu-7B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "flash_attention_2"
+
+# --- LoRA / PEFT ---
+peft:
+  enabled: true
+  r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+# --- Dataset ---
+dataset:
+  domain: "medical_qa"
+  tasks_path: "data/domains/medical_qa_1000/tasks.json"
+  split_tasks_path: "data/domains/medical_qa_1000/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 2048
+  max_completion_length: 1024
+
+# --- Training ---
+training:
+  output_dir: "checkpoints/opd_hybrid_drgrpo_lingshu7b"
+  num_train_epochs: 10
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  learning_rate: 5.0e-7
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 50
+  eval_steps: 25
+  save_total_limit: 5
+  seed: 42
+
+  # GRPO-specific
+  num_generations: 8
+  beta: 0.01
+  temperature: 0.7
+  top_p: 0.95
+  top_k: 50
+
+  # Dr. GRPO + DAPO hybrid
+  use_dr_grpo: true
+  loss_type: "grpo"
+  dynamic_sampling: false
+  overlong_reward_shaping: false
+
+# --- Reward ---
+rewards:
+  strategy: "grpo"
+  functions:
+    - name: "accuracy"
+      weight: 0.6
+    - name: "format"
+      weight: 0.4
+  bertscore_model: "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext"
+
+# --- On-Policy Distillation (Hybrid: SFT teacher for text QA) ---
+# Note: For full dual-teacher MOPD, a second teacher path would be
+# needed. This config uses SFT as primary teacher; the student
+# already has agentic knowledge from Dr.GRPO initialization.
+opd:
+  use_opd: true
+  opd_teacher_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/sft_warmup_lingshu7b_v2_merged/merged"
+  opd_mode: "hybrid"
+  opd_alpha: 0.6          # 60% RL + 40% OPD (RL-heavy, OPD as regularizer)
+  opd_lambda: 1.0         # Standard OPD, no extrapolation
+  opd_warmup_steps: 30    # Short warmup
+
+# --- Environment ---
+environment:
+  max_turns: 10
+  use_gym_env: true
+
+# --- Logging ---
+logging:
+  project: "pt2-minstar-gym-rl"
+  run_name: "opd_hybrid_drgrpo_lingshu7b"
+  use_wandb: true
+  log_dir: "logs/runs"
+
+# --- Experiment metadata ---
+meta:
+  experiment: "OPD Option 3 — Hybrid Dr.GRPO + OPD"
+  description: >
+    Dr.GRPO per-token normalization + OPD per-token teacher
+    supervision. SFT checkpoint as teacher provides text QA
+    regularization while RL drives agentic improvement.
+    Most novel — combines our two main contributions.

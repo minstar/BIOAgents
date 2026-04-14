@@ -92,6 +92,15 @@ def compute_bleu1(prediction: str, reference: str) -> float:
 
 def compute_bertscore_f1(prediction: str, reference: str, scorer=None) -> float:
     """Compute BERTScore F1 using a pre-initialized scorer or creating one."""
+    # Truncate to ~450 words to stay within BiomedBERT's 512 token limit
+    max_words = 450
+    pred_words = prediction.split()
+    ref_words = reference.split()
+    if len(pred_words) > max_words:
+        prediction = " ".join(pred_words[:max_words])
+    if len(ref_words) > max_words:
+        reference = " ".join(ref_words[:max_words])
+
     if scorer is not None:
         try:
             P, R, F1 = scorer.score([prediction], [reference], verbose=False)
@@ -158,7 +167,18 @@ def _extract_answer_from_content(content: str) -> str:
     try:
         parsed = json.loads(content.strip())
         if isinstance(parsed, dict) and parsed.get("name") == "submit_answer":
-            return parsed.get("arguments", {}).get("answer", "")
+            args = parsed.get("arguments", {})
+            if isinstance(args, str):
+                try:
+                    args = json.loads(args)
+                except json.JSONDecodeError:
+                    return args
+            if isinstance(args, dict):
+                answer = args.get("answer", "")
+                if isinstance(answer, list):
+                    answer = answer[0] if answer else ""
+                return str(answer)
+            return str(args)
     except json.JSONDecodeError:
         pass
     

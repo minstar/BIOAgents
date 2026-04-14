@@ -74,7 +74,7 @@ class MedicalKnowledgeBackend:
                     self._initialized = True
                     return False
 
-                self._conn = sqlite3.connect(db_path)
+                self._conn = sqlite3.connect(db_path, check_same_thread=False)
                 self._conn.execute("PRAGMA journal_mode=WAL;")
                 self._initialized = True
                 logger.info(f"Medical knowledge FTS backend initialized: {db_path}")
@@ -257,11 +257,11 @@ class WikiSearchBackend:
                     return False
 
                 # Initialize lightweight FTS search
-                self._fts_conn = sqlite3.connect(corpus_fts)
+                self._fts_conn = sqlite3.connect(corpus_fts, check_same_thread=False)
                 self._fts_conn.execute("PRAGMA journal_mode=WAL;")
 
                 # Initialize page accessor
-                self._pages_conn = sqlite3.connect(pages_index)
+                self._pages_conn = sqlite3.connect(pages_index, check_same_thread=False)
                 self._pages_fh = open(pages_jsonl, "rb")
 
                 self._wiki_root = wiki_root

@@ -18,9 +18,29 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
 
+import threading as _threading
+
 import torch
 import yaml
 from loguru import logger
+
+# ── Monkey-patch Triton autotuner for thread safety ──
+# Triton's in-memory cache is not thread-safe; concurrent autotuner runs
+# corrupt cache entries (NoneType mapping error). This lock serializes
+# autotuning — only affects the first call per kernel config.
+try:
+    import triton.runtime.autotuner as _triton_autotuner
+    _triton_autotuner_lock = _threading.Lock()
+    _triton_original_run = _triton_autotuner.Autotuner.run
+
+    def _triton_thread_safe_run(self, *args, **kwargs):
+        with _triton_autotuner_lock:
+            return _triton_original_run(self, *args, **kwargs)
+
+    _triton_autotuner.Autotuner.run = _triton_thread_safe_run
+    logger.info("[Triton] Autotuner monkey-patched for thread safety")
+except Exception as _e:
+    logger.warning(f"[Triton] Could not patch autotuner: {_e}")
 
 # ============================================================
 # Config
@@ -156,6 +176,26 @@ class BioAgentGRPOConfig:
     use_wandb: bool = True
     log_dir: str = "logs/runs"
 
+    # ── On-Policy Distillation (OPD) ──────────────────────────
+    # Cross-stage OPD (GLM-5 style): teacher provides per-token dense
+    # supervision on student-sampled trajectories.
+    # Reference: GLM-5 (arXiv:2602.15763), G-OPD (arXiv:2602.12125)
+    use_opd: bool = False                          # Enable OPD
+    opd_teacher_path: str = ""                     # Path to teacher model (merged)
+    opd_mode: str = "cross_stage"                  # "cross_stage" | "self_evolving" | "hybrid"
+    opd_alpha: float = 0.5                         # Blend: α*RL_advantage + (1-α)*OPD_advantage
+    opd_lambda: float = 1.0                        # G-OPD reward extrapolation (λ>1 = surpass teacher)
+    opd_warmup_steps: int = 50                     # Steps before OPD kicks in (let RL stabilize first)
+
+    # ── Bidirectional Truncated OPD (BT-OPD) ─────────────────
+    # Extends OPD with: (1) turn-aware truncation — apply OPD only to
+    # first K turns where teacher guidance is most informative; (2)
+    # bidirectional signals — use both positive and negative rewards
+    # to generate reinforcing and corrective OPD gradients.
+    # Reference: OpenClaw-RL (arXiv:2603.10165) hindsight-guided OPD
+    opd_max_turn: int = 0                          # 0 = all turns; K>0 = OPD only on first K turns
+    opd_bidirectional: bool = False                 # True = apply OPD on negative-reward trajs too
+
     @classmethod
     def from_yaml(cls, path: str) -> "BioAgentGRPOConfig":
         """Load config from YAML file."""
@@ -198,7 +238,7 @@ class BioAgentGRPOConfig:
                 "importance_sampling_level", "scale_rewards",
                 "dynamic_sampling", "dynamic_sampling_min_mixed_ratio",
                 "overlong_reward_shaping", "overlong_safe_length", "overlong_penalty_factor",
-                "use_dr_grpo",
+                "use_dr_grpo", "max_train_tasks",
             ]:
                 if key in t:
                     kwargs[key] = t[key]
@@ -215,6 +255,15 @@ class BioAgentGRPOConfig:
             kwargs["run_name"] = raw["logging"].get("run_name", cls.run_name)
             kwargs["use_wandb"] = raw["logging"].get("use_wandb", cls.use_wandb)
             kwargs["log_dir"] = raw["logging"].get("log_dir", cls.log_dir)
+        if "opd" in raw:
+            o = raw["opd"]
+            for key in [
+                "use_opd", "opd_teacher_path", "opd_mode",
+                "opd_alpha", "opd_lambda", "opd_warmup_steps",
+                "opd_max_turn", "opd_bidirectional",
+            ]:
+                if key in o:
+                    kwargs[key] = o[key]
 
         return cls(**kwargs)
 
@@ -278,7 +327,7 @@ def _build_prompt_from_task(task: dict, domain: str) -> list[dict]:
 
     Returns a list of message dicts for the tokenizer.apply_chat_template().
     """
-    ticket = task.get("ticket", "")
+    ticket = task.get("ticket", task.get("question", ""))
     description = task.get("description", {})
 
     if domain == "medical_qa":
@@ -290,6 +339,12 @@ def _build_prompt_from_task(task: dict, domain: str) -> list[dict]:
             "browse_wiki_entry, retrieve_evidence, analyze_answer_options, think, submit_answer.\n\n"
             "To call a tool, respond with JSON: {\"name\": \"tool_name\", \"arguments\": {...}}\n"
             "When ready, use submit_answer to provide your final answer."
+        )
+    elif domain == "medical_qa_direct":
+        system_msg = (
+            "You are a medical expert. Answer the following medical question by "
+            "selecting the best option. Reply with ONLY the letter (A, B, C, or D) "
+            "wrapped in <answer> tags, e.g. <answer>A</answer>."
         )
     elif domain == "drug_interaction":
         system_msg = (
@@ -552,6 +607,29 @@ class DynamicSamplingCallback(TrainerCallback):
 
 
 # ============================================================
+# Force-save callback (workaround for TRL resume save bug)
+# ============================================================
+
+
+class ForceSaveCallback(TrainerCallback):
+    """Force checkpoint saving every N steps.
+
+    Workaround for a bug where TRL GRPOTrainer doesn't save checkpoints
+    after resuming from a checkpoint. This callback explicitly sets
+    should_save=True on the correct step boundaries.
+    """
+
+    def __init__(self, save_steps: int = 50):
+        self.save_steps = save_steps
+
+    def on_step_end(self, args, state, control, **kwargs):
+        if state.global_step > 0 and state.global_step % self.save_steps == 0:
+            logger.info(f"ForceSaveCallback: triggering save at step {state.global_step}")
+            control.should_save = True
+        return control
+
+
+# ============================================================
 # Main trainer
 # ============================================================
 
@@ -719,6 +797,10 @@ def train(config: BioAgentGRPOConfig):
     # --- Callbacks ---
     callbacks = []
 
+    # Force-save callback (workaround for TRL resume save bug)
+    callbacks.append(ForceSaveCallback(save_steps=config.save_steps))
+    logger.info(f"ForceSaveCallback enabled (save every {config.save_steps} steps)")
+
     # Entropy monitoring (always enabled — critical for detecting collapse)
     callbacks.append(EntropyMonitorCallback())
     logger.info("Entropy monitoring enabled (GTPO-style collapse detection)")
@@ -745,9 +827,16 @@ def train(config: BioAgentGRPOConfig):
         callbacks=callbacks if callbacks else None,
     )
 
-    # --- Train ---
-    logger.info("Starting GRPO training...")
-    trainer.train()
+    # --- Train (auto-resume from latest checkpoint if available) ---
+    import glob as _glob
+    _ckpts = sorted(_glob.glob(os.path.join(config.output_dir, "checkpoint-*")),
+                    key=lambda p: int(p.split("-")[-1]) if p.split("-")[-1].isdigit() else 0)
+    _resume = _ckpts[-1] if _ckpts else None
+    if _resume:
+        logger.info(f"Resuming training from checkpoint: {_resume}")
+    else:
+        logger.info("Starting GRPO training from scratch...")
+    trainer.train(resume_from_checkpoint=_resume)
 
     # --- Save final model ---
     logger.info(f"Saving final model to {config.output_dir}/final")
@@ -1044,7 +1133,7 @@ class MultiTurnGRPOConfig(BioAgentGRPOConfig):
     max_trajectory_length: int = 4096   # Max tokens per trajectory
     # Training from trajectories
     trajectory_epochs: int = 2          # Epochs over collected trajectories
-    grpo_mini_batch_size: int = 4       # Mini-batch for GRPO update
+    grpo_mini_batch_size: int = 2       # Mini-batch for GRPO update (reduced for 9B + 4k tokens)
     # Task sampling — cap tasks per training cycle to prevent overfitting
     max_train_tasks: int = 20           # 0 = use all tasks (original behavior)
     # Logging
@@ -1103,21 +1192,50 @@ def train_multiturn(config: BioAgentGRPOConfig):
     from transformers import AutoConfig
     _model_config = AutoConfig.from_pretrained(mt_config.model_name_or_path, trust_remote_code=True)
     _model_type = getattr(_model_config, "model_type", "")
-    _is_qwen_vl = _model_type in ("qwen2_5_vl", "qwen2_vl") or "qwen2" in _model_type.lower() and "vl" in _model_type.lower()
 
+    _is_qwen_vl = (
+        _model_type in ("qwen2_5_vl", "qwen2_vl", "qwen3_5")
+        or ("qwen2" in _model_type.lower() and "vl" in _model_type.lower())
+    )
+
+    # Determine correct model class and attention implementation
+    _is_qwen3_5 = _model_type == "qwen3_5"
+    # Qwen3.5 requires eager attention (sdpa causes hangs)
+    _attn_impl = "eager" if _is_qwen3_5 else "sdpa"
+
+    # Load processor for VL models (needed for image inputs during rollout + training)
+    _processor = None
     if _is_qwen_vl:
+        from transformers import AutoProcessor
+        _processor = AutoProcessor.from_pretrained(
+            mt_config.model_name_or_path, trust_remote_code=True,
+        )
+        logger.info(f"Loaded VL processor for {_model_type}")
+
+    if _is_qwen3_5:
+        from transformers import Qwen3_5ForConditionalGeneration
+        logger.info(f"Loading VL model ({_model_type}) with Qwen3_5ForConditionalGeneration (attn={_attn_impl})")
+        model = Qwen3_5ForConditionalGeneration.from_pretrained(
+            mt_config.model_name_or_path,
+            torch_dtype=model_dtype,
+            trust_remote_code=True,
+            attn_implementation=_attn_impl,
+        )
+    elif _is_qwen_vl:
         from transformers import Qwen2_5_VLForConditionalGeneration
         logger.info(f"Loading VL model ({_model_type}) with Qwen2_5_VLForConditionalGeneration")
         model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             mt_config.model_name_or_path,
             torch_dtype=model_dtype,
             trust_remote_code=True,
+            attn_implementation=_attn_impl,
         )
     else:
         model = AutoModelForCausalLM.from_pretrained(
             mt_config.model_name_or_path,
             torch_dtype=model_dtype,
             trust_remote_code=True,
+            attn_implementation="sdpa",
         )
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
@@ -1137,6 +1255,36 @@ def train_multiturn(config: BioAgentGRPOConfig):
         model = get_peft_model(model, peft_config)
         logger.info(f"LoRA applied: r={mt_config.peft_r}, alpha={mt_config.peft_lora_alpha}")
         model.print_trainable_parameters()
+
+    # --- OPD: Load teacher model ---
+    teacher_model = None
+    if mt_config.use_opd and mt_config.opd_teacher_path:
+        logger.info(f"[OPD] Loading teacher model from: {mt_config.opd_teacher_path}")
+        logger.info(f"[OPD] Mode: {mt_config.opd_mode}, alpha: {mt_config.opd_alpha}, lambda: {mt_config.opd_lambda}")
+        if _is_qwen3_5:
+            teacher_model = Qwen3_5ForConditionalGeneration.from_pretrained(
+                mt_config.opd_teacher_path,
+                torch_dtype=model_dtype,
+                trust_remote_code=True,
+                attn_implementation=_attn_impl,
+            )
+        elif _is_qwen_vl:
+            teacher_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                mt_config.opd_teacher_path,
+                torch_dtype=model_dtype,
+                trust_remote_code=True,
+            )
+        else:
+            teacher_model = AutoModelForCausalLM.from_pretrained(
+                mt_config.opd_teacher_path,
+                torch_dtype=model_dtype,
+                trust_remote_code=True,
+            )
+        teacher_model = teacher_model.to(device)
+        teacher_model.eval()
+        for p in teacher_model.parameters():
+            p.requires_grad = False
+        logger.info(f"[OPD] Teacher model loaded ({sum(p.numel() for p in teacher_model.parameters())/1e9:.1f}B params, frozen)")
 
     # --- Load environment ---
     from bioagents.gym.agent_env import register_bioagent_gym
@@ -1239,10 +1387,305 @@ def train_multiturn(config: BioAgentGRPOConfig):
     best_mean_reward = -1.0
     global_step = 0
 
+    # --- Pre-load GYM domains in main thread (avoid race condition in workers) ---
+    from bioagents.gym.agent_env import _load_default_domains, register_bioagent_gym
+    _load_default_domains()
+    register_bioagent_gym()
+
+    # --- Rollout backend: vLLM server or HuggingFace model replicas ---
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    _visible_gpus = os.environ.get("CUDA_VISIBLE_DEVICES", "0").split(",")
+    _num_rollout_gpus = len(_visible_gpus)
+    _DOMAIN_ALIASES = {
+        "text_qa": "medical_qa",
+        "multimodal_vqa": "visual_diagnosis",
+    }
+
+    # ── vLLM Rollout Server Setup ──
+    # Uses vLLM for inference (CUDA graphs, PagedAttention, continuous batching)
+    # instead of raw HuggingFace model.generate() on each GPU.
+    _use_vllm_rollout = os.environ.get("BIOAGENT_USE_VLLM", "1") == "1"  # Set BIOAGENT_USE_VLLM=0 for HF fallback
+    _vllm_client = None
+    _vllm_process = None
+    _vllm_port = 8199
+    _lora_base_dir = os.path.join(mt_config.output_dir, "_vllm_lora")
+    _lora_version = [0]
+
+    if _use_vllm_rollout:
+        import subprocess
+        import time as _setup_time
+        try:
+            import openai as _openai_mod
+            import requests as _requests_mod
+        except ImportError:
+            logger.warning("[vLLM] openai/requests not available, falling back to HF replicas")
+            _use_vllm_rollout = False
+
+    if _use_vllm_rollout:
+        logger.info(f"[vLLM] Setting up vLLM rollout server (replaces {_num_rollout_gpus-1} HF replicas)")
+
+        # Save initial LoRA adapter for vLLM
+        os.makedirs(_lora_base_dir, exist_ok=True)
+        _lora_path_v0 = os.path.join(_lora_base_dir, "v0")
+        model.save_pretrained(_lora_path_v0)
+        logger.info(f"[vLLM] Saved initial LoRA adapter → {_lora_path_v0}")
+
+        # Determine how many vLLM instances to launch (1 per GPU, GPU1..N-1)
+        _vllm_num_instances = _num_rollout_gpus - 1  # Use all available GPUs for vLLM
+        _vllm_processes = []
+        _vllm_clients = []
+
+        for _vi in range(_vllm_num_instances):
+            _gpu_id = _vi + 1  # GPU1, GPU2, ...
+            _port = _vllm_port + _vi
+            # Use vLLM-converted model (interleaved qwen3_next format)
+            _vllm_model_path = mt_config.model_name_or_path + "-vllm"
+            if not os.path.exists(_vllm_model_path):
+                _vllm_model_path = mt_config.model_name_or_path + "-text-only"
+            if not os.path.exists(_vllm_model_path):
+                _vllm_model_path = mt_config.model_name_or_path  # fallback
+            _vllm_cmd = [
+                sys.executable, "-m", "vllm.entrypoints.openai.api_server",
+                "--model", _vllm_model_path,
+                "--served-model-name", "current",
+                "--tensor-parallel-size", "1",
+                "--gpu-memory-utilization", "0.85",
+                "--max-model-len", str(max(mt_config.max_prompt_length + mt_config.max_completion_length, 32768)),
+                "--port", str(_port),
+                "--trust-remote-code",
+                "--dtype", "bfloat16",
+                "--disable-log-requests",
+                "--enable-prefix-caching",
+                "--enforce-eager",
+                "--enable-auto-tool-choice",
+                "--tool-call-parser", "hermes",
+                "--enable-lora",
+                "--lora-modules", f"active={_lora_path_v0}",
+                "--max-lora-rank", "64",
+            ]
+            _vllm_env = os.environ.copy()
+            _vllm_env["CUDA_VISIBLE_DEVICES"] = str(_gpu_id)
+            _vllm_env["VLLM_ATTENTION_BACKEND"] = "FLASHINFER"
+            _vllm_env["VLLM_ALLOW_RUNTIME_LORA_UPDATING"] = "1"
+            _proc = subprocess.Popen(
+                _vllm_cmd, env=_vllm_env,
+                stdout=open(os.path.join(mt_config.output_dir, f"vllm_gpu{_gpu_id}.log"), "w"),
+                stderr=subprocess.STDOUT,
+            )
+            _vllm_processes.append(_proc)
+            logger.info(f"[vLLM] Launching instance {_vi} on GPU{_gpu_id}, port {_port} (PID={_proc.pid})")
+
+        # Wait for all servers to be ready
+        for _vi in range(_vllm_num_instances):
+            _port = _vllm_port + _vi
+            _client = _openai_mod.OpenAI(
+                base_url=f"http://localhost:{_port}/v1", api_key="dummy",
+                timeout=300.0,
+            )
+            _ready = False
+            for _attempt in range(300):  # up to 5 minutes per server
+                try:
+                    _client.models.list()
+                    _ready = True
+                    break
+                except Exception:
+                    _setup_time.sleep(1)
+
+            if not _ready:
+                logger.error(f"[vLLM] Instance {_vi} (port {_port}) failed to start!")
+                # Kill all and fallback
+                for p in _vllm_processes:
+                    p.kill()
+                _use_vllm_rollout = False
+                break
+
+            # LoRA pre-loaded via --lora-modules flag at server startup
+            logger.info(f"[vLLM] Instance {_vi} ready, LoRA pre-loaded via --lora-modules")
+
+            _vllm_clients.append(_client)
+
+        if _use_vllm_rollout:
+            logger.info(f"[vLLM] {len(_vllm_clients)} inference servers ready (continuous batching + CUDA graphs)")
+
+    def _reload_vllm_lora(lora_path: str, lora_version: int) -> bool:
+        """Hot-reload LoRA adapter on all vLLM inference servers.
+
+        Uses POST /v1/load_lora_adapter (vLLM 0.15.1+) to dynamically
+        update the LoRA weights without restarting the servers. Requires
+        VLLM_ALLOW_RUNTIME_LORA_UPDATING=1 (set in server env).
+
+        Args:
+            lora_path: Absolute path to the saved LoRA adapter directory.
+            lora_version: Version number for logging.
+
+        Returns:
+            True if all servers reloaded successfully, False otherwise.
+        """
+        import requests as _req_mod
+
+        _reload_success = True
+        for _ri, _rc in enumerate(_vllm_clients):
+            _port = _vllm_port + _ri
+            _url = f"http://localhost:{_port}/v1/load_lora_adapter"
+            _payload = {
+                "lora_name": "active",
+                "lora_path": lora_path,
+                "load_inplace": True,
+            }
+            try:
+                _resp = _req_mod.post(_url, json=_payload, timeout=60)
+                if _resp.status_code == 200:
+                    logger.info(
+                        f"[vLLM] Instance {_ri} (port {_port}): "
+                        f"LoRA v{lora_version} loaded successfully"
+                    )
+                else:
+                    logger.warning(
+                        f"[vLLM] Instance {_ri} (port {_port}): "
+                        f"LoRA reload returned {_resp.status_code}: {_resp.text}"
+                    )
+                    _reload_success = False
+            except Exception as _reload_err:
+                logger.warning(
+                    f"[vLLM] Instance {_ri} (port {_port}): "
+                    f"LoRA reload failed: {_reload_err}"
+                )
+                _reload_success = False
+
+        if _reload_success:
+            logger.info(
+                f"[vLLM] LoRA v{lora_version} hot-reloaded on all "
+                f"{len(_vllm_clients)} servers"
+            )
+        else:
+            logger.warning(
+                f"[vLLM] LoRA v{lora_version} reload had failures on some "
+                f"servers — rollouts may use stale weights"
+            )
+        return _reload_success
+
+    # Fallback: HuggingFace model replicas (original path)
+    _rollout_models = [model]
+    _rollout_devices = [device]
+    if not _use_vllm_rollout and _num_rollout_gpus > 1:
+        logger.info(f"[Multi-GPU] Setting up {_num_rollout_gpus} HF replicas for parallel rollouts")
+        for gpu_i in range(1, _num_rollout_gpus):
+            _dev = torch.device(f"cuda:{gpu_i}")
+            if _is_qwen3_5:
+                _replica = Qwen3_5ForConditionalGeneration.from_pretrained(
+                    mt_config.model_name_or_path, torch_dtype=model_dtype,
+                    trust_remote_code=True, attn_implementation=_attn_impl,
+                ).to(_dev)
+            elif _is_qwen_vl:
+                _replica = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                    mt_config.model_name_or_path, torch_dtype=model_dtype,
+                    trust_remote_code=True, attn_implementation="sdpa",
+                ).to(_dev)
+            else:
+                _replica = AutoModelForCausalLM.from_pretrained(
+                    mt_config.model_name_or_path, torch_dtype=model_dtype,
+                    trust_remote_code=True, attn_implementation="sdpa",
+                ).to(_dev)
+            _replica.load_state_dict(model.state_dict(), strict=False)
+            _replica.eval()
+            _rollout_models.append(_replica)
+            logger.info(f"[Multi-GPU] Replica {gpu_i} loaded on cuda:{gpu_i}")
+        _rollout_devices = [torch.device(f"cuda:{i}") for i in range(_num_rollout_gpus)]
+
+    def _process_single_task(task, gpu_idx):
+        """Process all rollouts for a single task."""
+        task_domain = task.get("_source_domain", mt_config.domain)
+        task_domain = _DOMAIN_ALIASES.get(task_domain, task_domain)
+        task_id = task.get("id", "?")
+
+        rollouts = []
+        for g in range(mt_config.num_rollouts_per_task):
+            logger.info(f"[GPU{gpu_idx}] Task {task_id} rollout {g+1}/{mt_config.num_rollouts_per_task} starting (domain={task_domain})")
+            if _use_vllm_rollout:
+                # Route to one of the vLLM instances (round-robin by gpu_idx)
+                _vllm_idx = gpu_idx % len(_vllm_clients)
+                trajectory = _run_single_rollout(
+                    model=None,
+                    tokenizer=tokenizer,
+                    device=None,
+                    domain=task_domain,
+                    task=task,
+                    max_turns=mt_config.max_turns,
+                    temperature=mt_config.rollout_temperature,
+                    max_completion_length=mt_config.max_completion_length,
+                    max_prompt_length=mt_config.max_prompt_length,
+                    rollout_timeout=6000.0,
+                    vllm_client=_vllm_clients[_vllm_idx],
+                    processor=_processor,
+                )
+            else:
+                _model = _rollout_models[gpu_idx]
+                _dev = _rollout_devices[gpu_idx]
+                trajectory = _run_single_rollout(
+                    model=_model,
+                    tokenizer=tokenizer,
+                    device=_dev,
+                    domain=task_domain,
+                    task=task,
+                    max_turns=mt_config.max_turns,
+                    temperature=mt_config.rollout_temperature,
+                    max_completion_length=mt_config.max_completion_length,
+                    max_prompt_length=mt_config.max_prompt_length,
+                    rollout_timeout=6000.0,
+                    processor=_processor,
+                )
+            rollouts.append(trajectory)
+            logger.info(f"[GPU{gpu_idx}] Task {task_id} rollout {g+1}/{mt_config.num_rollouts_per_task} done — resp_len={len(trajectory.get('final_response',''))}")
+        return rollouts
+
+    # ── Triton warm-up: compile kernels single-threaded to avoid cache races ──
+    if _use_vllm_rollout:
+        # vLLM handles its own kernel compilation; only warm up training model on GPU0
+        logger.info("[Triton] vLLM mode: warming up training model only (GPU0)...")
+        _wu_texts = ["Hello", "Hello world " * 50, "Hello world " * 400]
+        for _wu_text in _wu_texts:
+            _wu_ids = tokenizer(_wu_text, return_tensors="pt", truncation=True, max_length=4096).input_ids.to(device)
+            _wu_out = model(_wu_ids, labels=_wu_ids)
+            _wu_out.loss.backward()
+            optimizer.zero_grad()
+        logger.info("[Triton] Training forward+backward warm-up done")
+    else:
+        # HF replica mode: warm up all GPUs
+        logger.info("[Triton] Warming up kernels on each GPU (single-threaded)...")
+        _wu_texts = ["Hello", "Hello world " * 50, "Hello world " * 400]
+        for _wu_i, (_wu_model, _wu_dev) in enumerate(zip(_rollout_models, _rollout_devices)):
+            with torch.no_grad():
+                for _wu_text in _wu_texts:
+                    _wu_ids = tokenizer(_wu_text, return_tensors="pt", truncation=True, max_length=4096).input_ids.to(_wu_dev)
+                    _wu_model(_wu_ids)
+                _wu_short = tokenizer("Hello", return_tensors="pt").input_ids.to(_wu_dev)
+                _wu_model.generate(_wu_short, max_new_tokens=4, do_sample=True, temperature=0.9)
+                _wu_model.generate(_wu_short, max_new_tokens=4, do_sample=False)
+            logger.info(f"[Triton] GPU{_wu_i} warm-up done")
+        for _wu_text in _wu_texts:
+            _wu_ids = tokenizer(_wu_text, return_tensors="pt", truncation=True, max_length=4096).input_ids.to(device)
+            _wu_out = model(_wu_ids, labels=_wu_ids)
+            _wu_out.loss.backward()
+            optimizer.zero_grad()
+        logger.info("[Triton] Training forward+backward warm-up done")
+
     for epoch in range(mt_config.num_train_epochs):
         logger.info(f"\n{'='*50}")
         logger.info(f"Epoch {epoch+1}/{mt_config.num_train_epochs}")
         logger.info(f"{'='*50}")
+
+        # Sync LoRA weights to rollout backend at start of each epoch
+        if _use_vllm_rollout:
+            _lora_version[0] += 1
+            _lora_path_new = os.path.join(_lora_base_dir, f"v{_lora_version[0]}")
+            model.save_pretrained(_lora_path_new)
+            _reload_vllm_lora(_lora_path_new, _lora_version[0])
+        elif _num_rollout_gpus > 1:
+            _train_state = model.state_dict()
+            for gpu_i in range(1, _num_rollout_gpus):
+                _rollout_models[gpu_i].load_state_dict(_train_state, strict=False)
+            logger.info(f"[Multi-GPU] Synced weights to {_num_rollout_gpus} replicas")
 
         epoch_rewards = []
         epoch_trajectories = []
@@ -1250,56 +1693,104 @@ def train_multiturn(config: BioAgentGRPOConfig):
         # Shuffle tasks each epoch
         random.shuffle(all_tasks)
 
-        for task_idx, task in enumerate(all_tasks):
-            task_id = task["id"]
-            ticket = task.get("ticket", "")
-            correct_answer = task.get("correct_answer", "")
-            eval_criteria = task.get("evaluation_criteria", {})
-            expected_actions = eval_criteria.get("actions", [])
+        # Work-stealing GPU scheduler: each GPU pulls tasks from a shared
+        # queue instead of waiting for synchronized batches. This eliminates
+        # GPU idle time when tasks have different durations.
+        import queue as _queue_mod
+        import threading as _threading_mod
 
-            # --- Collect G rollouts for this task ---
-            task_rollouts = []
+        _task_queue = _queue_mod.Queue()
+        for _ti, _t in enumerate(all_tasks):
+            _task_queue.put((_ti, _t))
 
-            for g in range(mt_config.num_rollouts_per_task):
-                trajectory = _run_single_rollout(
-                    model=model,
-                    tokenizer=tokenizer,
-                    device=device,
-                    domain=mt_config.domain,
-                    task=task,
-                    max_turns=mt_config.max_turns,
-                    temperature=mt_config.rollout_temperature,
-                )
-                task_rollouts.append(trajectory)
+        _completed_tasks = []  # list of (task_idx, task, rollouts)
+        _completed_lock = _threading_mod.Lock()
+        _gradient_event = _threading_mod.Event()
+        _tasks_since_grad = [0]  # mutable counter
+        _grad_every_n = _num_rollout_gpus  # gradient step every 8 tasks
+        def _gpu_worker(gpu_idx):
+            """Each GPU continuously pulls tasks from the shared queue."""
+            while True:
+                try:
+                    task_idx, task = _task_queue.get_nowait()
+                except _queue_mod.Empty:
+                    break
+                rollouts = _process_single_task(task, gpu_idx)
+                with _completed_lock:
+                    _completed_tasks.append((task_idx, task, rollouts))
+                    _tasks_since_grad[0] += 1
+                    if _tasks_since_grad[0] >= _grad_every_n:
+                        _gradient_event.set()
+                _task_queue.task_done()
 
-            # --- Compute rewards for each rollout ---
-            task_rewards = []
-            for traj in task_rollouts:
-                if _use_strategy and _reward_strategy is not None:
-                    # Use adaptive reward strategy (MRPO, SARL, etc.)
-                    completions = [[{"content": traj["final_response"], "role": "assistant"}]]
-                    strategy_rewards = _reward_strategy.compute_reward(
-                        completions, solution=[correct_answer], task=task,
-                    )
-                    strategy_breakdowns = _reward_strategy.get_reward_breakdown(
-                        completions, solution=[correct_answer], task=task,
-                    )
-                    traj["reward"] = strategy_rewards[0]
-                    traj["reward_detail"] = strategy_breakdowns[0] if strategy_breakdowns else {"total": strategy_rewards[0]}
-                    task_rewards.append(strategy_rewards[0])
-                else:
-                    # Standard composite reward
-                    reward_result = compute_composite_reward(
-                        response=traj["final_response"],
-                        correct_answer=correct_answer,
-                        tool_call_log=traj["tool_calls"],
-                        expected_actions=expected_actions,
-                        is_final=True,
-                        weights=_reward_weights,
-                    )
-                    traj["reward"] = reward_result["total"]
-                    traj["reward_detail"] = reward_result
-                    task_rewards.append(reward_result["total"])
+        # Launch persistent worker threads
+        # With vLLM: can run more workers since vLLM handles batching internally
+        _num_workers = _num_rollout_gpus * 2 if _use_vllm_rollout else _num_rollout_gpus
+        _gpu_threads = []
+        for _gi in range(_num_workers):
+            _gt = _threading_mod.Thread(target=_gpu_worker, args=(_gi,), daemon=True)
+            _gt.start()
+            _gpu_threads.append(_gt)
+        if _use_vllm_rollout:
+            logger.info(f"[vLLM] Launched {_num_workers} worker threads → {len(_vllm_clients)} vLLM servers")
+
+        # Main thread: process completed tasks and fire gradient steps
+        _processed_count = 0
+        while _processed_count < len(all_tasks):
+            # Wait for enough tasks to complete (or all threads done)
+            _gradient_event.wait(timeout=30.0)
+            _gradient_event.clear()
+
+            # Grab completed tasks
+            with _completed_lock:
+                _new_completed = _completed_tasks[_processed_count:]
+                _tasks_since_grad[0] = 0
+
+            if not _new_completed:
+                # Check if all threads are still alive
+                if all(not t.is_alive() for t in _gpu_threads):
+                    break
+                continue
+
+            # Process each completed task: compute rewards & advantages
+            batch_results = {}
+            for task_idx, task, task_rollouts in _new_completed:
+                batch_results[task_idx] = (task, task_rollouts)
+
+            for task_idx in sorted(batch_results.keys()):
+                task, task_rollouts = batch_results[task_idx]
+                correct_answer = task.get("correct_answer", "")
+                eval_criteria = task.get("evaluation_criteria", {})
+                expected_actions = eval_criteria.get("actions", [])
+
+                # --- Compute rewards for each rollout ---
+                task_rewards = []
+                for traj in task_rollouts:
+                    if _use_strategy and _reward_strategy is not None:
+                        # Use adaptive reward strategy (MRPO, SARL, etc.)
+                        completions = [[{"content": traj["final_response"], "role": "assistant"}]]
+                        strategy_rewards = _reward_strategy.compute_reward(
+                            completions, solution=[correct_answer], task=task,
+                        )
+                        strategy_breakdowns = _reward_strategy.get_reward_breakdown(
+                            completions, solution=[correct_answer], task=task,
+                        )
+                        traj["reward"] = strategy_rewards[0]
+                        traj["reward_detail"] = strategy_breakdowns[0] if strategy_breakdowns else {"total": strategy_rewards[0]}
+                        task_rewards.append(strategy_rewards[0])
+                    else:
+                        # Standard composite reward
+                        reward_result = compute_composite_reward(
+                            response=traj["final_response"],
+                            correct_answer=correct_answer,
+                            tool_call_log=traj["tool_calls"],
+                            expected_actions=expected_actions,
+                            is_final=True,
+                            weights=_reward_weights,
+                        )
+                        traj["reward"] = reward_result["total"]
+                        traj["reward_detail"] = reward_result
+                        task_rewards.append(reward_result["total"])
 
             # --- Compute GRPO group-relative advantages ---
             mean_reward = sum(task_rewards) / max(len(task_rewards), 1)
@@ -1312,9 +1803,10 @@ def train_multiturn(config: BioAgentGRPOConfig):
 
             epoch_rewards.extend(task_rewards)
 
-            if (task_idx + 1) % 5 == 0:
+            if (task_idx + 1) % 1 == 0 or task_idx == len(all_tasks) - 1:
+                _gpu_tag = f" [batch={_num_rollout_gpus}x]" if _num_rollout_gpus > 1 else ""
                 logger.info(
-                    f"  Task {task_idx+1}/{len(all_tasks)}: "
+                    f"  Task {task_idx+1}/{len(all_tasks)}{_gpu_tag}: "
                     f"mean_R={mean_reward:.3f}, "
                     f"best_R={max(task_rewards):.3f}, "
                     f"worst_R={min(task_rewards):.3f}"
@@ -1330,90 +1822,167 @@ def train_multiturn(config: BioAgentGRPOConfig):
                 "task/num_turns_avg": sum(t.get("num_turns", 0) for t in task_rollouts) / max(len(task_rollouts), 1),
             }, step=global_step)
 
-        # --- Mix in eval trajectories (WebRL-style replay, arXiv:2411.02337) ---
-        # High-reward trajectories from the previous evaluation phase are replayed
-        # into the training batch to bootstrap learning from successful strategies.
-        if mt_config.eval_trajectories:
-            valid_eval = [
-                t for t in mt_config.eval_trajectories
-                if t.get("reward", t.get("final_reward", 0.0)) >= mt_config.eval_trajectory_min_reward
-            ]
-            mix_n = int(len(epoch_trajectories) * mt_config.eval_trajectory_mix_ratio)
-            if valid_eval and mix_n > 0:
-                sampled = random.sample(valid_eval, min(mix_n, len(valid_eval)))
-                # Set replay advantages to match the positive advantage
-                # distribution of the current GRPO batch. Fixed advantage=1.0
-                # creates a scale mismatch with normalized GRPO advantages.
-                rollout_advantages = [
-                    t.get("advantage", 0.0) for t in epoch_trajectories
-                    if t.get("advantage", 0.0) > 0
-                ]
-                replay_advantage = (
-                    sum(rollout_advantages) / len(rollout_advantages)
-                    if rollout_advantages else 1.0
+            # ── Async GRPO: gradient update after each batch of completed tasks ──
+            # Work-stealing scheduler fires gradient step every _grad_every_n tasks.
+            # GPU threads continue rolling out while gradient step runs on GPU0.
+            _n_new = len(_new_completed)
+            batch_trajectories = epoch_trajectories[-_n_new * mt_config.num_rollouts_per_task:]
+            batch_positive = [t for t in batch_trajectories if t.get("advantage", 0) > 0]
+            _grad_batch_num = (_processed_count + _n_new) // _grad_every_n
+
+            if batch_positive:
+                # Compute reference log-probs for this batch
+                _batch_ref_log_probs = None
+                if mt_config.peft_enabled and hasattr(model, "disable_adapter_layers"):
+                    model.disable_adapter_layers()
+                    _batch_ref_log_probs = _compute_ref_log_probs(
+                        ref_model=model,
+                        tokenizer=tokenizer,
+                        trajectories=batch_trajectories,
+                        device=device,
+                        max_length=mt_config.max_trajectory_length,
+                        use_dr_grpo=mt_config.use_dr_grpo,
+                        processor=_processor,
+                    )
+                    model.enable_adapter_layers()
+
+                # ── OPD: compute teacher & ref per-token log-probs ──
+                _teacher_tok_lps = None
+                _ref_tok_lps = None
+                if (
+                    teacher_model is not None
+                    and mt_config.use_opd
+                    and global_step >= mt_config.opd_warmup_steps
+                ):
+                    logger.info(f"  [OPD] Computing teacher per-token log-probs for {len(batch_trajectories)} trajs")
+                    _teacher_tok_lps = _compute_per_token_log_probs_batch(
+                        model=teacher_model,
+                        tokenizer=tokenizer,
+                        trajectories=batch_trajectories,
+                        device=device,
+                        max_length=mt_config.max_trajectory_length,
+                        processor=_processor,
+                    )
+                    # Ref per-token log-probs: use base model (LoRA disabled)
+                    if mt_config.peft_enabled and hasattr(model, "disable_adapter_layers"):
+                        model.disable_adapter_layers()
+                        _ref_tok_lps = _compute_per_token_log_probs_batch(
+                            model=model,
+                            tokenizer=tokenizer,
+                            trajectories=batch_trajectories,
+                            device=device,
+                            max_length=mt_config.max_trajectory_length,
+                            processor=_processor,
+                        )
+                        model.enable_adapter_layers()
+                    logger.info(f"  [OPD] Teacher: {len(_teacher_tok_lps)} trajs, Ref: {len(_ref_tok_lps) if _ref_tok_lps else 0} trajs")
+
+                # GRPO gradient update on this batch
+                batch_loss = _grpo_policy_update(
+                    model=model,
+                    tokenizer=tokenizer,
+                    optimizer=optimizer,
+                    trajectories=batch_trajectories,
+                    device=device,
+                    beta=mt_config.beta,
+                    max_length=mt_config.max_trajectory_length,
+                    mini_batch_size=mt_config.grpo_mini_batch_size,
+                    num_epochs=mt_config.trajectory_epochs,
+                    use_dr_grpo=mt_config.use_dr_grpo,
+                    ref_log_probs=_batch_ref_log_probs,
+                    lr_scheduler=lr_scheduler,
+                    teacher_token_log_probs=_teacher_tok_lps,
+                    ref_token_log_probs=_ref_tok_lps,
+                    opd_alpha=mt_config.opd_alpha,
+                    opd_lambda=mt_config.opd_lambda,
+                    opd_max_turn=mt_config.opd_max_turn,
+                    opd_bidirectional=mt_config.opd_bidirectional,
+                    processor=_processor,
                 )
-                for t in sampled:
-                    t["advantage"] = replay_advantage
-                    if "reward" not in t and "final_reward" in t:
-                        t["reward"] = t["final_reward"]
-                epoch_trajectories.extend(sampled)
                 logger.info(
-                    f"  [Replay] Mixed {len(sampled)} eval trajectories "
-                    f"(pool={len(valid_eval)}, ratio={mt_config.eval_trajectory_mix_ratio:.0%}, "
-                    f"replay_adv={replay_advantage:.3f})"
+                    f"  [Async] Batch {_grad_batch_num}: "
+                    f"loss={batch_loss:.4f}, trajs={len(batch_trajectories)}, "
+                    f"positive={len(batch_positive)}, mean_R={mean_reward:.3f}"
                 )
-                wb.log_step({"replay/eval_traj_count": len(sampled),
-                             "replay/eval_pool_size": len(valid_eval),
-                             "replay/advantage": replay_advantage}, step=global_step)
+                wb.log_step({
+                    "batch/loss": batch_loss,
+                    "batch/num_trajectories": len(batch_trajectories),
+                    "batch/positive_trajs": len(batch_positive),
+                }, step=global_step)
 
-        # --- Filter trajectories ---
-        positive_trajs = [t for t in epoch_trajectories if t.get("advantage", 0) > 0]
-        logger.info(
-            f"Epoch {epoch+1}: {len(epoch_trajectories)} total trajectories, "
-            f"{len(positive_trajs)} positive advantage"
-        )
+                # OPD-specific logging
+                if _teacher_tok_lps is not None:
+                    _opd_trajs = len(_teacher_tok_lps)
+                    _neg_trajs = sum(1 for t in batch_trajectories if t.get("advantage", 0) < 0)
+                    wb.log_step({
+                        "opd/active_trajs": _opd_trajs,
+                        "opd/negative_trajs_in_batch": _neg_trajs,
+                        "opd/bidirectional": 1 if mt_config.opd_bidirectional else 0,
+                        "opd/max_turn": mt_config.opd_max_turn,
+                        "opd/alpha": mt_config.opd_alpha,
+                        "opd/lambda": mt_config.opd_lambda,
+                    }, step=global_step)
 
-        # --- Compute reference log-probs (KL anchor) ---
-        # Use the base model (LoRA adapters disabled) as the reference.
-        # This prevents catastrophic forgetting by penalizing policy drift.
-        ref_log_probs = None
-        if mt_config.peft_enabled and hasattr(model, "disable_adapter_layers"):
-            logger.info("  Computing reference log-probs (LoRA disabled)...")
-            model.disable_adapter_layers()
-            ref_log_probs = _compute_ref_log_probs(
-                ref_model=model,
-                tokenizer=tokenizer,
-                trajectories=epoch_trajectories,
-                device=device,
-                max_length=mt_config.max_trajectory_length,
-                use_dr_grpo=mt_config.use_dr_grpo,
-            )
-            model.enable_adapter_layers()
-            logger.info(f"  Reference log-probs computed for {len(ref_log_probs)} trajectories")
+                # Periodic checkpoint saving (every 25 gradient batches)
+                _save_every_n = getattr(mt_config, 'save_steps', 25)
+                if _grad_batch_num > 0 and _grad_batch_num % _save_every_n == 0 and _grad_batch_num != getattr(train_multiturn, '_last_saved_batch', -1):
+                    _ckpt_path = os.path.join(mt_config.output_dir, f"checkpoint-{_grad_batch_num}")
+                    os.makedirs(_ckpt_path, exist_ok=True)
+                    model.save_pretrained(_ckpt_path)
+                    tokenizer.save_pretrained(_ckpt_path)
+                    # Save optimizer state for resume
+                    torch.save({
+                        "optimizer": optimizer.state_dict(),
+                        "grad_batch_num": _grad_batch_num,
+                        "global_step": global_step,
+                        "epoch": epoch,
+                        "processed_count": _processed_count,
+                    }, os.path.join(_ckpt_path, "training_state.pt"))
+                    train_multiturn._last_saved_batch = _grad_batch_num
+                    logger.info(f"  [Checkpoint] Saved checkpoint-{_grad_batch_num}")
+                    # Cleanup old checkpoints (keep latest save_total_limit)
+                    _save_limit = getattr(mt_config, 'save_total_limit', 15)
+                    import glob as _glob_mod
+                    _all_ckpts = sorted(_glob_mod.glob(os.path.join(mt_config.output_dir, "checkpoint-*")),
+                                        key=lambda p: int(p.split("-")[-1]))
+                    if len(_all_ckpts) > _save_limit:
+                        for _old in _all_ckpts[:-_save_limit]:
+                            import shutil
+                            shutil.rmtree(_old, ignore_errors=True)
 
-        # --- GRPO Policy Update ---
-        if positive_trajs:
-            loss_total = _grpo_policy_update(
-                model=model,
-                tokenizer=tokenizer,
-                optimizer=optimizer,
-                trajectories=epoch_trajectories,
-                device=device,
-                beta=mt_config.beta,
-                max_length=mt_config.max_trajectory_length,
-                mini_batch_size=mt_config.grpo_mini_batch_size,
-                num_epochs=mt_config.trajectory_epochs,
-                use_dr_grpo=mt_config.use_dr_grpo,
-                ref_log_probs=ref_log_probs,
-                lr_scheduler=lr_scheduler,
-            )
-            logger.info(f"  GRPO loss: {loss_total:.4f}")
-        else:
-            logger.warning("  No positive-advantage trajectories, skipping update")
+                # KL divergence early warning
+                if abs(batch_kl_avg := batch_loss) > 2.0:
+                    logger.warning(f"  [KL Warning] |avg_loss|={abs(batch_loss):.4f} > 2.0 — policy may be diverging")
+
+                # Sync updated weights to rollout backend
+                if _use_vllm_rollout:
+                    _lora_version[0] += 1
+                    _lora_path_new = os.path.join(_lora_base_dir, f"v{_lora_version[0]}")
+                    model.save_pretrained(_lora_path_new)
+                    _reload_vllm_lora(_lora_path_new, _lora_version[0])
+                    logger.info(f"  [Async] LoRA v{_lora_version[0]} synced to vLLM servers")
+                elif _num_rollout_gpus > 1:
+                    _train_state = model.state_dict()
+                    for gpu_i in range(1, _num_rollout_gpus):
+                        _rollout_models[gpu_i].load_state_dict(_train_state, strict=False)
+                    logger.info(f"  [Async] Synced weights to {_num_rollout_gpus} replicas")
+            else:
+                logger.info(f"  [Async] Batch {_grad_batch_num}: no positive-advantage trajs, skipping update")
+
+            _processed_count += len(_new_completed)
+
+        # Wait for all GPU threads to finish
+        for _gt in _gpu_threads:
+            _gt.join(timeout=60)
 
         # --- Epoch statistics ---
         mean_epoch_reward = sum(epoch_rewards) / max(len(epoch_rewards), 1)
-        logger.info(f"Epoch {epoch+1} mean reward: {mean_epoch_reward:.4f}")
+        positive_trajs = [t for t in epoch_trajectories if t.get("advantage", 0) > 0]
+        logger.info(
+            f"Epoch {epoch+1}: {len(epoch_trajectories)} total trajectories, "
+            f"{len(positive_trajs)} positive advantage, "
+            f"mean reward: {mean_epoch_reward:.4f}"
+        )
 
         # W&B epoch logging
         wb.log_epoch(
@@ -1421,7 +1990,7 @@ def train_multiturn(config: BioAgentGRPOConfig):
             mean_reward=mean_epoch_reward,
             num_trajectories=len(epoch_trajectories),
             positive_trajectories=len(positive_trajs),
-            loss=loss_total if positive_trajs else 0.0,
+            loss=0.0,
         )
 
         if mean_epoch_reward > best_mean_reward:
@@ -1439,6 +2008,17 @@ def train_multiturn(config: BioAgentGRPOConfig):
             _save_trajectories(epoch_trajectories, traj_path)
 
         all_trajectories.extend(epoch_trajectories)
+
+    # --- Cleanup vLLM servers ---
+    if _use_vllm_rollout and _vllm_processes:
+        logger.info(f"[vLLM] Shutting down {len(_vllm_processes)} inference servers...")
+        for _proc in _vllm_processes:
+            try:
+                _proc.terminate()
+                _proc.wait(timeout=10)
+            except Exception:
+                _proc.kill()
+        logger.info("[vLLM] All servers stopped")
 
     # --- Save final model ---
     final_path = os.path.join(mt_config.output_dir, "final")
@@ -1483,6 +2063,11 @@ def _run_single_rollout(
     task: dict,
     max_turns: int = 10,
     temperature: float = 0.8,
+    max_completion_length: int = 1024,
+    max_prompt_length: int = 4096,
+    rollout_timeout: float = 600.0,
+    vllm_client=None,
+    processor=None,
 ) -> dict:
     """Run a single multi-turn rollout through the GYM environment.
 
@@ -1491,20 +2076,25 @@ def _run_single_rollout(
     - tool_calls: list of tool call records
     - final_response: agent's final text response
     - num_turns: number of turns taken
+    - image_path: path to image file if this is a VQA task (for training)
     """
     import gymnasium as gym
+    import time as _time_mod
 
     task_id = task["id"]
+    _rollout_t0 = _time_mod.time()
 
     # Create environment (BUG-009: use constant, not string literal)
     from bioagents.utils.model_loader import GYM_ENV_ID
     env = gym.make(
         GYM_ENV_ID,
         domain=domain,
-        task_id=task_id,
     )
 
-    obs, info = env.reset()
+    # Pass task data directly to avoid task_id lookup failures
+    # in multi-domain combined datasets where task IDs may not
+    # exist in the target domain's own task registry
+    obs, info = env.reset(options={"task_data": task})
     # obs is a string (the initial observation text), info is a dict with metadata
     system_prompt = "You are a medical AI assistant. Use available tools to complete the task."
     if isinstance(obs, dict):
@@ -1514,41 +2104,162 @@ def _run_single_rollout(
     else:
         # Current format: obs is a string containing the full initial observation
         observation_text = str(obs)
+
+    # Build multimodal user content if image is available and processor is loaded
+    _image_path = info.get("image_path") or task.get("_image_path")
+    _has_vision = processor is not None and _image_path and os.path.isfile(_image_path)
+
+    if _has_vision:
+        # Multimodal message: image + text (matches eval format)
+        user_content = [
+            {"type": "image", "image": f"file://{_image_path}"},
+            {"type": "text", "text": observation_text},
+        ]
+    else:
+        user_content = observation_text
+
     messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "user", "content": observation_text},
+        {"role": "user", "content": user_content},
     ]
+
+    # --- Extract tool definitions from GYM env for Qwen3.5 tool calling ---
+    _env_tools_raw = info.get("tools", [])
+    _tool_defs = []
+    for td in _env_tools_raw:
+        if hasattr(td, "model_dump"):
+            _tool_defs.append(td.model_dump())
+        elif isinstance(td, dict):
+            _tool_defs.append(td)
+    # Ensure OpenAI-compatible format: {"type": "function", "function": {...}}
+    _openai_tools = []
+    for td in _tool_defs:
+        if "type" in td and "function" in td:
+            _openai_tools.append(td)
+        elif "name" in td:
+            _openai_tools.append({
+                "type": "function",
+                "function": {
+                    "name": td["name"],
+                    "description": td.get("description", ""),
+                    "parameters": td.get("parameters", {"type": "object", "properties": {}}),
+                },
+            })
 
     tool_calls = []
     final_response = ""
 
     for turn in range(max_turns):
-        # Generate model response
-        prompt_text = tokenizer.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=True,
-        )
-        inputs = tokenizer(prompt_text, return_tensors="pt", truncation=True, max_length=4096)
-        inputs = {k: v.to(device) for k, v in inputs.items()}
+        _turn_t0 = _time_mod.time()
 
-        with torch.no_grad():
-            outputs = model.generate(
-                **inputs,
-                max_new_tokens=512,
-                temperature=max(temperature, 0.01),
-                top_p=0.95,
-                do_sample=True,
-                pad_token_id=tokenizer.pad_token_id,
-            )
+        # Check rollout timeout
+        _rollout_elapsed = _time_mod.time() - _rollout_t0
+        if _rollout_elapsed > rollout_timeout:
+            logger.warning(f"[{task_id}] Rollout timeout ({rollout_timeout:.0f}s) at turn {turn+1}")
+            break
 
-        # Decode only the new tokens
-        new_tokens = outputs[0][inputs["input_ids"].shape[1]:]
-        response = tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
+        if vllm_client is not None:
+            # ── vLLM path: OpenAI-compatible API with continuous batching ──
+            try:
+                # Dynamic max_tokens: cap to remaining context to avoid 400 errors
+                _vllm_max_tokens = max_completion_length
+                # Estimate input tokens from all message content (content + tool_calls + name)
+                _est_input = 0
+                for _m in messages:
+                    _mc = _m.get("content") or ""
+                    _est_input += len(str(_mc)) // 3
+                    if _m.get("tool_calls"):
+                        _est_input += len(str(_m["tool_calls"])) // 3
+                _est_input += len(messages) * 4  # per-message overhead tokens
+                _remaining = 32768 - _est_input  # use 32k context
+                if _remaining < _vllm_max_tokens:
+                    _vllm_max_tokens = max(_remaining, 128)
+                _completion = vllm_client.chat.completions.create(
+                    model="current",  # LoRA adapter name
+                    messages=messages,
+                    tools=_openai_tools if _openai_tools else None,
+                    temperature=max(temperature, 0.01),
+                    top_p=0.95,
+                    max_tokens=_vllm_max_tokens,
+                )
+                _choice = _completion.choices[0]
+                response = _choice.message.content or ""
+                _input_len = _completion.usage.prompt_tokens if _completion.usage else 0
+                _gen_len = _completion.usage.completion_tokens if _completion.usage else len(response.split())
+
+                # Handle vLLM-parsed tool calls (Qwen3.5 native tool calling)
+                parsed_tool = None
+                if _choice.message.tool_calls:
+                    tc = _choice.message.tool_calls[0]
+                    try:
+                        _args = json.loads(tc.function.arguments) if isinstance(tc.function.arguments, str) else tc.function.arguments
+                    except (json.JSONDecodeError, TypeError):
+                        _args = {"raw": tc.function.arguments}
+                    parsed_tool = {"name": tc.function.name, "arguments": _args}
+                    # Reconstruct response text for trajectory logging
+                    response = json.dumps(parsed_tool, ensure_ascii=False)
+                elif response:
+                    # Try parsing text as tool call (fallback)
+                    parsed_tool = _parse_tool_call_from_response(response)
+            except Exception as _vllm_err:
+                logger.warning(f"[{task_id}] vLLM generation error at turn {turn+1}: {_vllm_err}")
+                response = '{"name": "think", "arguments": {"thought": "Let me analyze this carefully."}}'
+                parsed_tool = _parse_tool_call_from_response(response)
+                _input_len = 0
+                _gen_len = 0
+        else:
+            # ── HuggingFace path: direct model.generate() ──
+            _template_fn = processor if (_has_vision and processor is not None) else tokenizer
+            try:
+                prompt_text = _template_fn.apply_chat_template(
+                    messages, tools=_openai_tools if _openai_tools else None,
+                    tokenize=False, add_generation_prompt=True,
+                )
+            except Exception:
+                prompt_text = _template_fn.apply_chat_template(
+                    messages, tokenize=False, add_generation_prompt=True,
+                )
+
+            if _has_vision and processor is not None:
+                # Vision path: use processor to handle image + text together
+                from qwen_vl_utils import process_vision_info
+                image_inputs, video_inputs = process_vision_info(messages)
+                inputs = processor(
+                    text=[prompt_text],
+                    images=image_inputs,
+                    videos=video_inputs,
+                    return_tensors="pt",
+                    padding=True,
+                )
+                inputs = {k: v.to(device) for k, v in inputs.items()}
+            else:
+                inputs = tokenizer(prompt_text, return_tensors="pt", truncation=True, max_length=max_prompt_length)
+                inputs = {k: v.to(device) for k, v in inputs.items()}
+            _input_len = inputs["input_ids"].shape[1]
+
+            with torch.no_grad():
+                outputs = model.generate(
+                    **inputs,
+                    max_new_tokens=max_completion_length,
+                    temperature=max(temperature, 0.01),
+                    top_p=0.95,
+                    do_sample=True,
+                    pad_token_id=tokenizer.pad_token_id or tokenizer.eos_token_id,
+                )
+
+            new_tokens = outputs[0][inputs["input_ids"].shape[1]:]
+            response = tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
+            _gen_len = len(new_tokens)
+            parsed_tool = _parse_tool_call_from_response(response) if response else None
+
+        _turn_elapsed = _time_mod.time() - _turn_t0
 
         if not response:
             response = '{"name": "think", "arguments": {"thought": "Let me analyze this carefully."}}'
+            parsed_tool = _parse_tool_call_from_response(response)
 
-        # Try to parse as tool call
-        parsed_tool = _parse_tool_call_from_response(response)
+        _tool_name = parsed_tool.get("name", "?") if parsed_tool else "FINAL"
+        logger.info(f"[{task_id}] turn {turn+1}/{max_turns}: in={_input_len} gen={_gen_len} t={_turn_elapsed:.1f}s tool={_tool_name}")
 
         if parsed_tool:
             # Execute tool in environment
@@ -1583,13 +2294,37 @@ def _run_single_rollout(
 
     env.close()
 
+    # If loop exhausted max_turns without setting final_response, use last assistant msg
+    if not final_response:
+        for msg in reversed(messages):
+            if msg["role"] == "assistant" and msg["content"]:
+                final_response = msg["content"]
+                break
+
+    # Build full_text from assistant messages only (for text-only training path)
+    # Also track per-turn character boundaries for Truncated OPD
+    _assistant_texts = []
+    _turn_char_boundaries = []  # list of (char_start, char_end, turn_index)
+    _char_offset = 0
+    _turn_idx = 0
+    for m in messages:
+        if m["role"] == "assistant":
+            c = m["content"] if isinstance(m["content"], str) else str(m["content"])
+            _assistant_texts.append(c)
+            _start = _char_offset
+            _char_offset += len(c) + 1  # +1 for join "\n"
+            _turn_char_boundaries.append((_start, _char_offset - 1, _turn_idx))
+            _turn_idx += 1
+
     return {
         "task_id": task_id,
         "messages": messages,
         "tool_calls": tool_calls,
         "final_response": final_response,
         "num_turns": len(tool_calls) + 1,
-        "full_text": "\n".join(m["content"] for m in messages if m["role"] == "assistant"),
+        "full_text": "\n".join(_assistant_texts),
+        "turn_char_boundaries": _turn_char_boundaries,
+        "image_path": _image_path if _has_vision else None,
     }
 
 
@@ -1623,7 +2358,96 @@ def _parse_tool_call_from_response(text: str) -> Optional[dict]:
                 return parsed
         except json.JSONDecodeError:
             pass
+    # Qwen3.5 XML: <tool_call><function=name><parameter=key>value</parameter></function></tool_call>
+    qwen35_match = re.search(
+        r'<tool_call>\s*<function=([^>]+)>(.*?)</function>\s*</tool_call>',
+        text, re.DOTALL,
+    )
+    if qwen35_match:
+        func_name = qwen35_match.group(1).strip()
+        params_block = qwen35_match.group(2).strip()
+        param_pairs = re.findall(
+            r'<parameter=([^>]+)>(.*?)</parameter>', params_block, re.DOTALL
+        )
+        arguments = {}
+        for key, val in param_pairs:
+            val = val.strip()
+            try:
+                arguments[key.strip()] = json.loads(val)
+            except (json.JSONDecodeError, ValueError):
+                arguments[key.strip()] = val
+        if func_name:
+            return {"name": func_name, "arguments": arguments}
     return None
+
+
+def _tokenize_trajectory(
+    traj: dict,
+    tokenizer,
+    processor,
+    max_length: int,
+    device,
+) -> Optional[dict]:
+    """Tokenize a trajectory, handling vision inputs when available.
+
+    For VQA trajectories with images, uses the processor to create inputs
+    with pixel_values. For text-only trajectories, uses the tokenizer.
+
+    Returns a dict with input_ids (and optionally pixel_values, image_grid_thw)
+    on the target device, or None if the trajectory is empty.
+    """
+    full_text = traj.get("full_text", "")
+    if not full_text:
+        return None
+
+    image_path = traj.get("image_path")
+    if processor is not None and image_path and os.path.isfile(image_path):
+        # Vision path: rebuild messages and process with images
+        try:
+            from qwen_vl_utils import process_vision_info
+            messages = traj.get("messages", [])
+            # Re-apply chat template with processor
+            text = processor.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=False,
+            )
+            image_inputs, video_inputs = process_vision_info(messages)
+            inputs = processor(
+                text=[text],
+                images=image_inputs,
+                videos=video_inputs,
+                return_tensors="pt",
+                padding=False,
+            )
+            # NOTE: Do NOT truncate vision inputs — truncating input_ids can cut
+            # image placeholder tokens (<|vision_start|>...<|vision_end|>) while
+            # pixel_values remains intact, causing shape mismatch in the forward pass.
+            # If the sequence is too long, the model will handle it via its own
+            # context window limit. For extreme cases, skip the trajectory.
+            if inputs["input_ids"].shape[1] > max_length:
+                logger.warning(
+                    f"[Vision] Trajectory {traj.get('task_id', '?')} has "
+                    f"{inputs['input_ids'].shape[1]} tokens (max={max_length}), "
+                    f"skipping to avoid vision token truncation"
+                )
+                return None
+            return {k: v.to(device) for k, v in inputs.items()}
+        except Exception as _vision_err:
+            # Fall back to text-only — log warning so we can detect mismatches
+            logger.warning(
+                f"[Vision] Failed to process image {image_path}: {_vision_err}. "
+                f"Falling back to text-only tokenization for trajectory "
+                f"{traj.get('task_id', '?')}"
+            )
+
+    # Text-only path
+    encoding = tokenizer(
+        full_text,
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_length,
+        padding=False,
+    )
+    return {k: v.to(device) for k, v in encoding.items()}
 
 
 def _compute_ref_log_probs(
@@ -1633,6 +2457,7 @@ def _compute_ref_log_probs(
     device,
     max_length: int = 4096,
     use_dr_grpo: bool = False,
+    processor=None,
 ) -> dict[int, float]:
     """Pre-compute log-probabilities under the frozen reference model.
 
@@ -1647,23 +2472,160 @@ def _compute_ref_log_probs(
             full_text = traj.get("full_text", "")
             if not full_text:
                 continue
-            encoding = tokenizer(
-                full_text,
-                return_tensors="pt",
-                truncation=True,
-                max_length=max_length,
-                padding=False,
+
+            # Vision-aware tokenization
+            inputs = _tokenize_trajectory(
+                traj, tokenizer, processor, max_length, device,
             )
-            input_ids = encoding["input_ids"].to(device)
+            if inputs is None:
+                continue
+            input_ids = inputs["input_ids"]
             if input_ids.shape[1] < 2:
                 continue
-            outputs = ref_model(input_ids=input_ids, labels=input_ids)
+
+            # Pass vision inputs if available
+            _fwd_kwargs = {"input_ids": input_ids, "labels": input_ids}
+            if "pixel_values" in inputs:
+                _fwd_kwargs["pixel_values"] = inputs["pixel_values"]
+            if "image_grid_thw" in inputs:
+                _fwd_kwargs["image_grid_thw"] = inputs["image_grid_thw"]
+
+            outputs = ref_model(**_fwd_kwargs)
             if use_dr_grpo:
                 seq_len = max((input_ids != tokenizer.pad_token_id).sum().item(), 1)
                 ref_log_probs[idx] = (-outputs.loss * seq_len).item()
             else:
                 ref_log_probs[idx] = (-outputs.loss).item()
     return ref_log_probs
+
+
+def _get_per_token_log_probs(
+    model, input_ids: torch.Tensor, pixel_values=None, image_grid_thw=None,
+) -> torch.Tensor:
+    """Extract per-token log-probabilities from model logits.
+
+    Given input_ids [1, seq_len], compute log p(y_t | y_{<t}, x) for each
+    token position t. Uses the standard autoregressive left-shift:
+      logits[:, t-1, :] predicts token at position t.
+
+    Returns:
+        Tensor of shape [seq_len - 1] with per-token log-probs.
+    """
+    import torch.nn.functional as F
+
+    _fwd_kwargs = {"input_ids": input_ids}
+    if pixel_values is not None:
+        _fwd_kwargs["pixel_values"] = pixel_values
+    if image_grid_thw is not None:
+        _fwd_kwargs["image_grid_thw"] = image_grid_thw
+
+    outputs = model(**_fwd_kwargs)
+    logits = outputs.logits                        # [1, seq_len, vocab_size]
+    shift_logits = logits[:, :-1, :]               # [1, seq_len-1, vocab_size]
+    shift_labels = input_ids[:, 1:]                # [1, seq_len-1]
+
+    # Use F.cross_entropy(reduction='none') instead of log_softmax + gather.
+    # This avoids materializing a [seq_len, vocab_size] log-prob tensor,
+    # saving significant GPU memory for large vocabularies (150K+).
+    token_log_probs = -F.cross_entropy(
+        shift_logits.reshape(-1, shift_logits.size(-1)),
+        shift_labels.reshape(-1),
+        reduction="none",
+    )                                              # [seq_len-1]
+    return token_log_probs                         # [seq_len-1]
+
+
+def _build_turn_mask(
+    full_text: str,
+    turn_char_boundaries: list[tuple[int, int, int]],
+    tokenizer,
+    seq_len: int,
+    max_turn: int,
+    max_length: int = 4096,
+) -> torch.Tensor:
+    """Build a binary mask [seq_len] that is 1.0 for tokens in the first
+    `max_turn` assistant turns and 0.0 elsewhere.
+
+    Used by Truncated OPD to focus teacher supervision on early turns
+    where action quality has the highest impact on trajectory outcome.
+
+    Args:
+        full_text: The concatenated assistant text (joined by newline).
+        turn_char_boundaries: List of (char_start, char_end, turn_index).
+        tokenizer: The tokenizer (for offset mapping).
+        seq_len: Target mask length (= num tokens - 1, matching log-prob tensor).
+        max_turn: Apply OPD only on first max_turn turns (0-indexed internally).
+        max_length: Max token length for tokenization.
+
+    Returns:
+        Float tensor [seq_len] with 1.0 for OPD-active tokens, 0.0 otherwise.
+    """
+    # Find the character offset where turn K ends
+    cutoff_char = 0
+    for start, end, tidx in turn_char_boundaries:
+        if tidx < max_turn:
+            cutoff_char = end
+        else:
+            break
+
+    if cutoff_char == 0 or cutoff_char >= len(full_text):
+        # No truncation needed (fewer turns than max_turn, or edge case)
+        return torch.ones(seq_len, dtype=torch.float32)
+
+    # Tokenize the prefix up to cutoff to find the token boundary
+    prefix_text = full_text[:cutoff_char]
+    prefix_ids = tokenizer(
+        prefix_text,
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_length,
+        padding=False,
+        add_special_tokens=False,
+    )["input_ids"]
+    cutoff_token = prefix_ids.shape[1]
+
+    # Build mask: 1.0 for tokens before cutoff, 0.0 after
+    # Shift by -1 because log-probs are offset (predict next token)
+    mask = torch.zeros(seq_len, dtype=torch.float32)
+    effective_cutoff = min(cutoff_token, seq_len)
+    if effective_cutoff > 0:
+        mask[:effective_cutoff] = 1.0
+    return mask
+
+
+def _compute_per_token_log_probs_batch(
+    model,
+    tokenizer,
+    trajectories: list[dict],
+    device,
+    max_length: int = 4096,
+    processor=None,
+) -> dict[int, torch.Tensor]:
+    """Pre-compute per-token log-probs for all trajectories under a model.
+
+    Returns dict mapping trajectory index → CPU tensor [seq_len_i - 1]
+    of per-token log-probs. Stored on CPU to save GPU memory.
+
+    Used for both teacher and reference models in per-token OPD.
+    """
+    token_lps = {}
+    model.eval()
+    with torch.no_grad():
+        for idx, traj in enumerate(trajectories):
+            full_text = traj.get("full_text", "")
+            if not full_text:
+                continue
+            inputs = _tokenize_trajectory(traj, tokenizer, processor, max_length, device)
+            if inputs is None:
+                continue
+            input_ids = inputs["input_ids"]
+            if input_ids.shape[1] < 2:
+                continue
+            _pv = inputs.get("pixel_values")
+            _igt = inputs.get("image_grid_thw")
+            per_token = _get_per_token_log_probs(model, input_ids, _pv, _igt)
+            token_lps[idx] = per_token.cpu()  # store on CPU to save VRAM
+    return token_lps
 
 
 def _grpo_policy_update(
@@ -1679,6 +2641,13 @@ def _grpo_policy_update(
     use_dr_grpo: bool = False,
     ref_log_probs: dict[int, float] | None = None,
     lr_scheduler=None,
+    teacher_token_log_probs: dict[int, torch.Tensor] | None = None,
+    ref_token_log_probs: dict[int, torch.Tensor] | None = None,
+    opd_alpha: float = 0.5,
+    opd_lambda: float = 1.0,
+    opd_max_turn: int = 0,
+    opd_bidirectional: bool = False,
+    processor=None,
 ) -> float:
     """GRPO policy gradient update from collected trajectories.
 
@@ -1692,6 +2661,11 @@ def _grpo_policy_update(
     eliminating the length normalization bias in the original GRPO objective.
     Reference: Dr. GRPO (2025) — removes per-token averaging that penalizes
     appropriately detailed medical answers.
+
+    Bidirectional Truncated OPD (BT-OPD):
+    - opd_max_turn > 0: apply OPD only on tokens from first K assistant turns
+    - opd_bidirectional: use OPD signal on negative-reward trajectories too
+      (corrective gradient — teacher with enhanced context suppresses bad actions)
 
     where advantages are group-relative (normalized within each task's rollouts).
 
@@ -1721,7 +2695,11 @@ def _grpo_policy_update(
                 traj = trajectories[idx]
                 advantage = traj.get("advantage", 0.0)
 
-                if abs(advantage) < 1e-6:
+                # Skip trajectories with zero RL advantage — unless OPD is active,
+                # where teacher signal can still provide useful gradients
+                if abs(advantage) < 1e-6 and not (
+                    teacher_token_log_probs is not None and idx in teacher_token_log_probs
+                ):
                     continue
 
                 # Build the full trajectory text
@@ -1729,42 +2707,117 @@ def _grpo_policy_update(
                 if not full_text:
                     continue
 
-                # Tokenize
-                encoding = tokenizer(
-                    full_text,
-                    return_tensors="pt",
-                    truncation=True,
-                    max_length=max_length,
-                    padding=False,
-                )
-                input_ids = encoding["input_ids"].to(device)
+                # Tokenize (vision-aware)
+                inputs = _tokenize_trajectory(traj, tokenizer, processor, max_length, device)
+                if inputs is None:
+                    continue
+                input_ids = inputs["input_ids"]
+                _pv = inputs.get("pixel_values")
+                _igt = inputs.get("image_grid_thw")
 
                 if input_ids.shape[1] < 2:
                     continue
 
-                # Forward pass — compute log probabilities
-                outputs = model(input_ids=input_ids, labels=input_ids)
-                if use_dr_grpo:
-                    # Dr. GRPO: use sum (not mean) of log-probs to remove
-                    # length normalization bias. outputs.loss is mean NLL,
-                    # so multiply by sequence length to get sum.
-                    seq_len = max((input_ids != tokenizer.pad_token_id).sum().item(), 1)
-                    log_probs = -outputs.loss * seq_len
-                else:
-                    log_probs = -outputs.loss  # standard: mean NLL → log prob
+                # ── Per-token OPD path ──
+                # When OPD is active, compute per-token log-probs from logits
+                # and apply per-token teacher advantage (GLM-5 style).
+                # BT-OPD extensions:
+                #   - Truncated: mask OPD to first K turns (opd_max_turn)
+                #   - Bidirectional: apply OPD on negative-reward trajs too
+                # When OPD is inactive, use sequence-level outputs.loss (original path).
+                has_opd = (
+                    teacher_token_log_probs is not None
+                    and ref_token_log_probs is not None
+                    and idx in teacher_token_log_probs
+                    and idx in ref_token_log_probs
+                )
 
-                # GRPO objective: advantage-weighted log probability
-                # Positive advantage → increase log prob (good trajectory)
-                # Negative advantage → decrease log prob (bad trajectory)
-                policy_loss = -advantage * log_probs
+                # Bidirectional gate: skip negative-reward trajs unless enabled
+                if has_opd and advantage < 0 and not opd_bidirectional:
+                    has_opd = False
+
+                if has_opd:
+                    # Per-token student log-probs (with gradient)
+                    student_token_lps = _get_per_token_log_probs(model, input_ids, _pv, _igt)
+                    # [seq_len - 1], gradient flows through this
+
+                    # Pre-computed teacher & ref per-token log-probs (no gradient)
+                    teacher_t = teacher_token_log_probs[idx].to(device)
+                    ref_t = ref_token_log_probs[idx].to(device)
+
+                    # Align lengths (should match, but safety check)
+                    min_len = min(len(student_token_lps), len(teacher_t), len(ref_t))
+                    student_token_lps = student_token_lps[:min_len]
+                    teacher_t = teacher_t[:min_len]
+                    ref_t = ref_t[:min_len]
+
+                    # Per-token OPD advantage: Â_opd(t) = λ * sg[log π_teacher(t) - log π_ref(t)]
+                    opd_adv_per_token = opd_lambda * (teacher_t - ref_t)
+                    # Clip per-token OPD advantage to prevent extreme values
+                    opd_adv_per_token = opd_adv_per_token.clamp(-2.0, 2.0)
+
+                    # ── Truncated OPD: mask to first K turns ──
+                    # Build per-token turn mask from character boundaries
+                    if opd_max_turn > 0:
+                        turn_boundaries = traj.get("turn_char_boundaries", [])
+                        if turn_boundaries:
+                            opd_mask = _build_turn_mask(
+                                full_text=traj.get("full_text", ""),
+                                turn_char_boundaries=turn_boundaries,
+                                tokenizer=tokenizer,
+                                seq_len=min_len,
+                                max_turn=opd_max_turn,
+                                max_length=max_length,
+                            ).to(device)
+                            # Zero out OPD advantage for tokens beyond turn K
+                            opd_adv_per_token = opd_adv_per_token * opd_mask
+
+                    # Blend: α * RL_advantage (scalar, broadcast) + (1-α) * OPD_advantage (per-token)
+                    effective_adv_per_token = opd_alpha * advantage + (1 - opd_alpha) * opd_adv_per_token
+
+                    # Per-token policy loss
+                    token_losses = -effective_adv_per_token * student_token_lps
+
+                    # Aggregate: Dr.GRPO uses sum, standard uses mean
+                    if use_dr_grpo:
+                        policy_loss = token_losses.sum()
+                    else:
+                        policy_loss = token_losses.mean()
+
+                    # Sequence-level log-prob for KL penalty (reuse per-token sum/mean)
+                    if use_dr_grpo:
+                        log_probs = student_token_lps.sum()
+                    else:
+                        log_probs = student_token_lps.mean()
+
+                else:
+                    # ── Original sequence-level path (no OPD) ──
+                    _fwd_kwargs = {"input_ids": input_ids, "labels": input_ids}
+                    if _pv is not None:
+                        _fwd_kwargs["pixel_values"] = _pv
+                    if _igt is not None:
+                        _fwd_kwargs["image_grid_thw"] = _igt
+                    outputs = model(**_fwd_kwargs)
+                    if use_dr_grpo:
+                        seq_len = max((input_ids != tokenizer.pad_token_id).sum().item(), 1)
+                        log_probs = -outputs.loss * seq_len
+                    else:
+                        log_probs = -outputs.loss
+
+                    policy_loss = -advantage * log_probs
 
                 # KL divergence penalty: KL(π_θ || π_ref) ≈ log π_θ - log π_ref
-                # This prevents the policy from drifting too far from the
-                # pretrained model, avoiding catastrophic forgetting.
+                # Clipped to prevent explosion from off-policy divergence
+                # (vLLM rollouts use base model, policy has LoRA drift).
                 kl_penalty = torch.tensor(0.0, device=device)
                 if ref_log_probs is not None and idx in ref_log_probs:
                     ref_lp = ref_log_probs[idx]
-                    kl_penalty = log_probs - ref_lp  # approx KL per sample
+                    log_ratio = log_probs - ref_lp
+                    # Skip sample if policy has drifted too far (importance ratio too extreme)
+                    if abs(log_ratio.detach().item()) > 5.0:
+                        continue
+                    # Clip KL penalty for numerical stability
+                    kl_penalty = log_ratio.clamp(-5.0, 5.0)
                     batch_kl += kl_penalty.item()
 
                 # Combined loss: policy gradient + β * KL penalty

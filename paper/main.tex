@@ -545,6 +545,23 @@ RL improves procedural knowledge (+22\% composite reward for tool-use competence
 
 Sensitivity analysis across format reward weights and learning rates reveals that format weight removal is more effective than reduction (even 5\% format reward reintroduces dominance at higher LR), and that all successful pathways---direct QA RL (62.4\%), accuracy-only RL (62.0\%), and Dr.~GRPO (61.8\%)---converge near a $\sim$62\% MedQA ceiling, likely reflecting LoRA capacity rather than algorithmic limitations. Detailed results are in Appendix~\ref{app:reward_sensitivity}.
 
+\subsection{On-Policy Distillation Instability and Resolution}
+\label{sec:opd_instability}
+
+Our ablation trajectory across four OPD variants (v12--v16) reveals a progression of failure modes that aligns closely with the instability patterns identified by Self-Distilled RLVR~\citep{yang26rlsd} and OPSD~\citep{zhao26opsd}, while extending their analysis to the multi-turn agentic setting.
+
+\paragraph{Failure Progression.}
+\textbf{(1) Hard-copy teacher (v12, v13):} Periodic hard teacher updates ($T{=}10, 30$) cause catastrophic KL collapse---at each update, the KL divergence drops abruptly (e.g., $2.637 \to 0.343$ at step 10 in v12), destroying the distillation gradient signal. This produces monotonic accuracy decline: $56.9\% \to 49.3\%$ over 35 steps in v13, with concurrent multi-turn collapse (validation turns $7.65 \to 5.52$). This mirrors the ``gradient magnitude instability'' diagnosed by \citet{yang26rlsd}, who observe that naive self-distillation produces oscillating gradients that prevent stable learning.
+%
+\textbf{(2) EMA teacher without privileged conditioning (v14):} Replacing hard updates with EMA blending ($\alpha{=}0.995$) eliminates the KL collapse problem and introduces the oscillating recovery pattern, reaching $53.8\%$ at step 40 (+14.7 pp above frozen-teacher baseline at $39.1\%$). However, validation turns still erode ($7.82 \to 6.23$), indicating multi-turn structure degradation. This confirms RLSD's finding that gradient magnitude control (via EMA) is necessary but insufficient.
+%
+\textbf{(3) EMA + privileged conditioning without length control (v15):} Adding outcome-privileged teacher conditioning creates an initial accuracy plateau ($54.5\%$, steps 10--20) absent in v14, but response explosion ($11{,}308$ tokens, $91.7\%$ clipping by step 40) destroys the multi-turn structure, collapsing accuracy to $49.0\%$. The privileged conditioning enriches the KL target but accelerates the student's tendency toward verbose single-turn outputs.
+%
+\textbf{(4) Full BT-OPD (v16):} The addition of cosine length-controlled reward resolves the response explosion, enabling the EMA oscillating recovery to sustain through 65+ steps with accuracy reaching $61.1\%$ (+8.5 pp) while maintaining stable multi-turn structure ($7.0$--$7.4$ turns).
+
+\paragraph{Connection to OPD Literature.}
+This failure progression provides empirical grounding for theoretical concerns raised across the OPD literature. \citet{yang26rlsd} propose decomposing the training signal into gradient \emph{magnitude} (controlled by self-distillation) and \emph{direction} (controlled by RLVR); our EMA mechanism serves the magnitude role while outcome-privileged conditioning provides a richer directional signal than generic RLVR. \citet{zhao26opsd} identify teacher staleness as a key failure mode; our hard-copy results (v12/v13) confirm this in the agentic setting, while EMA blending provides a continuous solution. Crucially, our results reveal an additional failure mode \emph{unique to agentic RL}---response explosion and multi-turn collapse---that is absent from single-turn reasoning settings studied by prior OPD work. The cosine length reward addresses this agentic-specific challenge.
+
 
 % ============================================================
 \section{Discussion}

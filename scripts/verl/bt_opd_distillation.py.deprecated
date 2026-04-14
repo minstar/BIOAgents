@@ -1,0 +1,187 @@
+"""BT-OPD: Bidirectional Truncated On-Policy Distillation for veRL.
+
+Registers a custom distillation loss function 'bt_opd_kl' that extends
+standard reverse-KL distillation with:
+  1. Turn-aware truncation: OPD only on first K assistant turns
+  2. Bidirectional signals: corrective gradient for negative-reward trajectories
+
+Environment variables:
+  BT_OPD_MAX_TURN  — max assistant turns for OPD (default: 3, 0 = all)
+  BT_OPD_BIDIRECTIONAL — enable bidirectional signals (default: 1)
+"""
+
+import os
+
+import torch
+from tensordict import TensorDict
+
+from verl.trainer.distillation.losses import (
+    DistillationLossSettings,
+    register_distillation_loss,
+)
+from verl.trainer.ppo.core_algos import kl_penalty
+from verl.utils.metric import AggregationType, Metric
+from verl.workers.config import ActorConfig, DistillationConfig, DistillationLossConfig
+from verl.workers.utils.padding import no_padding_2_padding
+
+# ── BT-OPD configuration via env vars ──────────────────────────────
+BT_OPD_MAX_TURN = int(os.environ.get("BT_OPD_MAX_TURN", "3"))
+BT_OPD_BIDIRECTIONAL = os.environ.get("BT_OPD_BIDIRECTIONAL", "1") == "1"
+
+# Qwen3.5 special token IDs
+IM_START_TOKEN_ID = 151644  # <|im_start|>
+
+
+def _build_turn_mask_from_ids(
+    input_ids: torch.Tensor,
+    response_mask: torch.Tensor,
+    max_turn: int,
+) -> torch.Tensor:
+    """Build per-token mask: 1.0 for tokens in the first `max_turn` assistant turns.
+
+    In Qwen3.5 multi-turn format, each assistant turn in the response starts
+    after a <|im_start|> token. Turn 0 is the initial response before any
+    tool call/response cycle.
+
+    Args:
+        input_ids: (seq_len,) token IDs for one sequence.
+        response_mask: (seq_len,) boolean mask for response tokens.
+        max_turn: Apply OPD only on first K assistant turns.
+
+    Returns:
+        turn_mask: (seq_len,) float mask aligned with response_mask.
+    """
+    if max_turn <= 0:
+        return torch.ones_like(response_mask, dtype=torch.float32)
+
+    resp_indices = response_mask.nonzero(as_tuple=True)[0]
+    if len(resp_indices) == 0:
+        return torch.zeros_like(response_mask, dtype=torch.float32)
+
+    resp_start = resp_indices[0].item()
+    resp_end = resp_indices[-1].item() + 1
+
+    # Find <|im_start|> positions within response region
+    resp_ids = input_ids[resp_start:resp_end]
+    im_start_positions = (resp_ids == IM_START_TOKEN_ID).nonzero(as_tuple=True)[0]
+
+    turn_mask = torch.zeros_like(response_mask, dtype=torch.float32)
+
+    if len(im_start_positions) == 0:
+        # Single turn — all response tokens are turn 0
+        if max_turn >= 1:
+            turn_mask[resp_start:resp_end] = 1.0
+        return turn_mask
+
+    # Turn 0: resp_start → first <|im_start|>
+    # Turn k (k≥1): im_start[k-1] → im_start[k] (or resp_end)
+    boundaries = []
+    first_im = resp_start + im_start_positions[0].item()
+    boundaries.append((resp_start, first_im))
+
+    for i in range(len(im_start_positions)):
+        start = resp_start + im_start_positions[i].item()
+        end = (resp_start + im_start_positions[i + 1].item()) if i + 1 < len(im_start_positions) else resp_end
+        boundaries.append((start, end))
+
+    for turn_idx, (s, e) in enumerate(boundaries):
+        if turn_idx >= max_turn:
+            break
+        turn_mask[s:e] = 1.0
+
+    return turn_mask
+
+
+@register_distillation_loss(
+    DistillationLossSettings(names=["bt_opd_kl"], use_estimator=True)  # type: ignore[arg-type]
+)
+def compute_bt_opd_loss(
+    config: ActorConfig,
+    distillation_config: DistillationConfig,
+    model_output: dict,
+    data: TensorDict,
+) -> tuple[torch.Tensor, dict]:
+    """BT-OPD distillation loss.
+
+    Computes reverse-KL between student and teacher per-token log-probs,
+    then applies:
+      1. Turn-aware truncation mask (zero out KL after turn K)
+      2. Bidirectional gating (flip KL sign for negative-reward trajectories)
+
+    Returns:
+        distillation_losses: (bsz, resp_len) per-token loss values.
+        metrics: dict of logged metrics.
+    """
+    student_log_probs = no_padding_2_padding(model_output["log_probs"], data)
+    teacher_log_probs = no_padding_2_padding(data["teacher_logprobs"], data).squeeze(-1)
+    response_mask = data["response_mask"]
+    response_mask_bool = response_mask.bool()
+
+    assert teacher_log_probs.shape == student_log_probs.shape == response_mask_bool.shape, (
+        f"Shape mismatch: student={student_log_probs.shape}, "
+        f"teacher={teacher_log_probs.shape}, mask={response_mask_bool.shape}"
+    )
+
+    bsz, seq_len = student_log_probs.shape
+
+    # ── Standard reverse-KL ──────────────────────────────────────
+    loss_config: DistillationLossConfig = distillation_config.distillation_loss
+    kl_mode = "kl"
+    if loss_config.loss_settings and "kl_mode" in loss_config.loss_settings:
+        kl_mode = loss_config.loss_settings["kl_mode"]
+
+    distillation_losses = kl_penalty(
+        logprob=student_log_probs,
+        ref_logprob=teacher_log_probs,
+        kl_penalty=kl_mode,
+    )
+
+    max_turn = BT_OPD_MAX_TURN
+    bidirectional = BT_OPD_BIDIRECTIONAL
+    num_truncated_tokens = 0
+    num_negative_trajs = 0
+
+    # ── 1. Truncated OPD: mask tokens after turn K ───────────────
+    if max_turn > 0 and "input_ids" in data:
+        input_ids = data["input_ids"]
+        for i in range(bsz):
+            turn_mask = _build_turn_mask_from_ids(
+                input_ids[i], response_mask_bool[i], max_turn
+            )
+            # Count tokens masked out
+            active_before = response_mask_bool[i].sum().item()
+            active_after = (response_mask_bool[i] & turn_mask.bool()).sum().item()
+            num_truncated_tokens += active_before - active_after
+            # Apply mask
+            distillation_losses[i] = distillation_losses[i] * turn_mask.to(distillation_losses.device)
+
+    # ── 2. Bidirectional OPD ─────────────────────────────────────
+    # Positive-reward trajectories: standard KL (encourage matching teacher)
+    # Negative-reward trajectories: flip sign → corrective gradient
+    #   (teacher suppresses bad actions)
+    if bidirectional and "advantages" in data:
+        # In GRPO, advantages are outcome-level (same value per token in a trajectory)
+        # Use first valid token's advantage as trajectory-level signal
+        for i in range(bsz):
+            valid_advs = data["advantages"][i][response_mask_bool[i]]
+            if len(valid_advs) > 0 and valid_advs[0].item() < 0:
+                distillation_losses[i] = -distillation_losses[i]
+                num_negative_trajs += 1
+
+    # ── Metrics ──────────────────────────────────────────────────
+    valid_losses = distillation_losses[response_mask_bool]
+    metrics = {
+        "bt_opd/kl_abs_mean": Metric(AggregationType.MEAN, valid_losses.abs().mean()),
+        "bt_opd/kl_mean": Metric(AggregationType.MEAN, valid_losses.mean()),
+        "bt_opd/max_turn": float(max_turn),
+        "bt_opd/bidirectional": float(bidirectional),
+        "bt_opd/negative_trajs": float(num_negative_trajs),
+        "bt_opd/total_trajs": float(bsz),
+        "bt_opd/truncated_tokens": float(num_truncated_tokens),
+    }
+
+    return distillation_losses, metrics
+
+
+print("[BT-OPD] Registered 'bt_opd_kl' distillation loss "
+      f"(max_turn={BT_OPD_MAX_TURN}, bidirectional={BT_OPD_BIDIRECTIONAL})")

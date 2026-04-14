@@ -1,0 +1,122 @@
+# ============================================================
+# Multimodal RL Training — Lingshu-7B
+# ============================================================
+# Preliminary experiment: RL training with VQA tasks in training data.
+# Lingshu-7B (Qwen2.5-VL architecture) can process images natively.
+#
+# Tests whether including vision tasks in RL training:
+#   (a) Improves VQA performance directly
+#   (b) Maintains or improves text QA performance
+#   (c) Differs from text-only RL in transfer patterns
+#
+# Uses same SFT checkpoint and matched LoRA/hyperparams for fair comparison.
+#
+# Usage:
+#   python scripts/train_two_stage.py \
+#       --skip-sft \
+#       --sft-checkpoint checkpoints/sft_warmup_lingshu7b_v2_merged/merged \
+#       --rl-config configs/multimodal_rl_lingshu7b.yaml
+# ============================================================
+
+# --- Model ---
+model:
+  name_or_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Lingshu-7B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "flash_attention_2"
+
+# --- LoRA / PEFT (matched to text-only RL) ---
+peft:
+  enabled: true
+  r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+# --- Dataset: Mixed text + visual QA ---
+dataset:
+  domain: "multimodal_mixed"
+  tasks_path: "data/domains/multimodal_rl_combined/tasks.json"
+  split_tasks_path: "data/domains/multimodal_rl_combined/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 2048
+  max_completion_length: 1024
+
+# --- Training (GSPO+DAPO, matched to text-only RL) ---
+training:
+  output_dir: "checkpoints/multimodal_rl_lingshu7b"
+  num_train_epochs: 10
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 8
+  learning_rate: 5.0e-7
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 50
+  eval_steps: 25
+  save_total_limit: 5
+  seed: 42
+
+  # GRPO-specific (matched)
+  num_generations: 8
+  beta: 0.01
+  temperature: 0.7
+  top_p: 0.95
+  top_k: 50
+
+  # GSPO/DAPO (matched)
+  loss_type: "dapo"
+  epsilon_low: 0.2
+  epsilon_high: 0.28
+  importance_sampling_level: "sequence"
+  scale_rewards: "none"
+
+  # Dynamic Sampling
+  dynamic_sampling: true
+  dynamic_sampling_min_mixed_ratio: 0.1
+
+  # Overlong Reward Shaping
+  overlong_reward_shaping: true
+  overlong_safe_length: 768
+  overlong_penalty_factor: 0.5
+
+# --- Reward (matched to text-only RL) ---
+rewards:
+  strategy: "grpo"
+  functions:
+    - name: "accuracy"
+      weight: 0.6
+    - name: "format"
+      weight: 0.4
+  bertscore_model: "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext"
+
+# --- Environment ---
+environment:
+  max_turns: 10
+  use_gym_env: true
+
+# --- Logging ---
+logging:
+  project: "pt2-minstar-gym-rl"
+  run_name: "multimodal_rl_lingshu7b"
+  use_wandb: true
+  log_dir: "logs/runs"
+
+# --- Experiment metadata ---
+meta:
+  experiment: "Multimodal RL — Lingshu-7B"
+  description: >
+    Multimodal RL training with mixed text QA + VQA tasks.
+    Same SFT checkpoint and matched LoRA/hyperparams as text-only RL.
+    Tests direct vision task RL effect and cross-modal transfer.
+    Preliminary experiment for agentic RL (main contribution).

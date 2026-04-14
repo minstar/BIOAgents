@@ -221,8 +221,11 @@ def build_system_prompt(
     Returns:
         Complete system prompt with adaptive tool usage guidance
     """
+    # Keep tools in OpenAI format for apply_chat_template(tools=...)
+    # instead of injecting as JSON text in system prompt.
+    # tool_section is still built as fallback for models without native tool support.
     tool_section = json.dumps(tools, indent=2, ensure_ascii=False)
-    
+
     # Domain-specific system prompts for optimal agent performance
     _DOMAIN_PROMPTS = {
         "medical_qa": {
@@ -285,18 +288,7 @@ def build_system_prompt(
 
 {onboarding}
 
-## Available Tools
-You have access to the following tools. To use a tool, respond with ONLY a JSON object in this exact format:
-```json
-{{"name": "tool_name", "arguments": {{"arg1": "value1", "arg2": "value2"}}}}
-```
-
-Do NOT include any other text when making a tool call. One tool call per response.
-
-{final_instruction}
-
-## Tool Definitions
-{tool_section}"""
+{final_instruction}"""
 
     # Inject adaptive tool usage guidance if task info is available
     if task is not None:
@@ -380,7 +372,31 @@ def parse_tool_call(text: str) -> Optional[dict]:
                         return norm
             except json.JSONDecodeError:
                 pass
-    
+
+    # ── Try 0b: Qwen3.5 XML tool call format ──
+    # Format: <tool_call><function=name><parameter=key>value</parameter>...</function></tool_call>
+    qwen35_match = re.search(
+        r'<tool_call>\s*<function=([^>]+)>(.*?)</function>\s*</tool_call>',
+        text, re.DOTALL,
+    )
+    if qwen35_match:
+        func_name = qwen35_match.group(1).strip()
+        params_block = qwen35_match.group(2).strip()
+        # Parse <parameter=key>value</parameter> pairs
+        param_pairs = re.findall(
+            r'<parameter=([^>]+)>(.*?)</parameter>', params_block, re.DOTALL
+        )
+        arguments = {}
+        for key, val in param_pairs:
+            val = val.strip()
+            # Try to parse as JSON value (number, bool, object, array)
+            try:
+                arguments[key.strip()] = json.loads(val)
+            except (json.JSONDecodeError, ValueError):
+                arguments[key.strip()] = val
+        if func_name:
+            return {"name": func_name, "arguments": arguments}
+
     # ── Try 1: Extract JSON from code blocks ──
     code_block_match = re.search(r'```(?:json|tool_call)?\s*\n?({.*?})\s*\n?```', text, re.DOTALL)
     if code_block_match:
@@ -484,6 +500,11 @@ def repair_model_config(model_path: str) -> bool:
 
     with open(config_path) as f:
         config = json.load(f)
+
+    # Skip repair for non-Qwen2.5-VL models (e.g., Qwen3.5)
+    model_type = config.get("model_type", "")
+    if model_type not in ("qwen2_5_vl", "qwen2_vl"):
+        return False
 
     # Only repair if nested text_config with rope_parameters exists
     # AND top-level rope_scaling is missing
@@ -700,9 +721,9 @@ class AgentRunner:
         architectures = getattr(config, "architectures", [])
 
         self._is_vl_model = any(
-            "vl" in a.lower() or "vision" in a.lower()
+            "vl" in a.lower() or "vision" in a.lower() or "Qwen3_5" in a
             for a in (architectures or [])
-        ) or "vl" in model_type.lower()
+        ) or "vl" in model_type.lower() or model_type == "qwen3_5"
 
         # Load tokenizer / processor
         if self._is_vl_model:
@@ -733,10 +754,16 @@ class AgentRunner:
             trust_remote_code=True,
         )
 
+        is_qwen3_5 = model_type == "qwen3_5"
         is_qwen_vl = model_type in ("qwen2_5_vl", "qwen2_vl")
 
         try:
-            if is_qwen_vl:
+            if is_qwen3_5:
+                from transformers import Qwen3_5ForConditionalGeneration
+                self.model = Qwen3_5ForConditionalGeneration.from_pretrained(
+                    model_path, **load_kwargs
+                )
+            elif is_qwen_vl:
                 from transformers import Qwen2_5_VLForConditionalGeneration
                 self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                     model_path, **load_kwargs
@@ -754,45 +781,68 @@ class AgentRunner:
         self.model.eval()
         logger.info(f"Model loaded via legacy loader (VL={self._is_vl_model})")
     
-    def generate(self, messages: list[dict]) -> str:
-        """Generate a response from the model."""
+    def generate(self, messages: list[dict], tools: Optional[list[dict]] = None) -> str:
+        """Generate a response from the model.
+
+        Args:
+            messages: Conversation messages
+            tools: OpenAI-format tool definitions to pass to apply_chat_template(tools=...)
+        """
         if self.config.backend == "vllm":
-            return self._generate_vllm(messages)
+            return self._generate_vllm(messages, tools=tools)
         else:
-            return self._generate_transformers(messages)
+            return self._generate_transformers(messages, tools=tools)
     
-    def _generate_vllm(self, messages: list[dict]) -> str:
+    def _generate_vllm(self, messages: list[dict], tools: Optional[list[dict]] = None) -> str:
         """Generate with vLLM using chat template."""
         from vllm import SamplingParams
-        
+
         # Use the tokenizer from vLLM engine
         tokenizer = self.model.get_tokenizer()
-        prompt = tokenizer.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=True
-        )
+        try:
+            prompt = tokenizer.apply_chat_template(
+                messages, tools=tools if tools else None,
+                tokenize=False, add_generation_prompt=True
+            )
+        except Exception:
+            prompt = tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
+            )
         
         outputs = self.model.generate([prompt], self.sampling_params)
         return outputs[0].outputs[0].text.strip()
     
-    def _generate_transformers(self, messages: list[dict]) -> str:
+    def _generate_transformers(self, messages: list[dict], tools: Optional[list[dict]] = None) -> str:
         """Generate with HuggingFace transformers."""
         import torch
-        
+
         # For VL models, use processor if available
         if self._is_vl_model and self.processor is not None:
             # Text-only input for VL model
-            text = self.processor.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            )
+            try:
+                text = self.processor.apply_chat_template(
+                    messages, tools=tools if tools else None,
+                    tokenize=False, add_generation_prompt=True
+                )
+            except Exception:
+                text = self.processor.apply_chat_template(
+                    messages, tokenize=False, add_generation_prompt=True
+                )
             inputs = self.processor(
                 text=[text], padding=True, return_tensors="pt"
             ).to(self.model.device)
         else:
             # Apply chat template
             if hasattr(self.tokenizer, "apply_chat_template"):
-                text = self.tokenizer.apply_chat_template(
-                    messages, tokenize=False, add_generation_prompt=True
-                )
+                try:
+                    text = self.tokenizer.apply_chat_template(
+                        messages, tools=tools if tools else None,
+                        tokenize=False, add_generation_prompt=True
+                    )
+                except Exception:
+                    text = self.tokenizer.apply_chat_template(
+                        messages, tokenize=False, add_generation_prompt=True
+                    )
             else:
                 text = ""
                 for msg in messages:
@@ -842,6 +892,7 @@ class AgentRunner:
         obs, info = env.reset(options={"task_id": task_id})
         
         # ── no_tools ablation (SciAgentGYM-style w/o tools baseline) ──
+        tools_for_prompt = None
         if self.config.no_tools:
             no_tool_prompt = (
                 f"You are a medical AI assistant. Answer the following clinical "
@@ -876,14 +927,19 @@ class AgentRunner:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": obs},
             ]
-        
+
+        # Store tools for passing to apply_chat_template(tools=...)
+        # This ensures the tokenizer converts tool specs to the model's native format
+        # (e.g., Qwen3.5 XML format) matching the training-time format.
+        openai_tools = tools_for_prompt if not self.config.no_tools else None
+
         try:
             for turn_idx in range(self.config.max_turns):
                 turn = TurnRecord(turn_idx=turn_idx)
-                
+
                 # Generate
                 t0 = time.time()
-                raw_output = self.generate(messages)
+                raw_output = self.generate(messages, tools=openai_tools)
                 turn.latency_seconds = time.time() - t0
                 turn.raw_output = raw_output
                 

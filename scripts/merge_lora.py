@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 """Merge LoRA adapter into base model."""
 import sys
+import argparse
 import torch
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-base_path = "checkpoints/models/Lingshu-7B"
-adapter_path = "checkpoints/sft_p2_aggressive_lingshu/final"
-merged_path = "checkpoints/sft_p2_aggressive_lingshu/merged"
+parser = argparse.ArgumentParser()
+parser.add_argument("--base-model", default="checkpoints/models/Lingshu-7B")
+parser.add_argument("--adapter", default="checkpoints/sft_p2_aggressive_lingshu/final")
+parser.add_argument("--output", default="checkpoints/sft_p2_aggressive_lingshu/merged")
+args = parser.parse_args()
+
+base_path = args.base_model
+adapter_path = args.adapter
+merged_path = args.output
 
 print("Loading base model...")
 from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig
@@ -37,4 +44,14 @@ model.save_pretrained(merged_path)
 
 tokenizer = AutoTokenizer.from_pretrained(base_path, trust_remote_code=True)
 tokenizer.save_pretrained(merged_path)
+
+# Copy processor files for VL models (preprocessor_config.json, etc.)
+if is_qwen_vl:
+    import shutil
+    for fname in ("preprocessor_config.json", "chat_template.json"):
+        src = Path(base_path) / fname
+        if src.exists():
+            shutil.copy2(src, Path(merged_path) / fname)
+            print(f"Copied {fname} from base model")
+
 print(f"Merged model saved to {merged_path}")

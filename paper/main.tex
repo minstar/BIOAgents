@@ -52,7 +52,7 @@ for Training Generalizable Medical AI Agents}
 % ============================================================
 \begin{abstract}
 % ============================================================
-We present \gym{}, a Gymnasium-compatible environment for training medical AI agents across 10 clinical domains with 195K+ tasks, 187+ domain-specific tools, and a knowledge-grounded retrieval system over 828K medical passages. We propose \emph{Bidirectional Truncated On-Policy Distillation with Hint Injection} (BT-OPD+Hint), a teacher-student co-evolution framework where EMA-updated teachers provide outcome-aware KL regularization across all conversation turns via correctness-conditioned hints, combined with cosine length-controlled reward for training stability. BT-OPD+Hint achieves 61.1\% validation accuracy (+8.5 pp over baseline) with sustained multi-turn tool use over 60 steps, while standard GRPO shows no improvement. We further identify an \emph{agentic-textual transfer gap}: agentic RL teaches tool-use competence (+22\% composite reward) but does not transfer to text QA due to format reward dilution (24:1 ratio); in online single-iteration GRPO, clipping-based innovations are mathematically vacuous ($\pi_\theta/\pi_\text{old} \equiv 1$), and only reward normalization produces different dynamics. Our environment and training pipeline are publicly available.
+We present \gym{}, a Gymnasium-compatible environment for training medical AI agents across 10 clinical domains with 195K+ tasks, 187+ domain-specific tools, and a knowledge-grounded retrieval system over 828K medical passages. We propose \emph{Bidirectional Truncated On-Policy Distillation} (BT-OPD), a teacher-student co-evolution framework where EMA-updated teachers provide outcome-aware KL regularization across all conversation turns via outcome-privileged teacher conditioning, combined with cosine length-controlled reward for training stability. BT-OPD achieves 61.1\% validation accuracy (+8.5 pp over baseline) with sustained multi-turn tool use over 60 steps, while standard GRPO shows no improvement. We further identify an \emph{agentic-textual transfer gap}: agentic RL teaches tool-use competence (+22\% composite reward) but does not transfer to text QA due to format reward dilution (24:1 ratio); in online single-iteration GRPO, clipping-based innovations are mathematically vacuous ($\pi_\theta/\pi_\text{old} \equiv 1$), and only reward normalization produces different dynamics. Our environment and training pipeline are publicly available.
 
 \end{abstract}
 
@@ -74,7 +74,7 @@ We introduce \gym{}, a comprehensive Gymnasium-compatible environment that addre
 
     \item \textbf{Safety-Aware 5D Reward System.} A multi-dimensional reward function that evaluates accuracy (30\%), process quality (25\%), safety (20\%), format compliance (15\%), and coherence (10\%), with critical safety violations capping the total reward.
 
-    \item \textbf{Bidirectional Truncated On-Policy Distillation with Hint Injection (BT-OPD+Hint).} We propose a teacher-student co-evolution framework for agentic RL: the teacher model evolves alongside the student via EMA updates, with a bidirectional KL loss across all conversation turns. Correctness-conditioned hints are injected into the teacher's context during logprob computation, making the KL target outcome-aware---differentially regularizing correct vs.\ incorrect trajectories at every turn. This provides dense, outcome-conditioned process supervision that standard GRPO lacks. To prevent the response explosion that destabilizes standard agentic RL, we combine BT-OPD+Hint with cosine length-controlled reward and EMA scheduling as training stability mechanisms. The method achieves 61.1\% validation accuracy (+8.5 pp over baseline) at step 60 with sustained multi-turn tool use.
+    \item \textbf{Bidirectional Truncated On-Policy Distillation (BT-OPD).} We propose a teacher-student co-evolution framework for agentic RL: the teacher model evolves alongside the student via EMA updates, with a bidirectional KL loss across all conversation turns. Outcome-privileged information is injected into the teacher's context during logprob computation, making the KL target outcome-aware---differentially regularizing correct vs.\ incorrect trajectories at every turn. This provides dense, outcome-conditioned process supervision that standard GRPO lacks. To prevent the response explosion that destabilizes standard agentic RL, we combine BT-OPD with cosine length-controlled reward and EMA scheduling as training stability mechanisms. The method achieves 61.1\% validation accuracy (+8.5 pp over baseline) at step 60 with sustained multi-turn tool use.
 
     \item \textbf{Agentic-Textual Transfer Gap \& Reward Signal Analysis.} Through controlled experiments with 5 RL variants, 3 seeds, and 1000+ steps, we show that agentic RL teaches procedural competence (+22\%) but standard reward configurations do not improve declarative knowledge---caused by \emph{format reward dilution} (24:1 reward ratio). We further prove that in online single-iteration GRPO, all clipping-based innovations are vacuous ($\pi_\theta/\pi_\text{old} \equiv 1$), reducing the effective design space to learning rate, $\beta$, and reward composition.
 \end{enumerate}
@@ -94,10 +94,10 @@ AgentClinic~\citep{schmidgall2025agentclinic} simulates patient-doctor interacti
 GRPO~\citep{shao2024deepseekmath} eliminates the need for a separate critic model by using group relative rewards. GSPO~\citep{gspo2025} introduces sequence-level importance sampling to reduce variance. DAPO~\citep{dapo2025} proposes asymmetric clipping for stable exploration. Dr.~GRPO~\citep{liu2025drgrpo} removes length normalization bias. We combine these advances into a unified training pipeline tailored for medical domains.
 
 \paragraph{On-Policy Distillation.}
-On-policy distillation (OPD) trains a student model using its own trajectories with a teacher providing soft supervision. Self-Distilled Reasoner (OPSD)~\citep{zhao26opsd} introduces the foundational framework where the teacher distills privileged information into the student's policy. Self-Distilled RLVR~\citep{yang26rlsd} confirms OPD instability and proposes using self-distillation for gradient magnitude control with RLVR providing direction. SRPO~\citep{li26srpo} unifies group-relative and self-distillation objectives via sample routing: correct completions train with GRPO while failed ones use self-distillation. CRISP~\citep{sang26crisp} applies OPD for reasoning compression with periodic teacher refresh. \citet{song26opdsurvey} provide a comprehensive survey identifying agent-level OPD as an open problem. Our BT-OPD+Hint extends OPD to \emph{multi-turn agentic} settings with outcome-conditioned teacher supervision across all conversation turns.
+On-policy distillation (OPD) trains a student model using its own trajectories with a teacher providing soft supervision. Self-Distilled Reasoner (OPSD)~\citep{zhao26opsd} introduces the foundational framework where the teacher distills privileged information into the student's policy. Self-Distilled RLVR~\citep{yang26rlsd} confirms OPD instability and proposes using self-distillation for gradient magnitude control with RLVR providing direction. SRPO~\citep{li26srpo} unifies group-relative and self-distillation objectives via sample routing: correct completions train with GRPO while failed ones use self-distillation. CRISP~\citep{sang26crisp} applies OPD for reasoning compression with periodic teacher refresh. \citet{song26opdsurvey} provide a comprehensive survey identifying agent-level OPD as an open problem. Our BT-OPD extends OPD to \emph{multi-turn agentic} settings with outcome-privileged teacher conditioning across all conversation turns.
 
-\paragraph{Hint-Based and Agentic RL.}
-HiLL~\citep{xia26hill} learns a hint policy that provides intermediate guidance during RL training, most closely related to our hint injection mechanism---however, HiLL learns hints via a separate policy network, while our hints are template-based and injected only into the teacher's context for KL computation, never seen by the student. Complementary RL~\citep{muhtar26complementaryrl} proposes co-evolving an experience extractor with the actor in agentic RL, sharing our insight that agentic tasks benefit from auxiliary learning signals beyond sparse rewards. D$^2$Skill~\citep{tu26d2skill} introduces a dual-granularity skill bank for agentic RL that decomposes complex tasks into reusable primitives. Unlike these approaches, which focus on single-turn reasoning or task decomposition, BT-OPD+Hint addresses the specific challenge of \emph{multi-turn} agentic training where reward is sparse and diluted by format compliance, providing dense outcome-conditioned supervision at every conversation turn.
+\paragraph{Privileged Information and Agentic RL.}
+HiLL~\citep{xia26hill} learns a hint policy that provides intermediate guidance during RL training---however, HiLL trains a separate policy network, while our privileged conditioning is template-based and injected only into the teacher's context for KL computation, never seen by the student. Complementary RL~\citep{muhtar26complementaryrl} proposes co-evolving an experience extractor with the actor in agentic RL, sharing our insight that agentic tasks benefit from auxiliary learning signals beyond sparse rewards. D$^2$Skill~\citep{tu26d2skill} introduces a dual-granularity skill bank for agentic RL that decomposes complex tasks into reusable primitives. Unlike these approaches, which focus on single-turn reasoning or task decomposition, BT-OPD addresses the specific challenge of \emph{multi-turn} agentic training where reward is sparse and diluted by format compliance, providing dense outcome-privileged supervision at every conversation turn.
 
 \paragraph{Tool-Use and Retrieval-Augmented Generation.}
 Tool-augmented LLMs~\citep{schick2024toolformer, qin2023toolllm} learn to invoke external APIs. In medicine, retrieval from knowledge bases improves factual grounding~\citep{xiong2024medcpt}. \gym{} integrates tool use with domain-specific medical knowledge retrieval as a core training mechanism.
@@ -247,14 +247,14 @@ where the default weights are $\alpha_1{=}0.3$, $\alpha_2{=}0.25$, $\alpha_3{=}0
 
 We train directly from the base model (Qwen3.5-9B) using GRPO-based RL with on-policy distillation, \emph{without} SFT warmup. This design choice avoids the format compliance bias that SFT on tool-use trajectories introduces (see Appendix~\ref{app:rl_baselines} for SFT warmup analysis on baseline experiments).
 
-\paragraph{GRPO with BT-OPD+Hint.}
-We apply Group Relative Policy Optimization~\citep{shao2024deepseekmath} with dynamic sampling (only prompts with mixed outcomes contribute to training). The key innovation is combining GRPO with Bidirectional Truncated On-Policy Distillation and Hint Injection (BT-OPD+Hint, Section~\ref{sec:opd}), stabilized by EMA scheduling and cosine length-controlled reward (Section~\ref{sec:stability}).
+\paragraph{GRPO with BT-OPD.}
+We apply Group Relative Policy Optimization~\citep{shao2024deepseekmath} with dynamic sampling (only prompts with mixed outcomes contribute to training). The key innovation is combining GRPO with Bidirectional Truncated On-Policy Distillation (BT-OPD, Section~\ref{sec:opd}), stabilized by EMA scheduling and cosine length-controlled reward (Section~\ref{sec:stability}).
 
 
-\subsection{Bidirectional Truncated On-Policy Distillation with Hint Injection}
+\subsection{Bidirectional Truncated On-Policy Distillation}
 \label{sec:opd}
 
-A persistent failure mode in agentic RL is \emph{response explosion}: the model learns to generate increasingly long single-turn responses that bypass multi-turn tool use, eventually saturating the context window (12,288 tokens). Standard GRPO provides no mechanism to prevent this degeneration. We propose \emph{Bidirectional Truncated On-Policy Distillation with Hint Injection} (BT-OPD+Hint), a teacher-student co-evolution framework that provides both the learning signal for accuracy improvement and the structural regularization to maintain multi-turn behavior.
+A persistent failure mode in agentic RL is \emph{response explosion}: the model learns to generate increasingly long single-turn responses that bypass multi-turn tool use, eventually saturating the context window (12,288 tokens). Standard GRPO provides no mechanism to prevent this degeneration. We propose \emph{Bidirectional Truncated On-Policy Distillation} (BT-OPD), a teacher-student co-evolution framework that provides both the learning signal for accuracy improvement and the structural regularization to maintain multi-turn behavior.
 
 \paragraph{Core Method: BT-OPD.}
 We maintain a teacher model $\theta_T$ that co-evolves with the student $\theta_S$. The student is trained with a bidirectional truncated on-policy distillation loss that regularizes the policy toward the teacher across \emph{all} conversation turns ($\texttt{max\_turn}=0$):
@@ -263,19 +263,19 @@ We maintain a teacher model $\theta_T$ that co-evolves with the student $\theta_
 \end{equation}
 where $\lambda_{\text{KL}} = 0.01$. ``Bidirectional'' means the KL loss is computed across all turns of the multi-turn conversation, not just the final answer turn. ``Truncated'' refers to discarding KL contributions from turns that exceed the context window. Unlike frozen-teacher distillation (which collapses as the student improves beyond the teacher), the co-evolving teacher creates a \emph{moving} regularization target that tracks the student's improving policy---preventing catastrophic divergence while allowing continuous policy improvement.
 
-\paragraph{Hint Injection.}
-Standard OPD treats correct and incorrect trajectories identically when computing teacher logprobs---the teacher distribution provides the same regularization target regardless of outcome. We introduce \emph{hint injection}: during teacher logprob computation, a correctness-conditioned hint is inserted at the prompt-response boundary, modifying the teacher's probability distribution to be outcome-aware. For correct trajectories, the hint reinforces the student's reasoning (``the diagnostic reasoning appears sound, but consider alternative diagnoses''); for incorrect trajectories, the hint provides corrective guidance (``some aspects need re-examination---revisit the differential diagnosis''). When \texttt{HINT\_OPD\_DYNAMIC} is enabled, hints are dynamically generated from templates that include the student's specific answer, providing case-specific rather than generic feedback.
+\paragraph{Outcome-Privileged Teacher Conditioning.}
+Standard OPD treats correct and incorrect trajectories identically when computing teacher logprobs---the teacher distribution provides the same regularization target regardless of outcome. We introduce \emph{outcome-privileged teacher conditioning}: during teacher logprob computation, correctness-conditioned privileged information is inserted at the prompt-response boundary, modifying the teacher's probability distribution to be outcome-aware. For correct trajectories, the privileged context reinforces the student's reasoning (``the diagnostic reasoning appears sound, but consider alternative diagnoses''); for incorrect trajectories, it provides corrective guidance (``some aspects need re-examination---revisit the differential diagnosis''). Privileged information can be dynamically generated from templates that include the student's specific answer, providing case-specific rather than generic feedback.
 
-Critically, the hint tokens are \emph{removed} from the teacher's output logprobs after computation, so the student never sees the hints directly. Instead, the hints influence the teacher's probability distribution, creating a KL target that differentially regularizes correct vs.\ incorrect behavior: the teacher ``knows'' whether the trajectory succeeded, making the bidirectional KL loss outcome-aware at every turn. This transforms the BT-OPD loss from a generic regularizer into a form of \emph{outcome-conditioned process supervision}.
+Critically, the privileged tokens are \emph{removed} from the teacher's output logprobs after computation, so the student never sees them directly. Instead, the privileged information influences the teacher's probability distribution, creating a KL target that differentially regularizes correct vs.\ incorrect behavior: the teacher ``knows'' whether the trajectory succeeded, making the bidirectional KL loss outcome-aware at every turn. This transforms the BT-OPD loss from a generic regularizer into a form of \emph{outcome-conditioned process supervision}.
 
-\paragraph{Why BT-OPD+Hint Enables Agentic Learning.}
-The method addresses the core challenge of multi-turn agentic RL: the reward signal is sparse (only at the final turn) and diluted by format compliance, making it difficult for the student to learn \emph{which turns} contributed to success. BT-OPD+Hint solves this in two ways: (1) the bidirectional KL loss provides dense, per-turn regularization rather than sparse final-turn reward, and (2) hint injection makes this regularization outcome-aware---correct trajectories are reinforced differently from incorrect ones. This combination explains why BT-OPD+Hint achieves +7.0 pp accuracy improvement while standard GRPO (which lacks per-turn supervision) shows no improvement.
+\paragraph{Why BT-OPD Enables Agentic Learning.}
+The method addresses the core challenge of multi-turn agentic RL: the reward signal is sparse (only at the final turn) and diluted by format compliance, making it difficult for the student to learn \emph{which turns} contributed to success. BT-OPD solves this in two ways: (1) the bidirectional KL loss provides dense, per-turn regularization rather than sparse final-turn reward, and (2) outcome-privileged conditioning makes this regularization outcome-aware---correct trajectories are reinforced differently from incorrect ones. This combination explains why BT-OPD achieves +8.5 pp accuracy improvement while standard GRPO (which lacks per-turn supervision) shows no improvement.
 
 
 \subsection{Training Stability Mechanisms}
 \label{sec:stability}
 
-BT-OPD+Hint provides the learning signal, but agentic RL also requires mechanisms to prevent training instability. We employ two complementary techniques: EMA scheduling for smooth teacher evolution, and cosine length-controlled reward for response length control.
+BT-OPD provides the learning signal, but agentic RL also requires mechanisms to prevent training instability. We employ two complementary techniques: EMA scheduling for smooth teacher evolution, and cosine length-controlled reward for response length control.
 
 \paragraph{EMA Teacher Schedule.}
 The teacher model $\theta_T$ is updated via exponential moving average:
@@ -297,7 +297,7 @@ To prevent response explosion at the reward level, we replace the binary accurac
 where $L$ is the response length in tokens, $L_{\text{max}} = 12{,}288$, $R_{\text{max}} = 1.1$, $R_{\text{min}} = 0.7$, and $R_{\text{penalty}} = -0.5$. Correct short responses receive high reward ($\sim$1.1), which decays smoothly for longer responses; incorrect long responses receive increasing penalty. Critically, the cosine reward is applied only during training---validation uses standard binary accuracy to ensure unbiased evaluation.
 
 \paragraph{Interaction Between Components.}
-The three components---BT-OPD+Hint, EMA scheduling, and cosine reward---serve distinct roles: (1) BT-OPD+Hint provides the core learning signal (why accuracy improves), (2) EMA scheduling ensures the teacher tracks the student without catastrophic drift (why training doesn't diverge), and (3) the cosine reward prevents response explosion at the reward level (why multi-turn structure is maintained). Ablation results (Section~\ref{sec:opd_results}) confirm that removing any component degrades performance: without hints, accuracy plateaus; without EMA, training collapses; without cosine reward, response length explodes.
+The three components---BT-OPD, EMA scheduling, and cosine reward---serve distinct roles: (1) BT-OPD provides the core learning signal (why accuracy improves), (2) EMA scheduling ensures the teacher tracks the student without catastrophic drift (why training doesn't diverge), and (3) the cosine reward prevents response explosion at the reward level (why multi-turn structure is maintained). Ablation results (Section~\ref{sec:opd_results}) confirm that removing any component degrades performance: without privileged conditioning, accuracy plateaus; without EMA, training collapses; without cosine reward, response length explodes.
 
 
 % ============================================================
@@ -305,14 +305,14 @@ The three components---BT-OPD+Hint, EMA scheduling, and cosine reward---serve di
 \label{sec:eval}
 % ============================================================
 
-\subsection{BT-OPD+Hint Results}
+\subsection{BT-OPD Results}
 \label{sec:opd_results}
 
-Table~\ref{tab:opd_trajectory} presents the validation accuracy trajectory for BT-OPD+Hint with EMA scheduling and cosine length reward (Sections~\ref{sec:opd}--\ref{sec:stability}). Starting from a 52.6\% baseline, the method achieves 61.1\% (+8.5 pp) at step 60, with a characteristic oscillating improvement pattern where each peak exceeds the previous one.
+Table~\ref{tab:opd_trajectory} presents the validation accuracy trajectory for BT-OPD with EMA scheduling and cosine length reward (Sections~\ref{sec:opd}--\ref{sec:stability}). Starting from a 52.6\% baseline, the method achieves 61.1\% (+8.5 pp) at step 60, with a characteristic oscillating improvement pattern where each peak exceeds the previous one.
 
 \begin{table}[t]
 \centering
-\caption{BT-OPD+Hint validation accuracy trajectory. The method exhibits oscillating recovery---periodic dips followed by new peaks---while maintaining controlled response length. Standard GRPO (no distillation) shows no improvement; EMA-only distillation (no hints) plateaus at 53.8\% by step 40.}
+\caption{BT-OPD validation accuracy trajectory. The method exhibits oscillating recovery---periodic dips followed by new peaks---while maintaining controlled response length. Standard GRPO (no distillation) shows no improvement; EMA-only distillation (no privileged conditioning) plateaus at 53.8\% by step 40.}
 \label{tab:opd_trajectory}
 \begin{tabular}{lcccccc}
 \toprule
@@ -356,7 +356,7 @@ Table~\ref{tab:opd_trajectory} presents the validation accuracy trajectory for B
 \addplot[color=red!80, mark=*, mark size=2pt, thick] coordinates {
     (0,52.6) (5,53.8) (10,54.9) (15,56.4) (20,53.6) (25,58.0) (30,59.0) (35,59.1) (40,59.6) (45,60.4) (50,57.3) (55,60.3) (60,61.1)
 };
-\addlegendentry{BT-OPD+Hint (ours)}
+\addlegendentry{BT-OPD (ours)}
 
 % GRPO baseline (flat)
 \addplot[color=blue!50, mark=none, thick, dashed] coordinates {
@@ -387,13 +387,13 @@ Table~\ref{tab:opd_trajectory} presents the validation accuracy trajectory for B
 \addlegendentry{Resp.\ length}
 \end{axis}
 \end{tikzpicture}
-\caption{BT-OPD+Hint training trajectory. Red: validation accuracy shows oscillating improvement, reaching 61.1\% (+8.5 pp) at step 60. Orange: response length oscillates rather than monotonically increasing, demonstrating the cosine reward's effectiveness in preventing response explosion. The dashed blue line shows standard GRPO without distillation for comparison.}
+\caption{BT-OPD training trajectory. Red: validation accuracy shows oscillating improvement, reaching 61.1\% (+8.5 pp) at step 60. Orange: response length oscillates rather than monotonically increasing, demonstrating the cosine reward's effectiveness in preventing response explosion. The dashed blue line shows standard GRPO without distillation for comparison.}
 \label{fig:opd_trajectory}
 \end{figure}
 
 Three properties distinguish this training dynamic from standard RL:
 
-\textbf{Oscillating recovery (BT-OPD effect).} Validation accuracy follows a sawtooth pattern: rising peaks (steps 15, 25, 30, 45, 60) interspersed with periodic dips (steps 20, 35, 50). This reflects the interplay between student drift and EMA teacher updates---the student explores beyond the teacher between updates, then the teacher catches up via EMA, re-anchoring the student. Crucially, each peak exceeds the previous one because the outcome-conditioned hints make the KL target richer than generic regularization: the teacher differentially reinforces correct reasoning and corrects incorrect reasoning at every turn.
+\textbf{Oscillating recovery (BT-OPD effect).} Validation accuracy follows a sawtooth pattern: rising peaks (steps 15, 25, 30, 45, 60) interspersed with periodic dips (steps 20, 35, 50). This reflects the interplay between student drift and EMA teacher updates---the student explores beyond the teacher between updates, then the teacher catches up via EMA, re-anchoring the student. Crucially, each peak exceeds the previous one because the outcome-privileged conditioning makes the KL target richer than generic regularization: the teacher differentially reinforces correct reasoning and corrects incorrect reasoning at every turn.
 
 \textbf{Response length control (cosine reward effect).} The cosine reward maintains response length between 5.7--9.3K tokens with clip ratios of 33--71\%, in sharp contrast to standard agentic RL where response length monotonically increases to the 12,288-token limit (91.7\% clipping by step 40 without cosine reward). The oscillating pattern (peaks at steps 10, 35 followed by compressions at steps 30, 40) indicates the model alternates between exploration and consolidation of multi-turn tool-use behavior.
 
@@ -462,7 +462,7 @@ We evaluate across 21 medical benchmarks spanning 4 categories:
 
 \paragraph{Training Configuration.}
 \begin{itemize}
-    \item \textbf{BT-OPD+Hint RL}: 800 train tasks (bioagents\_medical), LR=$5 \times 10^{-7}$, 8 generations per prompt, $\beta{=}0.01$, temperature 0.7, EMA decay $\alpha{=}0.995$, cosine reward $R_{\text{max}}{=}1.1$, $L_{\text{max}}{=}12{,}288$ tokens.
+    \item \textbf{BT-OPD RL}: 800 train tasks (bioagents\_medical), LR=$5 \times 10^{-7}$, 8 generations per prompt, $\beta{=}0.01$, temperature 0.7, EMA decay $\alpha{=}0.995$, cosine reward $R_{\text{max}}{=}1.1$, $L_{\text{max}}{=}12{,}288$ tokens.
     \item \textbf{Hardware}: 8$\times$NVIDIA A100 80GB GPUs.
 \end{itemize}
 
@@ -569,11 +569,11 @@ Medical AI systems trained in \gym{} are intended for research purposes. Clinica
 \label{sec:conclusion}
 % ============================================================
 
-We presented \gym{}, a comprehensive multi-domain Gymnasium environment for training medical AI agents. By combining 10 clinical domains with 195K+ tasks, a knowledge-grounded tool system, a safety-aware 5D reward function, and BT-OPD+Hint for stable agentic RL, we provide a rigorous testbed for medical agent training.
+We presented \gym{}, a comprehensive multi-domain Gymnasium environment for training medical AI agents. By combining 10 clinical domains with 195K+ tasks, a knowledge-grounded tool system, a safety-aware 5D reward function, and BT-OPD for stable agentic RL, we provide a rigorous testbed for medical agent training.
 
 Our central empirical contribution is twofold. First, we identify and diagnose the \emph{agentic-textual transfer gap}: RL on agentic tasks improves procedural competence (+22\% tool-use reward) but does not transfer to text QA benchmarks, caused by \textbf{format reward dilution} (24:1 ratio). We show that online single-iteration GRPO renders all clipping-based innovations mathematically equivalent ($\pi_\theta/\pi_\text{old} \equiv 1$), while reward normalization (Dr.~GRPO) produces meaningfully different dynamics with 5.1$\times$ higher agentic accuracy.
 
-Second, we propose \textbf{Bidirectional Truncated On-Policy Distillation with Hint Injection (BT-OPD+Hint)}, a teacher-student co-evolution framework where the teacher provides structural regularization (bidirectional KL across all turns) with outcome-conditioned process supervision (correctness hints injected into the teacher's context make the KL target differentially regularize correct vs.\ incorrect trajectories). Stabilized by cosine length-controlled reward and EMA scheduling, BT-OPD+Hint overcomes the response explosion problem: validation accuracy improves from 52.6\% to 61.1\% (+8.5 pp) over 60 steps while maintaining controlled response length (5.7--9.3K tokens) and stable multi-turn tool use (7.0--7.4 turns). Standard GRPO shows no improvement under identical conditions. Future work should explore tighter EMA schedules, adaptive KL coefficients, and vision-language extensions to further improve training stability and push beyond the current accuracy ceiling.
+Second, we propose \textbf{Bidirectional Truncated On-Policy Distillation (BT-OPD)}, a teacher-student co-evolution framework where the teacher provides structural regularization (bidirectional KL across all turns) with outcome-privileged teacher conditioning (correctness information injected into the teacher's context makes the KL target differentially regularize correct vs.\ incorrect trajectories). Stabilized by cosine length-controlled reward and EMA scheduling, BT-OPD overcomes the response explosion problem: validation accuracy improves from 52.6\% to 61.1\% (+8.5 pp) over 60 steps while maintaining controlled response length (5.7--9.3K tokens) and stable multi-turn tool use (7.0--7.4 turns). Standard GRPO shows no improvement under identical conditions. Future work should explore tighter EMA schedules, adaptive KL coefficients, and vision-language extensions to further improve training stability and push beyond the current accuracy ceiling.
 
 \gym{} is publicly available at \todo{GitHub URL} to facilitate reproducible research in medical AI training.
 

@@ -1,0 +1,133 @@
+# ============================================================
+# BT-OPD: Bidirectional Truncated On-Policy Distillation
+# ============================================================
+# Novel OPD variant combining two innovations:
+#   1. Truncated OPD: Apply teacher supervision only on first K
+#      assistant turns where action quality is most impactful.
+#      Reduces OPD compute by ~60-70% with minimal performance loss.
+#   2. Bidirectional OPD: Use both positive and negative reward
+#      trajectories. Positive = reinforce good actions (standard).
+#      Negative = corrective gradient (teacher suppresses bad actions).
+#
+# Key insight: In multi-turn agentic tasks, early-turn actions
+# determine trajectory quality. Late turns are already constrained
+# by accumulated context, so teacher guidance has diminishing returns.
+#
+# References:
+#   - OpenClaw-RL (arXiv:2603.10165) — hindsight-guided OPD
+#   - GLM-5 (arXiv:2602.15763) — cross-stage OPD
+#   - G-OPD (arXiv:2602.12125) — reward extrapolation
+#
+# Usage:
+#   python scripts/train_two_stage.py \
+#       --skip-sft \
+#       --rl-config configs/opd_bt_qwen35_9b.yaml
+# ============================================================
+
+# --- Model (Qwen3.5-9B, start from best v7/v8 checkpoint) ---
+model:
+  name_or_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+# --- LoRA / PEFT ---
+peft:
+  enabled: true
+  r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+# --- Dataset (full 4-modality GYM) ---
+dataset:
+  domain: "medical_qa"
+  tasks_path: "data/domains/full_4modality_combined/tasks.json"
+  split_tasks_path: "data/domains/full_4modality_combined/split_tasks.json"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 8192
+  max_completion_length: 16384
+
+# --- Training ---
+training:
+  output_dir: "checkpoints/opd_bt_qwen35_9b"
+  num_train_epochs: 3
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 8
+  learning_rate: 5.0e-7
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 25
+  eval_steps: 10
+  save_total_limit: 10
+  seed: 42
+
+  # GRPO-specific
+  num_generations: 3
+  beta: 0.01
+  temperature: 0.7
+  top_p: 0.95
+  top_k: 50
+
+  # Standard GRPO (not Dr.GRPO — proven more stable on Qwen3.5)
+  use_dr_grpo: false
+  loss_type: "grpo"
+
+# --- Reward ---
+rewards:
+  strategy: "grpo"
+  functions:
+    - name: "accuracy"
+      weight: 0.6
+    - name: "format"
+      weight: 0.4
+  bertscore_model: "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext"
+
+# --- On-Policy Distillation (BT-OPD) ---
+opd:
+  use_opd: true
+  # Teacher: best RL checkpoint (to be updated after v7/v8 completes)
+  opd_teacher_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/v7_step90_merged"
+  opd_mode: "cross_stage"
+  opd_alpha: 0.3           # 30% RL + 70% OPD (Pareto-dominant from alpha ablation)
+  opd_lambda: 1.0           # Standard OPD (no reward extrapolation)
+  opd_warmup_steps: 20      # Let RL stabilize before OPD
+
+  # BT-OPD extensions
+  opd_max_turn: 3            # Apply OPD only on first 3 assistant turns
+  opd_bidirectional: true    # Use negative-reward trajs for corrective OPD
+
+# --- Environment ---
+environment:
+  max_turns: 10
+  use_gym_env: true
+
+# --- Logging ---
+logging:
+  project: "bioagents-verl-grpo"
+  run_name: "opd_bt_qwen35_9b"
+  use_wandb: true
+  log_dir: "logs/runs"
+
+# --- Experiment metadata ---
+meta:
+  experiment: "BT-OPD — Bidirectional Truncated On-Policy Distillation"
+  description: >
+    Novel OPD variant for medical agentic RL. Combines truncated OPD
+    (first 3 turns only, ~70% compute reduction) with bidirectional
+    signals (corrective gradient from negative-reward trajectories).
+    Teacher = best v7 GRPO checkpoint (step 90, val 70.3%).
+    Tests whether BT-OPD can: (1) maintain agentic competence while
+    (2) improving text QA transfer, and (3) extending training window
+    beyond the catastrophic forgetting boundary.

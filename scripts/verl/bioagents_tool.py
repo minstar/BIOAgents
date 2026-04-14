@@ -34,8 +34,8 @@ DATA_TO_BIO_DOMAIN = {
     "radiology_report": "radiology_report",
 }
 
-# Shared toolkit cache across all instances (loaded once per domain)
-_toolkit_cache: dict[str, Any] = {}
+# Toolkit cache keyed by (domain, instance_id) to avoid stale data across samples
+_toolkit_cache: dict[tuple[str, str], Any] = {}
 _knowledge_backend = None
 
 
@@ -55,10 +55,11 @@ def _get_knowledge_backend():
     return _knowledge_backend
 
 
-def _get_toolkit(bio_domain: str, db_data: dict = None):
-    """Get or create a domain toolkit."""
-    if bio_domain in _toolkit_cache:
-        return _toolkit_cache[bio_domain]
+def _get_toolkit(bio_domain: str, db_data: dict = None, instance_id: str = ""):
+    """Get or create a domain toolkit, keyed by (domain, instance) to avoid stale data."""
+    cache_key = (bio_domain, instance_id)
+    if cache_key in _toolkit_cache:
+        return _toolkit_cache[cache_key]
 
     toolkit = None
     try:
@@ -110,7 +111,11 @@ def _get_toolkit(bio_domain: str, db_data: dict = None):
     except Exception as e:
         logger.warning(f"Failed to load {bio_domain} tools: {e}")
 
-    _toolkit_cache[bio_domain] = toolkit
+    # Limit cache size to prevent memory leak (per-instance keying)
+    if len(_toolkit_cache) > 256:
+        _toolkit_cache.clear()
+
+    _toolkit_cache[cache_key] = toolkit
     return toolkit
 
 
@@ -184,9 +189,9 @@ class BIOAgentsMedicalTool(BaseTool):
         if tool_name in KNOWLEDGE_TOOLS:
             return await self._execute_knowledge_search(tool_name, parameters)
 
-        # Dispatch to domain toolkit
+        # Dispatch to domain toolkit (per-instance to avoid stale data)
         db_data = instance.get("extra_info", {}).get("db_data")
-        toolkit = _get_toolkit(bio_domain, db_data)
+        toolkit = _get_toolkit(bio_domain, db_data, instance_id=instance_id)
         if toolkit is None:
             return ToolResponse(text=f"Domain '{bio_domain}' tools unavailable."), 0.0, {}
 

@@ -9,7 +9,14 @@ Runs AgentRunner on medical_qa test tasks to measure:
 - Process quality
 
 Usage:
+    # Evaluate registered models
     CUDA_VISIBLE_DEVICES=X python scripts/eval_agentic_sft_vs_rl.py [--num-tasks 50]
+
+    # Evaluate custom model paths (e.g., v6 checkpoints)
+    python scripts/eval_agentic_sft_vs_rl.py \
+        --custom-models v6_step80=/path/to/step80/merged_hf \
+                        v6_step90=/path/to/step90/merged_hf \
+        --num-tasks 50 --domain medical_qa
 """
 
 import argparse
@@ -33,20 +40,22 @@ MODELS = {
 }
 
 
-def run_agentic_eval(model_name: str, model_path: str, task_ids: list, log_dir: str):
+def run_agentic_eval(model_name: str, model_path: str, task_ids: list, log_dir: str,
+                     domain: str = "medical_qa", max_turns: int = 10,
+                     max_new_tokens: int = 1024):
     """Run agentic evaluation for a single model."""
     abs_path = str(Path(model_path).resolve()) if Path(model_path).exists() else model_path
 
     config = RunConfig(
         model_name_or_path=abs_path,
         backend="transformers",
-        domain="medical_qa",
+        domain=domain,
         task_ids=task_ids,
         task_split=None,
-        max_turns=10,
+        max_turns=max_turns,
         temperature=0.1,
         top_p=0.95,
-        max_new_tokens=1024,
+        max_new_tokens=max_new_tokens,
         log_dir=log_dir,
         seed=42,
     )
@@ -56,16 +65,21 @@ def run_agentic_eval(model_name: str, model_path: str, task_ids: list, log_dir: 
     runner.load_model()
     results = runner.run_all_tasks()
 
-    # Compute summary
+    # Compute summary — qa_accuracy is stored in trajectory dict, not as attribute
     action_scores = [r.action_score for r in results if r.action_score is not None]
     rewards = [r.final_reward for r in results if r.final_reward is not None]
-    qa_accs = [r.qa_accuracy for r in results if r.qa_accuracy is not None]
+    qa_accs = [
+        r.trajectory.get("qa_accuracy", 0.0)
+        for r in results
+        if r.trajectory and "qa_accuracy" in r.trajectory
+    ]
     turns = [r.total_turns for r in results]
     completed = sum(1 for r in results if r.completed)
 
     summary = {
         "model_name": model_name,
         "model_path": model_path,
+        "domain": domain,
         "num_tasks": len(results),
         "completed": completed,
         "avg_action_score": sum(action_scores) / max(len(action_scores), 1),
@@ -81,32 +95,69 @@ def run_agentic_eval(model_name: str, model_path: str, task_ids: list, log_dir: 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--num-tasks", type=int, default=50, help="Number of test tasks")
-    parser.add_argument("--models", nargs="+", default=["sft_only", "rl_gspo_dapo_step600"],
-                        help="Models to evaluate")
+    parser.add_argument("--models", nargs="+", default=None,
+                        help="Registered model names to evaluate")
+    parser.add_argument("--custom-models", nargs="+", default=None,
+                        help="Custom model entries as name=path (e.g., v6_step80=/path/to/merged_hf)")
+    parser.add_argument("--domain", type=str, default="medical_qa",
+                        help="Domain to evaluate on")
+    parser.add_argument("--max-turns", type=int, default=10,
+                        help="Max turns per task")
+    parser.add_argument("--max-new-tokens", type=int, default=1024,
+                        help="Max new tokens per generation")
     args = parser.parse_args()
 
-    # Load test task IDs from medical_qa domain (50 tasks total)
-    with open("data/domains/medical_qa/tasks.json") as f:
+    # Build model dict from registered + custom models
+    eval_models = {}
+    if args.models:
+        for name in args.models:
+            if name in MODELS:
+                eval_models[name] = MODELS[name]
+            else:
+                logger.warning(f"Unknown registered model: {name}")
+    if args.custom_models:
+        for entry in args.custom_models:
+            if "=" not in entry:
+                logger.warning(f"Custom model must be name=path format: {entry}")
+                continue
+            name, path = entry.split("=", 1)
+            eval_models[name] = path
+
+    if not eval_models:
+        # Default: registered models
+        eval_models = {k: v for k, v in MODELS.items() if Path(v).exists()}
+        if not eval_models:
+            logger.error("No models found. Use --custom-models name=/path/to/model")
+            return
+
+    # Load test task IDs
+    tasks_file = f"data/domains/{args.domain}/tasks.json"
+    if not Path(tasks_file).exists():
+        logger.error(f"Tasks file not found: {tasks_file}")
+        return
+
+    with open(tasks_file) as f:
         all_tasks = json.load(f)
         test_ids = [t["id"] for t in all_tasks[:args.num_tasks]]
 
-    logger.info(f"Evaluating {len(test_ids)} test tasks")
+    logger.info(f"Evaluating {len(test_ids)} test tasks from {args.domain}")
+    logger.info(f"Models: {list(eval_models.keys())}")
 
     log_dir = "logs/agentic_eval"
     os.makedirs(log_dir, exist_ok=True)
 
     all_results = {}
-    for model_name in args.models:
-        if model_name not in MODELS:
-            logger.warning(f"Unknown model: {model_name}")
-            continue
-
-        model_path = MODELS[model_name]
+    for model_name, model_path in eval_models.items():
         if not Path(model_path).exists():
             logger.warning(f"Model path not found: {model_path}")
             continue
 
-        summary = run_agentic_eval(model_name, model_path, test_ids, log_dir)
+        summary = run_agentic_eval(
+            model_name, model_path, test_ids, log_dir,
+            domain=args.domain,
+            max_turns=args.max_turns,
+            max_new_tokens=args.max_new_tokens,
+        )
         all_results[model_name] = summary
 
         logger.info(f"\n{'='*60}")
@@ -123,7 +174,7 @@ def main():
         torch.cuda.empty_cache()
 
     # Save comparison
-    outpath = f"results/agentic_eval/sft_vs_rl_{time.strftime('%Y%m%d_%H%M%S')}.json"
+    outpath = f"results/agentic_eval/{args.domain}_{time.strftime('%Y%m%d_%H%M%S')}.json"
     os.makedirs(os.path.dirname(outpath), exist_ok=True)
     with open(outpath, "w") as f:
         json.dump(all_results, f, indent=2)

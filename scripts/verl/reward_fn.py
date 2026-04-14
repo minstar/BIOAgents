@@ -1,11 +1,123 @@
-"""Reward function for BIOAgents medical GRPO on veRL."""
+"""Reward function for BIOAgents medical GRPO on veRL.
+
+Supports optional cosine length-scaling reward (Yeo et al., 2025,
+"Demystifying Long Chain-of-Thought Reasoning in LLMs", arXiv:2502.03373).
+Enable via environment variable COSINE_REWARD=1.
+"""
 import json
+import math
 import os
 import re
 from typing import Any, Optional
 
 _DEBUG_LOG = os.environ.get("REWARD_DEBUG_LOG", "")
 _debug_count = 0
+
+# ── Cosine length-scaling reward (arXiv:2502.03373) ──────────────────
+# CosFn(t, T, η_min, η_max) = η_min + ½(η_max − η_min)(1 + cos(tπ/T))
+# Goes from η_max at t=0 to η_min at t=T.
+COSINE_REWARD_ENABLED = os.environ.get("COSINE_REWARD", "") == "1"
+
+# Max response length in tokens (must match data.max_response_length)
+COSINE_L_MAX = int(os.environ.get("COSINE_L_MAX", "12288"))
+# Chars-per-token estimate for converting solution_str length to tokens
+COSINE_CHARS_PER_TOKEN = float(os.environ.get("COSINE_CHARS_PER_TOKEN", "5.0"))
+
+# Reward at L_gen=0 / L_gen=L_max for correct answers
+COSINE_R0_CORRECT = float(os.environ.get("COSINE_R0_CORRECT", "1.1"))
+COSINE_RL_CORRECT = float(os.environ.get("COSINE_RL_CORRECT", "0.7"))
+# Reward at L_gen=0 / L_gen=L_max for wrong answers
+COSINE_R0_WRONG = float(os.environ.get("COSINE_R0_WRONG", "0.0"))
+COSINE_RL_WRONG = float(os.environ.get("COSINE_RL_WRONG", "-0.3"))
+# Penalty when response hits max length (clipped)
+COSINE_R_EXCEED = float(os.environ.get("COSINE_R_EXCEED", "-0.5"))
+
+
+def _cosine_fn(t: float, T: float, eta_min: float, eta_max: float) -> float:
+    """Cosine annealing: eta_max at t=0, eta_min at t=T."""
+    t = max(0.0, min(t, T))
+    return eta_min + 0.5 * (eta_max - eta_min) * (1.0 + math.cos(t * math.pi / T))
+
+
+def cosine_length_reward(is_correct: bool, response_len_chars: int) -> float:
+    """Compute cosine length-scaling reward.
+
+    Adapts Yeo et al. (2025) for multi-turn agentic setting:
+    - Correct short → highest reward (1.1)
+    - Correct long → reduced reward (0.7)
+    - Wrong short → zero (0.0)
+    - Wrong long → penalty (-0.3)
+    - Exceeded max length → strong penalty (-0.5)
+    """
+    est_tokens = response_len_chars / COSINE_CHARS_PER_TOKEN
+
+    if est_tokens >= COSINE_L_MAX:
+        return COSINE_R_EXCEED
+
+    if is_correct:
+        return _cosine_fn(est_tokens, COSINE_L_MAX, COSINE_RL_CORRECT, COSINE_R0_CORRECT)
+    else:
+        return _cosine_fn(est_tokens, COSINE_L_MAX, COSINE_RL_WRONG, COSINE_R0_WRONG)
+
+# Valid tool names from tool_config_full.yaml (135 tools)
+VALID_TOOLS = frozenset({
+    "activate_emergency_protocol", "add_clinical_note", "administer_cage",
+    "administer_gad7", "administer_mmse", "administer_pcl5", "administer_phq9",
+    "analyze_answer_options", "analyze_medical_image", "annotate_regions",
+    "assess_airway_breathing", "assess_capacity", "assess_fetal_status",
+    "assess_image_quality", "assess_labor_progress", "assess_preterm_risk",
+    "assess_suicide_risk", "assess_violence_risk", "browse_article",
+    "browse_wiki_entry", "calculate_apache2", "calculate_bishop_score",
+    "calculate_bmi", "calculate_chads2_vasc", "calculate_clinical_score",
+    "calculate_curb65", "calculate_esi_level", "calculate_gcs",
+    "calculate_gestational_age", "calculate_heart_score",
+    "calculate_hepatic_dose_adjustment", "calculate_image_metrics",
+    "calculate_interaction_severity_score", "calculate_meld_score",
+    "calculate_modified_bpp", "calculate_qsofa", "calculate_readmission_risk",
+    "calculate_renal_dose_adjustment", "calculate_sirs_criteria",
+    "calculate_trauma_score", "calculate_wells_score", "check_allergies",
+    "check_all_interactions", "check_cyp450_metabolism",
+    "check_diagnostic_criteria", "check_dosage", "check_drug_interaction",
+    "check_drug_interactions", "check_food_interactions", "check_interaction",
+    "check_medication_safety", "check_ob_protocol", "check_pregnancy_safety",
+    "check_protocol", "check_rh_status", "check_therapeutic_drug_monitoring",
+    "check_toxicology", "classify_finding", "compare_treatments",
+    "compare_with_prior", "detect_vital_alerts", "get_admission_history",
+    "get_admission_info", "get_allergy_list", "get_bed_assignment",
+    "get_biophysical_profile", "get_clinical_notes", "get_clinical_scores",
+    "get_code_status", "get_current_medications", "get_differential_diagnosis",
+    "get_differential_visual", "get_discharge_summary", "get_drug_info",
+    "get_drug_information", "get_ed_status", "get_gyn_assessment",
+    "get_image_report", "get_immunization_history",
+    "get_involuntary_hold_criteria", "get_lab_results", "get_lab_trend",
+    "get_medical_history", "get_medication_orders", "get_medications",
+    "get_nursing_assessments", "get_obstetric_history", "get_patient_context",
+    "get_patient_history", "get_patient_info", "get_patient_medications",
+    "get_patient_presentation", "get_patient_summary", "get_pharmacokinetics",
+    "get_prenatal_labs", "get_procedures", "get_psychiatric_history",
+    "get_quality_indicators", "get_risk_assessment", "get_social_history",
+    "get_vital_signs", "get_vital_signs_trend", "interpret_ctg",
+    "lookup_icd_code", "measure_lesion", "order_imaging", "order_labs",
+    "order_lab_test", "order_stat_labs", "perform_mental_status_exam",
+    "place_order", "prescribe_medication", "record_diagnosis",
+    "record_visual_diagnosis", "request_consult", "retrieve_evidence",
+    "review_treatment_guidelines", "screen_eating_disorder",
+    "screen_gestational_diabetes", "screen_sepsis", "screen_substance_use",
+    "search_alternatives", "search_clinical_guidelines",
+    "search_drugs_by_class", "search_imaging_knowledge",
+    "search_medical_literature", "search_medical_wiki", "search_pubmed",
+    "search_similar_cases", "submit_answer", "summarize_evidence", "think",
+    "track_lesion_changes", "transfer_to_specialist", "write_clinical_note",
+})
+
+# Penalty per invalid tool call (tool name not in VALID_TOOLS)
+INVALID_TOOL_PENALTY = 0.2
+
+
+def count_invalid_tool_calls(solution_str: str) -> int:
+    """Count tool calls to names not in VALID_TOOLS."""
+    tool_calls = re.findall(r"<function=([^>]+)>", solution_str)
+    return sum(1 for name in tool_calls if name.strip() not in VALID_TOOLS)
 
 
 def extract_answer_letter(text: str) -> Optional[str]:
@@ -51,6 +163,9 @@ def compute_score(
     if isinstance(extra_info, str):
         extra_info = json.loads(extra_info)
 
+    # During validation, use binary accuracy (no cosine scaling)
+    is_validate = extra_info.get("validate", False)
+
     # Normalize ground_truth: extract answer letter from formats like "ANSWER: (D)", "(D)", "D"
     if ground_truth:
         gt_stripped = ground_truth.strip()
@@ -84,23 +199,48 @@ def compute_score(
                 print(f"  TAIL: {tail}")
 
         if predicted is None:
-            return 0.0  # no answer extracted = 0
+            is_correct = False
+            base_reward = 0.0
+        else:
+            is_correct = predicted == correct
+            accuracy = 1.0 if is_correct else 0.0
+            # Format bonus: only for correct answers to avoid rewarding wrong-but-formatted
+            format_bonus = 0.1 if (accuracy > 0 and re.search(r"Answer:\s*[A-E]", solution_str)) else 0.0
+            base_reward = accuracy + format_bonus
 
-        accuracy = 1.0 if predicted == correct else 0.0
+        # Cosine length-scaling reward (replaces base_reward when enabled, training only)
+        if COSINE_REWARD_ENABLED and not is_validate:
+            base_reward = cosine_length_reward(is_correct, len(solution_str))
+            # Still add format bonus on top for correct answers
+            if is_correct and re.search(r"Answer:\s*[A-E]", solution_str):
+                base_reward += 0.1
 
-        # Format bonus: only for correct answers to avoid rewarding wrong-but-formatted
-        format_bonus = 0.1 if (accuracy > 0 and re.search(r"Answer:\s*[A-E]", solution_str)) else 0.0
-        return accuracy + format_bonus
+        # Penalty for calling tools not in the provided tool list
+        n_invalid = count_invalid_tool_calls(solution_str)
+        penalty = n_invalid * INVALID_TOOL_PENALTY
+        return base_reward - penalty
     else:
         # Open-ended: simple keyword overlap scoring
         if not ground_truth or not solution_str:
-            return 0.0
+            base_reward = 0.0
+            is_correct = False
+        else:
+            gt_words = set(ground_truth.lower().split())
+            pred_words = set(solution_str.lower().split())
 
-        gt_words = set(ground_truth.lower().split())
-        pred_words = set(solution_str.lower().split())
+            if not gt_words:
+                base_reward = 0.0
+                is_correct = False
+            else:
+                overlap = len(gt_words & pred_words) / len(gt_words)
+                base_reward = min(overlap, 1.0)
+                is_correct = overlap > 0.5
 
-        if not gt_words:
-            return 0.0
+        # Cosine length-scaling reward (training only)
+        if COSINE_REWARD_ENABLED and not is_validate:
+            base_reward = cosine_length_reward(is_correct, len(solution_str))
 
-        overlap = len(gt_words & pred_words) / len(gt_words)
-        return min(overlap, 1.0)
+        # Penalty for calling tools not in the provided tool list
+        n_invalid = count_invalid_tool_calls(solution_str)
+        penalty = n_invalid * INVALID_TOOL_PENALTY
+        return base_reward - penalty

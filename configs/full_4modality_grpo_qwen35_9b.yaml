@@ -49,7 +49,7 @@ training:
   num_train_epochs: 3
   per_device_train_batch_size: 2
   gradient_accumulation_steps: 8
-  learning_rate: 5.0e-6
+  learning_rate: 1.0e-6
   lr_scheduler_type: "cosine"
   warmup_ratio: 0.03
   weight_decay: 0.01

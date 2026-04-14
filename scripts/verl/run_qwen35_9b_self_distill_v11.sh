@@ -1,18 +1,15 @@
 #!/bin/bash
 # ============================================================
-# BT-OPD: Bidirectional Truncated On-Policy Distillation (v10)
+# Self-Distillation BT-OPD (v11)
 # ============================================================
+# Key change from v9b/v10: Teacher = Student (same base model),
+# updated every 10 steps with student's current weights.
+# This prevents the frozen-teacher divergence that caused v9b
+# catastrophic collapse (55.1% → 12.9% in 50 steps).
+#
 # 8x A100 80GB, FSDP with CPU offload, SGLang rollout
-# Teacher: v7_step90_merged (best RL checkpoint, frozen)
-#
-# Novel contributions over standard OPD:
-#   1. Truncated OPD: Apply teacher supervision only on first K
-#      assistant turns (reduces OPD compute ~60-70%)
-#   2. Bidirectional OPD: Corrective gradient from negative-reward
-#      trajectories (teacher suppresses bad actions)
-#
-# Based on v7 config with distillation layer added.
-# Uses veRL's native distillation infrastructure + custom bt_opd_kl loss.
+# Teacher starts from same Qwen3.5-9B base, gets student weights
+# every teacher_update_interval steps via merged checkpoint + HTTP API.
 # ============================================================
 
 export PATH="/data/project/private/minstar/miniconda3/envs/verl/bin:$PATH"
@@ -22,8 +19,6 @@ export VLLM_USE_V1=1
 export LD_LIBRARY_PATH="/data/project/private/minstar/miniconda3/envs/verl/lib:${LD_LIBRARY_PATH:-}"
 export SGLANG_ENABLE_STRICT_MEM_CHECK_DURING_IDLE=false
 export REWARD_DEBUG_LOG=1
-# v9 OOM fix: expandable_segments conflicts with SGLang TorchMemorySaver, removed
-# Relying on gpu_memory_utilization=0.15 (down from 0.25) to free ~16 GiB on GPU 0
 
 # Load environment variables (wandb key, etc.)
 if [ -f /data/project/private/minstar/workspace/BIOAgents/.env ]; then
@@ -35,12 +30,10 @@ fi
 # ── BT-OPD configuration ──
 export BT_OPD_MAX_TURN=3          # OPD on first 3 assistant turns only
 export BT_OPD_BIDIRECTIONAL=1      # Enable corrective gradient for negative trajs
-export BT_OPD_MODEL_PATH=/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B  # For dynamic token ID resolution
+export BT_OPD_MODEL_PATH=/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B
 
 # ── Hint-OPD configuration ──
-export HINT_OPD_ENABLED=0          # Disabled: debugging SGLang teacher crash first
-export HINT_OPD_CORRECT="Hint: The model's reasoning is correct. The chosen answer and tool-use strategy are appropriate. Reinforce this reasoning approach."
-export HINT_OPD_INCORRECT="Hint: The model's answer is incorrect. Reconsider the clinical reasoning, re-examine the key findings, and select the correct option based on the evidence."
+export HINT_OPD_ENABLED=0          # Disabled for now
 
 cd /data/project/private/minstar/workspace/verl
 
@@ -90,7 +83,9 @@ python3 -m verl.trainer.main_ppo \
     reward.custom_reward_function.path=/data/project/private/minstar/workspace/BIOAgents/scripts/verl/reward_fn.py \
     reward.custom_reward_function.name=compute_score \
     distillation.enabled=True \
-    distillation.teacher_model.model_path=/data/project/private/minstar/workspace/BIOAgents/checkpoints/v7_step90_merged \
+    +distillation.self_distillation=True \
+    +distillation.teacher_update_interval=10 \
+    distillation.teacher_model.model_path=/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B \
     distillation.teacher_model.inference.name=sglang \
     distillation.teacher_model.enable_resource_pool=False \
     distillation.teacher_model.n_gpus_per_node=2 \
@@ -107,9 +102,11 @@ python3 -m verl.trainer.main_ppo \
     trainer.critic_warmup=0 \
     'trainer.logger=[console,wandb]' \
     trainer.project_name=bioagents-verl-grpo \
-    trainer.experiment_name=qwen3_5_9b_bt_opd_v10_v9b \
+    trainer.experiment_name=qwen3_5_9b_self_distill_v11 \
     trainer.n_gpus_per_node=8 \
     trainer.nnodes=1 \
     trainer.save_freq=10 \
     trainer.test_freq=5 \
-    trainer.total_epochs=3
+    trainer.total_epochs=3 \
+    trainer.resume_mode=resume_path \
+    trainer.resume_from_path=/mnt/aiplatform/csi-volumes/pvc-e668fe31-e015-4e4e-a3f4-35f18e2ad53f-bd5321b06ddb2b68ae682cc934af2027aeea25db/private/minstar/workspace/verl/checkpoints/bioagents-verl-grpo/qwen3_5_9b_self_distill_v11/global_step_20

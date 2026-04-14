@@ -116,7 +116,7 @@ Tool-augmented LLMs~\citep{schick2024toolformer, qin2023toolllm} learn to invoke
 \begin{tikzpicture}[
     node distance=1.2cm,
     block/.style={rectangle, draw, rounded corners, minimum width=2.5cm, minimum height=0.8cm, align=center, font=\small},
-    domain/.style={rectangle, draw, fill=blue!10, rounded corners, minimum width=1.8cm, minimum height=0.6cm, align=center, font=\scriptsize},
+    domainbox/.style={rectangle, draw, fill=blue!10, rounded corners, minimum width=1.8cm, minimum height=0.6cm, align=center, font=\scriptsize},
     arrow/.style={->, thick, >=stealth}
 ]
     % Agent
@@ -127,11 +127,11 @@ Tool-augmented LLMs~\citep{schick2024toolformer, qin2023toolllm} learn to invoke
     \node[above=0.05cm of gym.north, font=\small\bfseries] {Healthcare AI GYM};
 
     % Domains inside GYM
-    \node[domain, fill=blue!10] at ([yshift=0.6cm]gym.center) (d1) {Clinical Dx};
+    \node[domainbox, fill=blue!10] at ([yshift=0.6cm]gym.center) (d1) {Clinical Dx};
     \node[domain, fill=blue!10, right=0.1cm of d1] (d2) {Med QA};
-    \node[domain, fill=blue!10] at ([yshift=-0.1cm]gym.center) (d3) {Drug Int.};
+    \node[domainbox, fill=blue!10] at ([yshift=-0.1cm]gym.center) (d3) {Drug Int.};
     \node[domain, fill=blue!10, right=0.1cm of d3] (d4) {EHR};
-    \node[domain, fill=blue!10] at ([yshift=-0.8cm]gym.center) (d5) {Triage};
+    \node[domainbox, fill=blue!10] at ([yshift=-0.8cm]gym.center) (d5) {Triage};
     \node[domain, fill=blue!10, right=0.1cm of d5] (d6) {+5 more};
 
     % Tools & KB

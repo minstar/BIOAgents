@@ -279,17 +279,28 @@ class VQABenchmarkEvaluator:
         )
         self._model_type = getattr(model_config, "model_type", "")
         self._is_vl_model = self._model_type in (
-            "qwen2_5_vl", "qwen2_vl", "llava", "llava_next",
+            "qwen2_5_vl", "qwen2_vl", "qwen3_5", "llava", "llava_next",
             "internvl", "lingshu", "step_robotics",
         )
 
         load_kwargs = dict(
             torch_dtype=torch.bfloat16,
             trust_remote_code=True,
-            device_map="auto",
+            device_map={"": 0},
         )
 
-        if self._model_type in ("qwen2_5_vl", "qwen2_vl"):
+        if self._model_type == "qwen3_5":
+            from transformers import Qwen3_5ForConditionalGeneration, AutoProcessor
+
+            self.model = Qwen3_5ForConditionalGeneration.from_pretrained(
+                self.config.model_name_or_path, **load_kwargs
+            )
+            self.processor = AutoProcessor.from_pretrained(
+                self.config.model_name_or_path, trust_remote_code=True
+            )
+            self.tokenizer = self.processor.tokenizer
+            logger.info("Loaded Qwen3.5-VL with processor")
+        elif self._model_type in ("qwen2_5_vl", "qwen2_vl"):
             from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
 
             self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
@@ -530,7 +541,7 @@ class VQABenchmarkEvaluator:
 
     def _generate_vl_answer(self, prompt: str, image_path: str) -> str:
         """Generate answer using a Vision-Language model with image input."""
-        if self._model_type in ("qwen2_5_vl", "qwen2_vl"):
+        if self._model_type in ("qwen2_5_vl", "qwen2_vl", "qwen3_5"):
             return self._generate_qwen_vl(prompt, image_path)
         elif self._model_type == "step_robotics":
             return self._generate_step3vl(prompt, image_path)

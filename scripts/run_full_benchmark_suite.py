@@ -286,14 +286,18 @@ def evaluate_medlfqa(model_key, output_dir, max_samples=0):
     model_config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
     model_type = getattr(model_config, "model_type", "")
     is_qwen_vl = model_type in ("qwen2_5_vl", "qwen2_vl") or ("qwen2" in model_type.lower() and "vl" in model_type.lower())
+    is_qwen3_5 = model_type == "qwen3_5"
 
     is_step3 = "step" in model_type.lower()
 
-    load_kwargs = dict(torch_dtype=torch.bfloat16, trust_remote_code=True, device_map="auto")
+    load_kwargs = dict(torch_dtype=torch.bfloat16, trust_remote_code=True, device_map={"": 0})
     if not is_step3:
         load_kwargs["attn_implementation"] = "sdpa"  # Step3-VL hangs with SDPA (B032)
 
-    if is_qwen_vl:
+    if is_qwen3_5:
+        from transformers import Qwen3_5ForConditionalGeneration
+        model = Qwen3_5ForConditionalGeneration.from_pretrained(model_path, **load_kwargs)
+    elif is_qwen_vl:
         from transformers import Qwen2_5_VLForConditionalGeneration
         model = Qwen2_5_VLForConditionalGeneration.from_pretrained(model_path, **load_kwargs)
     elif is_step3:
@@ -304,6 +308,7 @@ def evaluate_medlfqa(model_key, output_dir, max_samples=0):
 
     model.eval()
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    tokenizer.padding_side = "left"  # Critical for correct batched generation
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     print(f"[{model_name}] Model loaded", flush=True)
@@ -504,6 +509,51 @@ def evaluate_ehr(model_key, output_dir, max_samples=0):
     return results
 
 
+def _text_answer_to_letter(question: str, answer_text: str) -> str:
+    """Map a text answer back to its option letter (A/B/C/D) by matching against the question options.
+
+    Handles formats like 'Option A: text' or 'A. text' or 'A) text'.
+    Falls back to the answer text itself if it's already a single letter.
+    """
+    if not answer_text:
+        return ""
+    # If answer is already a single letter
+    if len(answer_text) == 1 and answer_text.upper() in "ABCDE":
+        return answer_text.upper()
+
+    # Try to match against option patterns in the question
+    answer_lower = answer_text.lower().strip()
+    for letter in "ABCDE":
+        # Match "Option A: text" format
+        pattern = rf"Option {letter}:\s*(.+?)(?:\n|$)"
+        m = re.search(pattern, question)
+        if m and m.group(1).strip().lower() == answer_lower:
+            return letter
+        # Match "A. text" or "A) text" format
+        pattern = rf"\b{letter}[.)]\s*(.+?)(?:\n|$)"
+        m = re.search(pattern, question)
+        if m and m.group(1).strip().lower() == answer_lower:
+            return letter
+
+    # Fuzzy fallback: find option whose text is most similar
+    best_letter, best_overlap = "", 0
+    for letter in "ABCDE":
+        for pat in [rf"Option {letter}:\s*(.+?)(?:\n|$)", rf"\b{letter}[.)]\s*(.+?)(?:\n|$)"]:
+            m = re.search(pat, question)
+            if m:
+                opt_text = m.group(1).strip().lower()
+                # Check containment
+                if answer_lower in opt_text or opt_text in answer_lower:
+                    overlap = len(opt_text)
+                    if overlap > best_overlap:
+                        best_overlap = overlap
+                        best_letter = letter
+    if best_letter:
+        return best_letter
+
+    return ""
+
+
 def evaluate_textqa(model_key, output_dir, max_samples=0):
     """Evaluate on TextQA benchmarks: MedQA, MedMCQA, MMLU (6 subcategories)."""
     import torch
@@ -521,14 +571,18 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
     model_config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
     model_type = getattr(model_config, "model_type", "")
     is_qwen_vl = model_type in ("qwen2_5_vl", "qwen2_vl") or ("qwen2" in model_type.lower() and "vl" in model_type.lower())
+    is_qwen3_5 = model_type == "qwen3_5"
 
     is_step3 = "step" in model_type.lower()
 
-    load_kwargs = dict(torch_dtype=torch.bfloat16, trust_remote_code=True, device_map="auto")
+    load_kwargs = dict(torch_dtype=torch.bfloat16, trust_remote_code=True, device_map={"": 0})
     if not is_step3:
         load_kwargs["attn_implementation"] = "sdpa"  # Step3-VL hangs with SDPA (B032)
 
-    if is_qwen_vl:
+    if is_qwen3_5:
+        from transformers import Qwen3_5ForConditionalGeneration
+        model = Qwen3_5ForConditionalGeneration.from_pretrained(model_path, **load_kwargs)
+    elif is_qwen_vl:
         from transformers import Qwen2_5_VLForConditionalGeneration
         model = Qwen2_5_VLForConditionalGeneration.from_pretrained(model_path, **load_kwargs)
     elif is_step3:
@@ -539,6 +593,7 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
 
     model.eval()
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+    tokenizer.padding_side = "left"  # Critical for correct batched generation
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     # TextQA benchmark files
@@ -572,7 +627,8 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
         t0 = time.time()
 
         # B036: Step3-VL get_input_embeddings uses squeeze(0)/unsqueeze(0) — batch_size>1 causes 4D tensor crash
-        BATCH_SIZE = 1 if is_step3 else 8
+        # Qwen3.5 with thinking needs more tokens per sample, reduce batch
+        BATCH_SIZE = 1 if is_step3 else (4 if is_qwen3_5 else 8)
         for batch_start in range(0, len(data), BATCH_SIZE):
             batch = data[batch_start:batch_start + BATCH_SIZE]
             batch_prompts = []
@@ -591,10 +647,14 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
                 ]
                 text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
                 # B039: Step3 chat template appends <think>\n — strip for direct MC answer
+                # Qwen3.5 also has <think> but was trained with it, so keep it
                 if is_step3 and text.endswith("<think>\n"):
                     text = text[:-len("<think>\n")]
                 batch_prompts.append(text)
-                batch_answers.append(answer.strip())
+
+                # Map text answer to letter by matching against options in question
+                answer_letter = _text_answer_to_letter(question, answer.strip())
+                batch_answers.append(answer_letter)
 
             if not batch_prompts:
                 continue
@@ -605,7 +665,8 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
 
             with torch.no_grad():
                 # B039: Without <think> prompt, model answers directly. 64 tokens enough for MC.
-                gen_max_tokens = 64 if is_step3 else 32
+                # Qwen3.5 uses <think>...</think> reasoning, needs more tokens
+                gen_max_tokens = 64 if is_step3 else (512 if is_qwen3_5 else 32)
                 outputs = model.generate(**inputs, max_new_tokens=gen_max_tokens, do_sample=False,
                                         pad_token_id=tokenizer.pad_token_id)
 
@@ -619,21 +680,17 @@ def evaluate_textqa(model_key, output_dir, max_samples=0):
                 if "</think>" in response:
                     response = response.split("</think>")[-1].strip()
 
-                # Extract answer letter
+                # Extract answer letter from model response
                 pred = ""
                 for ch in response:
-                    if ch in "ABCD":
+                    if ch in "ABCDE":
                         pred = ch
                         break
 
-                ref = ""
-                for ch in batch_answers[j]:
-                    if ch in "ABCD":
-                        ref = ch
-                        break
+                ref = batch_answers[j]  # Already a letter from _text_answer_to_letter
 
                 total += 1
-                if pred == ref:
+                if pred and ref and pred == ref:
                     correct += 1
 
             done = min(batch_start + BATCH_SIZE, len(data))
@@ -683,7 +740,9 @@ def main():
     parser.add_argument("--output-dir", default="results/benchmarks")
     args = parser.parse_args()
 
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpus
+    # Only set CUDA_VISIBLE_DEVICES if not already set by shell (e.g., parallel launch)
+    if "CUDA_VISIBLE_DEVICES" not in os.environ or os.environ["CUDA_VISIBLE_DEVICES"] == "":
+        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpus
     os.environ["PYTHONUNBUFFERED"] = "1"
 
     # Handle model_path override
@@ -697,7 +756,8 @@ def main():
             import json as _json
             _cfg = _json.load(open(_config_path))
             _arch = _cfg.get("architectures", [])
-            if any("VL" in a or "Vision" in a for a in _arch):
+            _model_type = _cfg.get("model_type", "")
+            if any("VL" in a or "Vision" in a or "Qwen3_5" in a for a in _arch) or _model_type == "qwen3_5":
                 _supports_vision = True
         MODELS["custom"] = {
             "name": model_name,

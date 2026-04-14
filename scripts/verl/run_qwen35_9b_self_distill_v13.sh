@@ -1,18 +1,13 @@
 #!/bin/bash
 # ============================================================
-# BT-OPD: Bidirectional Truncated On-Policy Distillation (v10)
+# Self-Distillation BT-OPD (v13) — Fix gradient starvation
 # ============================================================
-# 8x A100 80GB, FSDP with CPU offload, SGLang rollout
-# Teacher: v7_step90_merged (best RL checkpoint, frozen)
-#
-# Novel contributions over standard OPD:
-#   1. Truncated OPD: Apply teacher supervision only on first K
-#      assistant turns (reduces OPD compute ~60-70%)
-#   2. Bidirectional OPD: Corrective gradient from negative-reward
-#      trajectories (teacher suppresses bad actions)
-#
-# Based on v7 config with distillation layer added.
-# Uses veRL's native distillation infrastructure + custom bt_opd_kl loss.
+# Changes from v12:
+# - teacher_update_interval: 10 → 30 (keep KL non-zero longer)
+# - distillation_loss_coef: 2.333 → 4.0 (stronger distillation signal)
+# Root cause: hard-copy teacher update at step 10 collapsed BT-OPD KL
+# from 2.637 → 0.343, killing distillation gradient.
+# v12 showed val 56.59% → 50.39% in 10 steps.
 # ============================================================
 
 export PATH="/data/project/private/minstar/miniconda3/envs/verl/bin:$PATH"
@@ -22,8 +17,6 @@ export VLLM_USE_V1=1
 export LD_LIBRARY_PATH="/data/project/private/minstar/miniconda3/envs/verl/lib:${LD_LIBRARY_PATH:-}"
 export SGLANG_ENABLE_STRICT_MEM_CHECK_DURING_IDLE=false
 export REWARD_DEBUG_LOG=1
-# v9 OOM fix: expandable_segments conflicts with SGLang TorchMemorySaver, removed
-# Relying on gpu_memory_utilization=0.15 (down from 0.25) to free ~16 GiB on GPU 0
 
 # Load environment variables (wandb key, etc.)
 if [ -f /data/project/private/minstar/workspace/BIOAgents/.env ]; then
@@ -35,12 +28,10 @@ fi
 # ── BT-OPD configuration ──
 export BT_OPD_MAX_TURN=3          # OPD on first 3 assistant turns only
 export BT_OPD_BIDIRECTIONAL=1      # Enable corrective gradient for negative trajs
-export BT_OPD_MODEL_PATH=/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B  # For dynamic token ID resolution
+export BT_OPD_MODEL_PATH=/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B
 
 # ── Hint-OPD configuration ──
-export HINT_OPD_ENABLED=0          # Disabled: debugging SGLang teacher crash first
-export HINT_OPD_CORRECT="Hint: The model's reasoning is correct. The chosen answer and tool-use strategy are appropriate. Reinforce this reasoning approach."
-export HINT_OPD_INCORRECT="Hint: The model's answer is incorrect. Reconsider the clinical reasoning, re-examine the key findings, and select the correct option based on the evidence."
+export HINT_OPD_ENABLED=0          # Disabled for now
 
 cd /data/project/private/minstar/workspace/verl
 
@@ -90,7 +81,9 @@ python3 -m verl.trainer.main_ppo \
     reward.custom_reward_function.path=/data/project/private/minstar/workspace/BIOAgents/scripts/verl/reward_fn.py \
     reward.custom_reward_function.name=compute_score \
     distillation.enabled=True \
-    distillation.teacher_model.model_path=/data/project/private/minstar/workspace/BIOAgents/checkpoints/v7_step90_merged \
+    +distillation.self_distillation=True \
+    +distillation.teacher_update_interval=30 \
+    distillation.teacher_model.model_path=/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B \
     distillation.teacher_model.inference.name=sglang \
     distillation.teacher_model.enable_resource_pool=False \
     distillation.teacher_model.n_gpus_per_node=2 \
@@ -103,11 +96,11 @@ python3 -m verl.trainer.main_ppo \
     distillation.distillation_loss.loss_mode=bt_opd_kl \
     distillation.distillation_loss.use_policy_gradient=True \
     distillation.distillation_loss.use_task_rewards=True \
-    distillation.distillation_loss.distillation_loss_coef=2.333 \
+    distillation.distillation_loss.distillation_loss_coef=4.0 \
     trainer.critic_warmup=0 \
     'trainer.logger=[console,wandb]' \
     trainer.project_name=bioagents-verl-grpo \
-    trainer.experiment_name=qwen3_5_9b_bt_opd_v10_v9b \
+    trainer.experiment_name=qwen3_5_9b_self_distill_v13 \
     trainer.n_gpus_per_node=8 \
     trainer.nnodes=1 \
     trainer.save_freq=10 \

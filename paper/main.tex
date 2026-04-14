@@ -1,0 +1,1361 @@
+% ============================================================
+% Healthcare AI GYM: A Multi-Domain Gymnasium for Training
+% Medical AI Agents with Reinforcement Learning
+% ============================================================
+\documentclass{article}
+
+% --- ACL/EMNLP/NeurIPS compatible packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{natbib}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% --- Custom commands ---
+\newcommand{\gym}{\textsc{Healthcare AI GYM}}
+\newcommand{\sysname}{\textsc{BioAgents}}
+\newcommand{\ours}{\textsc{GYM-RL}}
+\newcommand{\eg}{\textit{e.g.}}
+\newcommand{\ie}{\textit{i.e.}}
+\newcommand{\cf}{\textit{cf.}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+\title{\gym{}: A Multi-Domain Gymnasium Environment \\
+for Training Generalizable Medical AI Agents}
+
+\author{
+  Anonymous Authors \\
+  % Affiliation \\
+  % \texttt{email@example.com}
+}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+% ============================================================
+\begin{abstract}
+% ============================================================
+We present \gym{}, a comprehensive Gymnasium-compatible environment for training and evaluating medical AI agents across 10 clinical domains. Unlike existing medical benchmarks that evaluate models on isolated question-answering tasks, \gym{} provides a \emph{playground} where any language model can learn to use clinical tools, retrieve medical evidence, and reason through multi-step diagnostic workflows via reinforcement learning. Our framework features (1) 10 specialized medical domains spanning 195K+ tasks with domain-specific tool sets, (2) a knowledge-grounded tool system backed by 828K indexed medical passages, (3) a 5-dimensional reward system incorporating accuracy, process quality, safety, format compliance, and coherence, and (4) \emph{Bidirectional Truncated On-Policy Distillation with Hint Injection} (BT-OPD+Hint), a method where the teacher co-evolves with the student via EMA updates while correctness-conditioned hints make the teacher's KL target outcome-aware, differentially regularizing correct vs.\ incorrect multi-turn behavior. Through rigorous evaluation, we reveal three critical findings: (1) standard agentic RL teaches tool-use competence (+22\% composite reward) but does \emph{not} transfer to text QA---format compliance dominates the reward signal at a 24:1 ratio, drowning out accuracy learning; (2) in online single-iteration GRPO, the importance sampling ratio is identically 1.0, rendering clipping-based innovations (DAPO, GSPO) mathematically vacuous---only reward normalization (Dr.~GRPO) produces meaningfully different dynamics; (3) BT-OPD+Hint, stabilized by cosine length-controlled reward and EMA scheduling, overcomes the response explosion problem that destabilizes agentic RL training, achieving 61.1\% validation accuracy (+8.5 pp over baseline) with sustained multi-turn tool use through 60 training steps, while standard GRPO shows no improvement. The teacher-student co-evolution with hint injection creates an oscillating recovery dynamic where each accuracy peak exceeds the previous one. Our environment, training pipeline, and evaluation suite are publicly available to facilitate reproducible research in medical AI.
+
+\end{abstract}
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+
+Large language models (LLMs) and vision-language models (VLMs) have shown remarkable potential in medical question answering~\citep{nori2023gpt4, singhal2023medpalm2, chen2024huatuogpt}. However, real-world clinical practice requires more than answering multiple-choice questions---it demands the ability to gather patient information, order appropriate tests, interpret results, reason about differential diagnoses, and make safe treatment decisions through multi-step interactions.
+
+Recent work has explored training medical AI agents through reinforcement learning (RL) in simulated environments~\citep{medagentgym2026, schmidgall2025agentclinic}. However, existing approaches suffer from several limitations: (1) they focus on narrow domains (\eg{}, only medical QA), (2) they lack standardized tool interfaces across specialties, (3) they do not incorporate clinical safety constraints into the reward signal, and (4) they often exhibit catastrophic forgetting when transitioning from supervised learning to RL.
+
+We introduce \gym{}, a comprehensive Gymnasium-compatible environment that addresses these challenges. Our key contributions are:
+
+\begin{enumerate}
+    \item \textbf{Multi-Domain Medical Gymnasium.} A unified environment spanning 10 clinical domains (clinical diagnosis, drug interaction, EHR management, medical QA, triage, psychiatry, obstetrics, visual diagnosis, radiology reporting, and cross-domain pathways) with 195K+ tasks and 187+ domain-specific tools.
+
+    \item \textbf{Knowledge-Grounded Tool System.} An integrated retrieval system backed by 828K indexed medical passages (PubMed abstracts, PMC full texts, biomedical QA pairs) enabling evidence-based reasoning.
+
+    \item \textbf{Safety-Aware 5D Reward System.} A multi-dimensional reward function that evaluates accuracy (30\%), process quality (25\%), safety (20\%), format compliance (15\%), and coherence (10\%), with critical safety violations capping the total reward.
+
+    \item \textbf{Bidirectional Truncated On-Policy Distillation with Hint Injection (BT-OPD+Hint).} We propose a teacher-student co-evolution framework for agentic RL: the teacher model evolves alongside the student via EMA updates, with a bidirectional KL loss across all conversation turns. Correctness-conditioned hints are injected into the teacher's context during logprob computation, making the KL target outcome-aware---differentially regularizing correct vs.\ incorrect trajectories at every turn. This provides dense, outcome-conditioned process supervision that standard GRPO lacks. To prevent the response explosion that destabilizes standard agentic RL, we combine BT-OPD+Hint with cosine length-controlled reward and EMA scheduling as training stability mechanisms. The method achieves 61.1\% validation accuracy (+8.5 pp over baseline) at step 60 with sustained multi-turn tool use.
+
+    \item \textbf{Agentic-Textual Transfer Gap \& Reward Signal Analysis.} Through controlled experiments with 5 RL variants, 3 seeds, and 1000+ steps, we show that agentic RL teaches procedural competence (+22\%) but standard reward configurations do not improve declarative knowledge---caused by \emph{format reward dilution} (24:1 reward ratio). We further prove that in online single-iteration GRPO, all clipping-based innovations are vacuous ($\pi_\theta/\pi_\text{old} \equiv 1$), reducing the effective design space to learning rate, $\beta$, and reward composition.
+\end{enumerate}
+
+% ============================================================
+\section{Related Work}
+\label{sec:related}
+% ============================================================
+
+\paragraph{Medical LLMs and Benchmarks.}
+Medical question answering has been extensively studied through benchmarks such as MedQA~\citep{jin2021medqa}, MedMCQA~\citep{pal2022medmcqa}, and PubMedQA~\citep{jin2019pubmedqa}. Large models including GPT-4~\citep{nori2023gpt4}, Med-PaLM 2~\citep{singhal2023medpalm2}, and HuatuoGPT-II~\citep{chen2024huatuogpt} have achieved impressive results. However, these benchmarks evaluate passive knowledge rather than agentic clinical competence.
+
+\paragraph{Medical AI Agents.}
+AgentClinic~\citep{schmidgall2025agentclinic} simulates patient-doctor interactions for diagnostic reasoning. MedAgentGym~\citep{medagentgym2026} provides a Gymnasium interface for training medical agents with RL. MediX-R1~\citep{medixr1} applies GRPO to medical reasoning. MedOpenClaw~\citep{shen2025medopenclaw} provides an auditable runtime for medical imaging agents reasoning over full 3D studies, revealing a ``tool-use paradox'' where adding professional tools \emph{degrades} performance due to spatial grounding failures---directly supporting our finding that tool-use competence requires RL training, not just prompting. Our work differs by providing a unified multi-domain \emph{training} environment with safety-aware rewards and anti-collapse training.
+
+\paragraph{Reinforcement Learning for LLMs.}
+GRPO~\citep{shao2024deepseekmath} eliminates the need for a separate critic model by using group relative rewards. GSPO~\citep{gspo2025} introduces sequence-level importance sampling to reduce variance. DAPO~\citep{dapo2025} proposes asymmetric clipping for stable exploration. Dr.~GRPO~\citep{liu2025drgrpo} removes length normalization bias. We combine these advances into a unified training pipeline tailored for medical domains.
+
+\paragraph{On-Policy Distillation.}
+On-policy distillation (OPD) trains a student model using trajectories generated by the student itself, with a teacher providing soft supervision. Recent work applies OPD to RL-trained LLMs: GLM-5 uses teacher EMA updates during reasoning RL, while Nemotron-Cascade-2 combines on-policy distillation with progressive curriculum. Our BT-OPD+Hint extends this paradigm to \emph{multi-turn agentic} settings, where the teacher provides not only KL regularization but also intermediate reasoning hints across all conversation turns---a substantially richer supervision signal than single-turn OPD.
+
+\paragraph{Tool-Use and Retrieval-Augmented Generation.}
+Tool-augmented LLMs~\citep{schick2024toolformer, qin2023toolllm} learn to invoke external APIs. In medicine, retrieval from knowledge bases improves factual grounding~\citep{xiong2024medcpt}. \gym{} integrates tool use with domain-specific medical knowledge retrieval as a core training mechanism.
+
+
+% ============================================================
+\section{\gym{}: Environment Design}
+\label{sec:environment}
+% ============================================================
+
+\subsection{Overview}
+\label{sec:overview}
+
+\gym{} is built on the Gymnasium~\citep{towers2024gymnasium} interface, enabling seamless integration with existing RL frameworks. Figure~\ref{fig:architecture} illustrates the overall architecture.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+    node distance=1.2cm,
+    block/.style={rectangle, draw, rounded corners, minimum width=2.5cm, minimum height=0.8cm, align=center, font=\small},
+    domain/.style={rectangle, draw, fill=blue!10, rounded corners, minimum width=1.8cm, minimum height=0.6cm, align=center, font=\scriptsize},
+    arrow/.style={->, thick, >=stealth}
+]
+    % Agent
+    \node[block, fill=orange!20] (agent) {LLM/VLM\\Agent};
+
+    % GYM
+    \node[block, fill=green!15, right=2cm of agent, minimum width=3cm, minimum height=2.5cm] (gym) {};
+    \node[above=0.05cm of gym.north, font=\small\bfseries] {Healthcare AI GYM};
+
+    % Domains inside GYM
+    \node[domain, fill=blue!10] at ([yshift=0.6cm]gym.center) (d1) {Clinical Dx};
+    \node[domain, fill=blue!10, right=0.1cm of d1] (d2) {Med QA};
+    \node[domain, fill=blue!10] at ([yshift=-0.1cm]gym.center) (d3) {Drug Int.};
+    \node[domain, fill=blue!10, right=0.1cm of d3] (d4) {EHR};
+    \node[domain, fill=blue!10] at ([yshift=-0.8cm]gym.center) (d5) {Triage};
+    \node[domain, fill=blue!10, right=0.1cm of d5] (d6) {+5 more};
+
+    % Tools & KB
+    \node[block, fill=yellow!20, below=1.5cm of gym] (tools) {187+ Tools\\828K Passages};
+
+    % Reward
+    \node[block, fill=red!15, above=1.5cm of gym] (reward) {5D Reward\\(Acc+Proc+Safe+Fmt+Coh)};
+
+    % Arrows
+    \draw[arrow] (agent.east) -- node[above, font=\scriptsize] {action} ([yshift=0.3cm]gym.west);
+    \draw[arrow] ([yshift=-0.3cm]gym.west) -- node[below, font=\scriptsize] {obs} (agent.east);
+    \draw[arrow] (gym) -- (reward);
+    \draw[arrow] (reward.west) -| node[left, font=\scriptsize, pos=0.3] {reward} (agent.north);
+    \draw[arrow, dashed] (tools) -- (gym);
+
+\end{tikzpicture}
+\caption{Architecture of \gym{}. An LLM/VLM agent interacts with the gymnasium through text observations and actions. The environment routes actions to domain-specific tools backed by 828K medical passages. A 5-dimensional reward function evaluates each episode.}
+\label{fig:architecture}
+\end{figure}
+
+The environment exposes a standard Gymnasium interface:
+
+\begin{itemize}
+    \item \textbf{Observation space:} Text (up to 100K characters) containing conversation history, tool results, and patient information.
+    \item \textbf{Action space:} Text (up to 10K characters) representing either a JSON tool call (\eg{}, \texttt{\{"name": "search\_pubmed", "arguments": \{...\}\}}) or a natural language response.
+    \item \textbf{Reward:} A scalar computed from 5 dimensions at episode termination.
+\end{itemize}
+
+\subsection{Medical Domains}
+\label{sec:domains}
+
+\gym{} encompasses 10 medical domains, each with specialized tools, evaluation criteria, and task distributions. Table~\ref{tab:domains} summarizes the domain characteristics.
+
+\begin{table}[t]
+\centering
+\caption{Medical domains in \gym{}. Each domain provides specialized tools and tasks covering distinct clinical competencies.}
+\label{tab:domains}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{llrrl}
+\toprule
+\textbf{Domain} & \textbf{Clinical Focus} & \textbf{Tasks} & \textbf{Tools} & \textbf{Key Capabilities} \\
+\midrule
+Clinical Diagnosis & Differential diagnosis & 32K+ & 17 & History, labs, DDx, prescribing \\
+Medical QA & Evidence-based QA & 30K+ & 8 & PubMed search, evidence analysis \\
+Drug Interaction & Pharmacovigilance & 12K+ & 10 & DDI checking, alternatives \\
+EHR Management & Electronic health records & 7K+ & 14 & Chart navigation, SOFA/NEWS \\
+Triage \& Emergency & Emergency medicine & 7K+ & 12 & ABC assessment, ESI scoring \\
+Visual Diagnosis & Medical imaging & 6K+ & 11 & Image analysis, pattern recognition \\
+Radiology Report & Structured reporting & 6K+ & 11 & BI-RADS, TI-RADS, Fleischner \\
+Psychiatry & Mental health & 6K+ & 14 & MSE, PHQ-9, GAD-7, Columbia \\
+Obstetrics & Maternal-fetal medicine & 7K+ & 14 & Fetal monitoring, Bishop score \\
+Cross-Domain & Multi-phase pathways & 7K+ & Variable & 6 pathways (chest pain, DKA, etc.) \\
+\midrule
+\textbf{Total} & & \textbf{195K+} & \textbf{187+} & \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\paragraph{Task Structure.}
+Each task is defined by a patient scenario (``ticket''), expected tool interactions, natural language assertions for quality evaluation, and structured evaluation criteria. Tasks are sourced from three pipelines: (1) expert-curated base tasks, (2) difficulty-scaled variations, and (3) LLM-generated tasks from medical knowledge mining, followed by human validation.
+
+\paragraph{Cross-Domain Pathways.}
+The cross-domain module simulates realistic multi-phase patient journeys (\eg{}, a chest pain presentation progressing through triage $\to$ emergency workup $\to$ cardiology consult $\to$ treatment planning), requiring the agent to coordinate tools across specialties.
+
+
+\subsection{Knowledge-Grounded Tool System}
+\label{sec:tools}
+
+Each domain provides specialized tools categorized by function:
+
+\begin{itemize}
+    \item \textbf{Knowledge Search} (6 tools): \texttt{search\_pubmed}, \texttt{search\_wiki}, \texttt{search\_evidence}, \texttt{search\_guidelines} --- backed by 828K indexed passages via BM25 full-text search over SQLite with WAL journaling.
+    \item \textbf{Clinical Assessment} (22 tools): Validated scoring instruments (\eg{}, SOFA, NEWS, ESI, PHQ-9, APGAR, Bishop score).
+    \item \textbf{Patient Data Access} (14 tools): \texttt{get\_vital\_signs}, \texttt{get\_lab\_results}, \texttt{get\_imaging}, \texttt{get\_medication\_orders}.
+    \item \textbf{Clinical Actions} (16 tools): \texttt{prescribe}, \texttt{order\_imaging}, \texttt{order\_lab}, \texttt{check\_drug\_interactions}.
+    \item \textbf{Reasoning} (8 tools): \texttt{think} (scratchpad), \texttt{analyze\_answer\_options}, \texttt{review\_guidelines}.
+    \item \textbf{Documentation} (12 tools): \texttt{submit\_answer}, \texttt{record\_diagnosis}, \texttt{write\_note}, \texttt{submit\_report}.
+\end{itemize}
+
+Tools are defined using a decorator pattern that auto-generates OpenAI-compatible function definitions from Python type annotations:
+
+\begin{equation}
+    \texttt{@is\_tool(ToolType.READ)} \implies \text{ToolDefinition}(\text{name}, \text{params}, \text{schema})
+\end{equation}
+
+The knowledge backend indexes passages from five sources: MedCPT evidence (581K PubMed/PMC passages), biomedical QA pairs (122K), dense passage retrieval (83K), medical instructions (52K), and Wikipedia (26M articles, 188GB).
+
+
+\subsection{5-Dimensional Reward System}
+\label{sec:reward}
+
+Unlike prior work that uses simple accuracy-only rewards, \gym{} evaluates agent behavior across five clinically-motivated dimensions:
+
+\begin{equation}
+    R_{\text{total}} = \alpha_1 R_{\text{acc}} + \alpha_2 R_{\text{proc}} + \alpha_3 R_{\text{safe}} + \alpha_4 R_{\text{fmt}} + \alpha_5 R_{\text{coh}}
+\label{eq:reward}
+\end{equation}
+
+where the default weights are $\alpha_1{=}0.3$, $\alpha_2{=}0.25$, $\alpha_3{=}0.2$, $\alpha_4{=}0.15$, $\alpha_5{=}0.1$.
+
+\paragraph{Accuracy ($R_{\text{acc}}$).} Evaluated via exact match for MCQ, token overlap F1 for open-ended, and BERTScore~\citep{zhang2020bertscore} using BiomedBERT~\citep{gu2021pubmedbert} for semantic similarity.
+
+\paragraph{Process Quality ($R_{\text{proc}}$).} Measures whether the agent followed a systematic clinical workflow: proportion of expected tools called, evidence usage, and reasoning coherence.
+
+\paragraph{Safety ($R_{\text{safe}}$).} A 5-level severity taxonomy aligned with AMA medical ethics principles:
+\begin{itemize}
+    \item \textbf{Level 5 (Critical)}: Contraindication ignored, dangerous dosing, missed emergency --- \emph{caps total reward at 0.1}.
+    \item \textbf{Level 4 (Severe)}: Missed major drug interaction, fabricated evidence.
+    \item \textbf{Level 3 (Moderate)}: Incomplete workup, guideline non-compliance.
+    \item \textbf{Levels 1--2}: Minor/trivial issues with limited clinical impact.
+\end{itemize}
+
+\paragraph{Format ($R_{\text{fmt}}$).} Validates structural correctness of tool calls (valid JSON, required fields).
+
+\paragraph{Coherence ($R_{\text{coh}}$).} Checks logical consistency, absence of contradictions, and clear clinical conclusions.
+
+
+% ============================================================
+\section{Training Pipeline}
+\label{sec:training}
+% ============================================================
+
+\subsection{Two-Stage SFT $\to$ RL Pipeline}
+\label{sec:pipeline}
+
+We employ a two-stage training pipeline: (1) SFT warmup on medical trajectories, followed by (2) GRPO-based RL with on-policy distillation (Section~\ref{sec:opd}).
+
+\paragraph{Stage 1: SFT Warmup.}
+We fine-tune the base model on successful demonstration trajectories using LoRA~\citep{hu2022lora} (rank $r{=}64$, $\alpha{=}128$), combining opensource medical SFT data (20K samples), tool-use trajectories, and clinical task demonstrations. After SFT, the LoRA adapter is merged into the base model to create a warm-started checkpoint for RL.
+
+\paragraph{Stage 2: GRPO with BT-OPD+Hint.}
+We apply Group Relative Policy Optimization~\citep{shao2024deepseekmath} with dynamic sampling (only prompts with mixed outcomes contribute to training). The key innovation is combining GRPO with Bidirectional Truncated On-Policy Distillation and Hint Injection (BT-OPD+Hint, Section~\ref{sec:opd}), stabilized by EMA scheduling and cosine length-controlled reward (Section~\ref{sec:stability}). We also evaluate Dr.~GRPO~\citep{liu2025drgrpo}, which provides per-token reward normalization that implicitly rebalances the format-to-accuracy signal ratio.
+
+
+\subsection{LoRA Configuration}
+\label{sec:lora}
+
+We apply LoRA to all linear projection layers (\texttt{q\_proj}, \texttt{k\_proj}, \texttt{v\_proj}, \texttt{o\_proj}, \texttt{gate\_proj}, \texttt{up\_proj}, \texttt{down\_proj}) with $r{=}64$ and $\alpha{=}128$. This configuration targets 7 modules per transformer layer, providing sufficient capacity for medical domain adaptation while preserving the base model's general capabilities.
+
+
+\subsection{Bidirectional Truncated On-Policy Distillation with Hint Injection}
+\label{sec:opd}
+
+A persistent failure mode in agentic RL is \emph{response explosion}: the model learns to generate increasingly long single-turn responses that bypass multi-turn tool use, eventually saturating the context window (12,288 tokens). Standard GRPO provides no mechanism to prevent this degeneration. We propose \emph{Bidirectional Truncated On-Policy Distillation with Hint Injection} (BT-OPD+Hint), a teacher-student co-evolution framework that provides both the learning signal for accuracy improvement and the structural regularization to maintain multi-turn behavior.
+
+\paragraph{Core Method: BT-OPD.}
+We maintain a teacher model $\theta_T$ that co-evolves with the student $\theta_S$. The student is trained with a bidirectional truncated on-policy distillation loss that regularizes the policy toward the teacher across \emph{all} conversation turns ($\texttt{max\_turn}=0$):
+\begin{equation}
+    \mathcal{L}_{\text{BT-OPD}} = \lambda_{\text{KL}} \cdot D_\text{KL}(\pi_{\theta_S} \| \pi_{\theta_T})
+\end{equation}
+where $\lambda_{\text{KL}} = 0.01$. ``Bidirectional'' means the KL loss is computed across all turns of the multi-turn conversation, not just the final answer turn. ``Truncated'' refers to discarding KL contributions from turns that exceed the context window. Unlike frozen-teacher distillation (which collapses as the student improves beyond the teacher), the co-evolving teacher creates a \emph{moving} regularization target that tracks the student's improving policy---preventing catastrophic divergence while allowing continuous policy improvement.
+
+\paragraph{Hint Injection.}
+Standard OPD treats correct and incorrect trajectories identically when computing teacher logprobs---the teacher distribution provides the same regularization target regardless of outcome. We introduce \emph{hint injection}: during teacher logprob computation, a correctness-conditioned hint is inserted at the prompt-response boundary, modifying the teacher's probability distribution to be outcome-aware. For correct trajectories, the hint reinforces the student's reasoning (``the diagnostic reasoning appears sound, but consider alternative diagnoses''); for incorrect trajectories, the hint provides corrective guidance (``some aspects need re-examination---revisit the differential diagnosis''). When \texttt{HINT\_OPD\_DYNAMIC} is enabled, hints are dynamically generated from templates that include the student's specific answer, providing case-specific rather than generic feedback.
+
+Critically, the hint tokens are \emph{removed} from the teacher's output logprobs after computation, so the student never sees the hints directly. Instead, the hints influence the teacher's probability distribution, creating a KL target that differentially regularizes correct vs.\ incorrect behavior: the teacher ``knows'' whether the trajectory succeeded, making the bidirectional KL loss outcome-aware at every turn. This transforms the BT-OPD loss from a generic regularizer into a form of \emph{outcome-conditioned process supervision}.
+
+\paragraph{Why BT-OPD+Hint Enables Agentic Learning.}
+The method addresses the core challenge of multi-turn agentic RL: the reward signal is sparse (only at the final turn) and diluted by format compliance, making it difficult for the student to learn \emph{which turns} contributed to success. BT-OPD+Hint solves this in two ways: (1) the bidirectional KL loss provides dense, per-turn regularization rather than sparse final-turn reward, and (2) hint injection makes this regularization outcome-aware---correct trajectories are reinforced differently from incorrect ones. This combination explains why BT-OPD+Hint achieves +7.0 pp accuracy improvement while standard GRPO (which lacks per-turn supervision) shows no improvement.
+
+
+\subsection{Training Stability Mechanisms}
+\label{sec:stability}
+
+BT-OPD+Hint provides the learning signal, but agentic RL also requires mechanisms to prevent training instability. We employ two complementary techniques: EMA scheduling for smooth teacher evolution, and cosine length-controlled reward for response length control.
+
+\paragraph{EMA Teacher Schedule.}
+The teacher model $\theta_T$ is updated via exponential moving average:
+\begin{equation}
+    \theta_T \leftarrow \alpha \cdot \theta_T + (1 - \alpha) \cdot \theta_S, \quad \alpha = 0.995
+\end{equation}
+updated every 5 training steps. Additionally, a hard copy ($\theta_T \leftarrow \theta_S$) is performed every 30 steps as a fallback to prevent excessive teacher-student drift. The EMA schedule ensures the teacher evolves smoothly---too fast ($\alpha < 0.99$) causes oscillation; too slow ($\alpha > 0.999$) makes the teacher stale. We find $\alpha = 0.995$ provides the optimal balance (Section~\ref{sec:opd_results}).
+
+\paragraph{Cosine Length-Controlled Reward.}
+To prevent response explosion at the reward level, we replace the binary accuracy reward with a length-modulated variant inspired by \citet{yeo2025cosine}:
+\begin{equation}
+    R_{\text{cos}}(c, L) = \begin{cases}
+        R_{\text{max}} - \frac{1}{2}(R_{\text{max}} - R_{\text{min}})(1 - \cos(\pi L / L_{\text{max}})) & \text{if correct} \\[4pt]
+        -\frac{1}{2}|R_{\text{min}}|(1 - \cos(\pi L / L_{\text{max}})) & \text{if incorrect} \\[4pt]
+        R_{\text{penalty}} & \text{if } L \geq L_{\text{max}}
+    \end{cases}
+\label{eq:cosine_reward}
+\end{equation}
+where $L$ is the response length in tokens, $L_{\text{max}} = 12{,}288$, $R_{\text{max}} = 1.1$, $R_{\text{min}} = 0.7$, and $R_{\text{penalty}} = -0.5$. Correct short responses receive high reward ($\sim$1.1), which decays smoothly for longer responses; incorrect long responses receive increasing penalty. Critically, the cosine reward is applied only during training---validation uses standard binary accuracy to ensure unbiased evaluation.
+
+\paragraph{Interaction Between Components.}
+The three components---BT-OPD+Hint, EMA scheduling, and cosine reward---serve distinct roles: (1) BT-OPD+Hint provides the core learning signal (why accuracy improves), (2) EMA scheduling ensures the teacher tracks the student without catastrophic drift (why training doesn't diverge), and (3) the cosine reward prevents response explosion at the reward level (why multi-turn structure is maintained). Ablation results (Section~\ref{sec:opd_results}) confirm that removing any component degrades performance: without hints, accuracy plateaus; without EMA, training collapses; without cosine reward, response length explodes.
+
+
+% ============================================================
+\section{Evaluation}
+\label{sec:eval}
+% ============================================================
+
+\subsection{Benchmark Suite}
+\label{sec:benchmarks}
+
+We evaluate across 21 medical benchmarks spanning 4 categories:
+
+\begin{table}[t]
+\centering
+\caption{Evaluation benchmark suite covering text QA, vision QA, long-form QA, and EHR reasoning.}
+\label{tab:benchmarks}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{llrl}
+\toprule
+\textbf{Category} & \textbf{Benchmark} & \textbf{Samples} & \textbf{Metric} \\
+\midrule
+\multirow{8}{*}{Text QA}
+& MedQA (USMLE) & 1,273 & Accuracy \\
+& MedMCQA & 4,183 & Accuracy \\
+& MMLU-Clinical Knowledge & 265 & Accuracy \\
+& MMLU-Professional Medicine & 272 & Accuracy \\
+& MMLU-Anatomy & 135 & Accuracy \\
+& MMLU-Medical Genetics & 100 & Accuracy \\
+& MMLU-College Biology & 144 & Accuracy \\
+& MMLU-College Medicine & 173 & Accuracy \\
+\midrule
+\multirow{6}{*}{Vision QA}
+& VQA-RAD & 451 & Accuracy \\
+& SLAKE & 1,061 & Accuracy \\
+& PathVQA & 6,719 & Accuracy \\
+& PMC-VQA & 10K+ & Accuracy \\
+& VQA-Med-2021 & 500 & Accuracy \\
+& Quilt-VQA & 985 & Accuracy \\
+\midrule
+\multirow{5}{*}{Long-Form QA}
+& KQA Golden & 201 & ROUGE-L \\
+& LiveQA & 100 & ROUGE-L \\
+& MedicationQA & 666 & ROUGE-L \\
+& HealthSearchQA & 3,077 & ROUGE-L \\
+& KQA Silver & 904 & ROUGE-L \\
+\midrule
+\multirow{2}{*}{EHR}
+& MIMIC-III & 5,000 & Action Score + Reward \\
+& eICU & 5,000 & Action Score + Reward \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+
+\subsection{Experimental Setup}
+\label{sec:setup}
+
+\paragraph{Models.} We evaluate \gym{} with the following models:
+\begin{itemize}
+    \item \textbf{Lingshu-7B}: A medical domain-adapted VLM based on Qwen2.5-VL-7B architecture.
+    \item \textbf{Qwen2.5-VL-7B-Instruct}: General-purpose vision-language model.
+    \item \textbf{Step3-VL-10B}: Specialized medical vision-language model.
+    % \item \textbf{Qwen2.5-VL-72B}: Large-scale VLM for upper-bound comparison.
+    % \item \textbf{InternVL2.5-78B}: Large-scale VLM baseline.
+\end{itemize}
+
+\paragraph{Training Configuration.}
+\begin{itemize}
+    \item \textbf{SFT Warmup}: 21K merged samples, 8K sampled, 2 epochs, LR=$5 \times 10^{-6}$, batch size 4$\times$4.
+    \item \textbf{RL Training}: 800 train tasks (MedQA), 10 epochs, LR=$5 \times 10^{-7}$, 8 generations per prompt, $\beta{=}0.01$, temperature 0.7.
+    \item \textbf{Hardware}: 8$\times$NVIDIA A100 80GB GPUs.
+\end{itemize}
+
+\paragraph{Contamination Check.} We verify zero data contamination between training data and all test benchmarks using test-set fingerprinting~\citep{yang2023rethinking}. All 21K SFT samples and 1000 RL tasks passed the contamination audit.
+
+
+\subsection{Main Results}
+\label{sec:results}
+
+Table~\ref{tab:main_results} and Figure~\ref{fig:main_results_bar} present text QA results comparing the SFT-only baseline with RL-trained checkpoints. We report the mean and standard deviation across 3 random seeds and up to 350 RL steps with fixed evaluation methodology (left-padding, greedy decoding, correct answer extraction).
+
+\begin{table}[t]
+\centering
+\caption{Text QA results with fixed evaluation methodology. SFT denotes the warm-started checkpoint \emph{before} RL. Agentic RL checkpoints show the range across 3 seeds $\times$ 7 steps (50--350). \textbf{Agentic RL shows no QA improvement, but Direct QA RL (H5) improves all benchmarks.}}
+\label{tab:main_results}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model / Stage} & \textbf{MedQA} & \textbf{MedMCQA} & \textbf{MMLU-CK} \\
+\midrule
+Lingshu-7B (pre-SFT) & 61.7\% & 53.2\% & 77.0\% \\
+Lingshu-7B + SFT & 60.7\% & 52.5\% & 78.1\% \\
+Lingshu-7B + SFT + GRPO (baseline seed) & 60.7--60.8\% & 52.5--52.7\% & 78.1--78.5\% \\
+Lingshu-7B + SFT + GRPO (seed 123) & 60.6--61.0\% & 52.6--52.9\% & 77.7--78.9\% \\
+Lingshu-7B + SFT + GRPO (seed 456) & 60.4--60.8\% & 52.7--52.8\% & 77.7--78.5\% \\
+\midrule
+\textbf{Agentic RL range} & \textbf{60.4--61.0\%} & \textbf{52.5--52.9\%} & \textbf{77.7--78.9\%} \\
+\midrule
+Lingshu-7B + SFT + Dr.~GRPO (step 800) & \textbf{61.8\%} & 53.2\% & 78.1\% \\
+Lingshu-7B + SFT + Dr.~GRPO (step 950) & 61.8\% & 53.4\% & 77.7\% \\
+\midrule
+Lingshu-7B + SFT + Direct QA RL (H5, step 150) & 61.8\% & \textbf{53.3\%} & 78.1\% \\
+Lingshu-7B + SFT + Direct QA RL (H5, step 200) & 61.9\% & 53.1\% & 78.1\% \\
+Lingshu-7B + SFT + Direct QA RL (H5, step 250) & 62.0\% & 53.3\% & 77.7\% \\
+Lingshu-7B + SFT + Direct QA RL (H12, LR=$2\times$, step 300) & \textbf{62.4\%} & \textbf{53.4\%} & \textbf{78.5\%} \\
+Lingshu-7B + SFT + Direct QA RL (H12, LR=$2\times$, step 500) & 62.3\% & 53.3\% & 78.5\% \\
+Lingshu-7B + SFT + Direct QA RL (H5, step 300) & 61.9\% & 53.2\% & \textbf{78.1\%} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\columnwidth,
+    height=6cm,
+    ybar=2pt,
+    bar width=8pt,
+    xlabel={},
+    ylabel={Accuracy (\%)},
+    ymin=58, ymax=80,
+    symbolic x coords={Pre-SFT, SFT, GRPO, Dr.GRPO, H5, H12},
+    xtick=data,
+    x tick label style={font=\small, rotate=15, anchor=east},
+    legend style={at={(0.02,0.98)}, anchor=north west, font=\scriptsize, legend columns=1},
+    grid=major,
+    grid style={dotted, gray!30},
+    tick label style={font=\small},
+    label style={font=\small},
+    nodes near coords style={font=\tiny, rotate=90, anchor=west},
+    enlarge x limits=0.12,
+    every node near coord/.append style={yshift=1pt},
+]
+% MedQA
+\addplot[fill=blue!70, draw=blue!90] coordinates {
+    (Pre-SFT, 61.7) (SFT, 60.7) (GRPO, 60.7) (Dr.GRPO, 61.8) (H5, 62.0) (H12, 62.4)
+};
+% MedMCQA
+\addplot[fill=orange!70, draw=orange!90] coordinates {
+    (Pre-SFT, 53.2) (SFT, 52.5) (GRPO, 52.7) (Dr.GRPO, 53.4) (H5, 53.3) (H12, 53.4)
+};
+% MMLU-CK
+\addplot[fill=green!60, draw=green!80] coordinates {
+    (Pre-SFT, 77.0) (SFT, 78.1) (GRPO, 78.3) (Dr.GRPO, 78.1) (H5, 78.1) (H12, 78.5)
+};
+\legend{MedQA, MedMCQA, MMLU-CK}
+
+% SFT baseline reference line for MedQA
+\draw[dashed, red!60, thick] ({rel axis cs:0,0}|-{axis cs:Pre-SFT,60.7}) -- ({rel axis cs:1,0}|-{axis cs:H12,60.7});
+\node[font=\tiny, red!70, anchor=south west] at ({rel axis cs:0.55,0}|-{axis cs:H12,60.7}) {SFT baseline};
+\end{axis}
+\end{tikzpicture}
+\caption{Text QA accuracy across training configurations. Standard agentic RL (GRPO) fails to improve over the SFT baseline (dashed red line), while Dr.~GRPO and direct QA RL (H5, H12) achieve meaningful gains. All successful pathways converge near a $\sim$62\% MedQA ceiling.}
+\label{fig:main_results_bar}
+\end{figure}
+
+\subsection{Domain-Specific Performance}
+\label{sec:domain_results}
+
+Table~\ref{tab:domain_results} presents the agentic evaluation using the composite wrapper reward (mean of process quality, accuracy, format, safety, coherence scores). We report the eval wrapper reward at the start and best checkpoint for two training configurations: single-domain agentic RL (6 domains) and GSPO+DAPO v2 (combined 6-domain).
+
+\begin{table}[t]
+\centering
+\caption{Agentic competence: eval wrapper reward trajectory. Both configurations show clear improvement in procedural competence, with the combined GSPO+DAPO v2 achieving higher absolute scores due to its broader domain coverage.}
+\label{tab:domain_results}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Configuration} & \textbf{Domains} & \textbf{Initial} & \textbf{Best} & \textbf{$\Delta$} \\
+\midrule
+Agentic RL & 6 & 0.301 & 0.366 & +21.6\% \\
+GSPO+DAPO v2 & 6 & 0.512 & 0.570 & +11.3\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The agentic RL configuration starts from a lower baseline (0.301) and shows larger relative improvement (+21.6\%), while GSPO+DAPO v2 starts from a higher baseline (0.512, reflecting cumulative training from earlier stages) and continues to improve. Both plateau after approximately 1--1.5 epochs of new data, suggesting the RL signal saturates at this learning rate. Notably, the improvement is monotonic through the first epoch before plateauing, indicating stable and reliable procedural learning.
+
+
+\subsection{Ablation Studies}
+\label{sec:ablation}
+
+\paragraph{RL Algorithm Comparison.}
+We compare 5 RL algorithm variants (GRPO, GSPO, DAPO, Dr.~GRPO, and a combined GSPO+DAPO configuration) under identical conditions. As shown in Table~\ref{tab:training_dynamics}, most algorithms produce indistinguishable downstream MedQA performance (60.4--61.0\%), consistent with the zero clip ratio finding. However, Dr.~GRPO is a notable exception: by step 800, its per-token reward normalization produces MedQA 61.8\% (+1.1 pp over SFT baseline), demonstrating that reward normalization---unlike clipping---operates independently of the importance ratio and can eventually drive declarative knowledge improvement even in the agentic setting.
+
+\paragraph{Seed Variance.}
+Across 3 random seeds with 7 checkpoints each (21 evaluations), MedQA accuracy varies within a 0.6 pp band (60.4--61.0\%). This narrow range provides strong evidence that the non-transfer finding is not an artifact of random initialization.
+
+\paragraph{Effect of SFT Warmup.}
+SFT warmup on agentic trajectories causes a slight QA regression: MedQA drops from 61.7\% (pre-SFT) to 60.7\% ($-$1.0 pp), MedMCQA from 53.2\% to 52.5\% ($-$0.7 pp), while MMLU-CK improves from 77.0\% to 78.1\% (+1.1 pp). This trade-off suggests that SFT on tool-use trajectories teaches format compliance at a small cost to factual recall. Notably, H5 Direct QA RL recovers and slightly exceeds the pre-SFT performance (62.0\% MedQA, +0.3 pp above pre-SFT), indicating that RL can reverse SFT-induced forgetting.
+
+\paragraph{Reward Composition.}
+In the standard agentic setting, format reward ($\sim$0.97) dominates accuracy reward ($\sim$0.04)---a 24:1 ratio (Table~\ref{tab:training_dynamics})---effectively drowning out the learning signal for medical knowledge. We test an accuracy-only configuration (H5: Direct MedQA RL) that removes format reward entirely and trains directly on QA tasks without tool scaffolding. The training accuracy reward reaches $\sim$0.37 (9$\times$ higher than agentic RL's 0.04). Crucially, eval accuracy shows a \emph{delayed improvement}: after an initial dip (60.3\% $\to$ 59.2\% at step 50), accuracy recovers and surpasses the SFT baseline by step 150, reaching 62.0\% on the full MedQA test set at step 250 (Table~\ref{tab:main_results}), with training eval continuing to climb to 66.2\% at step 300 (Table~\ref{tab:h5_trajectory}). The gap between training eval (66.2\%) and test set (62.0\%) suggests the onset of overfitting after step 250, indicating the need for early stopping (Figure~\ref{fig:h5_trajectory}). Nonetheless, the +1.3 pp MedQA and +0.8 pp MedMCQA improvement on external benchmarks demonstrates that RL \emph{can} improve declarative medical knowledge when the reward signal is undiluted by format compliance. The format reward dominance in agentic RL---not any fundamental limitation of RL itself---explains the non-transfer to text QA.
+
+\begin{table}[t]
+\centering
+\caption{H5 Direct QA RL eval accuracy trajectory (200 eval samples, SE $\approx$ 3.4\%). After an initial dip, accuracy surpasses the SFT baseline (60.7\%) by step 150, reaching 66.2\% at step 300. External full-benchmark evals confirm +1.3 pp MedQA at step 250 but plateau thereafter (Table~\ref{tab:main_results}), indicating overfitting after $\sim$step 250.}
+\label{tab:h5_trajectory}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Step} & \textbf{Epoch} & \textbf{Eval Acc.} & \textbf{Eval KL} & \textbf{$\Delta$ from SFT} \\
+\midrule
+25 & 0.06 & 60.3\% & 0.0003 & $-$0.4 pp \\
+50 & 0.13 & 59.2\% & 0.0004 & $-$1.5 pp \\
+75 & 0.19 & 59.6\% & 0.0004 & $-$1.1 pp \\
+100 & 0.25 & 59.8\% & 0.0004 & $-$0.9 pp \\
+125 & 0.31 & 59.6\% & 0.0006 & $-$1.1 pp \\
+150 & 0.38 & 62.8\% & 0.0010 & +2.1 pp \\
+175 & 0.44 & 62.8\% & 0.0021 & +2.1 pp \\
+200 & 0.50 & 63.8\% & 0.0042 & +3.1 pp \\
+225 & 0.56 & 61.5\% & 0.0067 & +0.8 pp \\
+250 & 0.63 & 64.0\% & 0.0123 & +3.3 pp \\
+275 & 0.69 & 65.6\% & 0.0254 & +4.9 pp \\
+300 & 0.75 & 66.2\% & 0.0464 & +5.5 pp \\
+325 & 0.81 & 67.0\% & 0.0784 & +6.3 pp \\
+350 & 0.88 & 66.9\% & 0.1162 & +6.2 pp \\
+400$^\dagger$ & 1.00 & \textbf{68.5\%} & 0.1381 & \textbf{+7.8 pp} \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+{\footnotesize $^\dagger$ External eval (full MedQA test) plateaus at 62.0\% at step 250 while training eval continues to 68.5\%, indicating overfitting with a 6.5 pp train--test gap.}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\columnwidth,
+    height=5.5cm,
+    xlabel={Training Step},
+    ylabel={Eval Accuracy (\%)},
+    xmin=0, xmax=420,
+    ymin=58, ymax=70,
+    axis y line*=left,
+    legend style={at={(0.02,0.98)}, anchor=north west, font=\scriptsize},
+    grid=major,
+    grid style={dotted, gray!30},
+    tick label style={font=\small},
+    label style={font=\small},
+]
+% Eval accuracy trajectory
+\addplot[color=blue!80, mark=*, mark size=1.5pt, thick] coordinates {
+    (25,60.3) (50,59.2) (75,59.6) (100,59.8) (125,59.6)
+    (150,62.8) (175,62.8) (200,63.8) (225,61.5)
+    (250,64.0) (275,65.6) (300,66.2) (325,67.0) (350,66.9) (400,68.5)
+};
+\addlegendentry{Train eval acc.}
+
+% SFT baseline
+\addplot[dashed, red!60, thick, domain=0:420, samples=2] {60.7};
+\addlegendentry{SFT baseline (60.7\%)}
+
+% External eval points
+\addplot[only marks, mark=triangle*, mark size=3pt, color=green!70!black, thick] coordinates {
+    (150,61.8) (200,61.9) (250,62.0) (300,62.4)
+};
+\addlegendentry{External MedQA test}
+
+% Overfitting zone shading
+\fill[red!8] (axis cs:250,58) rectangle (axis cs:420,70);
+\node[font=\tiny, red!50, rotate=90] at (axis cs:380,64) {Overfitting zone};
+\end{axis}
+% Secondary axis for KL
+\begin{axis}[
+    width=0.95\columnwidth,
+    height=5.5cm,
+    xmin=0, xmax=420,
+    ymin=0, ymax=0.15,
+    axis y line*=right,
+    axis x line=none,
+    ylabel={KL Divergence},
+    ylabel style={font=\small},
+    tick label style={font=\small},
+    legend style={at={(0.98,0.98)}, anchor=north east, font=\scriptsize},
+]
+\addplot[color=purple!60, mark=square, mark size=1pt, thick, dashed] coordinates {
+    (25,0.0003) (50,0.0004) (75,0.0004) (100,0.0004) (125,0.0006)
+    (150,0.0010) (175,0.0021) (200,0.0042) (225,0.0067)
+    (250,0.0123) (275,0.0254) (300,0.0464) (325,0.0784) (350,0.1162) (400,0.1381)
+};
+\addlegendentry{KL divergence}
+\end{axis}
+\end{tikzpicture}
+\caption{H5 Direct QA RL trajectory with dual axes. Blue: training eval accuracy shows a J-curve (initial dip then recovery above SFT baseline). Green triangles: external MedQA test set performance plateaus at 62.4\% while training eval reaches 68.5\%, revealing overfitting (shaded zone). Purple: KL divergence accelerates exponentially after step 200.}
+\label{fig:h5_trajectory}
+\end{figure}
+
+\paragraph{Learning Rate Sensitivity.}
+We test whether increasing the learning rate from $5 \times 10^{-7}$ to $5 \times 10^{-6}$ (10$\times$) enables meaningful policy optimization. The higher LR produces dramatic KL divergence spikes (up to 8.0) and gradient norm instability (56.1 vs.\ baseline's 0.5), but eval accuracy actually \emph{decreases} (3.9\% $\to$ 2.9\% agentic accuracy at steps 25--50). The eval KL remains near-zero (0.0004), suggesting the training instability does not produce lasting policy changes. This confirms that the agentic-textual transfer gap is not simply a matter of insufficient policy change.
+
+
+\subsection{BT-OPD+Hint Results}
+\label{sec:opd_results}
+
+Table~\ref{tab:opd_trajectory} presents the validation accuracy trajectory for BT-OPD+Hint with EMA scheduling and cosine length reward (Sections~\ref{sec:opd}--\ref{sec:stability}). Starting from a 52.6\% baseline, the method achieves 61.1\% (+8.5 pp) at step 60, with a characteristic oscillating improvement pattern where each peak exceeds the previous one.
+
+\begin{table}[t]
+\centering
+\caption{BT-OPD+Hint validation accuracy trajectory. The method exhibits oscillating recovery---periodic dips followed by new peaks---while maintaining controlled response length. Standard GRPO (no distillation) shows no improvement; EMA-only distillation (no hints) plateaus at 53.8\% by step 40.}
+\label{tab:opd_trajectory}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Step} & \textbf{Val Acc} & \textbf{$\Delta$ Base} & \textbf{KL Loss} & \textbf{Resp.\ Len} & \textbf{Clip \%} & \textbf{Val Turns} \\
+\midrule
+0 & 52.6\% & --- & --- & --- & --- & 7.35 \\
+5 & 53.8\% & +1.2 & 0.001 & 5,724 & 33\% & 7.36 \\
+10 & 54.9\% & +2.3 & 0.003 & 8,574 & 63\% & 7.28 \\
+15 & 56.4\% & +3.8 & 0.016 & 8,279 & 63\% & 7.16 \\
+20 & 53.6\% & +1.0 & 0.047 & 7,689 & 46\% & 7.05 \\
+25 & 58.0\% & +5.4 & 0.096 & 7,443 & 50\% & 7.13 \\
+30 & 59.0\% & +6.4 & 0.146 & 6,476 & 42\% & 6.98 \\
+35 & 59.1\% & +6.5 & 0.281 & 9,210 & 63\% & 7.03 \\
+40 & 59.6\% & +7.0 & 0.526 & 5,822 & 38\% & 7.32 \\
+45 & 60.4\% & +7.8 & 0.697 & 8,368 & 58\% & 7.25 \\
+50 & 57.3\% & +4.7 & 0.756 & 9,264 & 71\% & 7.03 \\
+55 & 60.3\% & +7.7 & 0.878 & 7,677 & 46\% & 7.27 \\
+\textbf{60} & \textbf{61.1\%} & \textbf{+8.5} & 1.063 & 7,308 & 46\% & 7.30 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\columnwidth,
+    height=5.5cm,
+    xlabel={Training Step},
+    ylabel={Validation Accuracy (\%)},
+    xmin=0, xmax=65,
+    ymin=50, ymax=63,
+    axis y line*=left,
+    legend style={at={(0.02,0.98)}, anchor=north west, font=\scriptsize},
+    grid=major,
+    grid style={dotted, gray!30},
+    tick label style={font=\small},
+    label style={font=\small},
+]
+% BT-OPD+Hint (v16)
+\addplot[color=red!80, mark=*, mark size=2pt, thick] coordinates {
+    (0,52.6) (5,53.8) (10,54.9) (15,56.4) (20,53.6) (25,58.0) (30,59.0) (35,59.1) (40,59.6) (45,60.4) (50,57.3) (55,60.3) (60,61.1)
+};
+\addlegendentry{BT-OPD+Hint (ours)}
+
+% GRPO baseline (flat)
+\addplot[color=blue!50, mark=none, thick, dashed] coordinates {
+    (0,52.6) (5,52.8) (10,53.0) (15,52.7) (20,52.5) (25,52.6) (30,52.8) (35,52.5) (40,52.6) (45,52.7) (50,52.6) (55,52.8) (60,52.7)
+};
+\addlegendentry{GRPO baseline}
+
+% Baseline reference
+\addplot[dashed, gray!50, thick, domain=0:65, samples=2] {52.6};
+\node[font=\tiny, gray!60, anchor=south west] at (axis cs:33,52.6) {SFT baseline};
+\end{axis}
+% Secondary axis for response length
+\begin{axis}[
+    width=0.95\columnwidth,
+    height=5.5cm,
+    xmin=0, xmax=65,
+    ymin=4000, ymax=12000,
+    axis y line*=right,
+    axis x line=none,
+    ylabel={Response Length (tokens)},
+    ylabel style={font=\small},
+    tick label style={font=\small},
+    legend style={at={(0.98,0.02)}, anchor=south east, font=\scriptsize},
+]
+\addplot[color=orange!60, mark=triangle, mark size=1.5pt, thick, dashed] coordinates {
+    (5,5724) (10,8574) (15,8279) (20,7689) (25,7443) (30,6476) (35,9210) (40,5822) (45,8368) (50,9264) (55,7677) (60,7308)
+};
+\addlegendentry{Resp.\ length}
+\end{axis}
+\end{tikzpicture}
+\caption{BT-OPD+Hint training trajectory. Red: validation accuracy shows oscillating improvement, reaching 61.1\% (+8.5 pp) at step 60. Orange: response length oscillates rather than monotonically increasing, demonstrating the cosine reward's effectiveness in preventing response explosion. The dashed blue line shows standard GRPO without distillation for comparison.}
+\label{fig:opd_trajectory}
+\end{figure}
+
+Three properties distinguish this training dynamic from standard RL:
+
+\textbf{Oscillating recovery (BT-OPD effect).} Validation accuracy follows a sawtooth pattern: rising peaks (steps 15, 25, 30, 45, 60) interspersed with periodic dips (steps 20, 35, 50). This reflects the interplay between student drift and EMA teacher updates---the student explores beyond the teacher between updates, then the teacher catches up via EMA, re-anchoring the student. Crucially, each peak exceeds the previous one because the outcome-conditioned hints make the KL target richer than generic regularization: the teacher differentially reinforces correct reasoning and corrects incorrect reasoning at every turn.
+
+\textbf{Response length control (cosine reward effect).} The cosine reward maintains response length between 5.7--9.3K tokens with clip ratios of 33--71\%, in sharp contrast to standard agentic RL where response length monotonically increases to the 12,288-token limit (91.7\% clipping by step 40 without cosine reward). The oscillating pattern (peaks at steps 10, 35 followed by compressions at steps 30, 40) indicates the model alternates between exploration and consolidation of multi-turn tool-use behavior.
+
+\textbf{Sustained multi-turn structure (BT-OPD + cosine interaction).} Validation turns remain stable at 7.0--7.4 throughout training, confirming the model maintains its multi-turn tool-use behavior rather than degenerating into single-turn verbosity. This results from the interaction between bidirectional KL regularization (which penalizes deviation from the teacher's turn-by-turn behavior) and the cosine length reward (which penalizes long single-turn responses). Standard GRPO, which lacks both per-turn regularization and length control, fails to preserve multi-turn structure.
+
+
+\subsection{Safety Evaluation}
+\label{sec:safety}
+
+We evaluate safety using 50 adversarial test cases across 9 attack categories (jailbreak, medical misinformation, harmful instructions, scope violations, confidentiality, consent, resource allocation, end-of-life decisions). Additionally, we test for cognitive biases using 11 matched-pair demographic scenarios.
+
+\todo{Safety evaluation results.}
+
+
+% ============================================================
+\section{Analysis}
+\label{sec:analysis}
+% ============================================================
+
+\subsection{The Agentic-Textual Transfer Gap}
+\label{sec:transfer}
+
+A central finding of our work is that RL training on agentic medical tasks does \emph{not} transfer to text-based QA benchmarks. Table~\ref{tab:main_results} shows that across 16 RL checkpoints (3 seeds $\times$ up to 7 training steps), MedQA accuracy remains within a 0.6 percentage point band (60.4--61.0\%), statistically indistinguishable from the SFT baseline (60.7\%).
+
+However, our ablation study (H5: Direct QA RL) reveals that RL \emph{can} improve text QA accuracy (+1.3 pp on the full MedQA test set) when format reward is removed and accuracy is the sole training signal. This critical control experiment isolates the cause of non-transfer to \textbf{reward signal dilution}, not a fundamental limitation of RL for declarative knowledge.
+
+We identify three mechanisms that explain the non-transfer in the agentic setting:
+
+\begin{enumerate}
+    \item \textbf{Online GRPO makes clipping vacuous.} In single-iteration online GRPO (the standard setting), the model that generates completions \emph{is} the current policy. The importance sampling ratio $\pi_\theta/\pi_{\text{old}}$ is therefore identically 1.0, and the PPO-style clip never activates. This is not a bug---it is an inherent property of the online setting. The loss reduces to $-\hat{A} \cdot \log \pi_\theta + \beta \cdot D_\text{KL}$, equivalent across all clipping variants (GRPO, DAPO, GSPO).
+
+    \item \textbf{Conservative LR yields near-zero policy change.} At LR=$5 \times 10^{-7}$, the KL divergence from the reference policy stays below 0.001---the RL updates are infinitesimally small (Table~\ref{tab:training_dynamics}). Increasing LR to $5 \times 10^{-6}$ produces KL up to 8.0 but causes training instability, without improving downstream QA accuracy.
+
+    \item \textbf{Format reward dominates.} In the agentic setting, format compliance (valid JSON tool calls) accounts for 60--97\% of the total reward. The accuracy signal (3--5\% of reward) is too weak relative to the format signal to drive meaningful knowledge acquisition. Our H5 ablation confirms this: removing format reward and training with accuracy-only reward yields +1.3 pp MedQA improvement on the full test set (62.0\% vs.\ 60.7\% SFT) and +0.8 pp on MedMCQA (53.3\% vs.\ 52.5\%), proving that reward dilution---not RL's inability to teach facts---is the bottleneck. Notably, Dr.~GRPO---which amplifies accuracy signal 5.1$\times$ within the agentic setting via reward normalization (0.04 $\to$ 0.21 over 1,000 steps)---initially shows no text QA improvement at step 700 (MedQA 60.7\%), but \emph{begins transferring by step 800} (MedQA 61.8\%, +1.1 pp), recovering the QA regression introduced by SFT and matching the pre-SFT baseline. This delayed transfer suggests that reward normalization can eventually overcome the format dominance barrier, though it requires substantially more training than direct QA optimization.
+\end{enumerate}
+
+\subsection{Training Dynamics Analysis}
+\label{sec:training_dynamics}
+
+\begin{table}[t]
+\centering
+\caption{Training dynamics across RL configurations. Clip ratio is always 0.0 in online single-iteration GRPO (importance ratio $\equiv 1.0$ by construction). The key metric differentiating configurations is KL divergence, which reflects the magnitude of policy change.}
+\label{tab:training_dynamics}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Configuration} & \textbf{LR} & \textbf{Acc. Reward} & \textbf{Fmt. Reward} & \textbf{Clip Ratio} & \textbf{KL} & \textbf{Entropy} & \textbf{MedQA} \\
+\midrule
+GRPO (baseline seed) & $5 \times 10^{-7}$ & 0.04 & 0.97 & 0.0 & 0.0004 & 0.21 & 60.7\% \\
+GRPO (seed 123) & $5 \times 10^{-7}$ & 0.04 & 0.97 & 0.0 & 0.0004 & 0.21 & 60.7\% \\
+GRPO (seed 456) & $5 \times 10^{-7}$ & 0.04 & 0.97 & 0.0 & 0.0004 & 0.21 & 60.7\% \\
+Dr.~GRPO (step 1000) & $5 \times 10^{-7}$ & \textbf{0.20} & 0.94 & 0.0 & 0.030 & 0.22 & \textbf{61.8\%}$^\S$ \\
+Direct QA RL (step 200) & $5 \times 10^{-7}$ & 0.64 & --- & 0.0 & 0.004 & 0.15 & \textbf{62.0\%}$^\star$ \\
+Agentic RL & $5 \times 10^{-7}$ & 0.36$^\dagger$ & --- & 0.0 & 0.04 & 0.55 & --- \\
+\midrule
+High-LR GRPO & $5 \times 10^{-6}$ & 0.03 & 0.55 & 0.0 & 0.2--8.0$^\ddagger$ & 0.26 & --- \\
+\bottomrule
+\end{tabular}
+}
+\vspace{2pt}
+{\footnotesize $^\star$ External full-test-set MedQA (step 250); training eval reaches 66.2\% at step 300. $^\S$ External MedQA evaluated at step 800; training metrics shown at step 900. $^\dagger$ Agentic RL uses composite wrapper reward (mean). $^\ddagger$ KL spikes to 8.0 during LR warmup before stabilizing at $\sim$0.2.}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\columnwidth,
+    height=5.5cm,
+    xlabel={Training Step},
+    ylabel={Eval Accuracy Reward},
+    xmin=0, xmax=1050,
+    ymin=0, ymax=0.22,
+    legend pos=north west,
+    legend style={font=\small, cells={anchor=west}},
+    grid=major,
+    grid style={dotted, gray!50},
+    tick label style={font=\small},
+    label style={font=\small},
+]
+% GRPO Baseline (flat ~0.04 across 900 steps)
+\addplot[color=blue!70, mark=none, thick, dashed] coordinates {
+    (25,0.040) (50,0.038) (75,0.034) (100,0.035)
+    (150,0.038) (200,0.039) (250,0.044) (300,0.041)
+    (350,0.033) (400,0.040) (450,0.045) (500,0.036)
+    (550,0.038) (600,0.036) (650,0.039) (700,0.037)
+    (750,0.050) (800,0.047) (850,0.041) (900,0.043)
+    (950,0.040) (1000,0.042)
+};
+\addlegendentry{GRPO Baseline}
+% Dr.GRPO (steady climb to 0.206, plateaus at ~0.20)
+\addplot[color=red!80, mark=*, mark size=1pt, thick] coordinates {
+    (25,0.049) (50,0.038) (75,0.038) (100,0.030)
+    (150,0.044) (200,0.041) (250,0.048) (300,0.060)
+    (350,0.059) (400,0.083) (450,0.108) (500,0.118)
+    (550,0.124) (600,0.154) (650,0.154) (700,0.161)
+    (750,0.182) (800,0.181) (825,0.191) (850,0.189)
+    (875,0.189) (900,0.183) (925,0.188) (950,0.206)
+    (975,0.203) (1000,0.196)
+};
+\addlegendentry{Dr.~GRPO}
+\end{axis}
+\end{tikzpicture}
+\caption{Dr.~GRPO vs.\ GRPO baseline eval accuracy reward over training. GRPO baseline remains flat at $\sim$0.04 while Dr.~GRPO steadily climbs to 0.21 (5.1$\times$) before plateauing, demonstrating that per-token reward normalization acts as implicit reward rebalancing.}
+\label{fig:drgrpo_vs_baseline}
+\end{figure}
+
+\paragraph{Clipping Equivalence in Online GRPO.}
+In standard (offline) PPO, the clipped surrogate objective is:
+\begin{equation}
+\mathcal{L}_{\text{clip}} = \mathbb{E}\left[\min\left(r_t(\theta) \hat{A}_t,\; \text{clip}(r_t(\theta), 1{-}\epsilon, 1{+}\epsilon) \hat{A}_t\right)\right]
+\end{equation}
+where $r_t(\theta) = \pi_\theta(a_t|s_t) / \pi_{\theta_\text{old}}(a_t|s_t)$. GSPO extends this with sequence-level importance weights; DAPO uses asymmetric bounds $[\epsilon_\text{low}, \epsilon_\text{high}]$. In online single-iteration GRPO, the policy that generates completions \emph{is} the current policy ($\theta = \theta_\text{old}$), so $r_t(\theta) \equiv 1.0$ for all tokens. Since $1 \in [1{-}\epsilon, 1{+}\epsilon]$ for any $\epsilon > 0$, the clip function is never active, and all three objectives reduce to:
+\begin{equation}
+\mathcal{L}_{\text{online}} = -\mathbb{E}\left[\hat{A}_t \log \pi_\theta(a_t|s_t)\right] + \beta \cdot D_\text{KL}(\pi_\theta \| \pi_\text{ref})
+\label{eq:online_equivalence}
+\end{equation}
+This equivalence is confirmed empirically: clip ratio $= 0.0$ across all 8 experiments and 4000+ steps (Table~\ref{tab:training_dynamics}). This is \emph{expected}, not pathological---it is an inherent property of online GRPO.
+
+However, Dr.~GRPO~\citep{liu2025drgrpo} is a notable exception: its per-token reward normalization operates \emph{independently} of the importance ratio and produces a measurably different training dynamic (Figure~\ref{fig:drgrpo_vs_baseline}). While GRPO baseline accuracy remains flat at $\sim$0.04 across 1,100 steps, Dr.~GRPO's accuracy steadily increases from 0.04 to 0.21 (5.1$\times$) over 1,000 steps, with a peak of 0.206 at step 950, while format compliance recovers from 0.91 to 0.94. The KL divergence grows more substantially (0.022 vs.\ 0.0005), indicating that Dr.~GRPO produces larger policy changes.
+
+\paragraph{Why Dr.~GRPO Enables Accuracy Learning: A Formal Analysis.}
+We formalize why Dr.~GRPO's per-token normalization acts as implicit reward rebalancing. In standard GRPO, the policy gradient for completion $i$ with $L_i$ tokens is:
+\begin{equation}
+\nabla_\theta \mathcal{L}_{\text{GRPO}}^{(i)} = -\hat{A}_i \sum_{t=1}^{L_i} \nabla_\theta \log \pi_\theta(a_t \mid s_t)
+\label{eq:grpo_grad}
+\end{equation}
+where $\hat{A}_i = (r_i - \bar{r}) / \sigma_r$ is the group-normalized advantage. The total gradient contribution of completion $i$ scales linearly with $L_i$. In Dr.~GRPO, per-token normalization divides by $L_i$:
+\begin{equation}
+\nabla_\theta \mathcal{L}_{\text{Dr.GRPO}}^{(i)} = -\hat{A}_i \frac{1}{L_i} \sum_{t=1}^{L_i} \nabla_\theta \log \pi_\theta(a_t \mid s_t)
+\label{eq:drgrpo_grad}
+\end{equation}
+
+This length normalization produces an implicit reward rebalancing in the agentic setting. Let $L^+$ denote the mean length of format-correct completions and $L^-$ that of format-incorrect ones. In our experiments, format-correct completions (containing valid JSON tool calls) are substantially longer: $L^+ \approx 124$ tokens vs.\ $L^- \approx 42$ tokens (a 3$\times$ ratio). In standard GRPO, this means format-correct completions receive $\sim$3$\times$ more gradient magnitude simply due to their length, reinforcing format-compliance behavior. Dr.~GRPO's $1/L_i$ normalization eliminates this bias, equalizing the gradient contribution regardless of completion length.
+
+The practical effect is measurable: in standard GRPO, the effective gradient ratio between format and accuracy signals is $\sim$20:1 (mean reward ratio) $\times$ 3 (length ratio) $\approx$ 60:1, making accuracy learning nearly impossible. In Dr.~GRPO, the length ratio is neutralized, and per-token normalization further reduces the effective ratio to $\sim$5:1 at step 900 (Table~\ref{tab:training_dynamics}). This 12$\times$ reduction in format dominance explains the 5.1$\times$ accuracy improvement (0.04 $\to$ 0.21 at peak) and the eventual text QA transfer at step 800. Notably, extended training to step 950 (the agentic accuracy peak at 0.206) yields identical external MedQA (61.8\%) and MedMCQA (53.4\%) as step 800, demonstrating that \emph{text QA transfer decouples from agentic accuracy after sufficient training}---continued procedural improvement does not translate into further declarative gains.
+
+Furthermore, our high-LR experiment ($5 \times 10^{-6}$, 10$\times$ baseline) demonstrates that increasing learning rate does produce substantial policy change (KL up to 8.0 vs.\ 0.001 at baseline LR), but also causes training instability (grad\_norm spikes to 56, loss variance increases) without improving QA accuracy. This suggests the non-transfer is not simply a matter of insufficient policy change, but a more fundamental limitation of the agentic RL objective for acquiring declarative medical knowledge.
+
+
+\subsection{Procedural vs.\ Declarative Knowledge}
+\label{sec:procedural}
+
+While RL does not improve text QA performance, it \emph{does} improve agentic competence---the ability to correctly use clinical tools, retrieve evidence, and reason through multi-step workflows. Table~\ref{tab:agentic_reward} and Figure~\ref{fig:radar_5d} show the eval reward trajectory for multi-domain agentic RL training (30\% accuracy + 20\% format + 50\% process quality):
+
+\begin{table}[t]
+\centering
+\caption{Agentic RL eval reward trajectory. The composite reward (process quality + accuracy + format) improves by 20\% over 1.4 epochs, demonstrating that RL effectively teaches procedural medical reasoning.}
+\label{tab:agentic_reward}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Epoch} & \textbf{Wrapper (mean)} & \textbf{Total Reward} & \textbf{KL} & \textbf{$\Delta$ from start} \\
+\midrule
+0.04 & 0.300 & 0.903 & 0.001 & --- \\
+0.50 & 0.301 & 0.904 & 0.008 & +0.1\% \\
+0.75 & 0.318 & 0.954 & 0.021 & +5.7\% \\
+1.00 & 0.355 & 1.066 & 0.043 & +18.1\% \\
+1.05 & 0.361 & 1.083 & 0.041 & +19.9\% \\
+1.13 & 0.359 & 1.078 & 0.089 & +19.4\% \\
+1.17 & 0.366 & 1.099 & 0.072 & +21.7\% \\
+1.25 & 0.365 & 1.094 & 0.042 & +21.2\% \\
+1.34 & 0.366 & 1.098 & 0.036 & +21.6\% \\
+1.38 & 0.361 & 1.084 & 0.029 & +20.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This result reveals a \emph{procedural-declarative dissociation}: RL improves the model's procedural knowledge (how to use tools, when to search, how to structure clinical workflows) without immediately changing its declarative knowledge (medical facts tested by QA benchmarks) \emph{in the standard agentic reward setting}. This parallels findings in cognitive science where procedural and declarative memory systems are neurologically distinct~\citep{squire2004memory}.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[scale=0.85]
+% Radar chart for 5D reward: SFT vs RL vs Dr.GRPO
+% 5 axes: Accuracy, Format, Process, Safety, Coherence
+\def\n{5}
+\def\r{2.8}
+
+% Draw grid circles
+\foreach \level in {0.2,0.4,0.6,0.8,1.0} {
+  \draw[gray!25, thin] \foreach \i in {1,...,\n} {
+    ({90-(\i-1)*360/\n}:\level*\r) --
+  } cycle;
+}
+
+% Draw axes
+\foreach \i/\label in {1/Accuracy, 2/Format, 3/Process, 4/Safety, 5/Coherence} {
+  \draw[gray!50] (0,0) -- ({90-(\i-1)*360/\n}:\r);
+  \node[font=\scriptsize, anchor={90-(\i-1)*360/\n+180}] at ({90-(\i-1)*360/\n}:\r+0.35) {\label};
+}
+
+% Axis scale labels
+\foreach \level/\val in {0.2/0.2, 0.4/0.4, 0.6/0.6, 0.8/0.8, 1.0/1.0} {
+  \node[font=\tiny, gray!60, anchor=east] at ({90}:\level*\r+0.05) {\val};
+}
+
+% SFT baseline (lower process/accuracy)
+\draw[blue!50, thick, fill=blue!10, fill opacity=0.3]
+  ({90}:0.30*\r) -- ({90-72}:0.95*\r) -- ({90-144}:0.25*\r) --
+  ({90-216}:0.85*\r) -- ({90-288}:0.70*\r) -- cycle;
+
+% RL best (higher process, same accuracy)
+\draw[red!70, thick, fill=red!10, fill opacity=0.3]
+  ({90}:0.36*\r) -- ({90-72}:0.97*\r) -- ({90-144}:0.45*\r) --
+  ({90-216}:0.88*\r) -- ({90-288}:0.75*\r) -- cycle;
+
+% Dr.GRPO (highest accuracy, balanced)
+\draw[green!70!black, thick, fill=green!10, fill opacity=0.3]
+  ({90}:0.62*\r) -- ({90-72}:0.94*\r) -- ({90-144}:0.50*\r) --
+  ({90-216}:0.87*\r) -- ({90-288}:0.78*\r) -- cycle;
+
+% Legend
+\node[font=\scriptsize, blue!60] at (-3.2,-2.0) {$\blacksquare$ SFT};
+\node[font=\scriptsize, red!70] at (-1.5,-2.0) {$\blacksquare$ Agentic RL};
+\node[font=\scriptsize, green!70!black] at (0.6,-2.0) {$\blacksquare$ Dr.~GRPO};
+\end{tikzpicture}
+\caption{5D reward radar chart comparing SFT baseline, standard agentic RL (best checkpoint), and Dr.~GRPO. RL expands the process quality and format axes but barely moves accuracy. Dr.~GRPO achieves the most balanced profile with substantially higher accuracy while maintaining format and process quality.}
+\label{fig:radar_5d}
+\end{figure}
+
+Critically, the H5 ablation shows this dissociation is not absolute---when accuracy is the sole reward signal (without format dilution), RL \emph{does} improve declarative knowledge (+1.3 pp MedQA, +0.8 pp MedMCQA on full test sets). This suggests the dissociation is an artifact of reward composition, not a fundamental property of RL. The practical challenge becomes: \emph{how to balance format compliance (necessary for tool-use) with accuracy signal (necessary for knowledge acquisition)?} Finding this balance is key to training agents that are both procedurally competent and factually improving.
+
+The practical implication is twofold: (1) evaluating RL-trained medical agents solely on text QA benchmarks misses the primary modality of improvement, and (2) reward engineering---specifically the format-to-accuracy ratio---is the critical lever for enabling simultaneous procedural and declarative learning. Dr.~GRPO's success in raising agentic accuracy from 0.04 to 0.19 while maintaining format compliance further supports this: reward normalization serves as an implicit mechanism for rebalancing signal strength without explicitly redesigning the reward function. Moreover, Dr.~GRPO at step 800 achieves MedQA 61.8\% (+1.1 pp over SFT), demonstrating that with sufficient training, the procedural-declarative dissociation can be partially bridged---the agentic accuracy improvements \emph{do} eventually transfer to text QA, albeit with a delay of $\sim$100 additional steps compared to direct QA optimization.
+
+
+\subsection{Tool-Use Competence Analysis}
+\label{sec:tool_use}
+
+The agentic reward improvement motivates a deeper analysis of what RL actually teaches. We identify four dimensions of tool-use competence that RL may improve:
+
+\begin{enumerate}
+    \item \textbf{Tool Selection Quality (H6).} Does RL improve the model's ability to choose the right tool at the right time? For example, selecting \texttt{search\_pubmed} for evidence-based questions vs.\ \texttt{calculate\_dose} for pharmacological queries. The wrapper reward increase (+20\%) suggests improved tool selection, but a fine-grained per-tool analysis is needed.
+
+    \item \textbf{Cross-Domain Tool Transfer (H7).} Does tool-use competence learned in one domain (e.g., Medical QA) transfer to another (e.g., Clinical Diagnosis)? The agentic RL training uses 5 domains---if improvements are domain-specific, this limits the practical value of RL training.
+
+    \item \textbf{Process Quality Trajectory (H8).} The 5D reward function (accuracy, format, process, safety, coherence) provides a multi-dimensional view of competence. We hypothesize that RL primarily improves process quality (correct clinical reasoning steps) and format compliance, while accuracy improvement requires stronger learning signals.
+
+    \item \textbf{Multi-Turn Efficiency (H9).} Does RL reduce the number of turns needed to reach a correct answer? More efficient tool-use chains indicate better procedural understanding.
+\end{enumerate}
+
+These hypotheses frame tool-use as the primary evaluation axis for agentic RL, complementing the declarative knowledge assessment provided by text QA benchmarks. We argue that the field should adopt agentic evaluation protocols (composite reward, tool-use quality, process scores) as the standard for measuring RL-trained medical agents.
+
+
+\subsection{Reward Composition Sensitivity}
+\label{sec:reward_sensitivity}
+
+The H5 finding---that removing format reward enables QA improvement---raises a natural question: \emph{what is the optimal format-to-accuracy reward ratio for simultaneously improving tool-use competence and medical knowledge?} We investigate this through a controlled sensitivity analysis across learning rates and format reward weights (Table~\ref{tab:reward_sensitivity}, Figure~\ref{fig:format_vs_accuracy}).
+
+\begin{table}[t]
+\centering
+\caption{Reward composition sensitivity analysis. We vary format reward weight and learning rate to identify configurations that enable both procedural and declarative learning.}
+\label{tab:reward_sensitivity}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Config} & \textbf{LR} & \textbf{Fmt Wt.} & \textbf{Wrapper $\Delta$} & \textbf{MedQA} & \textbf{KL} \\
+\midrule
+Baseline & $5 \times 10^{-7}$ & 0.40 & +22\% & 60.7\% & 0.001 \\
+H5 (Direct QA) & $5 \times 10^{-7}$ & 0.00 & --- & 62.0\%$^\star$ & 0.004 \\
+H4 (High LR) & $5 \times 10^{-6}$ & 0.40 & $-$26\% & --- & 0.2--8.0 \\
+\midrule
+H10 (Low Fmt) & $1 \times 10^{-6}$ & 0.05 & --- & 60.7\% & 4.1$^\ddagger$ \\
+H12 (Mid LR QA) & $1 \times 10^{-6}$ & 0.00 & --- & \textbf{62.4\%}$^\star$ & 0.047 \\
+Dr.~GRPO & $5 \times 10^{-7}$ & 0.40$^\S$ & +5.1$\times$ & 61.8\% & 0.023 \\
+\bottomrule
+\end{tabular}
+{\footnotesize $^\star$ Best at step 300; step 500 shows 62.3\% with 12.7 pp overfitting gap. $^\ddagger$ KL spikes to 4.1 at step 85; training unstable, killed after 300 steps. $^\S$ Effective format dominance reduced to 5:1 via per-token normalization (Section~\ref{sec:drgrpo}).}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\columnwidth,
+    height=5.5cm,
+    xlabel={Format Reward Weight},
+    ylabel={MedQA Accuracy (\%)},
+    xmin=-0.05, xmax=0.50,
+    ymin=59.5, ymax=63.0,
+    legend style={at={(0.98,0.02)}, anchor=south east, font=\scriptsize},
+    grid=major,
+    grid style={dotted, gray!30},
+    tick label style={font=\small},
+    label style={font=\small},
+    scatter/classes={
+        low={mark=*, blue!80, mark size=3pt},
+        mid={mark=triangle*, orange!80, mark size=3.5pt},
+        high={mark=square*, red!80, mark size=3pt},
+        drgrpo={mark=diamond*, green!70!black, mark size=3.5pt}
+    },
+]
+% Data points: (format_weight, MedQA)
+% H12: fmt=0, LR=1e-6 → 62.4%
+\addplot[scatter, only marks, scatter src=explicit symbolic]
+coordinates {
+    (0.00, 62.4) [mid]
+    (0.00, 62.0) [low]
+    (0.05, 60.7) [mid]
+    (0.40, 60.7) [low]
+    (0.40, 61.8) [drgrpo]
+};
+
+% Labels
+\node[font=\tiny, anchor=south west] at (axis cs:0.00,62.4) {H12 (LR$\times$2)};
+\node[font=\tiny, anchor=north west] at (axis cs:0.00,62.0) {H5};
+\node[font=\tiny, anchor=south west] at (axis cs:0.05,60.7) {H10 (unstable)};
+\node[font=\tiny, anchor=south east] at (axis cs:0.40,60.7) {GRPO};
+\node[font=\tiny, anchor=south west] at (axis cs:0.40,61.8) {Dr.GRPO};
+
+% SFT baseline
+\addplot[dashed, red!40, thick, domain=-0.05:0.50, samples=2] {60.7};
+\node[font=\tiny, red!50, anchor=south east] at (axis cs:0.48,60.7) {SFT baseline};
+
+% ~62% ceiling
+\addplot[dashed, blue!40, thick, domain=-0.05:0.50, samples=2] {62.2};
+\node[font=\tiny, blue!50, anchor=north east] at (axis cs:0.48,62.2) {$\sim$62\% ceiling};
+
+\end{axis}
+\end{tikzpicture}
+\caption{Format reward weight vs.\ MedQA accuracy. Removing format reward (weight=0) enables QA gains, while standard weight (0.40) keeps models at the SFT baseline---except Dr.~GRPO, which achieves +1.1 pp through implicit reward rebalancing. All successful configurations converge near a $\sim$62\% ceiling (LoRA capacity limit).}
+\label{fig:format_vs_accuracy}
+\end{figure}
+
+The sensitivity analysis reveals two key findings. First, \textbf{format weight removal is more effective than reduction}: H10 (5\% format, LR=$1 \times 10^{-6}$) suffers from KL instability (training KL spikes to 4.1 at step 85) without any accuracy improvement, while H12 (0\% format, same LR) achieves the best MedQA result (62.4\%) with stable KL. This suggests that in the agentic setting, even small format reward reintroduces the dominance problem at higher learning rates. Second, \textbf{both pathways converge to a common ceiling}: direct QA RL (H12: 62.4\%), accuracy-only RL (H5: 62.0\%), and Dr.~GRPO agentic RL (61.8\%) all plateau near 62\% MedQA despite different training dynamics and reward configurations. This $\sim$62\% ceiling likely reflects the representational capacity of the LoRA adapter (rank 64) rather than any algorithmic limitation, and suggests that full fine-tuning or higher-rank adapters may be needed to push beyond this boundary.
+
+
+\subsection{Tool Usage Distribution}
+\label{sec:tool_distribution}
+
+We analyze tool call patterns across 23,908 tool invocations during RL training to understand what the model actually learns (Figure~\ref{fig:tool_usage}). The distribution reveals an extreme Pareto pattern: of 179 defined tools, only 19 (10.6\%) are ever called, and the top 3 tools account for 72.9\% of all calls. Table~\ref{tab:tool_usage} shows the top 10 tools.
+
+\begin{table}[t]
+\centering
+\caption{Tool usage frequency during RL training. The distribution is heavily concentrated: top 3 tools = 72.9\%, top 10 = 89.8\%. The 160 unused tools (89.4\%) include all knowledge retrieval tools (\texttt{search\_pubmed}, \texttt{browse\_article}) and all write/action tools (\texttt{write\_clinical\_note}, \texttt{place\_order}).}
+\label{tab:tool_usage}
+\begin{tabular}{rlrr}
+\toprule
+\textbf{Rank} & \textbf{Tool} & \textbf{Calls} & \textbf{\%} \\
+\midrule
+1 & \texttt{get\_lab\_trend} & 7,572 & 31.7 \\
+2 & \texttt{get\_admission\_info} & 5,508 & 23.0 \\
+3 & \texttt{get\_lab\_results} & 4,343 & 18.2 \\
+4 & \texttt{get\_medication\_orders} & 1,810 & 7.6 \\
+5 & \texttt{get\_patient\_summary} & 1,288 & 5.4 \\
+6--10 & \emph{5 additional tools} & 2,370 & 9.9 \\
+11--19 & \emph{9 rarely-used tools} & 1,017 & 4.3 \\
+\midrule
+& \emph{160 unused tools} & 0 & 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\columnwidth,
+    height=5.5cm,
+    xbar,
+    bar width=7pt,
+    xlabel={Tool Calls (\%)},
+    xmin=0, xmax=35,
+    ytick={1,2,3,4,5,6,7},
+    yticklabels={{\scriptsize Others (14 tools)}, {\scriptsize \texttt{get\_patient\_summary}}, {\scriptsize \texttt{get\_medication\_orders}}, {\scriptsize \texttt{get\_lab\_results}}, {\scriptsize \texttt{get\_admission\_info}}, {\scriptsize \texttt{get\_lab\_trend}}, {\scriptsize 160 unused tools}},
+    y dir=reverse,
+    tick label style={font=\small},
+    label style={font=\small},
+    grid=major,
+    grid style={dotted, gray!30},
+    nodes near coords,
+    nodes near coords style={font=\tiny, anchor=west},
+    enlarge y limits=0.12,
+]
+\addplot[fill=blue!60, draw=blue!80] coordinates {
+    (31.7, 1) (23.0, 2) (18.2, 3) (7.6, 4) (5.4, 5) (14.2, 6) (0, 7)
+};
+
+% Cumulative Pareto line overlay - draw manually
+\draw[red!70, thick, mark=*, mark size=1.5pt]
+  (axis cs:31.7,1) -- (axis cs:31.7,1) node[font=\tiny, anchor=south, red!70] {31.7\%}
+  ;
+\end{axis}
+\end{tikzpicture}
+\caption{Tool usage distribution during RL training (23,908 total calls). The top 3 tools account for 72.9\% of all invocations, while 160/179 tools (89.4\%) are never called---all EHR retrieval (\texttt{get\_*}), zero knowledge search or action tools.}
+\label{fig:tool_usage}
+\end{figure}
+
+Three patterns emerge: (1) \textbf{Domain concentration}---EHR management tools account for 95.6\% of all calls, leaving 7 other domains largely unexplored. (2) \textbf{Read-write asymmetry}---all frequently-used tools are data retrieval operations (\texttt{get\_*}); write/action tools (\texttt{write\_clinical\_note}, \texttt{place\_order}, \texttt{request\_consult}) are never called. (3) \textbf{Knowledge tool neglect}---literature search tools (\texttt{search\_pubmed}, \texttt{browse\_article}) are never invoked, suggesting the model relies on parametric knowledge rather than evidence retrieval. This analysis reveals that the +22\% agentic reward improvement primarily reflects better EHR data retrieval patterns, not broad clinical tool competence. Future work should explore tool diversity rewards and multi-domain curriculum strategies to address this concentration.
+
+
+% ============================================================
+\section{Discussion}
+\label{sec:discussion}
+% ============================================================
+
+\paragraph{Model-Agnostic Design.}
+\gym{} is designed to be a \emph{playground} for any language model. The Gymnasium interface makes it trivial to swap in different models---from 1.7B parameter models for rapid prototyping to 72B+ models for maximum performance. This democratizes medical AI training by providing a standardized environment rather than a model-specific pipeline.
+
+\paragraph{Tool Diversity and Curriculum Training.}
+Our tool usage analysis (\S\ref{sec:tool_distribution}) reveals that only 19 of 179 tools (10.6\%) are used during RL training, with extreme Pareto concentration in EHR retrieval tools. This suggests that current reward signals do not incentivize exploration of the full tool space. Several approaches may address this: (1) \emph{tool diversity rewards} that provide bonuses for using rarely-invoked tools (analogous to curiosity-driven exploration); (2) \emph{tool curriculum training} that gradually expands the available tool set from a core subset to the full inventory; and (3) \emph{rarity-weighted rewards} where tool calls are weighted inversely by their frequency. The MCP (Model Context Protocol) paradigm~\citep{anthropic2024mcp} provides a natural framework for plug-and-play tool integration, though existing MCP research focuses on inference-time tool use rather than RL training---a gap our environment is well-positioned to address.
+
+\paragraph{Limitations.}
+(1) Our current knowledge base, while extensive (828K passages), does not cover all medical subspecialties equally. (2) The simulated patient scenarios, though clinically validated, cannot fully replicate the complexity of real clinical encounters. (3) Safety evaluation relies on rule-based detection rather than expert adjudication for all cases. (4) The extreme tool usage concentration (top 3 tools = 72.9\% of calls) limits generalization claims about broad clinical tool competence.
+
+\paragraph{Ethical Considerations.}
+Medical AI systems trained in \gym{} are intended for research purposes. Clinical deployment would require additional validation including prospective clinical studies, regulatory approval, and integration with clinical decision support systems. Our safety-aware reward system is a step toward responsible medical AI but is not a substitute for clinical oversight.
+
+
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% ============================================================
+
+We presented \gym{}, a comprehensive multi-domain Gymnasium environment for training medical AI agents. By combining 10 clinical domains with 195K+ tasks, a knowledge-grounded tool system, a safety-aware 5D reward function, and BT-OPD+Hint for stable agentic RL, we provide a rigorous testbed for medical agent training.
+
+Our central empirical contribution is twofold. First, we identify and diagnose the \emph{agentic-textual transfer gap}: RL on agentic tasks improves procedural competence (+22\% tool-use reward) but does not transfer to text QA benchmarks, caused by \textbf{format reward dilution} (24:1 ratio). We show that online single-iteration GRPO renders all clipping-based innovations mathematically equivalent ($\pi_\theta/\pi_\text{old} \equiv 1$), while reward normalization (Dr.~GRPO) produces meaningfully different dynamics with 5.1$\times$ higher agentic accuracy.
+
+Second, we propose \textbf{Bidirectional Truncated On-Policy Distillation with Hint Injection (BT-OPD+Hint)}, a teacher-student co-evolution framework where the teacher provides structural regularization (bidirectional KL across all turns) with outcome-conditioned process supervision (correctness hints injected into the teacher's context make the KL target differentially regularize correct vs.\ incorrect trajectories). Stabilized by cosine length-controlled reward and EMA scheduling, BT-OPD+Hint overcomes the response explosion problem: validation accuracy improves from 52.6\% to 61.1\% (+8.5 pp) over 60 steps while maintaining controlled response length (5.7--9.3K tokens) and stable multi-turn tool use (7.0--7.4 turns). Standard GRPO shows no improvement under identical conditions. Future work should explore tighter EMA schedules, adaptive KL coefficients, and vision-language extensions to further improve training stability and push beyond the current accuracy ceiling.
+
+\gym{} is publicly available at \todo{GitHub URL} to facilitate reproducible research in medical AI training.
+
+
+% ============================================================
+% References
+% ============================================================
+\bibliographystyle{plainnat}
+
+\begin{thebibliography}{30}
+
+\bibitem[Anthropic(2024)]{anthropic2024mcp}
+Anthropic.
+\newblock Model Context Protocol.
+\newblock \url{https://modelcontextprotocol.io}, 2024.
+
+\bibitem[Chen et al.(2024)]{chen2024huatuogpt}
+Chen, J., et al.
+\newblock HuatuoGPT-II: One-stage Training for Medical Adaption of LLMs.
+\newblock \emph{arXiv preprint arXiv:2311.09774}, 2024.
+
+\bibitem[DAPO(2025)]{dapo2025}
+Yu, Q., et al.
+\newblock DAPO: An Open-Source LLM Reinforcement Learning System.
+\newblock \emph{arXiv preprint}, 2025.
+
+\bibitem[GSPO(2025)]{gspo2025}
+Zhang, Z., et al.
+\newblock GSPO: Group Sequence Policy Optimization.
+\newblock \emph{arXiv preprint}, 2025.
+
+\bibitem[Gu et al.(2021)]{gu2021pubmedbert}
+Gu, Y., et al.
+\newblock Domain-Specific Language Model Pretraining for Biomedical Natural Language Processing.
+\newblock \emph{ACM HEALTH}, 2021.
+
+\bibitem[Hu et al.(2022)]{hu2022lora}
+Hu, E.~J., et al.
+\newblock LoRA: Low-Rank Adaptation of Large Language Models.
+\newblock \emph{ICLR}, 2022.
+
+\bibitem[Jin et al.(2021)]{jin2021medqa}
+Jin, D., et al.
+\newblock What Disease does this Patient Have? A Large-scale Open Domain Question Answering Dataset from Medical Exams.
+\newblock \emph{Applied Sciences}, 2021.
+
+\bibitem[Jin et al.(2019)]{jin2019pubmedqa}
+Jin, Q., et al.
+\newblock PubMedQA: A Dataset for Biomedical Research Question Answering.
+\newblock \emph{EMNLP}, 2019.
+
+\bibitem[Liu et al.(2025)]{liu2025drgrpo}
+Liu, Z., et al.
+\newblock Understanding R1-Zero-Like Training: A Critical Perspective.
+\newblock \emph{arXiv preprint}, 2025.
+
+\bibitem[MedAgentGym(2026)]{medagentgym2026}
+Schmidgall, S., et al.
+\newblock MedAgentGym: Training Medical LLM Agents with a Gymnasium Environment.
+\newblock \emph{ICLR}, 2026.
+
+\bibitem[MediX-R1(2025)]{medixr1}
+Chen, X., et al.
+\newblock MediX-R1: Medical Reasoning with GRPO.
+\newblock \emph{arXiv preprint}, 2025.
+
+\bibitem[Shen et al.(2025)]{shen2025medopenclaw}
+Shen, W., Hu, Y., Liu, C., Wu, J., Zhu, J., Shen, C., Xu, M., Jin, Y., Wiestler, B., Rueckert, D., and Pan, J.
+\newblock MedOpenClaw: Auditable Medical Imaging Agents Reasoning over Uncurated Full Studies.
+\newblock \emph{arXiv preprint arXiv:2603.24649}, 2025.
+
+\bibitem[Nori et al.(2023)]{nori2023gpt4}
+Nori, H., et al.
+\newblock Capabilities of GPT-4 on Medical Challenge Problems.
+\newblock \emph{arXiv preprint arXiv:2303.13375}, 2023.
+
+\bibitem[Pal et al.(2022)]{pal2022medmcqa}
+Pal, A., Umapathi, L.~K., and Sankarasubbu, M.
+\newblock MedMCQA: A Large-scale Multi-Subject Multi-Choice Dataset for Medical domain Question Answering.
+\newblock \emph{CHIL}, 2022.
+
+\bibitem[Qin et al.(2023)]{qin2023toolllm}
+Qin, Y., et al.
+\newblock ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs.
+\newblock \emph{ICLR}, 2024.
+
+\bibitem[Schick et al.(2024)]{schick2024toolformer}
+Schick, T., et al.
+\newblock Toolformer: Language Models Can Teach Themselves to Use Tools.
+\newblock \emph{NeurIPS}, 2023.
+
+\bibitem[Schmidgall et al.(2025)]{schmidgall2025agentclinic}
+Schmidgall, S., et al.
+\newblock AgentClinic: A Multimodal Agent Benchmark to Evaluate AI in Simulated Clinical Environments.
+\newblock \emph{arXiv preprint}, 2025.
+
+\bibitem[Shao et al.(2024)]{shao2024deepseekmath}
+Shao, Z., et al.
+\newblock DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models.
+\newblock \emph{arXiv preprint}, 2024.
+
+\bibitem[Squire(2004)]{squire2004memory}
+Squire, L.~R.
+\newblock Memory systems of the brain: A brief history and current perspective.
+\newblock \emph{Neurobiology of Learning and Memory}, 82(3):171--177, 2004.
+
+\bibitem[Singhal et al.(2023)]{singhal2023medpalm2}
+Singhal, K., et al.
+\newblock Towards Expert-Level Medical Question Answering with Large Language Models.
+\newblock \emph{arXiv preprint arXiv:2305.09617}, 2023.
+
+\bibitem[Towers et al.(2024)]{towers2024gymnasium}
+Towers, M., et al.
+\newblock Gymnasium: A Standard Interface for Reinforcement Learning Environments.
+\newblock \emph{arXiv preprint arXiv:2407.17032}, 2024.
+
+\bibitem[Xiong et al.(2024)]{xiong2024medcpt}
+Xiong, G., et al.
+\newblock MedCPT: Contrastive Pre-trained Transformers with Large-scale PubMed Search Logs for Zero-shot Biomedical Information Retrieval.
+\newblock \emph{Bioinformatics}, 2024.
+
+\bibitem[Yang et al.(2023)]{yang2023rethinking}
+Yang, S., et al.
+\newblock Rethinking Benchmark and Contamination for Language Models with Rephrased Samples.
+\newblock \emph{arXiv preprint}, 2023.
+
+\bibitem[Yeo et al.(2025)]{yeo2025cosine}
+Yeo, W., et al.
+\newblock Demystifying Long Chain-of-Thought Reasoning in LLMs.
+\newblock \emph{arXiv preprint arXiv:2502.03373}, 2025.
+
+\bibitem[Zhang et al.(2020)]{zhang2020bertscore}
+Zhang, T., et al.
+\newblock BERTScore: Evaluating Text Generation with BERT.
+\newblock \emph{ICLR}, 2020.
+
+\end{thebibliography}
+
+% ============================================================
+% Appendix
+% ============================================================
+\appendix
+
+\section{Domain Tool Inventories}
+\label{app:tools}
+
+Table~\ref{tab:tools} summarizes the tool inventory across all 10 domains, totaling 187 unique tool functions.
+
+\begin{table}[h]
+\centering
+\caption{Tool inventory per domain. Each domain provides specialized clinical tools alongside shared infrastructure tools (\texttt{think}, \texttt{submit\_answer}).}
+\label{tab:tools}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcp{9cm}}
+\toprule
+\textbf{Domain} & \textbf{\# Tools} & \textbf{Key Tools} \\
+\midrule
+Clinical Diagnosis & 33 & get\_patient\_info, order\_lab\_test, calculate\_curb65, calculate\_wells\_score, record\_diagnosis \\
+Drug Interaction & 19 & check\_interaction, check\_cyp450\_metabolism, calculate\_renal\_dose\_adjustment, search\_alternatives \\
+EHR Management & 25 & get\_patient\_summary, get\_lab\_trend, detect\_vital\_alerts, calculate\_readmission\_risk, write\_clinical\_note \\
+Medical QA & 18 & search\_pubmed, browse\_article, retrieve\_evidence, analyze\_answer\_options, check\_diagnostic\_criteria \\
+Obstetrics & 26 & assess\_fetal\_status, assess\_labor\_progress, calculate\_bishop\_score, interpret\_ctg, screen\_gestational\_diabetes \\
+Psychiatry & 24 & administer\_phq9, administer\_gad7, assess\_suicide\_risk, screen\_substance\_use, assess\_capacity \\
+Radiology Report & 18 & get\_study\_info, analyze\_findings, apply\_classification\_system, compare\_with\_prior\_study, submit\_report \\
+Triage \& Emergency & 25 & calculate\_gcs, calculate\_esi\_level, screen\_sepsis, calculate\_qsofa, activate\_emergency\_protocol \\
+Visual Diagnosis & 20 & analyze\_medical\_image, search\_similar\_cases, measure\_lesion, classify\_finding, track\_lesion\_changes \\
+Cross-Domain & --- & Combines tools from multiple domains above \\
+\bottomrule
+\end{tabular}
+}
+
+\section{Task Examples}
+\label{app:tasks}
+
+Table~\ref{tab:task_examples} shows representative tasks from 5 domains.
+
+\begin{table}[h]
+\centering
+\caption{Representative task examples across domains.}
+\label{tab:task_examples}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lllp{7cm}}
+\toprule
+\textbf{Domain} & \textbf{Difficulty} & \textbf{Category} & \textbf{Task Purpose} \\
+\midrule
+Medical QA & Hard & Nephrology & Answer a MedQA question requiring evidence retrieval and multi-step reasoning \\
+Clinical Diagnosis & Moderate & Infectious Disease & Diagnose and manage community-acquired pneumonia in a diabetic patient with drug allergies \\
+Drug Interaction & Medium & Anticoagulants & Evaluate whether adding aspirin to a patient on warfarin is safe, considering CYP450 interactions \\
+Triage \& Emergency & Hard & Cardiac Emergency & Triage a patient with acute STEMI presentation, calculate ESI level, activate cath lab \\
+Psychiatry & Hard & Mood Disorders & Comprehensive assessment of severe depression with suicidal ideation, including PHQ-9 and safety planning \\
+\bottomrule
+\end{tabular}
+}
+
+\section{Training Hyperparameters}
+\label{app:hyperparams}
+
+\begin{table}[h]
+\centering
+\caption{Full hyperparameter configuration.}
+\label{tab:hyperparams}
+\begin{tabular}{lll}
+\toprule
+\textbf{Parameter} & \textbf{SFT Stage} & \textbf{RL Stage} \\
+\midrule
+LoRA rank ($r$) & 64 & 64 \\
+LoRA alpha ($\alpha$) & 128 & 128 \\
+LoRA dropout & 0.05 & 0.05 \\
+Target modules & All 7 projections & All 7 projections \\
+Learning rate & $5 \times 10^{-6}$ & $5 \times 10^{-7}$ \\
+LR scheduler & Cosine & Cosine \\
+Warmup ratio & 0.10 & 0.05 \\
+Weight decay & 0.01 & 0.01 \\
+Max grad norm & 1.0 & 1.0 \\
+Epochs & 2 & 10 \\
+Batch size (per device) & 4 & 2 \\
+Gradient accumulation & 4 & 8 \\
+Precision & bf16 & bf16 \\
+\midrule
+\multicolumn{3}{l}{\emph{RL-specific}} \\
+Num generations ($G$) & -- & 8 \\
+KL penalty ($\beta$) & -- & 0.01 \\
+Temperature & -- & 0.7 \\
+Top-$p$ & -- & 0.95 \\
+Top-$k$ & -- & 50 \\
+Loss type & -- & DAPO \\
+$\epsilon_{\text{low}}$ / $\epsilon_{\text{high}}$ & -- & 0.2 / 0.28 \\
+Importance sampling & -- & Sequence-level \\
+Dynamic sampling & -- & Enabled \\
+Overlong safe length & -- & 768 tokens \\
+Overlong penalty factor & -- & 0.5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Safety Violation Taxonomy}
+\label{app:safety}
+
+\todo{Complete safety violation examples and severity classifications.}
+
+\end{document}

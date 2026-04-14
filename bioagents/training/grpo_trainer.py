@@ -187,6 +187,15 @@ class BioAgentGRPOConfig:
     opd_lambda: float = 1.0                        # G-OPD reward extrapolation (λ>1 = surpass teacher)
     opd_warmup_steps: int = 50                     # Steps before OPD kicks in (let RL stabilize first)
 
+    # ── Bidirectional Truncated OPD (BT-OPD) ─────────────────
+    # Extends OPD with: (1) turn-aware truncation — apply OPD only to
+    # first K turns where teacher guidance is most informative; (2)
+    # bidirectional signals — use both positive and negative rewards
+    # to generate reinforcing and corrective OPD gradients.
+    # Reference: OpenClaw-RL (arXiv:2603.10165) hindsight-guided OPD
+    opd_max_turn: int = 0                          # 0 = all turns; K>0 = OPD only on first K turns
+    opd_bidirectional: bool = False                 # True = apply OPD on negative-reward trajs too
+
     @classmethod
     def from_yaml(cls, path: str) -> "BioAgentGRPOConfig":
         """Load config from YAML file."""
@@ -251,6 +260,7 @@ class BioAgentGRPOConfig:
             for key in [
                 "use_opd", "opd_teacher_path", "opd_mode",
                 "opd_alpha", "opd_lambda", "opd_warmup_steps",
+                "opd_max_turn", "opd_bidirectional",
             ]:
                 if key in o:
                     kwargs[key] = o[key]
@@ -1395,7 +1405,7 @@ def train_multiturn(config: BioAgentGRPOConfig):
     # ── vLLM Rollout Server Setup ──
     # Uses vLLM for inference (CUDA graphs, PagedAttention, continuous batching)
     # instead of raw HuggingFace model.generate() on each GPU.
-    _use_vllm_rollout = True  # Enabled: flash_attn built from source for GLIBC 2.31
+    _use_vllm_rollout = os.environ.get("BIOAGENT_USE_VLLM", "1") == "1"  # Set BIOAGENT_USE_VLLM=0 for HF fallback
     _vllm_client = None
     _vllm_process = None
     _vllm_port = 8199
@@ -1836,6 +1846,37 @@ def train_multiturn(config: BioAgentGRPOConfig):
                     )
                     model.enable_adapter_layers()
 
+                # ── OPD: compute teacher & ref per-token log-probs ──
+                _teacher_tok_lps = None
+                _ref_tok_lps = None
+                if (
+                    teacher_model is not None
+                    and mt_config.use_opd
+                    and global_step >= mt_config.opd_warmup_steps
+                ):
+                    logger.info(f"  [OPD] Computing teacher per-token log-probs for {len(batch_trajectories)} trajs")
+                    _teacher_tok_lps = _compute_per_token_log_probs_batch(
+                        model=teacher_model,
+                        tokenizer=tokenizer,
+                        trajectories=batch_trajectories,
+                        device=device,
+                        max_length=mt_config.max_trajectory_length,
+                        processor=_processor,
+                    )
+                    # Ref per-token log-probs: use base model (LoRA disabled)
+                    if mt_config.peft_enabled and hasattr(model, "disable_adapter_layers"):
+                        model.disable_adapter_layers()
+                        _ref_tok_lps = _compute_per_token_log_probs_batch(
+                            model=model,
+                            tokenizer=tokenizer,
+                            trajectories=batch_trajectories,
+                            device=device,
+                            max_length=mt_config.max_trajectory_length,
+                            processor=_processor,
+                        )
+                        model.enable_adapter_layers()
+                    logger.info(f"  [OPD] Teacher: {len(_teacher_tok_lps)} trajs, Ref: {len(_ref_tok_lps) if _ref_tok_lps else 0} trajs")
+
                 # GRPO gradient update on this batch
                 batch_loss = _grpo_policy_update(
                     model=model,
@@ -1850,6 +1891,12 @@ def train_multiturn(config: BioAgentGRPOConfig):
                     use_dr_grpo=mt_config.use_dr_grpo,
                     ref_log_probs=_batch_ref_log_probs,
                     lr_scheduler=lr_scheduler,
+                    teacher_token_log_probs=_teacher_tok_lps,
+                    ref_token_log_probs=_ref_tok_lps,
+                    opd_alpha=mt_config.opd_alpha,
+                    opd_lambda=mt_config.opd_lambda,
+                    opd_max_turn=mt_config.opd_max_turn,
+                    opd_bidirectional=mt_config.opd_bidirectional,
                     processor=_processor,
                 )
                 logger.info(
@@ -1862,6 +1909,19 @@ def train_multiturn(config: BioAgentGRPOConfig):
                     "batch/num_trajectories": len(batch_trajectories),
                     "batch/positive_trajs": len(batch_positive),
                 }, step=global_step)
+
+                # OPD-specific logging
+                if _teacher_tok_lps is not None:
+                    _opd_trajs = len(_teacher_tok_lps)
+                    _neg_trajs = sum(1 for t in batch_trajectories if t.get("advantage", 0) < 0)
+                    wb.log_step({
+                        "opd/active_trajs": _opd_trajs,
+                        "opd/negative_trajs_in_batch": _neg_trajs,
+                        "opd/bidirectional": 1 if mt_config.opd_bidirectional else 0,
+                        "opd/max_turn": mt_config.opd_max_turn,
+                        "opd/alpha": mt_config.opd_alpha,
+                        "opd/lambda": mt_config.opd_lambda,
+                    }, step=global_step)
 
                 # Periodic checkpoint saving (every 25 gradient batches)
                 _save_every_n = getattr(mt_config, 'save_steps', 25)
@@ -2242,11 +2302,19 @@ def _run_single_rollout(
                 break
 
     # Build full_text from assistant messages only (for text-only training path)
+    # Also track per-turn character boundaries for Truncated OPD
     _assistant_texts = []
+    _turn_char_boundaries = []  # list of (char_start, char_end, turn_index)
+    _char_offset = 0
+    _turn_idx = 0
     for m in messages:
         if m["role"] == "assistant":
-            c = m["content"]
-            _assistant_texts.append(c if isinstance(c, str) else str(c))
+            c = m["content"] if isinstance(m["content"], str) else str(m["content"])
+            _assistant_texts.append(c)
+            _start = _char_offset
+            _char_offset += len(c) + 1  # +1 for join "\n"
+            _turn_char_boundaries.append((_start, _char_offset - 1, _turn_idx))
+            _turn_idx += 1
 
     return {
         "task_id": task_id,
@@ -2255,6 +2323,7 @@ def _run_single_rollout(
         "final_response": final_response,
         "num_turns": len(tool_calls) + 1,
         "full_text": "\n".join(_assistant_texts),
+        "turn_char_boundaries": _turn_char_boundaries,
         "image_path": _image_path if _has_vision else None,
     }
 
@@ -2466,6 +2535,64 @@ def _get_per_token_log_probs(
     return token_log_probs                         # [seq_len-1]
 
 
+def _build_turn_mask(
+    full_text: str,
+    turn_char_boundaries: list[tuple[int, int, int]],
+    tokenizer,
+    seq_len: int,
+    max_turn: int,
+    max_length: int = 4096,
+) -> torch.Tensor:
+    """Build a binary mask [seq_len] that is 1.0 for tokens in the first
+    `max_turn` assistant turns and 0.0 elsewhere.
+
+    Used by Truncated OPD to focus teacher supervision on early turns
+    where action quality has the highest impact on trajectory outcome.
+
+    Args:
+        full_text: The concatenated assistant text (joined by newline).
+        turn_char_boundaries: List of (char_start, char_end, turn_index).
+        tokenizer: The tokenizer (for offset mapping).
+        seq_len: Target mask length (= num tokens - 1, matching log-prob tensor).
+        max_turn: Apply OPD only on first max_turn turns (0-indexed internally).
+        max_length: Max token length for tokenization.
+
+    Returns:
+        Float tensor [seq_len] with 1.0 for OPD-active tokens, 0.0 otherwise.
+    """
+    # Find the character offset where turn K ends
+    cutoff_char = 0
+    for start, end, tidx in turn_char_boundaries:
+        if tidx < max_turn:
+            cutoff_char = end
+        else:
+            break
+
+    if cutoff_char == 0 or cutoff_char >= len(full_text):
+        # No truncation needed (fewer turns than max_turn, or edge case)
+        return torch.ones(seq_len, dtype=torch.float32)
+
+    # Tokenize the prefix up to cutoff to find the token boundary
+    prefix_text = full_text[:cutoff_char]
+    prefix_ids = tokenizer(
+        prefix_text,
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_length,
+        padding=False,
+        add_special_tokens=False,
+    )["input_ids"]
+    cutoff_token = prefix_ids.shape[1]
+
+    # Build mask: 1.0 for tokens before cutoff, 0.0 after
+    # Shift by -1 because log-probs are offset (predict next token)
+    mask = torch.zeros(seq_len, dtype=torch.float32)
+    effective_cutoff = min(cutoff_token, seq_len)
+    if effective_cutoff > 0:
+        mask[:effective_cutoff] = 1.0
+    return mask
+
+
 def _compute_per_token_log_probs_batch(
     model,
     tokenizer,
@@ -2518,6 +2645,8 @@ def _grpo_policy_update(
     ref_token_log_probs: dict[int, torch.Tensor] | None = None,
     opd_alpha: float = 0.5,
     opd_lambda: float = 1.0,
+    opd_max_turn: int = 0,
+    opd_bidirectional: bool = False,
     processor=None,
 ) -> float:
     """GRPO policy gradient update from collected trajectories.
@@ -2532,6 +2661,11 @@ def _grpo_policy_update(
     eliminating the length normalization bias in the original GRPO objective.
     Reference: Dr. GRPO (2025) — removes per-token averaging that penalizes
     appropriately detailed medical answers.
+
+    Bidirectional Truncated OPD (BT-OPD):
+    - opd_max_turn > 0: apply OPD only on tokens from first K assistant turns
+    - opd_bidirectional: use OPD signal on negative-reward trajectories too
+      (corrective gradient — teacher with enhanced context suppresses bad actions)
 
     where advantages are group-relative (normalized within each task's rollouts).
 
@@ -2587,6 +2721,9 @@ def _grpo_policy_update(
                 # ── Per-token OPD path ──
                 # When OPD is active, compute per-token log-probs from logits
                 # and apply per-token teacher advantage (GLM-5 style).
+                # BT-OPD extensions:
+                #   - Truncated: mask OPD to first K turns (opd_max_turn)
+                #   - Bidirectional: apply OPD on negative-reward trajs too
                 # When OPD is inactive, use sequence-level outputs.loss (original path).
                 has_opd = (
                     teacher_token_log_probs is not None
@@ -2594,6 +2731,10 @@ def _grpo_policy_update(
                     and idx in teacher_token_log_probs
                     and idx in ref_token_log_probs
                 )
+
+                # Bidirectional gate: skip negative-reward trajs unless enabled
+                if has_opd and advantage < 0 and not opd_bidirectional:
+                    has_opd = False
 
                 if has_opd:
                     # Per-token student log-probs (with gradient)
@@ -2614,6 +2755,22 @@ def _grpo_policy_update(
                     opd_adv_per_token = opd_lambda * (teacher_t - ref_t)
                     # Clip per-token OPD advantage to prevent extreme values
                     opd_adv_per_token = opd_adv_per_token.clamp(-2.0, 2.0)
+
+                    # ── Truncated OPD: mask to first K turns ──
+                    # Build per-token turn mask from character boundaries
+                    if opd_max_turn > 0:
+                        turn_boundaries = traj.get("turn_char_boundaries", [])
+                        if turn_boundaries:
+                            opd_mask = _build_turn_mask(
+                                full_text=traj.get("full_text", ""),
+                                turn_char_boundaries=turn_boundaries,
+                                tokenizer=tokenizer,
+                                seq_len=min_len,
+                                max_turn=opd_max_turn,
+                                max_length=max_length,
+                            ).to(device)
+                            # Zero out OPD advantage for tokens beyond turn K
+                            opd_adv_per_token = opd_adv_per_token * opd_mask
 
                     # Blend: α * RL_advantage (scalar, broadcast) + (1-α) * OPD_advantage (per-token)
                     effective_adv_per_token = opd_alpha * advantage + (1 - opd_alpha) * opd_adv_per_token

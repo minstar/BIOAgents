@@ -1,18 +1,26 @@
 #!/bin/bash
 # ============================================================
-# BT-OPD: Bidirectional Truncated On-Policy Distillation (v10)
+# Self-Distillation BT-OPD (v16) — EMA + Hints + Cosine Length Reward
 # ============================================================
-# 8x A100 80GB, FSDP with CPU offload, SGLang rollout
-# Teacher: v7_step90_merged (best RL checkpoint, frozen)
+# Changes from v15 (EMA + hints, no length penalty):
+# - COSINE_REWARD=1: cosine length-scaling reward (arXiv:2502.03373)
+#   penalizes response explosion that caused v15 collapse
+# - Hints ON (same as v15): v15 plateau (54.5% steps 10-20) was valuable
+# - BT_OPD_MAX_TURN=0: apply OPD to ALL turns
+# - max_response_length=12288: same as v15
 #
-# Novel contributions over standard OPD:
-#   1. Truncated OPD: Apply teacher supervision only on first K
-#      assistant turns (reduces OPD compute ~60-70%)
-#   2. Bidirectional OPD: Corrective gradient from negative-reward
-#      trajectories (teacher suppresses bad actions)
+# v15 findings: hints created best plateau (54.5% steps 10-20) but
+#   collapsed to 49.0% by step 40 due to response explosion
+#   (clip ratio 45%→91.7%, turns 7.5→4.3)
 #
-# Based on v7 config with distillation layer added.
-# Uses veRL's native distillation infrastructure + custom bt_opd_kl loss.
+# v16 hypothesis: cosine length penalty + hints will:
+# 1. Preserve v15's hint-driven plateau (54.5% steps 10-20)
+# 2. Prevent response explosion via length penalty
+# 3. Enable EMA recovery by keeping turns alive
+#
+# Cosine reward hyperparameters (env vars):
+#   Correct: 1.1 (short) → 0.7 (long), exceed: -0.5
+#   Wrong:   0.0 (short) → -0.3 (long), exceed: -0.5
 # ============================================================
 
 export PATH="/data/project/private/minstar/miniconda3/envs/verl/bin:$PATH"
@@ -22,8 +30,6 @@ export VLLM_USE_V1=1
 export LD_LIBRARY_PATH="/data/project/private/minstar/miniconda3/envs/verl/lib:${LD_LIBRARY_PATH:-}"
 export SGLANG_ENABLE_STRICT_MEM_CHECK_DURING_IDLE=false
 export REWARD_DEBUG_LOG=1
-# v9 OOM fix: expandable_segments conflicts with SGLang TorchMemorySaver, removed
-# Relying on gpu_memory_utilization=0.15 (down from 0.25) to free ~16 GiB on GPU 0
 
 # Load environment variables (wandb key, etc.)
 if [ -f /data/project/private/minstar/workspace/BIOAgents/.env ]; then
@@ -33,14 +39,26 @@ if [ -f /data/project/private/minstar/workspace/BIOAgents/.env ]; then
 fi
 
 # ── BT-OPD configuration ──
-export BT_OPD_MAX_TURN=3          # OPD on first 3 assistant turns only
-export BT_OPD_BIDIRECTIONAL=1      # Enable corrective gradient for negative trajs
-export BT_OPD_MODEL_PATH=/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B  # For dynamic token ID resolution
+export BT_OPD_MAX_TURN=0             # 0 = apply OPD to ALL turns (no truncation)
+export BT_OPD_BIDIRECTIONAL=1         # Enable corrective gradient for negative trajs
+export BT_OPD_MODEL_PATH=/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B
 
-# ── Hint-OPD configuration ──
-export HINT_OPD_ENABLED=0          # Disabled: debugging SGLang teacher crash first
-export HINT_OPD_CORRECT="Hint: The model's reasoning is correct. The chosen answer and tool-use strategy are appropriate. Reinforce this reasoning approach."
-export HINT_OPD_INCORRECT="Hint: The model's answer is incorrect. Reconsider the clinical reasoning, re-examine the key findings, and select the correct option based on the evidence."
+# ── Cosine length reward (arXiv:2502.03373) ──
+export COSINE_REWARD=1
+export COSINE_L_MAX=12288             # Must match data.max_response_length
+export COSINE_CHARS_PER_TOKEN=5.0     # Measured from actual rollouts: multi-turn XML tool calls inflate char count
+export COSINE_R0_CORRECT=1.1          # Short correct → max reward
+export COSINE_RL_CORRECT=0.7          # Long correct → reduced reward
+export COSINE_R0_WRONG=0.0            # Short wrong → zero
+export COSINE_RL_WRONG=-0.3           # Long wrong → penalty
+export COSINE_R_EXCEED=-0.5           # Max length exceeded → strong penalty
+
+# ── Hint-OPD configuration (same as v15) ──
+export HINT_OPD_ENABLED=1
+export HINT_OPD_DYNAMIC=1            # Teacher generates case-specific concern-style hints
+# Static fallbacks (used when dynamic generation fails)
+export HINT_OPD_CORRECT="The diagnostic reasoning appears sound, but could there be alternative diagnoses worth considering? Double-check whether the key findings truly support this conclusion."
+export HINT_OPD_INCORRECT="Some aspects of this reasoning may need re-examination. Have you fully considered all the clinical findings? It might be worth revisiting the differential diagnosis and verifying each step of the reasoning process."
 
 cd /data/project/private/minstar/workspace/verl
 
@@ -50,7 +68,7 @@ python3 -m verl.trainer.main_ppo \
     data.val_files=/data/project/private/minstar/workspace/BIOAgents/data/verl_parquet/full_4modality_vlm/test.parquet \
     data.train_batch_size=8 \
     data.max_prompt_length=8192 \
-    data.max_response_length=8192 \
+    data.max_response_length=12288 \
     data.filter_overlong_prompts=True \
     data.truncation=error \
     data.image_key=images \
@@ -90,7 +108,12 @@ python3 -m verl.trainer.main_ppo \
     reward.custom_reward_function.path=/data/project/private/minstar/workspace/BIOAgents/scripts/verl/reward_fn.py \
     reward.custom_reward_function.name=compute_score \
     distillation.enabled=True \
-    distillation.teacher_model.model_path=/data/project/private/minstar/workspace/BIOAgents/checkpoints/v7_step90_merged \
+    +distillation.self_distillation=True \
+    +distillation.teacher_update_interval=30 \
+    +distillation.use_ema=True \
+    +distillation.ema_decay=0.995 \
+    +distillation.ema_update_interval=5 \
+    distillation.teacher_model.model_path=/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B \
     distillation.teacher_model.inference.name=sglang \
     distillation.teacher_model.enable_resource_pool=False \
     distillation.teacher_model.n_gpus_per_node=2 \
@@ -103,13 +126,14 @@ python3 -m verl.trainer.main_ppo \
     distillation.distillation_loss.loss_mode=bt_opd_kl \
     distillation.distillation_loss.use_policy_gradient=True \
     distillation.distillation_loss.use_task_rewards=True \
-    distillation.distillation_loss.distillation_loss_coef=2.333 \
+    distillation.distillation_loss.distillation_loss_coef=4.0 \
     trainer.critic_warmup=0 \
     'trainer.logger=[console,wandb]' \
     trainer.project_name=bioagents-verl-grpo \
-    trainer.experiment_name=qwen3_5_9b_bt_opd_v10_v9b \
+    trainer.experiment_name=qwen3_5_9b_self_distill_v16_ema_cosine \
     trainer.n_gpus_per_node=8 \
     trainer.nnodes=1 \
-    trainer.save_freq=10 \
+    trainer.save_freq=5 \
     trainer.test_freq=5 \
+    trainer.rollout_data_dir=/data/project/private/minstar/workspace/BIOAgents/rollout_dumps/v16 \
     trainer.total_epochs=3

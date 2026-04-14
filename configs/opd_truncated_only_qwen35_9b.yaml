@@ -1,0 +1,97 @@
+# ============================================================
+# Truncated OPD Ablation (no bidirectional)
+# ============================================================
+# Isolates the effect of turn-aware truncation from bidirectional
+# signals. Same as opd_bt_qwen35_9b.yaml but opd_bidirectional=false.
+#
+# Comparison: BT-OPD (full) vs T-OPD (truncated only) vs standard OPD
+# ============================================================
+
+model:
+  name_or_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/models/Qwen3.5-9B"
+  torch_dtype: "bfloat16"
+  attn_implementation: "sdpa"
+
+peft:
+  enabled: true
+  r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+dataset:
+  domain: "medical_qa"
+  tasks_path: "data/verl_parquet/full_4modality_vlm/train.parquet"
+  split_tasks_path: "data/verl_parquet/full_4modality_vlm/test.parquet"
+  train_split: "train"
+  eval_split: "test"
+  max_prompt_length: 8192
+  max_completion_length: 16384
+
+training:
+  output_dir: "checkpoints/opd_truncated_qwen35_9b"
+  num_train_epochs: 3
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 8
+  learning_rate: 5.0e-7
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  bf16: true
+  logging_steps: 5
+  save_steps: 25
+  eval_steps: 10
+  save_total_limit: 10
+  seed: 42
+  num_generations: 3
+  beta: 0.01
+  temperature: 0.7
+  top_p: 0.95
+  top_k: 50
+  use_dr_grpo: false
+  loss_type: "grpo"
+
+rewards:
+  strategy: "grpo"
+  functions:
+    - name: "accuracy"
+      weight: 0.6
+    - name: "format"
+      weight: 0.4
+  bertscore_model: "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext"
+
+opd:
+  use_opd: true
+  opd_teacher_path: "/data/project/private/minstar/workspace/BIOAgents/checkpoints/v7_step90_merged"
+  opd_mode: "cross_stage"
+  opd_alpha: 0.3
+  opd_lambda: 1.0
+  opd_warmup_steps: 20
+  # Truncated only — no bidirectional
+  opd_max_turn: 3
+  opd_bidirectional: false
+
+environment:
+  max_turns: 10
+  use_gym_env: true
+
+logging:
+  project: "bioagents-verl-grpo"
+  run_name: "opd_truncated_qwen35_9b"
+  use_wandb: true
+  log_dir: "logs/runs"
+
+meta:
+  experiment: "T-OPD Ablation — Truncated OPD without Bidirectional"
+  description: >
+    Ablation study: truncated OPD (first 3 turns) without bidirectional
+    signals. Compared with BT-OPD (full) and standard OPD (all turns,
+    positive only) to isolate the contribution of each component.

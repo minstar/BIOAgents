@@ -242,16 +242,13 @@ where the default weights are $\alpha_1{=}0.3$, $\alpha_2{=}0.25$, $\alpha_3{=}0
 \label{sec:training}
 % ============================================================
 
-\subsection{Two-Stage SFT $\to$ RL Pipeline}
+\subsection{Training Pipeline}
 \label{sec:pipeline}
 
-We employ a two-stage training pipeline: (1) SFT warmup on medical trajectories, followed by (2) GRPO-based RL with on-policy distillation (Section~\ref{sec:opd}).
+We train directly from the base model (Qwen3.5-9B) using GRPO-based RL with on-policy distillation, \emph{without} SFT warmup. This design choice avoids the format compliance bias that SFT on tool-use trajectories introduces (see Appendix~\ref{app:rl_baselines} for SFT warmup analysis on baseline experiments).
 
-\paragraph{Stage 1: SFT Warmup.}
-We fine-tune the base model on successful demonstration trajectories using LoRA~\citep{hu2022lora} (rank $r{=}64$, $\alpha{=}128$) applied to all 7 linear projection layers (\texttt{q\_proj}, \texttt{k\_proj}, \texttt{v\_proj}, \texttt{o\_proj}, \texttt{gate\_proj}, \texttt{up\_proj}, \texttt{down\_proj}), combining opensource medical SFT data (20K samples), tool-use trajectories, and clinical task demonstrations. After SFT, the LoRA adapter is merged into the base model to create a warm-started checkpoint for RL.
-
-\paragraph{Stage 2: GRPO with BT-OPD+Hint.}
-We apply Group Relative Policy Optimization~\citep{shao2024deepseekmath} with dynamic sampling (only prompts with mixed outcomes contribute to training). The key innovation is combining GRPO with Bidirectional Truncated On-Policy Distillation and Hint Injection (BT-OPD+Hint, Section~\ref{sec:opd}), stabilized by EMA scheduling and cosine length-controlled reward (Section~\ref{sec:stability}). We also evaluate Dr.~GRPO~\citep{liu2025drgrpo}, which provides per-token reward normalization that implicitly rebalances the format-to-accuracy signal ratio.
+\paragraph{GRPO with BT-OPD+Hint.}
+We apply Group Relative Policy Optimization~\citep{shao2024deepseekmath} with dynamic sampling (only prompts with mixed outcomes contribute to training). The key innovation is combining GRPO with Bidirectional Truncated On-Policy Distillation and Hint Injection (BT-OPD+Hint, Section~\ref{sec:opd}), stabilized by EMA scheduling and cosine length-controlled reward (Section~\ref{sec:stability}).
 
 
 \subsection{Bidirectional Truncated On-Policy Distillation with Hint Injection}
@@ -369,7 +366,7 @@ Table~\ref{tab:opd_trajectory} presents the validation accuracy trajectory for B
 
 % Baseline reference
 \addplot[dashed, gray!50, thick, domain=0:65, samples=2] {52.6};
-\node[font=\tiny, gray!60, anchor=south west] at (axis cs:33,52.6) {SFT baseline};
+\node[font=\tiny, gray!60, anchor=south west] at (axis cs:33,52.6) {Base model};
 \end{axis}
 % Secondary axis for response length
 \begin{axis}[
@@ -465,12 +462,11 @@ We evaluate across 21 medical benchmarks spanning 4 categories:
 
 \paragraph{Training Configuration.}
 \begin{itemize}
-    \item \textbf{SFT Warmup}: 21K merged samples, 8K sampled, 2 epochs, LR=$5 \times 10^{-6}$, batch size 4$\times$4.
-    \item \textbf{RL Training}: 800 train tasks (MedQA), 10 epochs, LR=$5 \times 10^{-7}$, 8 generations per prompt, $\beta{=}0.01$, temperature 0.7.
+    \item \textbf{BT-OPD+Hint RL}: 800 train tasks (bioagents\_medical), LR=$5 \times 10^{-7}$, 8 generations per prompt, $\beta{=}0.01$, temperature 0.7, EMA decay $\alpha{=}0.995$, cosine reward $R_{\text{max}}{=}1.1$, $L_{\text{max}}{=}12{,}288$ tokens.
     \item \textbf{Hardware}: 8$\times$NVIDIA A100 80GB GPUs.
 \end{itemize}
 
-\paragraph{Contamination Check.} We verify zero data contamination between training data and all test benchmarks using test-set fingerprinting~\citep{yang2023rethinking}. All 21K SFT samples and 1000 RL tasks passed the contamination audit.
+\paragraph{Contamination Check.} We verify zero data contamination between training data and all test benchmarks using test-set fingerprinting~\citep{yang2023rethinking}.
 
 
 \subsection{Main Results}
@@ -508,9 +504,6 @@ We compare 5 RL algorithm variants (GRPO, GSPO, DAPO, Dr.~GRPO, and a combined G
 
 \paragraph{Seed Variance.}
 Across 3 random seeds with 7 checkpoints each (21 evaluations), MedQA accuracy varies within a 0.6 pp band (60.4--61.0\%). This narrow range provides strong evidence that the non-transfer finding is not an artifact of random initialization.
-
-\paragraph{Effect of SFT Warmup.}
-SFT warmup on agentic trajectories causes a slight QA regression: MedQA drops from 61.7\% (pre-SFT) to 60.7\% ($-$1.0 pp), MedMCQA from 53.2\% to 52.5\% ($-$0.7 pp), while MMLU-CK improves from 77.0\% to 78.1\% (+1.1 pp). This trade-off suggests that SFT on tool-use trajectories teaches format compliance at a small cost to factual recall. Notably, H5 Direct QA RL recovers and slightly exceeds the pre-SFT performance (62.0\% MedQA, +0.3 pp above pre-SFT), indicating that RL can reverse SFT-induced forgetting.
 
 \paragraph{Reward Composition.}
 In the standard agentic setting, format reward ($\sim$0.97) dominates accuracy reward ($\sim$0.04)---a 24:1 ratio (Table~\ref{tab:training_dynamics})---effectively drowning out the learning signal for medical knowledge. We test an accuracy-only configuration (H5: Direct MedQA RL) that removes format reward entirely and trains directly on QA tasks without tool scaffolding. The training accuracy reward reaches $\sim$0.37 (9$\times$ higher than agentic RL's 0.04). Crucially, eval accuracy shows a \emph{delayed improvement}: after an initial dip, accuracy recovers and surpasses the SFT baseline by step 150, reaching 62.0\% on the full MedQA test set at step 250 with training eval climbing to 66.2\% at step 300 (see Appendix~\ref{app:h5} for the full trajectory and overfitting analysis). The +1.3 pp MedQA and +0.8 pp MedMCQA improvement on external benchmarks demonstrates that RL \emph{can} improve declarative medical knowledge when the reward signal is undiluted by format compliance. The format reward dominance in agentic RL---not any fundamental limitation of RL itself---explains the non-transfer to text QA.

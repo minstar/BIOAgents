@@ -108,16 +108,27 @@ ANALYZE_OPTIONS_TOOL = {
     },
 }
 
-# Tools passed to apply_chat_template — only submit_answer for direct evaluation
+# Tools passed to apply_chat_template — single placeholder to trigger tool-call instructions
+# (matches training: inject_tool_schemas=False passes one placeholder)
 OPENAI_TOOLS = [SUBMIT_ANSWER_TOOL]
 
-# System prompt — direct answer version using training tool format
-SYSTEM_PROMPT = (
-    "You are a medical AI assistant. Answer the following medical question "
-    "by calling the submit_answer tool with the correct answer letter and your reasoning.\n\n"
-    "Respond with ONLY the tool call JSON, no other text:\n"
-    "{\"name\": \"submit_answer\", \"arguments\": {\"answer\": \"A\", \"reasoning\": \"...\"}}"
-)
+# Load training-aligned system prompt with full domain tools
+_TRAINING_PROMPTS_PATH = Path(__file__).parent / "verl" / "training_system_prompts.json"
+if _TRAINING_PROMPTS_PATH.exists():
+    with open(_TRAINING_PROMPTS_PATH) as _f:
+        _TRAINING_PROMPTS = json.load(_f)
+    # medical_qa domain has all 14 tools used during TextQA training
+    SYSTEM_PROMPT = _TRAINING_PROMPTS.get("medical_qa", "")
+    print(f"  Loaded training system prompt: medical_qa ({len(SYSTEM_PROMPT)} chars)", flush=True)
+else:
+    # Fallback if training prompts not found
+    SYSTEM_PROMPT = (
+        "You are a medical AI assistant. Answer the following medical question "
+        "by calling the submit_answer tool with the correct answer letter and your reasoning.\n\n"
+        "Respond with ONLY the tool call JSON, no other text:\n"
+        "{\"name\": \"submit_answer\", \"arguments\": {\"answer\": \"A\", \"reasoning\": \"...\"}}"
+    )
+    print(f"  WARNING: training_system_prompts.json not found, using fallback prompt", flush=True)
 
 
 def extract_answer_from_response(response: str) -> str:
@@ -200,6 +211,8 @@ def main():
     parser.add_argument("--output-dir", type=str, default="results/benchmarks_tooluse")
     parser.add_argument("--gpus", type=str, default="0,1,2,3,4,5,6,7")
     parser.add_argument("--max-samples", type=int, default=0)
+    parser.add_argument("--offset", type=int, default=0, help="Skip first N samples (for parallel splits)")
+    parser.add_argument("--benchmarks", type=str, default="", help="Comma-separated benchmark keys (e.g., medqa,medmcqa)")
     parser.add_argument("--batch-size", type=int, default=0, help="Override batch size (0=auto)")
     parser.add_argument("--no-think", action="store_true", help="Disable thinking (append </think>)")
     args = parser.parse_args()
@@ -263,6 +276,12 @@ def main():
     all_results = {}
     BATCH_SIZE = args.batch_size if args.batch_size > 0 else (1 if is_qwen3_5 else 8)
 
+    # Filter benchmarks if specified
+    if args.benchmarks:
+        selected = [b.strip() for b in args.benchmarks.split(",")]
+        benchmark_files = {k: v for k, v in benchmark_files.items() if k in selected}
+        print(f"  Running selected benchmarks: {list(benchmark_files.keys())}", flush=True)
+
     for bm_key, bm_file in benchmark_files.items():
         full_path = PROJECT_ROOT / bm_file
         if not full_path.exists():
@@ -275,6 +294,9 @@ def main():
                 if line.strip():
                     data.append(json.loads(line))
 
+        # Apply offset first, then max_samples
+        if args.offset > 0:
+            data = data[args.offset:]
         if args.max_samples > 0:
             data = data[:args.max_samples]
 

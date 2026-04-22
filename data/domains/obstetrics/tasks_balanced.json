@@ -1,0 +1,3678 @@
+[
+  {
+    "id": "ob_bal_chorioamnionitis_144",
+    "ticket": "A 38-year-old G4P3 (grand multipara, AMA) presents: maternal fever, prolonged rupture >18h. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: chorioamnionitis. Management: IV antibiotics, delivery, antipyretics.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placental abruption_049",
+    "ticket": "A 21-year-old G1P0 (primigravida) presents: abdominal pain after trauma, fetal distress at 30w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placental abruption. Management: emergent delivery if severe, fetal monitoring, IV access and fluids.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_chorioamnionitis_140",
+    "ticket": "A 28-year-old G2P1 (multigravida) presents: tender uterus, fetal tachycardia, WBC 18k. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: chorioamnionitis. Management: IV antibiotics, delivery, antipyretics.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placenta previa_033",
+    "ticket": "A 40-year-old G4P3 (grand multipara, AMA) presents: painless bleeding at 32w, complete previa. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placenta previa. Management: pelvic rest, serial US, planned cesarean.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_003",
+    "ticket": "A 21-year-old G1P0 (primigravida) presents: BP 160/100, proteinuria, headache at 32w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preterm labor_065",
+    "ticket": "A 28-year-old G2P1 (multigravida) presents: PPROM confirmed at 32w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preterm labor. Management: tocolytics, betamethasone, Mg for neuroprotection.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum hemorrhage_089",
+    "ticket": "A 25-year-old G1P0 (primigravida) presents: ongoing bleeding post-cesarean, atony. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum hemorrhage. Management: uterine massage, uterotonics, transfusion.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_shoulder dystocia_113",
+    "ticket": "A 36-year-old G3P2 (advanced maternal age) presents: turtle sign after head delivery, EFW 4200g. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: shoulder dystocia. Management: McRoberts, suprapubic pressure, episiotomy.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_placental abruption_057",
+    "ticket": "A 31-year-old G1P0 presents: dark bleeding, uterine tenderness, back pain at 33w. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "placenta previa",
+      "B": "preterm labor",
+      "C": "uterine rupture",
+      "D": "no complications expected",
+      "E": "routine follow-up"
+    },
+    "correct_answer": "A",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_preeclampsia_016",
+    "ticket": "A 36-year-old G3P2 presents: severe features: BP 170/110, visual changes, thrombocytopenia at 34w. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "Intermittent auscultation",
+      "B": "Weekly NST",
+      "C": "Biophysical profile only",
+      "D": "No monitoring needed",
+      "E": "Continuous fetal heart rate monitoring"
+    },
+    "correct_answer": "E",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_002",
+    "ticket": "A 28-year-old G1P0 (primigravida) presents: BP 160/100, proteinuria, headache at 32w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placenta previa_035",
+    "ticket": "A 34-year-old G1P0 (IVF pregnancy) presents: painless bleeding at 32w, complete previa. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placenta previa. Management: pelvic rest, serial US, planned cesarean.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_placental abruption_058",
+    "ticket": "A 28-year-old G2P1 presents: abdominal pain after trauma, fetal distress at 30w. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "Biophysical profile only",
+      "B": "No monitoring needed",
+      "C": "Continuous fetal heart rate monitoring",
+      "D": "Intermittent auscultation",
+      "E": "Weekly NST"
+    },
+    "correct_answer": "C",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_shoulder dystocia_112",
+    "ticket": "A 30-year-old G1P0 (IVF pregnancy) presents: turtle sign after head delivery, EFW 4200g. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: shoulder dystocia. Management: McRoberts, suprapubic pressure, episiotomy.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_ectopic pregnancy_077",
+    "ticket": "A 38-year-old G3P2 (advanced maternal age) presents: acute RLQ pain, adnexal mass at 7w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: ectopic pregnancy. Management: methotrexate if stable, surgical management, serial beta-hCG.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_hyperemesis gravidarum_109",
+    "ticket": "A 16-year-old G1P0 presents: intractable vomiting, ketonuria, hypokalemia at 8w. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "biliary disease",
+      "B": "no complications expected",
+      "C": "molar pregnancy",
+      "D": "gastroparesis",
+      "E": "thyrotoxicosis"
+    },
+    "correct_answer": "C",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preterm labor_064",
+    "ticket": "A 16-year-old G1P0 (adolescent primigravida) presents: pelvic pressure, cervical shortening at 28w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preterm labor. Management: tocolytics, betamethasone, Mg for neuroprotection.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_011",
+    "ticket": "A 35-year-old G3P2 (advanced maternal age) presents: severe features: BP 170/110, visual changes, thrombocytopenia at 34w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_postpartum depression_162",
+    "ticket": "A 22-year-old G1P0 presents: suicidal thoughts, anxiety about infant safety 2 weeks PP. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "No monitoring needed",
+      "B": "Intermittent auscultation",
+      "C": "Weekly NST",
+      "D": "Continuous fetal heart rate monitoring",
+      "E": "Biophysical profile only"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placenta previa_041",
+    "ticket": "A 27-year-old G2P1 (multigravida) presents: recurrent bleeding at 34w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placenta previa. Management: pelvic rest, serial US, planned cesarean.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_preterm labor_068",
+    "ticket": "A 31-year-old G1P0 presents: pelvic pressure, cervical shortening at 28w. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "expectant management",
+      "B": "betamethasone",
+      "C": "Mg for neuroprotection",
+      "D": "tocolytics",
+      "E": "antibiotics if PPROM"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_shoulder dystocia_116",
+    "ticket": "A 34-year-old G1P0 (IVF pregnancy) presents: prolonged second stage, no restitution. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: shoulder dystocia. Management: McRoberts, suprapubic pressure, episiotomy.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum hemorrhage_093",
+    "ticket": "A 28-year-old G2P1 (multigravida with prior cesarean) presents: steady bleeding from laceration. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum hemorrhage. Management: uterine massage, uterotonics, transfusion.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_cord prolapse_127",
+    "ticket": "A 20-year-old G1P0 (primigravida) presents: palpable cord on exam after SROM. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: cord prolapse. Management: elevate presenting part, emergency cesarean, knee-chest position.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_shoulder dystocia_123",
+    "ticket": "A 28-year-old G2P1 presents: macrosomia, difficulty delivering shoulders. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "Weekly NST",
+      "B": "Continuous fetal heart rate monitoring",
+      "C": "Biophysical profile only",
+      "D": "No monitoring needed",
+      "E": "Intermittent auscultation"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_018",
+    "ticket": "A 37-year-old G3P2 (advanced maternal age) presents: failed GCT at 28w, BMI 32. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_chorioamnionitis_146",
+    "ticket": "A 16-year-old G1P0 presents: tender uterus, fetal tachycardia, WBC 18k. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "IV antibiotics",
+      "B": "neonatal evaluation",
+      "C": "expectant management",
+      "D": "antipyretics",
+      "E": "delivery"
+    },
+    "correct_answer": "A",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_chorioamnionitis_137",
+    "ticket": "A 35-year-old G3P2 (advanced maternal age) presents: maternal fever 38.5, tachycardia, foul-smelling fluid after prolonged ROM. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: chorioamnionitis. Management: IV antibiotics, delivery, antipyretics.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_postpartum hemorrhage_095",
+    "ticket": "A 36-year-old G1P0 presents: ongoing bleeding post-cesarean, atony. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Laceration",
+      "B": "Atony",
+      "C": "Retained Placenta",
+      "D": "Postpartum Hemorrhage",
+      "E": "Coagulopathy"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_hyperemesis gravidarum_100",
+    "ticket": "A 27-year-old G1P0 (primigravida) presents: vomiting 8x/day, 5% weight loss at 10w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: hyperemesis gravidarum. Management: IV fluids, thiamine, ondansetron.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_cord prolapse_125",
+    "ticket": "A 27-year-old G2P1 (multigravida) presents: visible cord after ROM, FHR deceleration. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: cord prolapse. Management: elevate presenting part, emergency cesarean, knee-chest position.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_001",
+    "ticket": "A 30-year-old G2P1 (multigravida with prior cesarean) presents: BP 160/100, proteinuria, headache at 32w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_postpartum depression_160",
+    "ticket": "A 30-year-old G2P1 presents: crying, hopelessness, difficulty bonding 3 weeks postpartum. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Postpartum Depression",
+      "B": "Thyroid Dysfunction",
+      "C": "Adjustment Disorder",
+      "D": "Postpartum Psychosis",
+      "E": "Baby Blues"
+    },
+    "correct_answer": "A",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_hyperemesis gravidarum_108",
+    "ticket": "A 18-year-old G1P0 presents: intractable vomiting, ketonuria, hypokalemia at 8w. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Biliary Disease",
+      "B": "Hyperemesis Gravidarum",
+      "C": "Molar Pregnancy",
+      "D": "Thyrotoxicosis",
+      "E": "Gastroparesis"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_006",
+    "ticket": "A 38-year-old G3P2 (advanced maternal age) presents: BP 150/95, RUQ pain, elevated LFTs at 36w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_hyperemesis gravidarum_102",
+    "ticket": "A 22-year-old G1P0 (primigravida) presents: intractable vomiting, ketonuria, hypokalemia at 8w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: hyperemesis gravidarum. Management: IV fluids, thiamine, ondansetron.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_placental abruption_055",
+    "ticket": "A 28-year-old G2P1 presents: painful vaginal bleeding, rigid uterus at 35w. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "coagulation studies",
+      "B": "expectant management",
+      "C": "IV access and fluids",
+      "D": "emergent delivery if severe",
+      "E": "fetal monitoring"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_shoulder dystocia_122",
+    "ticket": "A 32-year-old G2P1 presents: prolonged second stage, no restitution. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "None of the above",
+      "B": "no complications expected",
+      "C": "cephalopelvic disproportion",
+      "D": "normal labor",
+      "E": "routine follow-up"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_025",
+    "ticket": "A 23-year-old G1P0 (primigravida) presents: 3-hour GTT abnormal. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum hemorrhage_085",
+    "ticket": "A 20-year-old G1P0 (primigravida) presents: EBL 1200mL, boggy uterus 2h postpartum. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum hemorrhage. Management: uterine massage, uterotonics, transfusion.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_hyperemesis gravidarum_104",
+    "ticket": "A 33-year-old G3P2 (advanced maternal age) presents: dehydration requiring IV fluids at 12w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: hyperemesis gravidarum. Management: IV fluids, thiamine, ondansetron.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum depression_150",
+    "ticket": "A 27-year-old G1P0 (primigravida) presents: crying, hopelessness, difficulty bonding 3 weeks postpartum. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum depression. Management: SSRIs, psychotherapy, support groups.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_cord prolapse_135",
+    "ticket": "A 22-year-old G1P0 presents: palpable cord on exam after SROM. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "fetal distress other cause",
+      "B": "cord compression",
+      "C": "routine follow-up",
+      "D": "no complications expected",
+      "E": "None of the above"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_026",
+    "ticket": "A 38-year-old G3P2 (advanced maternal age) presents: polyhydramnios, large for dates. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_020",
+    "ticket": "A 30-year-old G2P1 (multigravida) presents: fasting glucose 102, macrosomia on US. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_hyperemesis gravidarum_103",
+    "ticket": "A 28-year-old G1P0 (primigravida) presents: intractable vomiting, ketonuria, hypokalemia at 8w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: hyperemesis gravidarum. Management: IV fluids, thiamine, ondansetron.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_shoulder dystocia_117",
+    "ticket": "A 42-year-old G4P3 (grand multipara, AMA) presents: macrosomia, difficulty delivering shoulders. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: shoulder dystocia. Management: McRoberts, suprapubic pressure, episiotomy.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_007",
+    "ticket": "A 18-year-old G1P0 (adolescent primigravida) presents: new HTN 145/95, edema at 28w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placenta previa_036",
+    "ticket": "A 38-year-old G3P2 (advanced maternal age) presents: bright red bleeding at 28w, low-lying placenta. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placenta previa. Management: pelvic rest, serial US, planned cesarean.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum depression_158",
+    "ticket": "A 40-year-old G4P3 (grand multipara, AMA) presents: suicidal thoughts, anxiety about infant safety 2 weeks PP. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum depression. Management: SSRIs, psychotherapy, support groups.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_shoulder dystocia_118",
+    "ticket": "A 25-year-old G1P0 (primigravida) presents: macrosomia, difficulty delivering shoulders. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: shoulder dystocia. Management: McRoberts, suprapubic pressure, episiotomy.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_postpartum depression_161",
+    "ticket": "A 35-year-old G1P0 presents: crying, hopelessness, difficulty bonding 3 weeks postpartum. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "no complications expected",
+      "B": "adjustment disorder",
+      "C": "baby blues",
+      "D": "postpartum psychosis",
+      "E": "thyroid dysfunction"
+    },
+    "correct_answer": "C",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placenta previa_038",
+    "ticket": "A 21-year-old G1P0 (primigravida) presents: bright red bleeding at 28w, low-lying placenta. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placenta previa. Management: pelvic rest, serial US, planned cesarean.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum depression_157",
+    "ticket": "A 18-year-old G1P0 (primigravida) presents: suicidal thoughts, anxiety about infant safety 2 weeks PP. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum depression. Management: SSRIs, psychotherapy, support groups.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_ectopic pregnancy_075",
+    "ticket": "A 19-year-old G1P0 (primigravida) presents: acute RLQ pain, adnexal mass at 7w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: ectopic pregnancy. Management: methotrexate if stable, surgical management, serial beta-hCG.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placental abruption_054",
+    "ticket": "A 17-year-old G1P0 (adolescent primigravida) presents: dark bleeding, uterine tenderness, back pain at 33w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placental abruption. Management: emergent delivery if severe, fetal monitoring, IV access and fluids.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_postpartum hemorrhage_094",
+    "ticket": "A 26-year-old G2P1 presents: EBL 1200mL, boggy uterus 2h postpartum. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "surgical intervention",
+      "B": "uterotonics",
+      "C": "uterine massage",
+      "D": "transfusion",
+      "E": "expectant management"
+    },
+    "correct_answer": "C",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_chorioamnionitis_138",
+    "ticket": "A 19-year-old G1P0 (adolescent primigravida) presents: maternal fever 38.5, tachycardia, foul-smelling fluid after prolonged ROM. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: chorioamnionitis. Management: IV antibiotics, delivery, antipyretics.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placental abruption_048",
+    "ticket": "A 30-year-old G2P1 (multigravida) presents: painful vaginal bleeding, rigid uterus at 35w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placental abruption. Management: emergent delivery if severe, fetal monitoring, IV access and fluids.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_005",
+    "ticket": "A 30-year-old G1P0 (IVF pregnancy) presents: BP 150/95, RUQ pain, elevated LFTs at 36w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_ectopic pregnancy_084",
+    "ticket": "A 38-year-old G4P3 presents: shoulder tip pain, hemodynamic instability at 8w. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "Continuous fetal heart rate monitoring",
+      "B": "No monitoring needed",
+      "C": "Biophysical profile only",
+      "D": "Intermittent auscultation",
+      "E": "Weekly NST"
+    },
+    "correct_answer": "A",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_hyperemesis gravidarum_107",
+    "ticket": "A 26-year-old G2P1 presents: dehydration requiring IV fluids at 12w. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "IV fluids",
+      "B": "expectant management",
+      "C": "electrolyte correction",
+      "D": "thiamine",
+      "E": "ondansetron"
+    },
+    "correct_answer": "A",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_012",
+    "ticket": "A 31-year-old G1P0 (IVF pregnancy) presents: severe features: BP 170/110, visual changes, thrombocytopenia at 34w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_cord prolapse_136",
+    "ticket": "A 32-year-old G2P1 presents: cord presenting with AROM. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "Intermittent auscultation",
+      "B": "Weekly NST",
+      "C": "Continuous fetal heart rate monitoring",
+      "D": "Biophysical profile only",
+      "E": "No monitoring needed"
+    },
+    "correct_answer": "C",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_ectopic pregnancy_081",
+    "ticket": "A 28-year-old G2P1 presents: acute RLQ pain, adnexal mass at 7w. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "surgical management",
+      "B": "expectant management",
+      "C": "methotrexate if stable",
+      "D": "Rh status",
+      "E": "serial beta-hCG"
+    },
+    "correct_answer": "C",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preterm labor_067",
+    "ticket": "A 35-year-old G3P2 (advanced maternal age) presents: PPROM confirmed at 32w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preterm labor. Management: tocolytics, betamethasone, Mg for neuroprotection.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_placental abruption_056",
+    "ticket": "A 32-year-old G2P1 presents: painful vaginal bleeding, rigid uterus at 35w. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Preterm Labor",
+      "B": "Uterine Rupture",
+      "C": "None of the above",
+      "D": "Placental Abruption",
+      "E": "Placenta Previa"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_027",
+    "ticket": "A 18-year-old G1P0 (primigravida) presents: polyhydramnios, large for dates. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum depression_155",
+    "ticket": "A 16-year-old G1P0 (adolescent primigravida) presents: insomnia, guilt, inability to care for infant 6 weeks PP. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum depression. Management: SSRIs, psychotherapy, support groups.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_hyperemesis gravidarum_106",
+    "ticket": "A 21-year-old G1P0 (primigravida) presents: dehydration requiring IV fluids at 12w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: hyperemesis gravidarum. Management: IV fluids, thiamine, ondansetron.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placental abruption_050",
+    "ticket": "A 19-year-old G1P0 (adolescent primigravida) presents: abdominal pain after trauma, fetal distress at 30w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placental abruption. Management: emergent delivery if severe, fetal monitoring, IV access and fluids.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_postpartum hemorrhage_097",
+    "ticket": "A 26-year-old G1P0 presents: steady bleeding from laceration. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "Biophysical profile only",
+      "B": "Weekly NST",
+      "C": "No monitoring needed",
+      "D": "Intermittent auscultation",
+      "E": "Continuous fetal heart rate monitoring"
+    },
+    "correct_answer": "E",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_cord prolapse_132",
+    "ticket": "A 28-year-old G1P0 (primigravida) presents: cord presenting with AROM. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: cord prolapse. Management: elevate presenting part, emergency cesarean, knee-chest position.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_preterm labor_071",
+    "ticket": "A 16-year-old G1P0 presents: regular contractions q5min, cervix 3cm at 30w. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "Continuous fetal heart rate monitoring",
+      "B": "Biophysical profile only",
+      "C": "Intermittent auscultation",
+      "D": "Weekly NST",
+      "E": "No monitoring needed"
+    },
+    "correct_answer": "A",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_gestational diabetes_032",
+    "ticket": "A 35-year-old G3P2 presents: polyhydramnios, large for dates. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "No monitoring needed",
+      "B": "Biophysical profile only",
+      "C": "Continuous fetal heart rate monitoring",
+      "D": "Intermittent auscultation",
+      "E": "Weekly NST"
+    },
+    "correct_answer": "C",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_gestational diabetes_031",
+    "ticket": "A 26-year-old G2P1 presents: polyhydramnios, large for dates. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "IGT",
+      "B": "steroid-induced",
+      "C": "no complications expected",
+      "D": "pre-existing T2DM",
+      "E": "routine follow-up"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placental abruption_053",
+    "ticket": "A 40-year-old G4P3 (grand multipara, AMA) presents: dark bleeding, uterine tenderness, back pain at 33w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placental abruption. Management: emergent delivery if severe, fetal monitoring, IV access and fluids.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_ectopic pregnancy_076",
+    "ticket": "A 41-year-old G4P3 (grand multipara, AMA) presents: acute RLQ pain, adnexal mass at 7w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: ectopic pregnancy. Management: methotrexate if stable, surgical management, serial beta-hCG.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum depression_152",
+    "ticket": "A 34-year-old G3P2 (advanced maternal age) presents: crying, hopelessness, difficulty bonding 3 weeks postpartum. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum depression. Management: SSRIs, psychotherapy, support groups.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_postpartum hemorrhage_096",
+    "ticket": "A 29-year-old G2P1 presents: steady bleeding from laceration. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "atony",
+      "B": "laceration",
+      "C": "retained placenta",
+      "D": "no complications expected",
+      "E": "coagulopathy"
+    },
+    "correct_answer": "A",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_preterm labor_069",
+    "ticket": "A 41-year-old G4P3 presents: PPROM confirmed at 32w. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Braxton-Hicks",
+      "B": "Cervical Insufficiency",
+      "C": "Uti",
+      "D": "Preterm Labor",
+      "E": "None of the above"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placenta previa_039",
+    "ticket": "A 19-year-old G1P0 (primigravida) presents: recurrent bleeding at 34w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placenta previa. Management: pelvic rest, serial US, planned cesarean.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_010",
+    "ticket": "A 38-year-old G4P3 (grand multipara, AMA) presents: severe features: BP 170/110, visual changes, thrombocytopenia at 34w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_ectopic pregnancy_072",
+    "ticket": "A 36-year-old G3P2 (advanced maternal age) presents: unilateral pain, empty uterus, hCG 1500 at 6w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: ectopic pregnancy. Management: methotrexate if stable, surgical management, serial beta-hCG.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_hyperemesis gravidarum_105",
+    "ticket": "A 25-year-old G2P1 (multigravida) presents: dehydration requiring IV fluids at 12w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: hyperemesis gravidarum. Management: IV fluids, thiamine, ondansetron.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_cord prolapse_124",
+    "ticket": "A 37-year-old G3P2 (advanced maternal age) presents: visible cord after ROM, FHR deceleration. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: cord prolapse. Management: elevate presenting part, emergency cesarean, knee-chest position.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placental abruption_052",
+    "ticket": "A 35-year-old G1P0 (IVF pregnancy) presents: dark bleeding, uterine tenderness, back pain at 33w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placental abruption. Management: emergent delivery if severe, fetal monitoring, IV access and fluids.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_chorioamnionitis_142",
+    "ticket": "A 16-year-old G1P0 (adolescent primigravida) presents: tender uterus, fetal tachycardia, WBC 18k. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: chorioamnionitis. Management: IV antibiotics, delivery, antipyretics.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preterm labor_066",
+    "ticket": "A 33-year-old G2P1 (multigravida with prior cesarean) presents: PPROM confirmed at 32w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preterm labor. Management: tocolytics, betamethasone, Mg for neuroprotection.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_017",
+    "ticket": "A 30-year-old G2P1 (multigravida with prior cesarean) presents: failed GCT at 28w, BMI 32. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_ectopic pregnancy_074",
+    "ticket": "A 26-year-old G1P0 (primigravida) presents: unilateral pain, empty uterus, hCG 1500 at 6w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: ectopic pregnancy. Management: methotrexate if stable, surgical management, serial beta-hCG.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_ectopic pregnancy_078",
+    "ticket": "A 34-year-old G1P0 (IVF pregnancy) presents: shoulder tip pain, hemodynamic instability at 8w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: ectopic pregnancy. Management: methotrexate if stable, surgical management, serial beta-hCG.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_hyperemesis gravidarum_098",
+    "ticket": "A 29-year-old G2P1 (multigravida with prior cesarean) presents: vomiting 8x/day, 5% weight loss at 10w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: hyperemesis gravidarum. Management: IV fluids, thiamine, ondansetron.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_postpartum depression_159",
+    "ticket": "A 30-year-old G1P0 presents: crying, hopelessness, difficulty bonding 3 weeks postpartum. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "brexanolone if severe",
+      "B": "psychotherapy",
+      "C": "SSRIs",
+      "D": "support groups",
+      "E": "expectant management"
+    },
+    "correct_answer": "C",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_022",
+    "ticket": "A 19-year-old G1P0 (adolescent primigravida) presents: fasting glucose 102, macrosomia on US. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_cord prolapse_128",
+    "ticket": "A 32-year-old G1P0 (IVF pregnancy) presents: palpable cord on exam after SROM. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: cord prolapse. Management: elevate presenting part, emergency cesarean, knee-chest position.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preterm labor_062",
+    "ticket": "A 29-year-old G2P1 (multigravida with prior cesarean) presents: pelvic pressure, cervical shortening at 28w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preterm labor. Management: tocolytics, betamethasone, Mg for neuroprotection.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_placenta previa_045",
+    "ticket": "A 28-year-old G2P1 presents: painless bleeding at 32w, complete previa. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "No monitoring needed",
+      "B": "Continuous fetal heart rate monitoring",
+      "C": "Weekly NST",
+      "D": "Intermittent auscultation",
+      "E": "Biophysical profile only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_preeclampsia_015",
+    "ticket": "A 32-year-old G2P1 presents: BP 150/95, RUQ pain, elevated LFTs at 36w. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "no complications expected",
+      "B": "TTP-HUS",
+      "C": "chronic HTN",
+      "D": "gestational HTN",
+      "E": "HELLP"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_shoulder dystocia_119",
+    "ticket": "A 37-year-old G3P2 (advanced maternal age) presents: macrosomia, difficulty delivering shoulders. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: shoulder dystocia. Management: McRoberts, suprapubic pressure, episiotomy.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_009",
+    "ticket": "A 27-year-old G2P1 (multigravida) presents: new HTN 145/95, edema at 28w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_004",
+    "ticket": "A 38-year-old G4P3 (grand multipara, AMA) presents: BP 150/95, RUQ pain, elevated LFTs at 36w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum depression_156",
+    "ticket": "A 37-year-old G3P2 (advanced maternal age) presents: suicidal thoughts, anxiety about infant safety 2 weeks PP. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum depression. Management: SSRIs, psychotherapy, support groups.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_cord prolapse_126",
+    "ticket": "A 36-year-old G1P0 (IVF pregnancy) presents: visible cord after ROM, FHR deceleration. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: cord prolapse. Management: elevate presenting part, emergency cesarean, knee-chest position.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_placenta previa_042",
+    "ticket": "A 17-year-old G1P0 presents: painless bleeding at 32w, complete previa. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "planned cesarean",
+      "B": "pelvic rest",
+      "C": "expectant management",
+      "D": "serial US",
+      "E": "blood type and screen"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum depression_151",
+    "ticket": "A 17-year-old G1P0 (adolescent primigravida) presents: crying, hopelessness, difficulty bonding 3 weeks postpartum. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum depression. Management: SSRIs, psychotherapy, support groups.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_placenta previa_043",
+    "ticket": "A 28-year-old G2P1 presents: bright red bleeding at 28w, low-lying placenta. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Cervical Pathology",
+      "B": "Placenta Previa",
+      "C": "Abruption",
+      "D": "Vasa Previa",
+      "E": "Bloody Show"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_cord prolapse_134",
+    "ticket": "A 36-year-old G1P0 presents: cord presenting with AROM. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Cord Prolapse",
+      "B": "None of the above",
+      "C": "Cord Compression",
+      "D": "Fetal Distress Other Cause"
+    },
+    "correct_answer": "A",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum hemorrhage_090",
+    "ticket": "A 40-year-old G4P3 (grand multipara, AMA) presents: ongoing bleeding post-cesarean, atony. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum hemorrhage. Management: uterine massage, uterotonics, transfusion.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_cord prolapse_129",
+    "ticket": "A 41-year-old G4P3 (grand multipara, AMA) presents: palpable cord on exam after SROM. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: cord prolapse. Management: elevate presenting part, emergency cesarean, knee-chest position.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_cord prolapse_133",
+    "ticket": "A 41-year-old G4P3 presents: palpable cord on exam after SROM. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "knee-chest position",
+      "B": "expectant management",
+      "C": "fill bladder",
+      "D": "emergency cesarean",
+      "E": "elevate presenting part"
+    },
+    "correct_answer": "E",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placental abruption_047",
+    "ticket": "A 31-year-old G1P0 (IVF pregnancy) presents: painful vaginal bleeding, rigid uterus at 35w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placental abruption. Management: emergent delivery if severe, fetal monitoring, IV access and fluids.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_cord prolapse_130",
+    "ticket": "A 19-year-old G1P0 (primigravida) presents: cord presenting with AROM. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: cord prolapse. Management: elevate presenting part, emergency cesarean, knee-chest position.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_ectopic pregnancy_079",
+    "ticket": "A 18-year-old G1P0 (primigravida) presents: shoulder tip pain, hemodynamic instability at 8w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: ectopic pregnancy. Management: methotrexate if stable, surgical management, serial beta-hCG.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_shoulder dystocia_111",
+    "ticket": "A 22-year-old G1P0 (primigravida) presents: turtle sign after head delivery, EFW 4200g. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: shoulder dystocia. Management: McRoberts, suprapubic pressure, episiotomy.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum depression_154",
+    "ticket": "A 28-year-old G2P1 (multigravida with prior cesarean) presents: insomnia, guilt, inability to care for infant 6 weeks PP. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum depression. Management: SSRIs, psychotherapy, support groups.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_gestational diabetes_029",
+    "ticket": "A 18-year-old G1P0 presents: 3-hour GTT abnormal. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "fetal surveillance",
+      "B": "insulin if needed",
+      "C": "glucose monitoring",
+      "D": "expectant management",
+      "E": "dietary modification"
+    },
+    "correct_answer": "E",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_gestational diabetes_030",
+    "ticket": "A 31-year-old G2P1 presents: failed GCT at 28w, BMI 32. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Pre-Existing T2Dm",
+      "B": "Gestational Diabetes",
+      "C": "None of the above",
+      "D": "Steroid-Induced",
+      "E": "Igt"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preterm labor_061",
+    "ticket": "A 33-year-old G1P0 (IVF pregnancy) presents: regular contractions q5min, cervix 3cm at 30w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preterm labor. Management: tocolytics, betamethasone, Mg for neuroprotection.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preterm labor_060",
+    "ticket": "A 20-year-old G1P0 (primigravida) presents: regular contractions q5min, cervix 3cm at 30w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preterm labor. Management: tocolytics, betamethasone, Mg for neuroprotection.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_chorioamnionitis_143",
+    "ticket": "A 38-year-old G3P2 (advanced maternal age) presents: maternal fever, prolonged rupture >18h. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: chorioamnionitis. Management: IV antibiotics, delivery, antipyretics.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum hemorrhage_091",
+    "ticket": "A 35-year-old G3P2 (advanced maternal age) presents: steady bleeding from laceration. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum hemorrhage. Management: uterine massage, uterotonics, transfusion.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_ectopic pregnancy_083",
+    "ticket": "A 39-year-old G4P3 presents: shoulder tip pain, hemodynamic instability at 8w. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "appendicitis",
+      "B": "ovarian cyst",
+      "C": "PID",
+      "D": "no complications expected",
+      "E": "threatened abortion"
+    },
+    "correct_answer": "E",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum hemorrhage_088",
+    "ticket": "A 25-year-old G2P1 (multigravida) presents: ongoing bleeding post-cesarean, atony. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum hemorrhage. Management: uterine massage, uterotonics, transfusion.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placenta previa_040",
+    "ticket": "A 34-year-old G3P2 (advanced maternal age) presents: recurrent bleeding at 34w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placenta previa. Management: pelvic rest, serial US, planned cesarean.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preterm labor_059",
+    "ticket": "A 28-year-old G2P1 (multigravida with prior cesarean) presents: regular contractions q5min, cervix 3cm at 30w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preterm labor. Management: tocolytics, betamethasone, Mg for neuroprotection.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_chorioamnionitis_145",
+    "ticket": "A 27-year-old G2P1 (multigravida) presents: maternal fever, prolonged rupture >18h. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: chorioamnionitis. Management: IV antibiotics, delivery, antipyretics.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_cord prolapse_131",
+    "ticket": "A 18-year-old G1P0 (adolescent primigravida) presents: cord presenting with AROM. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: cord prolapse. Management: elevate presenting part, emergency cesarean, knee-chest position.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "cord prolapse",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_024",
+    "ticket": "A 27-year-old G2P1 (multigravida) presents: 3-hour GTT abnormal. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_chorioamnionitis_148",
+    "ticket": "A 28-year-old G2P1 presents: tender uterus, fetal tachycardia, WBC 18k. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "epidural fever",
+      "B": "no complications expected",
+      "C": "other infection source",
+      "D": "UTI",
+      "E": "routine follow-up"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_shoulder dystocia_120",
+    "ticket": "A 33-year-old G1P0 presents: turtle sign after head delivery, EFW 4200g. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "McRoberts",
+      "B": "Woods/Rubin maneuver",
+      "C": "episiotomy",
+      "D": "suprapubic pressure",
+      "E": "expectant management"
+    },
+    "correct_answer": "A",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_021",
+    "ticket": "A 38-year-old G4P3 (grand multipara, AMA) presents: fasting glucose 102, macrosomia on US. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placental abruption_051",
+    "ticket": "A 27-year-old G2P1 (multigravida) presents: abdominal pain after trauma, fetal distress at 30w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placental abruption. Management: emergent delivery if severe, fetal monitoring, IV access and fluids.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum hemorrhage_086",
+    "ticket": "A 17-year-old G1P0 (adolescent primigravida) presents: EBL 1200mL, boggy uterus 2h postpartum. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum hemorrhage. Management: uterine massage, uterotonics, transfusion.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum depression_153",
+    "ticket": "A 22-year-old G1P0 (primigravida) presents: insomnia, guilt, inability to care for infant 6 weeks PP. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum depression. Management: SSRIs, psychotherapy, support groups.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum depression",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum hemorrhage_092",
+    "ticket": "A 39-year-old G4P3 (grand multipara, AMA) presents: steady bleeding from laceration. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum hemorrhage. Management: uterine massage, uterotonics, transfusion.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_shoulder dystocia_115",
+    "ticket": "A 30-year-old G2P1 (multigravida with prior cesarean) presents: prolonged second stage, no restitution. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: shoulder dystocia. Management: McRoberts, suprapubic pressure, episiotomy.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placental abruption_046",
+    "ticket": "A 28-year-old G1P0 (primigravida) presents: painful vaginal bleeding, rigid uterus at 35w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placental abruption. Management: emergent delivery if severe, fetal monitoring, IV access and fluids.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placental abruption",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_hyperemesis gravidarum_101",
+    "ticket": "A 38-year-old G4P3 (grand multipara, AMA) presents: intractable vomiting, ketonuria, hypokalemia at 8w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: hyperemesis gravidarum. Management: IV fluids, thiamine, ondansetron.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_hyperemesis gravidarum_110",
+    "ticket": "A 42-year-old G4P3 presents: intractable vomiting, ketonuria, hypokalemia at 8w. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "Weekly NST",
+      "B": "Continuous fetal heart rate monitoring",
+      "C": "No monitoring needed",
+      "D": "Intermittent auscultation",
+      "E": "Biophysical profile only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_023",
+    "ticket": "A 18-year-old G1P0 (primigravida) presents: 3-hour GTT abnormal. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_preeclampsia_014",
+    "ticket": "A 29-year-old G2P1 presents: new HTN 145/95, edema at 28w. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Ttp-Hus",
+      "B": "Chronic Htn",
+      "C": "Hellp",
+      "D": "Preeclampsia",
+      "E": "Gestational Htn"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_hyperemesis gravidarum_099",
+    "ticket": "A 18-year-old G1P0 (primigravida) presents: vomiting 8x/day, 5% weight loss at 10w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: hyperemesis gravidarum. Management: IV fluids, thiamine, ondansetron.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "hyperemesis gravidarum",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_028",
+    "ticket": "A 28-year-old G2P1 (multigravida with prior cesarean) presents: polyhydramnios, large for dates. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_chorioamnionitis_149",
+    "ticket": "A 30-year-old G2P1 presents: tender uterus, fetal tachycardia, WBC 18k. What is the MOST important fetal monitoring step?",
+    "options": {
+      "A": "Weekly NST",
+      "B": "Continuous fetal heart rate monitoring",
+      "C": "Intermittent auscultation",
+      "D": "No monitoring needed",
+      "E": "Biophysical profile only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_shoulder dystocia_121",
+    "ticket": "A 28-year-old G2P1 presents: turtle sign after head delivery, EFW 4200g. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Cephalopelvic Disproportion",
+      "B": "None of the above",
+      "C": "Normal Labor",
+      "D": "Shoulder Dystocia"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preeclampsia_008",
+    "ticket": "A 29-year-old G2P1 (multigravida with prior cesarean) presents: new HTN 145/95, edema at 28w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preeclampsia. Management: magnesium sulfate, antihypertensives, delivery timing.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placenta previa_034",
+    "ticket": "A 26-year-old G2P1 (multigravida) presents: painless bleeding at 32w, complete previa. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placenta previa. Management: pelvic rest, serial US, planned cesarean.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_preeclampsia_013",
+    "ticket": "A 42-year-old G4P3 presents: severe features: BP 170/110, visual changes, thrombocytopenia at 34w. What is the MOST appropriate next step in management?",
+    "options": {
+      "A": "delivery timing",
+      "B": "magnesium sulfate",
+      "C": "fetal monitoring",
+      "D": "antihypertensives",
+      "E": "expectant management"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preeclampsia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_shoulder dystocia_114",
+    "ticket": "A 35-year-old G3P2 (advanced maternal age) presents: prolonged second stage, no restitution. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: shoulder dystocia. Management: McRoberts, suprapubic pressure, episiotomy.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "shoulder dystocia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_chorioamnionitis_139",
+    "ticket": "A 22-year-old G1P0 (primigravida) presents: maternal fever 38.5, tachycardia, foul-smelling fluid after prolonged ROM. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: chorioamnionitis. Management: IV antibiotics, delivery, antipyretics.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_postpartum hemorrhage_087",
+    "ticket": "A 23-year-old G1P0 (primigravida) presents: EBL 1200mL, boggy uterus 2h postpartum. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: postpartum hemorrhage. Management: uterine massage, uterotonics, transfusion.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "postpartum hemorrhage",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_ectopic pregnancy_080",
+    "ticket": "A 39-year-old G4P3 (grand multipara, AMA) presents: shoulder tip pain, hemodynamic instability at 8w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: ectopic pregnancy. Management: methotrexate if stable, surgical management, serial beta-hCG.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_gestational diabetes_019",
+    "ticket": "A 19-year-old G1P0 (adolescent primigravida) presents: failed GCT at 28w, BMI 32. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: gestational diabetes. Management: dietary modification, glucose monitoring, insulin if needed.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "gestational diabetes",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_placenta previa_044",
+    "ticket": "A 33-year-old G2P1 presents: painless bleeding at 32w, complete previa. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "cervical pathology",
+      "B": "bloody show",
+      "C": "abruption",
+      "D": "vasa previa",
+      "E": "no complications expected"
+    },
+    "correct_answer": "C",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_preterm labor_063",
+    "ticket": "A 39-year-old G4P3 (grand multipara, AMA) presents: pelvic pressure, cervical shortening at 28w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: preterm labor. Management: tocolytics, betamethasone, Mg for neuroprotection.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_chorioamnionitis_147",
+    "ticket": "A 32-year-old G2P1 presents: tender uterus, fetal tachycardia, WBC 18k. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Other Infection Source",
+      "B": "Epidural Fever",
+      "C": "None of the above",
+      "D": "Chorioamnionitis",
+      "E": "Uti"
+    },
+    "correct_answer": "D",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_ectopic pregnancy_073",
+    "ticket": "A 30-year-old G2P1 (multigravida with prior cesarean) presents: unilateral pain, empty uterus, hCG 1500 at 6w. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: ectopic pregnancy. Management: methotrexate if stable, surgical management, serial beta-hCG.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_placenta previa_037",
+    "ticket": "A 18-year-old G1P0 (adolescent primigravida) presents: bright red bleeding at 28w, low-lying placenta. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: placenta previa. Management: pelvic rest, serial US, planned cesarean.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "placenta previa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_preterm labor_070",
+    "ticket": "A 33-year-old G1P0 presents: regular contractions q5min, cervix 3cm at 30w. Which complication should be assessed for FIRST?",
+    "options": {
+      "A": "routine follow-up",
+      "B": "Braxton-Hicks",
+      "C": "cervical insufficiency",
+      "D": "no complications expected",
+      "E": "UTI"
+    },
+    "correct_answer": "B",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "preterm labor",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_mcqa_ectopic pregnancy_082",
+    "ticket": "A 34-year-old G1P0 presents: shoulder tip pain, hemodynamic instability at 8w. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Ovarian Cyst",
+      "B": "Pid",
+      "C": "Ectopic Pregnancy",
+      "D": "Appendicitis",
+      "E": "Threatened Abortion"
+    },
+    "correct_answer": "C",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "ectopic pregnancy",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "ob_bal_chorioamnionitis_141",
+    "ticket": "A 34-year-old G3P2 (advanced maternal age) presents: tender uterus, fetal tachycardia, WBC 18k. Provide comprehensive obstetric assessment and management plan.",
+    "correct_answer": "Diagnosis: chorioamnionitis. Management: IV antibiotics, delivery, antipyretics.",
+    "_source_domain": "obstetrics",
+    "description": {
+      "condition": "chorioamnionitis",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "assess_obstetric_status",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  }
+]

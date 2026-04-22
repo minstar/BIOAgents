@@ -1,10 +1,63 @@
 [
   {
-    "id": "dx_pulmonary_embolism_submassive_elderly_female_029",
-    "ticket": "A 67-year-old female presents to the emergency department with dyspnea, tachycardia and hemoptysis. Symptoms began 1 week ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be submassive in nature.",
+    "id": "dx_urinary_tract_infection_pyelonephritis_pediatric_087",
+    "ticket": "A 2-year-old male presents to the emergency department with urgency, frequency and suprapubic pain. Symptoms began 1 week ago. The presentation appears to be pyelonephritis in nature.",
     "description": {
-      "condition": "pulmonary_embolism",
-      "severity": "submassive",
+      "condition": "urinary_tract_infection",
+      "severity": "pyelonephritis",
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urinalysis"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urine_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider urinary_tract_infection in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: pyelonephritis"
+      ]
+    }
+  },
+  {
+    "id": "dx_pancreatitis_severe_elderly_female_078",
+    "ticket": "A 72-year-old female presents to the emergency department with fever and epigastric pain. Symptoms began 1 week ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "pancreatitis",
+      "severity": "severe",
       "patient_type": "elderly_female"
     },
     "evaluation_criteria": {
@@ -22,21 +75,21 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "CT_angiography"
+            "test_name": "lipase"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "D-dimer"
+            "test_name": "amylase"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "ABG"
+            "test_name": "CT_abdomen"
           },
           "compare_args": []
         }
@@ -46,19 +99,19 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider pulmonary_embolism in differential",
+        "Agent should consider pancreatitis in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: submassive"
+        "Agent should account for severity level: severe"
       ]
     }
   },
   {
-    "id": "dx_diabetic_ketoacidosis_mild_elderly_female_034",
-    "ticket": "A 79-year-old female presents to the emergency department with polyuria, abdominal pain, Kussmaul breathing and polydipsia. Symptoms began 3 days ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be mild in nature.",
+    "id": "dx_pneumonia_moderate_elderly_male_005",
+    "ticket": "A 70-year-old male presents to the emergency department with chest pain, fever, dyspnea and cough. Symptoms began 6 hours ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be moderate in nature.",
     "description": {
-      "condition": "diabetic_ketoacidosis",
-      "severity": "mild",
-      "patient_type": "elderly_female"
+      "condition": "pneumonia",
+      "severity": "moderate",
+      "patient_type": "elderly_male"
     },
     "evaluation_criteria": {
       "actions": [
@@ -75,21 +128,21 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "BMP"
+            "test_name": "chest_xray"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "ABG"
+            "test_name": "CBC"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "serum_ketones"
+            "test_name": "sputum_culture"
           },
           "compare_args": []
         }
@@ -99,17 +152,17 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider diabetic_ketoacidosis in differential",
+        "Agent should consider pneumonia in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: mild"
+        "Agent should account for severity level: moderate"
       ]
     }
   },
   {
-    "id": "dx_diabetic_ketoacidosis_severe_pregnant_041",
-    "ticket": "A 31-year-old female presents to the emergency department with polyuria and abdominal pain. Symptoms began 1 day ago. Past medical history includes pregnancy. The presentation appears to be severe in nature.",
+    "id": "dx_pneumonia_severe_pregnant_008",
+    "ticket": "A 28-year-old female presents to the emergency department with cough, dyspnea and fever. Symptoms began 1 week ago. Past medical history includes pregnancy. The presentation appears to be severe in nature.",
     "description": {
-      "condition": "diabetic_ketoacidosis",
+      "condition": "pneumonia",
       "severity": "severe",
       "patient_type": "pregnant"
     },
@@ -128,21 +181,21 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "BMP"
+            "test_name": "chest_xray"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "ABG"
+            "test_name": "CBC"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "serum_ketones"
+            "test_name": "sputum_culture"
           },
           "compare_args": []
         }
@@ -152,18 +205,18 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider diabetic_ketoacidosis in differential",
+        "Agent should consider pneumonia in differential",
         "Agent should order appropriate diagnostic tests",
         "Agent should account for severity level: severe"
       ]
     }
   },
   {
-    "id": "dx_diabetic_ketoacidosis_severe_middle_age_female_042",
-    "ticket": "A 46-year-old female presents to the emergency department with Kussmaul breathing and abdominal pain. Symptoms began 1 week ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be severe in nature.",
+    "id": "dx_COPD_exacerbation_mild_middle_age_female_088",
+    "ticket": "A 53-year-old female presents to the emergency department with cough, dyspnea and increased sputum. Symptoms began 1 day ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be mild in nature.",
     "description": {
-      "condition": "diabetic_ketoacidosis",
-      "severity": "severe",
+      "condition": "COPD_exacerbation",
+      "severity": "mild",
       "patient_type": "middle_age_female"
     },
     "evaluation_criteria": {
@@ -181,213 +234,8 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "BMP"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
             "test_name": "ABG"
           },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "serum_ketones"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider diabetic_ketoacidosis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: severe"
-      ]
-    }
-  },
-  {
-    "id": "dx_sepsis_septic_shock_elderly_female_059",
-    "ticket": "A 70-year-old female presents to the emergency department with fever, altered mental status and tachycardia. Symptoms began 3 days ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be septic shock in nature.",
-    "description": {
-      "condition": "sepsis",
-      "severity": "septic_shock",
-      "patient_type": "elderly_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "blood_culture"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "lactate"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider sepsis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: septic_shock"
-      ]
-    }
-  },
-  {
-    "id": "dx_diabetic_ketoacidosis_mild_pregnant_036",
-    "ticket": "A 42-year-old female presents to the emergency department with polydipsia, Kussmaul breathing and polyuria. Symptoms began 1 day ago. Past medical history includes pregnancy. The presentation appears to be mild in nature.",
-    "description": {
-      "condition": "diabetic_ketoacidosis",
-      "severity": "mild",
-      "patient_type": "pregnant"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "BMP"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "ABG"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "serum_ketones"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider diabetic_ketoacidosis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: mild"
-      ]
-    }
-  },
-  {
-    "id": "dx_meningitis_moderate_elderly_male_010",
-    "ticket": "A 68-year-old male presents to the emergency department with fever, neck stiffness and photophobia. Symptoms began 6 hours ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be moderate in nature.",
-    "description": {
-      "condition": "meningitis",
-      "severity": "moderate",
-      "patient_type": "elderly_male"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "lumbar_puncture"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "blood_culture"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider meningitis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: moderate"
-      ]
-    }
-  },
-  {
-    "id": "dx_pneumonia_moderate_young_female_006",
-    "ticket": "A 28-year-old female presents to the emergency department with cough and fever. Symptoms began 2 hours ago. The presentation appears to be moderate in nature.",
-    "description": {
-      "condition": "pneumonia",
-      "severity": "moderate",
-      "patient_type": "young_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
           "compare_args": []
         },
         {
@@ -403,13 +251,6 @@
             "test_name": "CBC"
           },
           "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "sputum_culture"
-          },
-          "compare_args": []
         }
       ],
       "reward_basis": [
@@ -417,433 +258,9 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider pneumonia in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: moderate"
-      ]
-    }
-  },
-  {
-    "id": "dx_sepsis_severe_sepsis_elderly_female_057",
-    "ticket": "A 66-year-old female presents to the emergency department with hypotension, fever and tachycardia. Symptoms began 6 hours ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be severe sepsis in nature.",
-    "description": {
-      "condition": "sepsis",
-      "severity": "severe_sepsis",
-      "patient_type": "elderly_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "blood_culture"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "lactate"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider sepsis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: severe_sepsis"
-      ]
-    }
-  },
-  {
-    "id": "dx_diabetic_ketoacidosis_severe_elderly_male_040",
-    "ticket": "A 74-year-old male presents to the emergency department with Kussmaul breathing, polyuria and abdominal pain. Symptoms began 1 day ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be severe in nature.",
-    "description": {
-      "condition": "diabetic_ketoacidosis",
-      "severity": "severe",
-      "patient_type": "elderly_male"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "BMP"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "ABG"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "serum_ketones"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider diabetic_ketoacidosis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: severe"
-      ]
-    }
-  },
-  {
-    "id": "dx_appendicitis_uncomplicated_middle_age_male_016",
-    "ticket": "A 62-year-old male presents to the emergency department with fever, anorexia, nausea and RLQ pain. Symptoms began 1 day ago. Past medical history includes hypertension, diabetes. The presentation appears to be uncomplicated in nature.",
-    "description": {
-      "condition": "appendicitis",
-      "severity": "uncomplicated",
-      "patient_type": "middle_age_male"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CT_abdomen"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CRP"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider appendicitis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: uncomplicated"
-      ]
-    }
-  },
-  {
-    "id": "dx_stroke_hemorrhagic_elderly_female_049",
-    "ticket": "A 76-year-old female presents to the emergency department with aphasia, vision loss and facial droop. Symptoms began 1 week ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be hemorrhagic in nature.",
-    "description": {
-      "condition": "stroke",
-      "severity": "hemorrhagic",
-      "patient_type": "elderly_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CT_head"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "MRI_brain"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "carotid_doppler"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider stroke in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: hemorrhagic"
-      ]
-    }
-  },
-  {
-    "id": "dx_appendicitis_complicated_pregnant_021",
-    "ticket": "A 39-year-old female presents to the emergency department with fever and anorexia. Symptoms began 6 hours ago. Past medical history includes pregnancy. The presentation appears to be complicated in nature.",
-    "description": {
-      "condition": "appendicitis",
-      "severity": "complicated",
-      "patient_type": "pregnant"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CT_abdomen"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CRP"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider appendicitis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: complicated"
-      ]
-    }
-  },
-  {
-    "id": "dx_myocardial_infarction_NSTEMI_young_female_025",
-    "ticket": "A 33-year-old female presents to the emergency department with diaphoresis and chest pain. Symptoms began 3 days ago. The presentation appears to be NSTEMI in nature.",
-    "description": {
-      "condition": "myocardial_infarction",
-      "severity": "NSTEMI",
-      "patient_type": "young_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "ECG"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "troponin"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider myocardial_infarction in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: NSTEMI"
-      ]
-    }
-  },
-  {
-    "id": "dx_pneumonia_mild_young_female_001",
-    "ticket": "A 26-year-old female presents to the emergency department with fever and cough. Symptoms began 2 hours ago. The presentation appears to be mild in nature.",
-    "description": {
-      "condition": "pneumonia",
-      "severity": "mild",
-      "patient_type": "young_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "chest_xray"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "sputum_culture"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider pneumonia in differential",
+        "Agent should consider COPD_exacerbation in differential",
         "Agent should order appropriate diagnostic tests",
         "Agent should account for severity level: mild"
-      ]
-    }
-  },
-  {
-    "id": "dx_sepsis_sepsis_young_female_054",
-    "ticket": "A 26-year-old female presents to the emergency department with fever and tachycardia. Symptoms began 6 hours ago. The presentation appears to be sepsis in nature.",
-    "description": {
-      "condition": "sepsis",
-      "severity": "sepsis",
-      "patient_type": "young_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "blood_culture"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "lactate"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider sepsis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: sepsis"
       ]
     }
   },
@@ -901,171 +318,12 @@
     }
   },
   {
-    "id": "dx_stroke_ischemic_elderly_female_046",
-    "ticket": "A 75-year-old female presents to the emergency department with facial droop and aphasia. Symptoms began 6 hours ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be ischemic in nature.",
-    "description": {
-      "condition": "stroke",
-      "severity": "ischemic",
-      "patient_type": "elderly_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CT_head"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "MRI_brain"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "carotid_doppler"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider stroke in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: ischemic"
-      ]
-    }
-  },
-  {
-    "id": "dx_pulmonary_embolism_submassive_pregnant_028",
-    "ticket": "A 36-year-old female presents to the emergency department with hemoptysis, dyspnea and tachycardia. Symptoms began 6 hours ago. Past medical history includes pregnancy. The presentation appears to be submassive in nature.",
-    "description": {
-      "condition": "pulmonary_embolism",
-      "severity": "submassive",
-      "patient_type": "pregnant"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CT_angiography"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "D-dimer"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "ABG"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider pulmonary_embolism in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: submassive"
-      ]
-    }
-  },
-  {
-    "id": "dx_diabetic_ketoacidosis_moderate_young_male_039",
-    "ticket": "A 19-year-old male presents to the emergency department with Kussmaul breathing and polyuria. Symptoms began 3 days ago. The presentation appears to be moderate in nature.",
-    "description": {
-      "condition": "diabetic_ketoacidosis",
-      "severity": "moderate",
-      "patient_type": "young_male"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "BMP"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "ABG"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "serum_ketones"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider diabetic_ketoacidosis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: moderate"
-      ]
-    }
-  },
-  {
-    "id": "dx_myocardial_infarction_NSTEMI_elderly_female_027",
-    "ticket": "A 78-year-old female presents to the emergency department with diaphoresis and dyspnea. Symptoms began 1 day ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be NSTEMI in nature.",
+    "id": "dx_myocardial_infarction_NSTEMI_young_female_025",
+    "ticket": "A 33-year-old female presents to the emergency department with diaphoresis and chest pain. Symptoms began 3 days ago. The presentation appears to be NSTEMI in nature.",
     "description": {
       "condition": "myocardial_infarction",
       "severity": "NSTEMI",
-      "patient_type": "elderly_female"
+      "patient_type": "young_female"
     },
     "evaluation_criteria": {
       "actions": [
@@ -1109,6 +367,218 @@
         "Agent should consider myocardial_infarction in differential",
         "Agent should order appropriate diagnostic tests",
         "Agent should account for severity level: NSTEMI"
+      ]
+    }
+  },
+  {
+    "id": "dx_pneumonia_mild_elderly_female_003",
+    "ticket": "A 67-year-old female presents to the emergency department with fever and dyspnea. Symptoms began 1 week ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be mild in nature.",
+    "description": {
+      "condition": "pneumonia",
+      "severity": "mild",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "sputum_culture"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pneumonia in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: mild"
+      ]
+    }
+  },
+  {
+    "id": "dx_heart_failure_NYHA_III_elderly_male_066",
+    "ticket": "A 75-year-old male presents to the emergency department with dyspnea, orthopnea and fatigue. Symptoms began 1 day ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be NYHA III in nature.",
+    "description": {
+      "condition": "heart_failure",
+      "severity": "NYHA_III",
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BNP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "echocardiogram"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider heart_failure in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: NYHA_III"
+      ]
+    }
+  },
+  {
+    "id": "dx_pancreatitis_mild_middle_age_male_070",
+    "ticket": "A 57-year-old male presents to the emergency department with nausea, vomiting, fever and epigastric pain. Symptoms began 1 week ago. Past medical history includes hypertension, diabetes. The presentation appears to be mild in nature.",
+    "description": {
+      "condition": "pancreatitis",
+      "severity": "mild",
+      "patient_type": "middle_age_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lipase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "amylase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pancreatitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: mild"
+      ]
+    }
+  },
+  {
+    "id": "dx_pancreatitis_moderately_severe_pregnant_074",
+    "ticket": "A 34-year-old female presents to the emergency department with nausea and epigastric pain. Symptoms began 2 hours ago. Past medical history includes pregnancy. The presentation appears to be moderately severe in nature.",
+    "description": {
+      "condition": "pancreatitis",
+      "severity": "moderately_severe",
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lipase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "amylase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pancreatitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: moderately_severe"
       ]
     }
   },
@@ -1166,12 +636,12 @@
     }
   },
   {
-    "id": "dx_meningitis_moderate_young_male_011",
-    "ticket": "A 29-year-old male presents to the emergency department with neck stiffness, fever and photophobia. Symptoms began 2 hours ago. The presentation appears to be moderate in nature.",
+    "id": "dx_gastrointestinal_bleeding_minor_pediatric_099",
+    "ticket": "A 12-year-old male presents to the emergency department with lightheadedness, tachycardia and hematemesis. Symptoms began 2 hours ago. The presentation appears to be minor in nature.",
     "description": {
-      "condition": "meningitis",
-      "severity": "moderate",
-      "patient_type": "young_male"
+      "condition": "gastrointestinal_bleeding",
+      "severity": "minor",
+      "patient_type": "pediatric"
     },
     "evaluation_criteria": {
       "actions": [
@@ -1188,14 +658,120 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "lumbar_puncture"
+            "test_name": "CBC"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "blood_culture"
+            "test_name": "BMP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "coagulation"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider gastrointestinal_bleeding in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: minor"
+      ]
+    }
+  },
+  {
+    "id": "dx_diabetic_ketoacidosis_moderate_pediatric_037",
+    "ticket": "A 9-year-old male presents to the emergency department with polyuria, Kussmaul breathing, abdominal pain and polydipsia. Symptoms began 6 hours ago. The presentation appears to be moderate in nature.",
+    "description": {
+      "condition": "diabetic_ketoacidosis",
+      "severity": "moderate",
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BMP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "serum_ketones"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider diabetic_ketoacidosis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: moderate"
+      ]
+    }
+  },
+  {
+    "id": "dx_COPD_exacerbation_severe_elderly_female_096",
+    "ticket": "A 84-year-old female presents to the emergency department with increased sputum and dyspnea. Symptoms began 3 days ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "COPD_exacerbation",
+      "severity": "severe",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
           },
           "compare_args": []
         },
@@ -1212,9 +788,221 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider meningitis in differential",
+        "Agent should consider COPD_exacerbation in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: moderate"
+        "Agent should account for severity level: severe"
+      ]
+    }
+  },
+  {
+    "id": "dx_pulmonary_embolism_submassive_pediatric_030",
+    "ticket": "A 5-year-old male presents to the emergency department with dyspnea and tachycardia. Symptoms began 2 hours ago. The presentation appears to be submassive in nature.",
+    "description": {
+      "condition": "pulmonary_embolism",
+      "severity": "submassive",
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_angiography"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "D-dimer"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pulmonary_embolism in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: submassive"
+      ]
+    }
+  },
+  {
+    "id": "dx_diabetic_ketoacidosis_severe_elderly_male_040",
+    "ticket": "A 74-year-old male presents to the emergency department with Kussmaul breathing, polyuria and abdominal pain. Symptoms began 1 day ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "diabetic_ketoacidosis",
+      "severity": "severe",
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BMP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "serum_ketones"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider diabetic_ketoacidosis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: severe"
+      ]
+    }
+  },
+  {
+    "id": "dx_gastrointestinal_bleeding_minor_young_female_097",
+    "ticket": "A 32-year-old female presents to the emergency department with tachycardia, melena, hematemesis and lightheadedness. Symptoms began 6 hours ago. The presentation appears to be minor in nature.",
+    "description": {
+      "condition": "gastrointestinal_bleeding",
+      "severity": "minor",
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BMP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "coagulation"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider gastrointestinal_bleeding in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: minor"
+      ]
+    }
+  },
+  {
+    "id": "dx_gastrointestinal_bleeding_minor_elderly_male_098",
+    "ticket": "A 74-year-old male presents to the emergency department with hematemesis and melena. Symptoms began 1 week ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be minor in nature.",
+    "description": {
+      "condition": "gastrointestinal_bleeding",
+      "severity": "minor",
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BMP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "coagulation"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider gastrointestinal_bleeding in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: minor"
       ]
     }
   },
@@ -1272,12 +1060,65 @@
     }
   },
   {
-    "id": "dx_pulmonary_embolism_massive_young_male_032",
-    "ticket": "A 24-year-old male presents to the emergency department with pleuritic chest pain, tachycardia, hemoptysis and dyspnea. Symptoms began 3 days ago. The presentation appears to be massive in nature.",
+    "id": "dx_meningitis_moderate_young_male_011",
+    "ticket": "A 29-year-old male presents to the emergency department with neck stiffness, fever and photophobia. Symptoms began 2 hours ago. The presentation appears to be moderate in nature.",
+    "description": {
+      "condition": "meningitis",
+      "severity": "moderate",
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lumbar_puncture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "blood_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider meningitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: moderate"
+      ]
+    }
+  },
+  {
+    "id": "dx_pulmonary_embolism_massive_pregnant_033",
+    "ticket": "A 38-year-old female presents to the emergency department with dyspnea and hemoptysis. Symptoms began 3 days ago. Past medical history includes pregnancy. The presentation appears to be massive in nature.",
     "description": {
       "condition": "pulmonary_embolism",
       "severity": "massive",
-      "patient_type": "young_male"
+      "patient_type": "pregnant"
     },
     "evaluation_criteria": {
       "actions": [
@@ -1325,12 +1166,12 @@
     }
   },
   {
-    "id": "dx_meningitis_severe_elderly_female_014",
-    "ticket": "A 73-year-old female presents to the emergency department with neck stiffness and fever. Symptoms began 1 day ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be severe in nature.",
+    "id": "dx_urinary_tract_infection_pyelonephritis_young_male_086",
+    "ticket": "A 31-year-old male presents to the emergency department with dysuria, urgency and frequency. Symptoms began 3 days ago. The presentation appears to be pyelonephritis in nature.",
     "description": {
-      "condition": "meningitis",
-      "severity": "severe",
-      "patient_type": "elderly_female"
+      "condition": "urinary_tract_infection",
+      "severity": "pyelonephritis",
+      "patient_type": "young_male"
     },
     "evaluation_criteria": {
       "actions": [
@@ -1347,14 +1188,14 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "lumbar_puncture"
+            "test_name": "urinalysis"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "blood_culture"
+            "test_name": "urine_culture"
           },
           "compare_args": []
         },
@@ -1371,7 +1212,113 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider meningitis in differential",
+        "Agent should consider urinary_tract_infection in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: pyelonephritis"
+      ]
+    }
+  },
+  {
+    "id": "dx_pulmonary_embolism_submassive_pregnant_028",
+    "ticket": "A 36-year-old female presents to the emergency department with hemoptysis, dyspnea and tachycardia. Symptoms began 6 hours ago. Past medical history includes pregnancy. The presentation appears to be submassive in nature.",
+    "description": {
+      "condition": "pulmonary_embolism",
+      "severity": "submassive",
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_angiography"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "D-dimer"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pulmonary_embolism in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: submassive"
+      ]
+    }
+  },
+  {
+    "id": "dx_pancreatitis_severe_pediatric_076",
+    "ticket": "A 11-year-old male presents to the emergency department with fever and nausea. Symptoms began 3 days ago. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "pancreatitis",
+      "severity": "severe",
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lipase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "amylase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pancreatitis in differential",
         "Agent should order appropriate diagnostic tests",
         "Agent should account for severity level: severe"
       ]
@@ -1431,10 +1378,169 @@
     }
   },
   {
-    "id": "dx_pneumonia_moderate_young_male_004",
-    "ticket": "A 35-year-old male presents to the emergency department with fever, chest pain and dyspnea. Symptoms began 2 hours ago. The presentation appears to be moderate in nature.",
+    "id": "dx_sepsis_sepsis_pediatric_053",
+    "ticket": "A 6-year-old male presents to the emergency department with fever and hypotension. Symptoms began 3 days ago. The presentation appears to be sepsis in nature.",
     "description": {
-      "condition": "pneumonia",
+      "condition": "sepsis",
+      "severity": "sepsis",
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "blood_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lactate"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider sepsis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: sepsis"
+      ]
+    }
+  },
+  {
+    "id": "dx_heart_failure_NYHA_II_young_male_061",
+    "ticket": "A 25-year-old male presents to the emergency department with fatigue and orthopnea. Symptoms began 1 day ago. The presentation appears to be NYHA II in nature.",
+    "description": {
+      "condition": "heart_failure",
+      "severity": "NYHA_II",
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BNP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "echocardiogram"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider heart_failure in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: NYHA_II"
+      ]
+    }
+  },
+  {
+    "id": "dx_pancreatitis_moderately_severe_elderly_female_075",
+    "ticket": "A 66-year-old female presents to the emergency department with fever and vomiting. Symptoms began 2 hours ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be moderately severe in nature.",
+    "description": {
+      "condition": "pancreatitis",
+      "severity": "moderately_severe",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lipase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "amylase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pancreatitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: moderately_severe"
+      ]
+    }
+  },
+  {
+    "id": "dx_COPD_exacerbation_moderate_young_male_091",
+    "ticket": "A 31-year-old male presents to the emergency department with cough and dyspnea. Symptoms began 2 hours ago. The presentation appears to be moderate in nature.",
+    "description": {
+      "condition": "COPD_exacerbation",
       "severity": "moderate",
       "patient_type": "young_male"
     },
@@ -1453,6 +1559,13 @@
         {
           "name": "order_lab_test",
           "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
             "test_name": "chest_xray"
           },
           "compare_args": []
@@ -1463,11 +1576,57 @@
             "test_name": "CBC"
           },
           "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider COPD_exacerbation in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: moderate"
+      ]
+    }
+  },
+  {
+    "id": "dx_meningitis_moderate_elderly_male_010",
+    "ticket": "A 68-year-old male presents to the emergency department with fever, neck stiffness and photophobia. Symptoms began 6 hours ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be moderate in nature.",
+    "description": {
+      "condition": "meningitis",
+      "severity": "moderate",
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "sputum_culture"
+            "test_name": "lumbar_puncture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "blood_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
           },
           "compare_args": []
         }
@@ -1477,19 +1636,19 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider pneumonia in differential",
+        "Agent should consider meningitis in differential",
         "Agent should order appropriate diagnostic tests",
         "Agent should account for severity level: moderate"
       ]
     }
   },
   {
-    "id": "dx_diabetic_ketoacidosis_moderate_pediatric_037",
-    "ticket": "A 9-year-old male presents to the emergency department with polyuria, Kussmaul breathing, abdominal pain and polydipsia. Symptoms began 6 hours ago. The presentation appears to be moderate in nature.",
+    "id": "dx_diabetic_ketoacidosis_severe_pregnant_041",
+    "ticket": "A 31-year-old female presents to the emergency department with polyuria and abdominal pain. Symptoms began 1 day ago. Past medical history includes pregnancy. The presentation appears to be severe in nature.",
     "description": {
       "condition": "diabetic_ketoacidosis",
-      "severity": "moderate",
-      "patient_type": "pediatric"
+      "severity": "severe",
+      "patient_type": "pregnant"
     },
     "evaluation_criteria": {
       "actions": [
@@ -1532,15 +1691,68 @@
       "assertions": [
         "Agent should consider diabetic_ketoacidosis in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: moderate"
+        "Agent should account for severity level: severe"
       ]
     }
   },
   {
-    "id": "dx_pneumonia_severe_middle_age_male_009",
-    "ticket": "A 56-year-old male presents to the emergency department with fever, dyspnea, cough and chest pain. Symptoms began 6 hours ago. Past medical history includes hypertension, diabetes. The presentation appears to be severe in nature.",
+    "id": "dx_myocardial_infarction_NSTEMI_young_male_026",
+    "ticket": "A 35-year-old male presents to the emergency department with dyspnea and nausea. Symptoms began 1 week ago. The presentation appears to be NSTEMI in nature.",
     "description": {
-      "condition": "pneumonia",
+      "condition": "myocardial_infarction",
+      "severity": "NSTEMI",
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ECG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "troponin"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider myocardial_infarction in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: NSTEMI"
+      ]
+    }
+  },
+  {
+    "id": "dx_meningitis_severe_middle_age_male_015",
+    "ticket": "A 51-year-old male presents to the emergency department with photophobia, neck stiffness, fever and headache. Symptoms began 1 day ago. Past medical history includes hypertension, diabetes. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "meningitis",
       "severity": "severe",
       "patient_type": "middle_age_male"
     },
@@ -1559,7 +1771,14 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "chest_xray"
+            "test_name": "lumbar_puncture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "blood_culture"
           },
           "compare_args": []
         },
@@ -1569,13 +1788,6 @@
             "test_name": "CBC"
           },
           "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "sputum_culture"
-          },
-          "compare_args": []
         }
       ],
       "reward_basis": [
@@ -1583,7 +1795,7 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider pneumonia in differential",
+        "Agent should consider meningitis in differential",
         "Agent should order appropriate diagnostic tests",
         "Agent should account for severity level: severe"
       ]
@@ -1643,171 +1855,12 @@
     }
   },
   {
-    "id": "dx_meningitis_moderate_young_female_012",
-    "ticket": "A 23-year-old female presents to the emergency department with neck stiffness, headache, photophobia and fever. Symptoms began 1 day ago. The presentation appears to be moderate in nature.",
-    "description": {
-      "condition": "meningitis",
-      "severity": "moderate",
-      "patient_type": "young_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "lumbar_puncture"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "blood_culture"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider meningitis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: moderate"
-      ]
-    }
-  },
-  {
-    "id": "dx_appendicitis_uncomplicated_young_female_017",
-    "ticket": "A 25-year-old female presents to the emergency department with anorexia and RLQ pain. Symptoms began 2 hours ago. The presentation appears to be uncomplicated in nature.",
-    "description": {
-      "condition": "appendicitis",
-      "severity": "uncomplicated",
-      "patient_type": "young_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CT_abdomen"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CRP"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider appendicitis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: uncomplicated"
-      ]
-    }
-  },
-  {
-    "id": "dx_pneumonia_severe_pregnant_008",
-    "ticket": "A 28-year-old female presents to the emergency department with cough, dyspnea and fever. Symptoms began 1 week ago. Past medical history includes pregnancy. The presentation appears to be severe in nature.",
-    "description": {
-      "condition": "pneumonia",
-      "severity": "severe",
-      "patient_type": "pregnant"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "chest_xray"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "sputum_culture"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider pneumonia in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: severe"
-      ]
-    }
-  },
-  {
-    "id": "dx_stroke_ischemic_young_female_048",
-    "ticket": "A 32-year-old female presents to the emergency department with hemiparesis, vision loss, facial droop and aphasia. Symptoms began 6 hours ago. The presentation appears to be ischemic in nature.",
+    "id": "dx_stroke_ischemic_elderly_female_046",
+    "ticket": "A 75-year-old female presents to the emergency department with facial droop and aphasia. Symptoms began 6 hours ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be ischemic in nature.",
     "description": {
       "condition": "stroke",
       "severity": "ischemic",
-      "patient_type": "young_female"
+      "patient_type": "elderly_female"
     },
     "evaluation_criteria": {
       "actions": [
@@ -1855,12 +1908,118 @@
     }
   },
   {
-    "id": "dx_stroke_TIA_young_male_044",
-    "ticket": "A 25-year-old male presents to the emergency department with hemiparesis, facial droop and vision loss. Symptoms began 1 week ago. The presentation appears to be TIA in nature.",
+    "id": "dx_COPD_exacerbation_moderate_elderly_female_093",
+    "ticket": "A 75-year-old female presents to the emergency department with wheezing, increased sputum and cough. Symptoms began 2 hours ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be moderate in nature.",
+    "description": {
+      "condition": "COPD_exacerbation",
+      "severity": "moderate",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider COPD_exacerbation in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: moderate"
+      ]
+    }
+  },
+  {
+    "id": "dx_pulmonary_embolism_submassive_elderly_female_029",
+    "ticket": "A 67-year-old female presents to the emergency department with dyspnea, tachycardia and hemoptysis. Symptoms began 1 week ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be submassive in nature.",
+    "description": {
+      "condition": "pulmonary_embolism",
+      "severity": "submassive",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_angiography"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "D-dimer"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pulmonary_embolism in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: submassive"
+      ]
+    }
+  },
+  {
+    "id": "dx_stroke_TIA_middle_age_male_043",
+    "ticket": "A 47-year-old male presents to the emergency department with hemiparesis and facial droop. Symptoms began 2 hours ago. Past medical history includes hypertension, diabetes. The presentation appears to be TIA in nature.",
     "description": {
       "condition": "stroke",
       "severity": "TIA",
-      "patient_type": "young_male"
+      "patient_type": "middle_age_male"
     },
     "evaluation_criteria": {
       "actions": [
@@ -1908,12 +2067,436 @@
     }
   },
   {
-    "id": "dx_diabetic_ketoacidosis_mild_middle_age_female_035",
-    "ticket": "A 55-year-old female presents to the emergency department with polydipsia and polyuria. Symptoms began 6 hours ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be mild in nature.",
+    "id": "dx_pulmonary_embolism_massive_middle_age_female_031",
+    "ticket": "A 55-year-old female presents to the emergency department with pleuritic chest pain and hemoptysis. Symptoms began 3 days ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be massive in nature.",
+    "description": {
+      "condition": "pulmonary_embolism",
+      "severity": "massive",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_angiography"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "D-dimer"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pulmonary_embolism in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: massive"
+      ]
+    }
+  },
+  {
+    "id": "dx_sepsis_severe_sepsis_elderly_female_057",
+    "ticket": "A 66-year-old female presents to the emergency department with hypotension, fever and tachycardia. Symptoms began 6 hours ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be severe sepsis in nature.",
+    "description": {
+      "condition": "sepsis",
+      "severity": "severe_sepsis",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "blood_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lactate"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider sepsis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: severe_sepsis"
+      ]
+    }
+  },
+  {
+    "id": "dx_stroke_hemorrhagic_young_male_050",
+    "ticket": "A 34-year-old male presents to the emergency department with facial droop and vision loss. Symptoms began 2 hours ago. The presentation appears to be hemorrhagic in nature.",
+    "description": {
+      "condition": "stroke",
+      "severity": "hemorrhagic",
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_head"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "MRI_brain"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "carotid_doppler"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider stroke in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: hemorrhagic"
+      ]
+    }
+  },
+  {
+    "id": "dx_heart_failure_NYHA_IV_elderly_female_068",
+    "ticket": "A 84-year-old female presents to the emergency department with dyspnea, edema and orthopnea. Symptoms began 1 week ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be NYHA IV in nature.",
+    "description": {
+      "condition": "heart_failure",
+      "severity": "NYHA_IV",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BNP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "echocardiogram"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider heart_failure in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: NYHA_IV"
+      ]
+    }
+  },
+  {
+    "id": "dx_myocardial_infarction_NSTEMI_elderly_female_027",
+    "ticket": "A 78-year-old female presents to the emergency department with diaphoresis and dyspnea. Symptoms began 1 day ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be NSTEMI in nature.",
+    "description": {
+      "condition": "myocardial_infarction",
+      "severity": "NSTEMI",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ECG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "troponin"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider myocardial_infarction in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: NSTEMI"
+      ]
+    }
+  },
+  {
+    "id": "dx_appendicitis_uncomplicated_middle_age_male_016",
+    "ticket": "A 62-year-old male presents to the emergency department with fever, anorexia, nausea and RLQ pain. Symptoms began 1 day ago. Past medical history includes hypertension, diabetes. The presentation appears to be uncomplicated in nature.",
+    "description": {
+      "condition": "appendicitis",
+      "severity": "uncomplicated",
+      "patient_type": "middle_age_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CRP"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider appendicitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: uncomplicated"
+      ]
+    }
+  },
+  {
+    "id": "dx_pneumonia_moderate_young_female_006",
+    "ticket": "A 28-year-old female presents to the emergency department with cough and fever. Symptoms began 2 hours ago. The presentation appears to be moderate in nature.",
+    "description": {
+      "condition": "pneumonia",
+      "severity": "moderate",
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "sputum_culture"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pneumonia in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: moderate"
+      ]
+    }
+  },
+  {
+    "id": "dx_meningitis_severe_middle_age_female_013",
+    "ticket": "A 46-year-old female presents to the emergency department with headache and neck stiffness. Symptoms began 3 days ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "meningitis",
+      "severity": "severe",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lumbar_puncture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "blood_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider meningitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: severe"
+      ]
+    }
+  },
+  {
+    "id": "dx_diabetic_ketoacidosis_mild_elderly_female_034",
+    "ticket": "A 79-year-old female presents to the emergency department with polyuria, abdominal pain, Kussmaul breathing and polydipsia. Symptoms began 3 days ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be mild in nature.",
     "description": {
       "condition": "diabetic_ketoacidosis",
       "severity": "mild",
-      "patient_type": "middle_age_female"
+      "patient_type": "elderly_female"
     },
     "evaluation_criteria": {
       "actions": [
@@ -1957,6 +2540,165 @@
         "Agent should consider diabetic_ketoacidosis in differential",
         "Agent should order appropriate diagnostic tests",
         "Agent should account for severity level: mild"
+      ]
+    }
+  },
+  {
+    "id": "dx_pneumonia_mild_young_female_001",
+    "ticket": "A 26-year-old female presents to the emergency department with fever and cough. Symptoms began 2 hours ago. The presentation appears to be mild in nature.",
+    "description": {
+      "condition": "pneumonia",
+      "severity": "mild",
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "sputum_culture"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pneumonia in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: mild"
+      ]
+    }
+  },
+  {
+    "id": "dx_pancreatitis_mild_young_female_071",
+    "ticket": "A 18-year-old female presents to the emergency department with vomiting, epigastric pain and nausea. Symptoms began 1 week ago. The presentation appears to be mild in nature.",
+    "description": {
+      "condition": "pancreatitis",
+      "severity": "mild",
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lipase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "amylase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pancreatitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: mild"
+      ]
+    }
+  },
+  {
+    "id": "dx_COPD_exacerbation_moderate_pediatric_092",
+    "ticket": "A 6-year-old male presents to the emergency department with wheezing, dyspnea and increased sputum. Symptoms began 1 day ago. The presentation appears to be moderate in nature.",
+    "description": {
+      "condition": "COPD_exacerbation",
+      "severity": "moderate",
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider COPD_exacerbation in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: moderate"
       ]
     }
   },
@@ -2014,12 +2756,12 @@
     }
   },
   {
-    "id": "dx_pulmonary_embolism_massive_pregnant_033",
-    "ticket": "A 38-year-old female presents to the emergency department with dyspnea and hemoptysis. Symptoms began 3 days ago. Past medical history includes pregnancy. The presentation appears to be massive in nature.",
+    "id": "dx_diabetic_ketoacidosis_moderate_young_male_039",
+    "ticket": "A 19-year-old male presents to the emergency department with Kussmaul breathing and polyuria. Symptoms began 3 days ago. The presentation appears to be moderate in nature.",
     "description": {
-      "condition": "pulmonary_embolism",
-      "severity": "massive",
-      "patient_type": "pregnant"
+      "condition": "diabetic_ketoacidosis",
+      "severity": "moderate",
+      "patient_type": "young_male"
     },
     "evaluation_criteria": {
       "actions": [
@@ -2036,14 +2778,7 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "CT_angiography"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "D-dimer"
+            "test_name": "BMP"
           },
           "compare_args": []
         },
@@ -2053,57 +2788,11 @@
             "test_name": "ABG"
           },
           "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider pulmonary_embolism in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: massive"
-      ]
-    }
-  },
-  {
-    "id": "dx_sepsis_sepsis_elderly_male_052",
-    "ticket": "A 75-year-old male presents to the emergency department with hypotension and altered mental status. Symptoms began 3 days ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be sepsis in nature.",
-    "description": {
-      "condition": "sepsis",
-      "severity": "sepsis",
-      "patient_type": "elderly_male"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "blood_culture"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "lactate"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
+            "test_name": "serum_ketones"
           },
           "compare_args": []
         }
@@ -2113,113 +2802,7 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider sepsis in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: sepsis"
-      ]
-    }
-  },
-  {
-    "id": "dx_stroke_ischemic_middle_age_male_047",
-    "ticket": "A 65-year-old male presents to the emergency department with vision loss, aphasia and hemiparesis. Symptoms began 2 hours ago. Past medical history includes hypertension, diabetes. The presentation appears to be ischemic in nature.",
-    "description": {
-      "condition": "stroke",
-      "severity": "ischemic",
-      "patient_type": "middle_age_male"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CT_head"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "MRI_brain"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "carotid_doppler"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider stroke in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: ischemic"
-      ]
-    }
-  },
-  {
-    "id": "dx_pneumonia_moderate_elderly_male_005",
-    "ticket": "A 70-year-old male presents to the emergency department with chest pain, fever, dyspnea and cough. Symptoms began 6 hours ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be moderate in nature.",
-    "description": {
-      "condition": "pneumonia",
-      "severity": "moderate",
-      "patient_type": "elderly_male"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "chest_xray"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CBC"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "sputum_culture"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider pneumonia in differential",
+        "Agent should consider diabetic_ketoacidosis in differential",
         "Agent should order appropriate diagnostic tests",
         "Agent should account for severity level: moderate"
       ]
@@ -2332,11 +2915,117 @@
     }
   },
   {
-    "id": "dx_myocardial_infarction_NSTEMI_young_male_026",
-    "ticket": "A 35-year-old male presents to the emergency department with dyspnea and nausea. Symptoms began 1 week ago. The presentation appears to be NSTEMI in nature.",
+    "id": "dx_appendicitis_uncomplicated_young_female_017",
+    "ticket": "A 25-year-old female presents to the emergency department with anorexia and RLQ pain. Symptoms began 2 hours ago. The presentation appears to be uncomplicated in nature.",
     "description": {
-      "condition": "myocardial_infarction",
-      "severity": "NSTEMI",
+      "condition": "appendicitis",
+      "severity": "uncomplicated",
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CRP"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider appendicitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: uncomplicated"
+      ]
+    }
+  },
+  {
+    "id": "dx_sepsis_sepsis_elderly_male_052",
+    "ticket": "A 75-year-old male presents to the emergency department with hypotension and altered mental status. Symptoms began 3 days ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be sepsis in nature.",
+    "description": {
+      "condition": "sepsis",
+      "severity": "sepsis",
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "blood_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lactate"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider sepsis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: sepsis"
+      ]
+    }
+  },
+  {
+    "id": "dx_COPD_exacerbation_severe_young_male_095",
+    "ticket": "A 19-year-old male presents to the emergency department with increased sputum and dyspnea. Symptoms began 2 hours ago. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "COPD_exacerbation",
+      "severity": "severe",
       "patient_type": "young_male"
     },
     "evaluation_criteria": {
@@ -2354,14 +3043,14 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "ECG"
+            "test_name": "ABG"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "troponin"
+            "test_name": "chest_xray"
           },
           "compare_args": []
         },
@@ -2378,9 +3067,592 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider myocardial_infarction in differential",
+        "Agent should consider COPD_exacerbation in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: NSTEMI"
+        "Agent should account for severity level: severe"
+      ]
+    }
+  },
+  {
+    "id": "dx_COPD_exacerbation_mild_young_female_090",
+    "ticket": "A 35-year-old female presents to the emergency department with cough and wheezing. Symptoms began 1 week ago. The presentation appears to be mild in nature.",
+    "description": {
+      "condition": "COPD_exacerbation",
+      "severity": "mild",
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider COPD_exacerbation in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: mild"
+      ]
+    }
+  },
+  {
+    "id": "dx_urinary_tract_infection_uncomplicated_pregnant_080",
+    "ticket": "A 42-year-old female presents to the emergency department with urgency, frequency, suprapubic pain and dysuria. Symptoms began 6 hours ago. Past medical history includes pregnancy. The presentation appears to be uncomplicated in nature.",
+    "description": {
+      "condition": "urinary_tract_infection",
+      "severity": "uncomplicated",
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urinalysis"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urine_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider urinary_tract_infection in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: uncomplicated"
+      ]
+    }
+  },
+  {
+    "id": "dx_pancreatitis_mild_middle_age_female_072",
+    "ticket": "A 64-year-old female presents to the emergency department with vomiting, nausea, fever and epigastric pain. Symptoms began 6 hours ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be mild in nature.",
+    "description": {
+      "condition": "pancreatitis",
+      "severity": "mild",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lipase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "amylase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pancreatitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: mild"
+      ]
+    }
+  },
+  {
+    "id": "dx_appendicitis_complicated_pregnant_021",
+    "ticket": "A 39-year-old female presents to the emergency department with fever and anorexia. Symptoms began 6 hours ago. Past medical history includes pregnancy. The presentation appears to be complicated in nature.",
+    "description": {
+      "condition": "appendicitis",
+      "severity": "complicated",
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CRP"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider appendicitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: complicated"
+      ]
+    }
+  },
+  {
+    "id": "dx_gastrointestinal_bleeding_major_middle_age_female_100",
+    "ticket": "A 54-year-old female presents to the emergency department with hematemesis, tachycardia, lightheadedness and melena. Symptoms began 1 week ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be major in nature.",
+    "description": {
+      "condition": "gastrointestinal_bleeding",
+      "severity": "major",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BMP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "coagulation"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider gastrointestinal_bleeding in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: major"
+      ]
+    }
+  },
+  {
+    "id": "dx_heart_failure_NYHA_III_pregnant_064",
+    "ticket": "A 35-year-old female presents to the emergency department with dyspnea and orthopnea. Symptoms began 6 hours ago. Past medical history includes pregnancy. The presentation appears to be NYHA III in nature.",
+    "description": {
+      "condition": "heart_failure",
+      "severity": "NYHA_III",
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BNP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "echocardiogram"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider heart_failure in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: NYHA_III"
+      ]
+    }
+  },
+  {
+    "id": "dx_pneumonia_moderate_young_male_004",
+    "ticket": "A 35-year-old male presents to the emergency department with fever, chest pain and dyspnea. Symptoms began 2 hours ago. The presentation appears to be moderate in nature.",
+    "description": {
+      "condition": "pneumonia",
+      "severity": "moderate",
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "sputum_culture"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pneumonia in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: moderate"
+      ]
+    }
+  },
+  {
+    "id": "dx_COPD_exacerbation_severe_pediatric_094",
+    "ticket": "A 10-year-old male presents to the emergency department with wheezing and dyspnea. Symptoms began 2 hours ago. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "COPD_exacerbation",
+      "severity": "severe",
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider COPD_exacerbation in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: severe"
+      ]
+    }
+  },
+  {
+    "id": "dx_stroke_hemorrhagic_elderly_female_049",
+    "ticket": "A 76-year-old female presents to the emergency department with aphasia, vision loss and facial droop. Symptoms began 1 week ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be hemorrhagic in nature.",
+    "description": {
+      "condition": "stroke",
+      "severity": "hemorrhagic",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_head"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "MRI_brain"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "carotid_doppler"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider stroke in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: hemorrhagic"
+      ]
+    }
+  },
+  {
+    "id": "dx_pancreatitis_severe_middle_age_female_077",
+    "ticket": "A 52-year-old female presents to the emergency department with epigastric pain and fever. Symptoms began 3 days ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "pancreatitis",
+      "severity": "severe",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lipase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "amylase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pancreatitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: severe"
+      ]
+    }
+  },
+  {
+    "id": "dx_pancreatitis_moderately_severe_pediatric_073",
+    "ticket": "A 4-year-old male presents to the emergency department with epigastric pain, nausea, vomiting and fever. Symptoms began 6 hours ago. The presentation appears to be moderately severe in nature.",
+    "description": {
+      "condition": "pancreatitis",
+      "severity": "moderately_severe",
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lipase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "amylase"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pancreatitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: moderately_severe"
       ]
     }
   },
@@ -2438,12 +3710,12 @@
     }
   },
   {
-    "id": "dx_stroke_TIA_middle_age_male_043",
-    "ticket": "A 47-year-old male presents to the emergency department with hemiparesis and facial droop. Symptoms began 2 hours ago. Past medical history includes hypertension, diabetes. The presentation appears to be TIA in nature.",
+    "id": "dx_diabetic_ketoacidosis_mild_pregnant_036",
+    "ticket": "A 42-year-old female presents to the emergency department with polydipsia, Kussmaul breathing and polyuria. Symptoms began 1 day ago. Past medical history includes pregnancy. The presentation appears to be mild in nature.",
     "description": {
-      "condition": "stroke",
-      "severity": "TIA",
-      "patient_type": "middle_age_male"
+      "condition": "diabetic_ketoacidosis",
+      "severity": "mild",
+      "patient_type": "pregnant"
     },
     "evaluation_criteria": {
       "actions": [
@@ -2460,21 +3732,21 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "CT_head"
+            "test_name": "BMP"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "MRI_brain"
+            "test_name": "ABG"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "carotid_doppler"
+            "test_name": "serum_ketones"
           },
           "compare_args": []
         }
@@ -2484,19 +3756,19 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider stroke in differential",
+        "Agent should consider diabetic_ketoacidosis in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: TIA"
+        "Agent should account for severity level: mild"
       ]
     }
   },
   {
-    "id": "dx_pneumonia_mild_young_male_002",
-    "ticket": "A 35-year-old male presents to the emergency department with chest pain and cough. Symptoms began 2 hours ago. The presentation appears to be mild in nature.",
+    "id": "dx_meningitis_moderate_young_female_012",
+    "ticket": "A 23-year-old female presents to the emergency department with neck stiffness, headache, photophobia and fever. Symptoms began 1 day ago. The presentation appears to be moderate in nature.",
     "description": {
-      "condition": "pneumonia",
-      "severity": "mild",
-      "patient_type": "young_male"
+      "condition": "meningitis",
+      "severity": "moderate",
+      "patient_type": "young_female"
     },
     "evaluation_criteria": {
       "actions": [
@@ -2513,7 +3785,14 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "chest_xray"
+            "test_name": "lumbar_puncture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "blood_culture"
           },
           "compare_args": []
         },
@@ -2523,13 +3802,6 @@
             "test_name": "CBC"
           },
           "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "sputum_culture"
-          },
-          "compare_args": []
         }
       ],
       "reward_basis": [
@@ -2537,18 +3809,18 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider pneumonia in differential",
+        "Agent should consider meningitis in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: mild"
+        "Agent should account for severity level: moderate"
       ]
     }
   },
   {
-    "id": "dx_stroke_hemorrhagic_young_male_050",
-    "ticket": "A 34-year-old male presents to the emergency department with facial droop and vision loss. Symptoms began 2 hours ago. The presentation appears to be hemorrhagic in nature.",
+    "id": "dx_pulmonary_embolism_massive_young_male_032",
+    "ticket": "A 24-year-old male presents to the emergency department with pleuritic chest pain, tachycardia, hemoptysis and dyspnea. Symptoms began 3 days ago. The presentation appears to be massive in nature.",
     "description": {
-      "condition": "stroke",
-      "severity": "hemorrhagic",
+      "condition": "pulmonary_embolism",
+      "severity": "massive",
       "patient_type": "young_male"
     },
     "evaluation_criteria": {
@@ -2566,21 +3838,21 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "CT_head"
+            "test_name": "CT_angiography"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "MRI_brain"
+            "test_name": "D-dimer"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "carotid_doppler"
+            "test_name": "ABG"
           },
           "compare_args": []
         }
@@ -2590,9 +3862,168 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider stroke in differential",
+        "Agent should consider pulmonary_embolism in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: hemorrhagic"
+        "Agent should account for severity level: massive"
+      ]
+    }
+  },
+  {
+    "id": "dx_diabetic_ketoacidosis_severe_middle_age_female_042",
+    "ticket": "A 46-year-old female presents to the emergency department with Kussmaul breathing and abdominal pain. Symptoms began 1 week ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "diabetic_ketoacidosis",
+      "severity": "severe",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BMP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "serum_ketones"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider diabetic_ketoacidosis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: severe"
+      ]
+    }
+  },
+  {
+    "id": "dx_urinary_tract_infection_uncomplicated_young_male_081",
+    "ticket": "A 33-year-old male presents to the emergency department with urgency, dysuria and frequency. Symptoms began 1 week ago. The presentation appears to be uncomplicated in nature.",
+    "description": {
+      "condition": "urinary_tract_infection",
+      "severity": "uncomplicated",
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urinalysis"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urine_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider urinary_tract_infection in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: uncomplicated"
+      ]
+    }
+  },
+  {
+    "id": "dx_urinary_tract_infection_complicated_young_female_084",
+    "ticket": "A 22-year-old female presents to the emergency department with suprapubic pain and urgency. Symptoms began 6 hours ago. The presentation appears to be complicated in nature.",
+    "description": {
+      "condition": "urinary_tract_infection",
+      "severity": "complicated",
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urinalysis"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urine_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider urinary_tract_infection in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: complicated"
       ]
     }
   },
@@ -2650,11 +4081,64 @@
     }
   },
   {
-    "id": "dx_appendicitis_complicated_middle_age_female_020",
-    "ticket": "A 53-year-old female presents to the emergency department with fever, RLQ pain, nausea and anorexia. Symptoms began 6 hours ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be complicated in nature.",
+    "id": "dx_heart_failure_NYHA_II_pregnant_062",
+    "ticket": "A 32-year-old female presents to the emergency department with dyspnea and edema. Symptoms began 6 hours ago. Past medical history includes pregnancy. The presentation appears to be NYHA II in nature.",
     "description": {
-      "condition": "appendicitis",
-      "severity": "complicated",
+      "condition": "heart_failure",
+      "severity": "NYHA_II",
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BNP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "echocardiogram"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider heart_failure in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: NYHA_II"
+      ]
+    }
+  },
+  {
+    "id": "dx_heart_failure_NYHA_IV_middle_age_female_069",
+    "ticket": "A 54-year-old female presents to the emergency department with fatigue, orthopnea, edema and dyspnea. Symptoms began 1 week ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be NYHA IV in nature.",
+    "description": {
+      "condition": "heart_failure",
+      "severity": "NYHA_IV",
       "patient_type": "middle_age_female"
     },
     "evaluation_criteria": {
@@ -2672,21 +4156,21 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "CT_abdomen"
+            "test_name": "BNP"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "CBC"
+            "test_name": "echocardiogram"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "CRP"
+            "test_name": "chest_xray"
           },
           "compare_args": []
         }
@@ -2696,9 +4180,168 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider appendicitis in differential",
+        "Agent should consider heart_failure in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: complicated"
+        "Agent should account for severity level: NYHA_IV"
+      ]
+    }
+  },
+  {
+    "id": "dx_urinary_tract_infection_uncomplicated_middle_age_female_079",
+    "ticket": "A 59-year-old female presents to the emergency department with suprapubic pain and urgency. Symptoms began 1 week ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be uncomplicated in nature.",
+    "description": {
+      "condition": "urinary_tract_infection",
+      "severity": "uncomplicated",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urinalysis"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urine_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider urinary_tract_infection in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: uncomplicated"
+      ]
+    }
+  },
+  {
+    "id": "dx_diabetic_ketoacidosis_mild_middle_age_female_035",
+    "ticket": "A 55-year-old female presents to the emergency department with polydipsia and polyuria. Symptoms began 6 hours ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be mild in nature.",
+    "description": {
+      "condition": "diabetic_ketoacidosis",
+      "severity": "mild",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BMP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "serum_ketones"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider diabetic_ketoacidosis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: mild"
+      ]
+    }
+  },
+  {
+    "id": "dx_heart_failure_NYHA_IV_young_male_067",
+    "ticket": "A 18-year-old male presents to the emergency department with orthopnea, fatigue, edema and dyspnea. Symptoms began 1 day ago. The presentation appears to be NYHA IV in nature.",
+    "description": {
+      "condition": "heart_failure",
+      "severity": "NYHA_IV",
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BNP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "echocardiogram"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider heart_failure in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: NYHA_IV"
       ]
     }
   },
@@ -2756,11 +4399,11 @@
     }
   },
   {
-    "id": "dx_pulmonary_embolism_submassive_pediatric_030",
-    "ticket": "A 5-year-old male presents to the emergency department with dyspnea and tachycardia. Symptoms began 2 hours ago. The presentation appears to be submassive in nature.",
+    "id": "dx_COPD_exacerbation_mild_pediatric_089",
+    "ticket": "A 12-year-old male presents to the emergency department with cough, wheezing, dyspnea and increased sputum. Symptoms began 6 hours ago. The presentation appears to be mild in nature.",
     "description": {
-      "condition": "pulmonary_embolism",
-      "severity": "submassive",
+      "condition": "COPD_exacerbation",
+      "severity": "mild",
       "patient_type": "pediatric"
     },
     "evaluation_criteria": {
@@ -2778,21 +4421,21 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "CT_angiography"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "D-dimer"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
             "test_name": "ABG"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
           },
           "compare_args": []
         }
@@ -2802,19 +4445,72 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider pulmonary_embolism in differential",
+        "Agent should consider COPD_exacerbation in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: submassive"
+        "Agent should account for severity level: mild"
       ]
     }
   },
   {
-    "id": "dx_sepsis_sepsis_pediatric_053",
-    "ticket": "A 6-year-old male presents to the emergency department with fever and hypotension. Symptoms began 3 days ago. The presentation appears to be sepsis in nature.",
+    "id": "dx_appendicitis_complicated_middle_age_female_020",
+    "ticket": "A 53-year-old female presents to the emergency department with fever, RLQ pain, nausea and anorexia. Symptoms began 6 hours ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be complicated in nature.",
+    "description": {
+      "condition": "appendicitis",
+      "severity": "complicated",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_abdomen"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CRP"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider appendicitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: complicated"
+      ]
+    }
+  },
+  {
+    "id": "dx_sepsis_septic_shock_elderly_female_059",
+    "ticket": "A 70-year-old female presents to the emergency department with fever, altered mental status and tachycardia. Symptoms began 3 days ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be septic shock in nature.",
     "description": {
       "condition": "sepsis",
-      "severity": "sepsis",
-      "patient_type": "pediatric"
+      "severity": "septic_shock",
+      "patient_type": "elderly_female"
     },
     "evaluation_criteria": {
       "actions": [
@@ -2857,17 +4553,17 @@
       "assertions": [
         "Agent should consider sepsis in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: sepsis"
+        "Agent should account for severity level: septic_shock"
       ]
     }
   },
   {
-    "id": "dx_meningitis_severe_middle_age_female_013",
-    "ticket": "A 46-year-old female presents to the emergency department with headache and neck stiffness. Symptoms began 3 days ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be severe in nature.",
+    "id": "dx_urinary_tract_infection_complicated_pediatric_082",
+    "ticket": "A 6-year-old male presents to the emergency department with dysuria, urgency and frequency. Symptoms began 6 hours ago. The presentation appears to be complicated in nature.",
     "description": {
-      "condition": "meningitis",
-      "severity": "severe",
-      "patient_type": "middle_age_female"
+      "condition": "urinary_tract_infection",
+      "severity": "complicated",
+      "patient_type": "pediatric"
     },
     "evaluation_criteria": {
       "actions": [
@@ -2884,14 +4580,14 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "lumbar_puncture"
+            "test_name": "urinalysis"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "blood_culture"
+            "test_name": "urine_culture"
           },
           "compare_args": []
         },
@@ -2908,18 +4604,18 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider meningitis in differential",
+        "Agent should consider urinary_tract_infection in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: severe"
+        "Agent should account for severity level: complicated"
       ]
     }
   },
   {
-    "id": "dx_meningitis_severe_middle_age_male_015",
-    "ticket": "A 51-year-old male presents to the emergency department with photophobia, neck stiffness, fever and headache. Symptoms began 1 day ago. Past medical history includes hypertension, diabetes. The presentation appears to be severe in nature.",
+    "id": "dx_stroke_ischemic_middle_age_male_047",
+    "ticket": "A 65-year-old male presents to the emergency department with vision loss, aphasia and hemiparesis. Symptoms began 2 hours ago. Past medical history includes hypertension, diabetes. The presentation appears to be ischemic in nature.",
     "description": {
-      "condition": "meningitis",
-      "severity": "severe",
+      "condition": "stroke",
+      "severity": "ischemic",
       "patient_type": "middle_age_male"
     },
     "evaluation_criteria": {
@@ -2937,21 +4633,21 @@
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "lumbar_puncture"
+            "test_name": "CT_head"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "blood_culture"
+            "test_name": "MRI_brain"
           },
           "compare_args": []
         },
         {
           "name": "order_lab_test",
           "arguments": {
-            "test_name": "CBC"
+            "test_name": "carotid_doppler"
           },
           "compare_args": []
         }
@@ -2961,72 +4657,19 @@
         "NL_ASSERTION"
       ],
       "assertions": [
-        "Agent should consider meningitis in differential",
+        "Agent should consider stroke in differential",
         "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: severe"
+        "Agent should account for severity level: ischemic"
       ]
     }
   },
   {
-    "id": "dx_pulmonary_embolism_massive_middle_age_female_031",
-    "ticket": "A 55-year-old female presents to the emergency department with pleuritic chest pain and hemoptysis. Symptoms began 3 days ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be massive in nature.",
-    "description": {
-      "condition": "pulmonary_embolism",
-      "severity": "massive",
-      "patient_type": "middle_age_female"
-    },
-    "evaluation_criteria": {
-      "actions": [
-        {
-          "name": "get_patient_info",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "get_vital_signs",
-          "arguments": {},
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "CT_angiography"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "D-dimer"
-          },
-          "compare_args": []
-        },
-        {
-          "name": "order_lab_test",
-          "arguments": {
-            "test_name": "ABG"
-          },
-          "compare_args": []
-        }
-      ],
-      "reward_basis": [
-        "ACTION",
-        "NL_ASSERTION"
-      ],
-      "assertions": [
-        "Agent should consider pulmonary_embolism in differential",
-        "Agent should order appropriate diagnostic tests",
-        "Agent should account for severity level: massive"
-      ]
-    }
-  },
-  {
-    "id": "dx_sepsis_severe_sepsis_elderly_male_055",
-    "ticket": "A 79-year-old male presents to the emergency department with altered mental status, hypotension, fever and tachycardia. Symptoms began 2 hours ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be severe sepsis in nature.",
+    "id": "dx_sepsis_severe_sepsis_young_female_056",
+    "ticket": "A 22-year-old female presents to the emergency department with fever, tachycardia, altered mental status and hypotension. Symptoms began 6 hours ago. The presentation appears to be severe sepsis in nature.",
     "description": {
       "condition": "sepsis",
       "severity": "severe_sepsis",
-      "patient_type": "elderly_male"
+      "patient_type": "young_female"
     },
     "evaluation_criteria": {
       "actions": [
@@ -3074,12 +4717,171 @@
     }
   },
   {
-    "id": "dx_pneumonia_mild_elderly_female_003",
-    "ticket": "A 67-year-old female presents to the emergency department with fever and dyspnea. Symptoms began 1 week ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be mild in nature.",
+    "id": "dx_meningitis_severe_elderly_female_014",
+    "ticket": "A 73-year-old female presents to the emergency department with neck stiffness and fever. Symptoms began 1 day ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "meningitis",
+      "severity": "severe",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lumbar_puncture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "blood_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider meningitis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: severe"
+      ]
+    }
+  },
+  {
+    "id": "dx_heart_failure_NYHA_II_middle_age_female_063",
+    "ticket": "A 57-year-old female presents to the emergency department with edema, dyspnea and orthopnea. Symptoms began 1 day ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be NYHA II in nature.",
+    "description": {
+      "condition": "heart_failure",
+      "severity": "NYHA_II",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BNP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "echocardiogram"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider heart_failure in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: NYHA_II"
+      ]
+    }
+  },
+  {
+    "id": "dx_sepsis_sepsis_young_female_054",
+    "ticket": "A 26-year-old female presents to the emergency department with fever and tachycardia. Symptoms began 6 hours ago. The presentation appears to be sepsis in nature.",
+    "description": {
+      "condition": "sepsis",
+      "severity": "sepsis",
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "blood_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "lactate"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider sepsis in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: sepsis"
+      ]
+    }
+  },
+  {
+    "id": "dx_pneumonia_mild_young_male_002",
+    "ticket": "A 35-year-old male presents to the emergency department with chest pain and cough. Symptoms began 2 hours ago. The presentation appears to be mild in nature.",
     "description": {
       "condition": "pneumonia",
       "severity": "mild",
-      "patient_type": "elderly_female"
+      "patient_type": "young_male"
     },
     "evaluation_criteria": {
       "actions": [
@@ -3127,12 +4929,330 @@
     }
   },
   {
-    "id": "dx_sepsis_severe_sepsis_young_female_056",
-    "ticket": "A 22-year-old female presents to the emergency department with fever, tachycardia, altered mental status and hypotension. Symptoms began 6 hours ago. The presentation appears to be severe sepsis in nature.",
+    "id": "dx_stroke_TIA_young_male_044",
+    "ticket": "A 25-year-old male presents to the emergency department with hemiparesis, facial droop and vision loss. Symptoms began 1 week ago. The presentation appears to be TIA in nature.",
+    "description": {
+      "condition": "stroke",
+      "severity": "TIA",
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_head"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "MRI_brain"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "carotid_doppler"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider stroke in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: TIA"
+      ]
+    }
+  },
+  {
+    "id": "dx_urinary_tract_infection_complicated_elderly_female_083",
+    "ticket": "A 73-year-old female presents to the emergency department with urgency, suprapubic pain and dysuria. Symptoms began 6 hours ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be complicated in nature.",
+    "description": {
+      "condition": "urinary_tract_infection",
+      "severity": "complicated",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urinalysis"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urine_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider urinary_tract_infection in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: complicated"
+      ]
+    }
+  },
+  {
+    "id": "dx_heart_failure_NYHA_III_elderly_female_065",
+    "ticket": "A 83-year-old female presents to the emergency department with dyspnea, fatigue and orthopnea. Symptoms began 1 day ago. Past medical history includes osteoporosis, hypertension, heart_failure. The presentation appears to be NYHA III in nature.",
+    "description": {
+      "condition": "heart_failure",
+      "severity": "NYHA_III",
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "BNP"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "echocardiogram"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider heart_failure in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: NYHA_III"
+      ]
+    }
+  },
+  {
+    "id": "dx_pneumonia_severe_middle_age_male_009",
+    "ticket": "A 56-year-old male presents to the emergency department with fever, dyspnea, cough and chest pain. Symptoms began 6 hours ago. Past medical history includes hypertension, diabetes. The presentation appears to be severe in nature.",
+    "description": {
+      "condition": "pneumonia",
+      "severity": "severe",
+      "patient_type": "middle_age_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "chest_xray"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "sputum_culture"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider pneumonia in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: severe"
+      ]
+    }
+  },
+  {
+    "id": "dx_stroke_ischemic_young_female_048",
+    "ticket": "A 32-year-old female presents to the emergency department with hemiparesis, vision loss, facial droop and aphasia. Symptoms began 6 hours ago. The presentation appears to be ischemic in nature.",
+    "description": {
+      "condition": "stroke",
+      "severity": "ischemic",
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CT_head"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "MRI_brain"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "carotid_doppler"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider stroke in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: ischemic"
+      ]
+    }
+  },
+  {
+    "id": "dx_urinary_tract_infection_pyelonephritis_middle_age_female_085",
+    "ticket": "A 58-year-old female presents to the emergency department with suprapubic pain, frequency and dysuria. Symptoms began 6 hours ago. Past medical history includes obesity, hypothyroidism. The presentation appears to be pyelonephritis in nature.",
+    "description": {
+      "condition": "urinary_tract_infection",
+      "severity": "pyelonephritis",
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urinalysis"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "urine_culture"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "order_lab_test",
+          "arguments": {
+            "test_name": "CBC"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider urinary_tract_infection in differential",
+        "Agent should order appropriate diagnostic tests",
+        "Agent should account for severity level: pyelonephritis"
+      ]
+    }
+  },
+  {
+    "id": "dx_sepsis_severe_sepsis_elderly_male_055",
+    "ticket": "A 79-year-old male presents to the emergency department with altered mental status, hypotension, fever and tachycardia. Symptoms began 2 hours ago. Past medical history includes COPD, atrial_fibrillation, CKD. The presentation appears to be severe sepsis in nature.",
     "description": {
       "condition": "sepsis",
       "severity": "severe_sepsis",
-      "patient_type": "young_female"
+      "patient_type": "elderly_male"
     },
     "evaluation_criteria": {
       "actions": [

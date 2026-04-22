@@ -1,0 +1,670 @@
+tools:
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: think
+      description: Internal reasoning tool. Use to think through complex medical questions
+        before answering.
+      parameters:
+        type: object
+        properties:
+          thought:
+            type: string
+            description: Your reasoning process
+        required:
+        - thought
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: submit_answer
+      description: Submit your final answer to the medical question.
+      parameters:
+        type: object
+        properties:
+          answer:
+            type: string
+            description: Your answer
+          reasoning:
+            type: string
+            description: Brief explanation
+        required:
+        - answer
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: search_pubmed
+      description: Search medical literature, encyclopedias, and textbooks.
+      parameters:
+        type: object
+        properties:
+          query:
+            type: string
+            description: Search query
+          source:
+            type: string
+            description: Source to search (default all)
+            enum:
+            - pubmed
+            - wiki
+            - textbook
+            - all
+          max_results:
+            type: integer
+            description: Maximum number of results to return (default 5)
+        required:
+        - query
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: search_medical_wiki
+      description: Search medical encyclopedias and wiki resources.
+      parameters:
+        type: object
+        properties:
+          query:
+            type: string
+            description: Search query
+          max_results:
+            type: integer
+            description: Maximum number of results to return (default 5)
+        required:
+        - query
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: search_medical_literature
+      description: Search medical literature and research articles.
+      parameters:
+        type: object
+        properties:
+          query:
+            type: string
+            description: Search query
+          max_results:
+            type: integer
+            description: Maximum number of results to return (default 5)
+        required:
+        - query
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: retrieve_evidence
+      description: Retrieve and summarize evidence from multiple sources for a clinical question.
+      parameters:
+        type: object
+        properties:
+          query:
+            type: string
+            description: Clinical question to summarize evidence for
+          max_results:
+            type: integer
+            description: Maximum number of sources to summarize
+        required:
+        - query
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: analyze_answer_options
+      description: Analyze given answer options against the knowledge base to find
+        supporting evidence.
+      parameters:
+        type: object
+        properties:
+          question:
+            type: string
+            description: The medical question
+          options:
+            type: string
+            description: The answer options to analyze
+        required:
+        - question
+        - options
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: get_differential_diagnosis
+      description: Generate differential diagnosis for a symptom complex.
+      parameters:
+        type: object
+        properties:
+          symptoms:
+            type: string
+            description: Symptom complex to generate differentials for
+        required:
+        - symptoms
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: check_diagnostic_criteria
+      description: Look up standard diagnostic criteria for a medical condition.
+      parameters:
+        type: object
+        properties:
+          condition:
+            type: string
+            description: Medical condition to look up criteria for
+        required:
+        - condition
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: compare_treatments
+      description: Compare treatment options for a medical condition.
+      parameters:
+        type: object
+        properties:
+          condition:
+            type: string
+            description: Medical condition
+          treatment1:
+            type: string
+            description: First treatment option
+          treatment2:
+            type: string
+            description: Second treatment option
+        required:
+        - condition
+        - treatment1
+        - treatment2
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: get_drug_info
+      description: Get comprehensive drug information including mechanism, indications,
+        side effects, pharmacokinetics, dosing, and monitoring. Replaces get_drug_info,
+        get_drug_information, get_pharmacokinetics, check_dosage, search_drugs_by_class,
+        check_therapeutic_drug_monitoring.
+      parameters:
+        type: object
+        properties:
+          drug_name:
+            type: string
+            description: Name of the drug
+          aspect:
+            type: string
+            description: Specific aspect to retrieve (default overview)
+            enum:
+            - overview
+            - pharmacokinetics
+            - dosing
+            - monitoring
+            - class
+        required:
+        - drug_name
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: check_interaction
+      description: Check for drug-drug, drug-food, and CYP450 interactions.
+      parameters:
+        type: object
+        properties:
+          drug1:
+            type: string
+            description: First drug name
+          drug2:
+            type: string
+            description: Second drug, omit to check all interactions for drug1
+          patient_id:
+            type: string
+            description: Patient identifier for context-aware interaction checking
+        required:
+        - drug1
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: check_medication_safety
+      description: Check medication safety including pregnancy, allergies, renal/hepatic
+        adjustments, and alternatives. Replaces check_medication_safety, check_pregnancy_safety,
+        check_allergies, search_alternatives, calculate_renal_dose_adjustment,
+        calculate_hepatic_dose_adjustment.
+      parameters:
+        type: object
+        properties:
+          drug_name:
+            type: string
+            description: Name of the drug
+          patient_id:
+            type: string
+            description: Patient identifier
+          check_type:
+            type: string
+            description: Type of safety check
+            enum:
+            - general
+            - pregnancy
+            - renal
+            - hepatic
+            - alternatives
+        required:
+        - drug_name
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: get_patient_info
+      description: Get patient information including demographics, medical history,
+        medications, allergies, social history, and specialty-specific history. Replaces
+        get_patient_info, get_patient_history, get_patient_presentation, get_patient_summary,
+        get_patient_context, get_patient_medications, get_medical_history,
+        get_current_medications, get_social_history, get_allergy_list,
+        get_immunization_history, get_psychiatric_history, get_obstetric_history.
+      parameters:
+        type: object
+        properties:
+          patient_id:
+            type: string
+            description: Patient identifier
+          aspect:
+            type: string
+            description: Specific aspect (default demographics)
+            enum:
+            - demographics
+            - history
+            - medications
+            - allergies
+            - social
+            - psychiatric
+            - obstetric
+            - immunizations
+            - summary
+        required:
+        - patient_id
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: get_patient_records
+      description: Get clinical records including notes, admissions, discharge summaries,
+        procedures, and code status. Replaces get_clinical_notes, get_admission_history,
+        get_admission_info, get_discharge_summary, get_nursing_assessments,
+        get_code_status, get_procedures, get_quality_indicators, get_medication_orders.
+      parameters:
+        type: object
+        properties:
+          patient_id:
+            type: string
+            description: Patient identifier
+          record_type:
+            type: string
+            description: Type of record to retrieve (default notes)
+            enum:
+            - notes
+            - admissions
+            - discharge
+            - procedures
+            - medications
+            - nursing
+            - code_status
+        required:
+        - patient_id
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: get_vital_signs
+      description: Get vital signs including current readings, trends, and abnormal
+        alerts. Replaces get_vital_signs, get_vital_signs_trend, detect_vital_alerts.
+      parameters:
+        type: object
+        properties:
+          patient_id:
+            type: string
+            description: Patient identifier
+          include_trend:
+            type: boolean
+            description: Include trend data (default false)
+        required:
+        - patient_id
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: get_lab_results
+      description: Get laboratory results, trends, and prenatal labs. Replaces
+        get_lab_results, get_lab_trend, get_prenatal_labs.
+      parameters:
+        type: object
+        properties:
+          patient_id:
+            type: string
+            description: Patient identifier
+          category:
+            type: string
+            description: Filter by lab category
+          include_trend:
+            type: boolean
+            description: Include trend data
+        required:
+        - patient_id
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: order_test
+      description: Order laboratory tests or imaging studies. Replaces order_lab_test,
+        order_labs, order_stat_labs, order_imaging.
+      parameters:
+        type: object
+        properties:
+          patient_id:
+            type: string
+            description: Patient identifier
+          test_type:
+            type: string
+            description: Name of lab test or imaging study
+          urgency:
+            type: string
+            description: Urgency level (default routine)
+            enum:
+            - routine
+            - stat
+          reason:
+            type: string
+            description: Clinical reason for ordering
+        required:
+        - patient_id
+        - test_type
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: analyze_medical_image
+      description: Analyze a medical image including findings, classification, quality
+        assessment, measurements, and annotations. Replaces analyze_medical_image,
+        classify_finding, assess_image_quality, calculate_image_metrics,
+        annotate_regions, measure_lesion, track_lesion_changes.
+      parameters:
+        type: object
+        properties:
+          image_id:
+            type: string
+            description: Identifier of the medical image
+          analysis_type:
+            type: string
+            description: Type of analysis to perform (default findings)
+            enum:
+            - findings
+            - classify
+            - quality
+            - metrics
+            - measure
+            - annotate
+            - track
+        required:
+        - image_id
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: get_image_report
+      description: Get the full radiology or pathology report for a medical image.
+      parameters:
+        type: object
+        properties:
+          image_id:
+            type: string
+            description: Identifier of the medical image
+        required:
+        - image_id
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: search_imaging_knowledge
+      description: Search imaging knowledge base, find similar cases, compare with
+        prior studies, and generate visual differentials. Replaces search_imaging_knowledge,
+        search_similar_cases, compare_with_prior, get_differential_visual,
+        record_visual_diagnosis.
+      parameters:
+        type: object
+        properties:
+          query:
+            type: string
+            description: Search query
+          search_type:
+            type: string
+            description: Type of search (default knowledge)
+            enum:
+            - knowledge
+            - similar_cases
+            - compare_prior
+            - differential
+          max_results:
+            type: integer
+            description: Maximum number of results to return
+        required:
+        - query
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: calculate_clinical_score
+      description: Calculate any clinical score or risk assessment. Replaces all
+        calculate_* tools (CURB-65, Wells, CHA2DS2-VASc, MELD, APACHE II, GCS, ESI,
+        SIRS, qSOFA, HEART, trauma, BMI, Bishop, readmission risk, gestational age,
+        modified BPP).
+      parameters:
+        type: object
+        properties:
+          score_name:
+            type: string
+            description: Name of the score e.g. curb65, wells_pe, gcs, bmi
+          patient_id:
+            type: string
+            description: Patient identifier
+        required:
+        - score_name
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: search_clinical_guidelines
+      description: Search clinical guidelines, treatment protocols, emergency protocols,
+        and ICD codes. Replaces search_clinical_guidelines, review_treatment_guidelines,
+        check_protocol, check_ob_protocol, lookup_icd_code.
+      parameters:
+        type: object
+        properties:
+          query:
+            type: string
+            description: Search query
+          guideline_type:
+            type: string
+            description: Type of guideline (default treatment)
+            enum:
+            - treatment
+            - protocol
+            - emergency
+            - icd_code
+        required:
+        - query
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: record_clinical_action
+      description: Record diagnoses, clinical notes, prescriptions, orders, and
+        consultations. Replaces record_diagnosis, add_clinical_note, write_clinical_note,
+        prescribe_medication, place_order, request_consult, transfer_to_specialist,
+        record_visual_diagnosis, activate_emergency_protocol.
+      parameters:
+        type: object
+        properties:
+          action_type:
+            type: string
+            description: Type of clinical action
+            enum:
+            - diagnosis
+            - note
+            - prescription
+            - order
+            - consult
+            - emergency
+          details:
+            type: string
+            description: Action details in structured format
+          patient_id:
+            type: string
+            description: Patient identifier
+        required:
+        - action_type
+        - details
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: perform_assessment
+      description: Perform clinical screening and assessments including mental status,
+        suicide risk, substance use, capacity, and specialty assessments. Replaces
+        perform_mental_status_exam, assess_suicide_risk, assess_violence_risk,
+        screen_substance_use, screen_eating_disorder, assess_capacity,
+        administer_phq9, administer_gad7, administer_mmse, administer_pcl5,
+        administer_cage, screen_sepsis, screen_gestational_diabetes, check_rh_status,
+        assess_preterm_risk, get_involuntary_hold_criteria.
+      parameters:
+        type: object
+        properties:
+          assessment_type:
+            type: string
+            description: Type of assessment e.g. mental_status, phq9, suicide_risk,
+              sepsis, gcs
+          patient_id:
+            type: string
+            description: Patient identifier
+        required:
+        - assessment_type
+        - patient_id
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: assess_obstetric_status
+      description: Assess obstetric and fetal status including labor progress, fetal
+        monitoring, and biophysical profiles. Replaces assess_fetal_status,
+        assess_labor_progress, get_biophysical_profile, interpret_ctg,
+        assess_preterm_risk, calculate_modified_bpp, get_gyn_assessment,
+        get_risk_assessment.
+      parameters:
+        type: object
+        properties:
+          patient_id:
+            type: string
+            description: Patient identifier
+          assessment_type:
+            type: string
+            description: Type of obstetric assessment (default fetal)
+            enum:
+            - fetal
+            - labor
+            - biophysical
+            - ctg
+            - risk
+            - gyn
+        required:
+        - patient_id
+- class_name: bioagents_tool.BIOAgentsMedicalTool
+  config:
+    type: native
+    domain: medical_qa
+  tool_schema:
+    type: function
+    function:
+      name: get_ed_status
+      description: Get Emergency Department operational status including bed availability
+        and wait times.
+      parameters:
+        type: object
+        properties: {}
+        required: []

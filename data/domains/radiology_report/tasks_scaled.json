@@ -1,0 +1,1206 @@
+[
+  {
+    "id": "rad_ct_lung_mass_015",
+    "ticket": "CT scan chest for a 29-year-old male. Study ID: RAD_GEN_015. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_015",
+    "description": {
+      "modality": "CT",
+      "body_part": "chest",
+      "finding": "lung_mass"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify lung mass",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_mri_multiple_sclerosis_018",
+    "ticket": "MRI brain for a 20-year-old female. Study ID: RAD_GEN_018. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_018",
+    "description": {
+      "modality": "MRI",
+      "body_part": "brain",
+      "finding": "multiple_sclerosis"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify multiple sclerosis",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_ct_hemorrhagic_stroke_007",
+    "ticket": "CT scan head for a 76-year-old female. Study ID: RAD_GEN_007. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_007",
+    "description": {
+      "modality": "CT",
+      "body_part": "head",
+      "finding": "hemorrhagic_stroke"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify hemorrhagic stroke",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_xr_pneumonia_001",
+    "ticket": "X-ray chest for a 5-year-old male. Study ID: RAD_GEN_001. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_001",
+    "description": {
+      "modality": "XR",
+      "body_part": "chest",
+      "finding": "pneumonia"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify pneumonia",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_ct_mediastinal_mass_016",
+    "ticket": "CT scan chest for a 79-year-old female. Study ID: RAD_GEN_016. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_016",
+    "description": {
+      "modality": "CT",
+      "body_part": "chest",
+      "finding": "mediastinal_mass"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify mediastinal mass",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_mri_abscess_019",
+    "ticket": "MRI brain for a 77-year-old male. Study ID: RAD_GEN_019. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_019",
+    "description": {
+      "modality": "MRI",
+      "body_part": "brain",
+      "finding": "abscess"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify abscess",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_mri_spinal_stenosis_021",
+    "ticket": "MRI spine for a 38-year-old female. Study ID: RAD_GEN_021. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_021",
+    "description": {
+      "modality": "MRI",
+      "body_part": "spine",
+      "finding": "spinal_stenosis"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify spinal stenosis",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_xr_pneumothorax_003",
+    "ticket": "X-ray chest for a 48-year-old female. Study ID: RAD_GEN_003. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_003",
+    "description": {
+      "modality": "XR",
+      "body_part": "chest",
+      "finding": "pneumothorax"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify pneumothorax",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_ct_pancreatitis_013",
+    "ticket": "CT scan abdomen for a 49-year-old female. Study ID: RAD_GEN_013. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_013",
+    "description": {
+      "modality": "CT",
+      "body_part": "abdomen",
+      "finding": "pancreatitis"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify pancreatitis",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_ct_normal_009",
+    "ticket": "CT scan head for a 74-year-old male. Study ID: RAD_GEN_009. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_009",
+    "description": {
+      "modality": "CT",
+      "body_part": "head",
+      "finding": "normal"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify normal",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_mri_disc_herniation_020",
+    "ticket": "MRI spine for a 10-year-old male. Study ID: RAD_GEN_020. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_020",
+    "description": {
+      "modality": "MRI",
+      "body_part": "spine",
+      "finding": "disc_herniation"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify disc herniation",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_mg_mass_suspicious_026",
+    "ticket": "Mammogram breast for a 69-year-old female. Study ID: RAD_GEN_026. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_026",
+    "description": {
+      "modality": "MG",
+      "body_part": "breast",
+      "finding": "mass_suspicious"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify mass suspicious",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_us_liver_mass_024",
+    "ticket": "Ultrasound abdomen for a 32-year-old female. Study ID: RAD_GEN_024. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_024",
+    "description": {
+      "modality": "US",
+      "body_part": "abdomen",
+      "finding": "liver_mass"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify liver mass",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_mg_calcifications_027",
+    "ticket": "Mammogram breast for a 49-year-old male. Study ID: RAD_GEN_027. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_027",
+    "description": {
+      "modality": "MG",
+      "body_part": "breast",
+      "finding": "calcifications"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify calcifications",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_ct_pulmonary_embolism_014",
+    "ticket": "CT scan chest for a 60-year-old female. Study ID: RAD_GEN_014. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_014",
+    "description": {
+      "modality": "CT",
+      "body_part": "chest",
+      "finding": "pulmonary_embolism"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify pulmonary embolism",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_us_cholecystitis_023",
+    "ticket": "Ultrasound abdomen for a 85-year-old female. Study ID: RAD_GEN_023. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_023",
+    "description": {
+      "modality": "US",
+      "body_part": "abdomen",
+      "finding": "cholecystitis"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify cholecystitis",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_us_aortic_aneurysm_025",
+    "ticket": "Ultrasound abdomen for a 12-year-old male. Study ID: RAD_GEN_025. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_025",
+    "description": {
+      "modality": "US",
+      "body_part": "abdomen",
+      "finding": "aortic_aneurysm"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify aortic aneurysm",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_ct_renal_stone_012",
+    "ticket": "CT scan abdomen for a 48-year-old female. Study ID: RAD_GEN_012. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_012",
+    "description": {
+      "modality": "CT",
+      "body_part": "abdomen",
+      "finding": "renal_stone"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify renal stone",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_ct_subdural_hematoma_008",
+    "ticket": "CT scan head for a 35-year-old female. Study ID: RAD_GEN_008. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_008",
+    "description": {
+      "modality": "CT",
+      "body_part": "head",
+      "finding": "subdural_hematoma"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify subdural hematoma",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_ct_bowel_obstruction_011",
+    "ticket": "CT scan abdomen for a 56-year-old male. Study ID: RAD_GEN_011. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_011",
+    "description": {
+      "modality": "CT",
+      "body_part": "abdomen",
+      "finding": "bowel_obstruction"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify bowel obstruction",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_mri_cord_compression_022",
+    "ticket": "MRI spine for a 22-year-old female. Study ID: RAD_GEN_022. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_022",
+    "description": {
+      "modality": "MRI",
+      "body_part": "spine",
+      "finding": "cord_compression"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify cord compression",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_ct_ischemic_stroke_006",
+    "ticket": "CT scan head for a 3-year-old male. Study ID: RAD_GEN_006. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_006",
+    "description": {
+      "modality": "CT",
+      "body_part": "head",
+      "finding": "ischemic_stroke"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify ischemic stroke",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_ct_appendicitis_010",
+    "ticket": "CT scan abdomen for a 65-year-old male. Study ID: RAD_GEN_010. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_010",
+    "description": {
+      "modality": "CT",
+      "body_part": "abdomen",
+      "finding": "appendicitis"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify appendicitis",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_xr_normal_005",
+    "ticket": "X-ray chest for a 4-year-old male. Study ID: RAD_GEN_005. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_005",
+    "description": {
+      "modality": "XR",
+      "body_part": "chest",
+      "finding": "normal"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify normal",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_mri_brain_tumor_017",
+    "ticket": "MRI brain for a 64-year-old male. Study ID: RAD_GEN_017. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_017",
+    "description": {
+      "modality": "MRI",
+      "body_part": "brain",
+      "finding": "brain_tumor"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify brain tumor",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_xr_cardiomegaly_004",
+    "ticket": "X-ray chest for a 47-year-old male. Study ID: RAD_GEN_004. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_004",
+    "description": {
+      "modality": "XR",
+      "body_part": "chest",
+      "finding": "cardiomegaly"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify cardiomegaly",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_xr_pleural_effusion_002",
+    "ticket": "X-ray chest for a 80-year-old male. Study ID: RAD_GEN_002. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_002",
+    "description": {
+      "modality": "XR",
+      "body_part": "chest",
+      "finding": "pleural_effusion"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify pleural effusion",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "rad_mg_normal_028",
+    "ticket": "Mammogram breast for a 41-year-old female. Study ID: RAD_GEN_028. Generate a complete structured radiology report.",
+    "study_id": "RAD_GEN_028",
+    "description": {
+      "modality": "MG",
+      "body_part": "breast",
+      "finding": "normal"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_study_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_clinical_history",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "analyze_findings",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_report_template",
+          "arguments": {},
+          "compare_args": []
+        }
+      ],
+      "nl_assertions": [
+        "Report should identify normal",
+        "Report follows structured format (indication, technique, findings, impression)",
+        "Report includes comparison with prior if available"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  }
+]

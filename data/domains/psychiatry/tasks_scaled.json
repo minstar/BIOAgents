@@ -1,0 +1,3521 @@
+[
+  {
+    "id": "psych_mcqa_PTSD_079",
+    "ticket": "A 17-year-old male presents with nightmares, hypervigilance, avoidance of trauma reminders, emotional numbness after combat 6 months ago. Which of the following is the MOST likely diagnosis?",
+    "options": {
+      "A": "TBI",
+      "B": "major depression",
+      "C": "Ptsd",
+      "D": "adjustment disorder",
+      "E": "acute stress disorder"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_anorexia_nervosa_recently_widowed_048",
+    "ticket": "A 68-year-old female (recently widowed) presents with 17yo male, significant weight loss, food rituals, purging behavior, dental erosion. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. Key assessments: eating_disorder, mental_status, suicide_risk. First-line treatment: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia_nervosa",
+      "patient_type": "recently widowed",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider anorexia nervosa as primary diagnosis",
+        "Agent should assess for eating_disorder, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_generalized_anxiety_disorder_068",
+    "ticket": "A 21-year-old male presents with excessive worry about multiple domains for 8 months, muscle tension, restlessness, difficulty sleeping. Which condition should be ruled out FIRST in the differential diagnosis?",
+    "options": {
+      "A": "hyperthyroidism",
+      "B": "PTSD",
+      "C": "none of the above",
+      "D": "caffeine excess",
+      "E": "panic disorder"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_ADHD_adult_100",
+    "ticket": "A 19-year-old female presents with chronic procrastination, job changes, relationship difficulties, childhood history of hyperactivity. Which condition should be ruled out FIRST in the differential diagnosis?",
+    "options": {
+      "A": "none of the above",
+      "B": "thyroid dysfunction",
+      "C": "anxiety disorder",
+      "D": "bipolar disorder",
+      "E": "sleep disorder"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD_adult",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_ADHD_adult_098",
+    "ticket": "A 62-year-old male presents with lifelong difficulty concentrating, loses items frequently, poor time management, impulsivity. Which screening instrument is MOST appropriate for this patient's presentation?",
+    "options": {
+      "A": "MDQ",
+      "B": "DAST-10",
+      "C": "CAGE",
+      "D": "AUDIT-C",
+      "E": "MENTAL-STATUS"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD_adult",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_alcohol_use_disorder_professional_035",
+    "ticket": "A 42-year-old male (professional) presents with daily drinking 12 beers, neglecting responsibilities, failed attempts to cut down. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. Key assessments: cage, mental_status, suicide_risk. First-line treatment: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol_use_disorder",
+      "patient_type": "professional",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider alcohol use disorder as primary diagnosis",
+        "Agent should assess for cage, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_generalized_anxiety_disorder_college_student_010",
+    "ticket": "A 22-year-old male (college student) presents with persistent anxiety, irritability, fatigue, difficulty concentrating for over a year. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: generalized anxiety disorder. Key assessments: gad7, mental_status, substance_use. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider generalized anxiety disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_ADHD_adult_retired_veteran_059",
+    "ticket": "A 65-year-old male (retired veteran) presents with cannot focus in meetings, forgetful, starts many projects but finishes none, restlessness. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: ADHD adult. Key assessments: mental_status, substance_use, phq9. First-line treatment: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD_adult",
+      "patient_type": "retired veteran",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider ADHD adult as primary diagnosis",
+        "Agent should assess for mental_status, substance_use, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_bipolar_disorder_type_1_recently_widowed_024",
+    "ticket": "A 56-year-old female (recently widowed) presents with irritability, psychomotor agitation, flight of ideas, decreased sleep for 10 days. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: bipolar disorder type 1. Key assessments: mental_status, suicide_risk, substance_use. First-line treatment: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar_disorder_type_1",
+      "patient_type": "recently widowed",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider bipolar disorder type 1 as primary diagnosis",
+        "Agent should assess for mental_status, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_PTSD_working_mother_027",
+    "ticket": "A 33-year-old female (working mother) presents with flashbacks, startle response, insomnia, irritability following sexual assault 1 year ago. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: PTSD. Key assessments: pcl5, suicide_risk, substance_use. First-line treatment: CPT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider PTSD as primary diagnosis",
+        "Agent should assess for pcl5, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_schizophrenia_072",
+    "ticket": "A 15-year-old male presents with auditory hallucinations, paranoid delusions, social withdrawal, flat affect for 8 months. Which condition should be ruled out FIRST in the differential diagnosis?",
+    "options": {
+      "A": "none of the above",
+      "B": "substance-induced psychosis",
+      "C": "brief psychotic disorder",
+      "D": "delusional disorder",
+      "E": "schizoaffective disorder"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_generalized_anxiety_disorder_high_school_student_012",
+    "ticket": "A 17-year-old male (high school student) presents with chronic worry, GI complaints, palpitations, tension headaches for 6 months. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: generalized anxiety disorder. Key assessments: gad7, mental_status, substance_use. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider generalized anxiety disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_major_depressive_disorder_063",
+    "ticket": "A 30-year-old male presents with crying spells, insomnia for 6 weeks, difficulty at work, loss of interest in hobbies. Which of the following is the MOST likely diagnosis?",
+    "options": {
+      "A": "bipolar disorder",
+      "B": "substance use",
+      "C": "Major Depressive Disorder",
+      "D": "hypothyroidism",
+      "E": "adjustment disorder"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_major_depressive_disorder_064",
+    "ticket": "A 64-year-old female presents with depressed mood for 3 weeks, anhedonia, insomnia, poor concentration, weight loss. Which condition should be ruled out FIRST in the differential diagnosis?",
+    "options": {
+      "A": "substance use",
+      "B": "none of the above",
+      "C": "hypothyroidism",
+      "D": "adjustment disorder",
+      "E": "bipolar disorder"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_major_depressive_disorder_college_student_004",
+    "ticket": "A 19-year-old male (college student) presents with fatigue, hopelessness, guilt, decreased appetite for 1 month, withdrew from social activities. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: major depressive disorder. Key assessments: phq9, suicide_risk, mental_status. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider major depressive disorder as primary diagnosis",
+        "Agent should assess for phq9, suicide_risk, mental_status"
+      ]
+    }
+  },
+  {
+    "id": "psych_schizophrenia_professional_018",
+    "ticket": "A 38-year-old male (professional) presents with persecutory delusions, thought broadcasting, deteriorating self-care for 6 months. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. Key assessments: mental_status, mmse, capacity. First-line treatment: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "patient_type": "professional",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "capacity"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider schizophrenia as primary diagnosis",
+        "Agent should assess for mental_status, mmse, capacity"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_alcohol_use_disorder_084",
+    "ticket": "A 15-year-old male presents with daily drinking 12 beers, neglecting responsibilities, failed attempts to cut down. Which condition should be ruled out FIRST in the differential diagnosis?",
+    "options": {
+      "A": "none of the above",
+      "B": "other substance use",
+      "C": "liver disease",
+      "D": "depression",
+      "E": "anxiety disorder"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol_use_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_schizophrenia_recently_widowed_013",
+    "ticket": "A 59-year-old female (recently widowed) presents with auditory hallucinations, paranoid delusions, social withdrawal, flat affect for 8 months. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. Key assessments: mental_status, mmse, capacity. First-line treatment: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "patient_type": "recently widowed",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "capacity"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider schizophrenia as primary diagnosis",
+        "Agent should assess for mental_status, mmse, capacity"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_alcohol_use_disorder_081",
+    "ticket": "A 19-year-old female presents with drinking escalated over 2 years, morning tremors, missed work, family complaints. What is the MOST appropriate initial pharmacotherapy for this patient?",
+    "options": {
+      "A": "acamprosate",
+      "B": "motivational interviewing",
+      "C": "disulfiram",
+      "D": "observation only",
+      "E": "naltrexone"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol_use_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_schizophrenia_070",
+    "ticket": "A 57-year-old female presents with persecutory delusions, thought broadcasting, deteriorating self-care for 6 months. Which screening instrument is MOST appropriate for this patient's presentation?",
+    "options": {
+      "A": "MENTAL-STATUS",
+      "B": "MDQ",
+      "C": "CAGE",
+      "D": "DAST-10",
+      "E": "AUDIT-C"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_ADHD_adult_097",
+    "ticket": "A 14-year-old male presents with chronic procrastination, job changes, relationship difficulties, childhood history of hyperactivity. What is the MOST appropriate initial pharmacotherapy for this patient?",
+    "options": {
+      "A": "methylphenidate",
+      "B": "atomoxetine",
+      "C": "behavioral strategies",
+      "D": "observation only",
+      "E": "amphetamine salts"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD_adult",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_alcohol_use_disorder_professional_032",
+    "ticket": "A 38-year-old male (professional) presents with drinking escalated over 2 years, morning tremors, missed work, family complaints. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. Key assessments: cage, mental_status, suicide_risk. First-line treatment: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol_use_disorder",
+      "patient_type": "professional",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider alcohol use disorder as primary diagnosis",
+        "Agent should assess for cage, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_major_depressive_disorder_working_mother_003",
+    "ticket": "A 33-year-old female (working mother) presents with fatigue, hopelessness, guilt, decreased appetite for 1 month, withdrew from social activities. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: major depressive disorder. Key assessments: phq9, suicide_risk, mental_status. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider major depressive disorder as primary diagnosis",
+        "Agent should assess for phq9, suicide_risk, mental_status"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_major_depressive_disorder_062",
+    "ticket": "A 33-year-old male presents with crying spells, insomnia for 6 weeks, difficulty at work, loss of interest in hobbies. Which screening instrument is MOST appropriate for this patient's presentation?",
+    "options": {
+      "A": "MDQ",
+      "B": "CAGE",
+      "C": "PHQ9",
+      "D": "AUDIT-C",
+      "E": "DAST-10"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_alcohol_use_disorder_retired_veteran_034",
+    "ticket": "A 62-year-old male (retired veteran) presents with blackouts, withdrawal seizure history, drinking to avoid shaking, liver enzyme elevation. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. Key assessments: cage, mental_status, suicide_risk. First-line treatment: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol_use_disorder",
+      "patient_type": "retired veteran",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider alcohol use disorder as primary diagnosis",
+        "Agent should assess for cage, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_generalized_anxiety_disorder_college_student_008",
+    "ticket": "A 21-year-old male (college student) presents with excessive worry about multiple domains for 8 months, muscle tension, restlessness, difficulty sleeping. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: generalized anxiety disorder. Key assessments: gad7, mental_status, substance_use. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider generalized anxiety disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_major_depressive_disorder_college_student_002",
+    "ticket": "A 21-year-old female (college student) presents with depressed mood for 3 weeks, anhedonia, insomnia, poor concentration, weight loss. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: major depressive disorder. Key assessments: phq9, suicide_risk, mental_status. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider major depressive disorder as primary diagnosis",
+        "Agent should assess for phq9, suicide_risk, mental_status"
+      ]
+    }
+  },
+  {
+    "id": "psych_ADHD_adult_retired_veteran_057",
+    "ticket": "A 55-year-old male (retired veteran) presents with chronic procrastination, job changes, relationship difficulties, childhood history of hyperactivity. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: ADHD adult. Key assessments: mental_status, substance_use, phq9. First-line treatment: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD_adult",
+      "patient_type": "retired veteran",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider ADHD adult as primary diagnosis",
+        "Agent should assess for mental_status, substance_use, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_major_depressive_disorder_high_school_student_005",
+    "ticket": "A 14-year-old male (high school student) presents with crying spells, insomnia for 6 weeks, difficulty at work, loss of interest in hobbies. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: major depressive disorder. Key assessments: phq9, suicide_risk, mental_status. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider major depressive disorder as primary diagnosis",
+        "Agent should assess for phq9, suicide_risk, mental_status"
+      ]
+    }
+  },
+  {
+    "id": "psych_generalized_anxiety_disorder_working_mother_007",
+    "ticket": "A 30-year-old female (working mother) presents with excessive worry about multiple domains for 8 months, muscle tension, restlessness, difficulty sleeping. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: generalized anxiety disorder. Key assessments: gad7, mental_status, substance_use. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider generalized anxiety disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_ADHD_adult_high_school_student_060",
+    "ticket": "A 14-year-old male (high school student) presents with cannot focus in meetings, forgetful, starts many projects but finishes none, restlessness. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: ADHD adult. Key assessments: mental_status, substance_use, phq9. First-line treatment: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD_adult",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider ADHD adult as primary diagnosis",
+        "Agent should assess for mental_status, substance_use, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_anorexia_nervosa_092",
+    "ticket": "A 14-year-old male presents with 18yo female, BMI 16.5, amenorrhea, excessive exercise, body image distortion. Which condition should be ruled out FIRST in the differential diagnosis?",
+    "options": {
+      "A": "malignancy",
+      "B": "none of the above",
+      "C": "hyperthyroidism",
+      "D": "malabsorption",
+      "E": "bulimia nervosa"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia_nervosa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_PTSD_080",
+    "ticket": "A 23-year-old female presents with nightmares, hypervigilance, avoidance of trauma reminders, emotional numbness after combat 6 months ago. Which condition should be ruled out FIRST in the differential diagnosis?",
+    "options": {
+      "A": "adjustment disorder",
+      "B": "none of the above",
+      "C": "major depression",
+      "D": "TBI",
+      "E": "acute stress disorder"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_bipolar_disorder_type_1_076",
+    "ticket": "A 14-year-old female presents with decreased need for sleep, grandiosity, pressured speech, impulsive spending for 1 week. Which condition should be ruled out FIRST in the differential diagnosis?",
+    "options": {
+      "A": "ADHD",
+      "B": "hyperthyroidism",
+      "C": "substance-induced mania",
+      "D": "schizoaffective disorder",
+      "E": "none of the above"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar_disorder_type_1",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_anorexia_nervosa_091",
+    "ticket": "A 23-year-old female presents with 18yo female, BMI 16.5, amenorrhea, excessive exercise, body image distortion. Which of the following is the MOST likely diagnosis?",
+    "options": {
+      "A": "Anorexia Nervosa",
+      "B": "hyperthyroidism",
+      "C": "malignancy",
+      "D": "bulimia nervosa",
+      "E": "malabsorption"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia_nervosa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_bipolar_disorder_type_1_college_student_022",
+    "ticket": "A 23-year-old female (college student) presents with elevated mood, increased energy, racing thoughts, risky sexual behavior for 5 days. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: bipolar disorder type 1. Key assessments: mental_status, suicide_risk, substance_use. First-line treatment: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar_disorder_type_1",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider bipolar disorder type 1 as primary diagnosis",
+        "Agent should assess for mental_status, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_anorexia_nervosa_090",
+    "ticket": "A 16-year-old female presents with 18yo female, BMI 16.5, amenorrhea, excessive exercise, body image distortion. Which screening instrument is MOST appropriate for this patient's presentation?",
+    "options": {
+      "A": "DAST-10",
+      "B": "MDQ",
+      "C": "AUDIT-C",
+      "D": "CAGE",
+      "E": "EATING-DISORDER"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia_nervosa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_ADHD_adult_college_student_055",
+    "ticket": "A 24-year-old male (college student) presents with lifelong difficulty concentrating, loses items frequently, poor time management, impulsivity. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: ADHD adult. Key assessments: mental_status, substance_use, phq9. First-line treatment: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD_adult",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider ADHD adult as primary diagnosis",
+        "Agent should assess for mental_status, substance_use, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_panic_disorder_087",
+    "ticket": "A 44-year-old male presents with unexpected panic attacks 3x/week, agoraphobia developing, avoids crowded places. Which of the following is the MOST likely diagnosis?",
+    "options": {
+      "A": "pheochromocytoma",
+      "B": "cardiac arrhythmia",
+      "C": "GAD",
+      "D": "Panic Disorder",
+      "E": "hyperthyroidism"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_generalized_anxiety_disorder_college_student_011",
+    "ticket": "A 20-year-old female (college student) presents with chronic worry, GI complaints, palpitations, tension headaches for 6 months. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: generalized anxiety disorder. Key assessments: gad7, mental_status, substance_use. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider generalized anxiety disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_alcohol_use_disorder_recently_widowed_031",
+    "ticket": "A 61-year-old female (recently widowed) presents with drinking escalated over 2 years, morning tremors, missed work, family complaints. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. Key assessments: cage, mental_status, suicide_risk. First-line treatment: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol_use_disorder",
+      "patient_type": "recently widowed",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider alcohol use disorder as primary diagnosis",
+        "Agent should assess for cage, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_panic_disorder_088",
+    "ticket": "A 20-year-old male presents with sudden onset shortness of breath, tingling, dizziness, feeling of impending doom. Which condition should be ruled out FIRST in the differential diagnosis?",
+    "options": {
+      "A": "hyperthyroidism",
+      "B": "GAD",
+      "C": "pheochromocytoma",
+      "D": "none of the above",
+      "E": "cardiac arrhythmia"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_ADHD_adult_high_school_student_058",
+    "ticket": "A 14-year-old female (high school student) presents with chronic procrastination, job changes, relationship difficulties, childhood history of hyperactivity. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: ADHD adult. Key assessments: mental_status, substance_use, phq9. First-line treatment: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD_adult",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider ADHD adult as primary diagnosis",
+        "Agent should assess for mental_status, substance_use, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_anorexia_nervosa_college_student_044",
+    "ticket": "A 24-year-old male (college student) presents with 18yo female, BMI 16.5, amenorrhea, excessive exercise, body image distortion. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. Key assessments: eating_disorder, mental_status, suicide_risk. First-line treatment: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia_nervosa",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider anorexia nervosa as primary diagnosis",
+        "Agent should assess for eating_disorder, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_anorexia_nervosa_college_student_046",
+    "ticket": "A 20-year-old male (college student) presents with 22yo female, restricting intake to 500cal/day, lanugo hair, bradycardia, electrolyte abnormalities. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. Key assessments: eating_disorder, mental_status, suicide_risk. First-line treatment: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia_nervosa",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider anorexia nervosa as primary diagnosis",
+        "Agent should assess for eating_disorder, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_PTSD_retired_veteran_029",
+    "ticket": "A 66-year-old male (retired veteran) presents with intrusive memories, emotional detachment, difficulty trusting others after motor vehicle accident 4 months ago. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: PTSD. Key assessments: pcl5, suicide_risk, substance_use. First-line treatment: CPT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "patient_type": "retired veteran",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider PTSD as primary diagnosis",
+        "Agent should assess for pcl5, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_PTSD_working_mother_030",
+    "ticket": "A 35-year-old female (working mother) presents with intrusive memories, emotional detachment, difficulty trusting others after motor vehicle accident 4 months ago. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: PTSD. Key assessments: pcl5, suicide_risk, substance_use. First-line treatment: CPT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider PTSD as primary diagnosis",
+        "Agent should assess for pcl5, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_bipolar_disorder_type_1_high_school_student_021",
+    "ticket": "A 16-year-old male (high school student) presents with elevated mood, increased energy, racing thoughts, risky sexual behavior for 5 days. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: bipolar disorder type 1. Key assessments: mental_status, suicide_risk, substance_use. First-line treatment: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar_disorder_type_1",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider bipolar disorder type 1 as primary diagnosis",
+        "Agent should assess for mental_status, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_schizophrenia_071",
+    "ticket": "A 34-year-old female presents with persecutory delusions, thought broadcasting, deteriorating self-care for 6 months. Which of the following is the MOST likely diagnosis?",
+    "options": {
+      "A": "brief psychotic disorder",
+      "B": "schizoaffective disorder",
+      "C": "Schizophrenia",
+      "D": "substance-induced psychosis",
+      "E": "delusional disorder"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_bipolar_disorder_type_1_075",
+    "ticket": "A 43-year-old male presents with decreased need for sleep, grandiosity, pressured speech, impulsive spending for 1 week. Which of the following is the MOST likely diagnosis?",
+    "options": {
+      "A": "schizoaffective disorder",
+      "B": "substance-induced mania",
+      "C": "Bipolar Disorder Type 1",
+      "D": "hyperthyroidism",
+      "E": "ADHD"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar_disorder_type_1",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_alcohol_use_disorder_083",
+    "ticket": "A 16-year-old male presents with blackouts, withdrawal seizure history, drinking to avoid shaking, liver enzyme elevation. Which of the following is the MOST likely diagnosis?",
+    "options": {
+      "A": "anxiety disorder",
+      "B": "depression",
+      "C": "Alcohol Use Disorder",
+      "D": "liver disease",
+      "E": "other substance use"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol_use_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_OCD_high_school_student_051",
+    "ticket": "A 14-year-old female (high school student) presents with intrusive violent thoughts, checking locks/stove 30+ times, significantly impaired function. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: OCD. Key assessments: mental_status, phq9, gad7. First-line treatment: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider OCD as primary diagnosis",
+        "Agent should assess for mental_status, phq9, gad7"
+      ]
+    }
+  },
+  {
+    "id": "psych_PTSD_high_school_student_028",
+    "ticket": "A 17-year-old male (high school student) presents with flashbacks, startle response, insomnia, irritability following sexual assault 1 year ago. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: PTSD. Key assessments: pcl5, suicide_risk, substance_use. First-line treatment: CPT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider PTSD as primary diagnosis",
+        "Agent should assess for pcl5, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_schizophrenia_professional_014",
+    "ticket": "A 36-year-old male (professional) presents with auditory hallucinations, paranoid delusions, social withdrawal, flat affect for 8 months. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. Key assessments: mental_status, mmse, capacity. First-line treatment: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "patient_type": "professional",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "capacity"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider schizophrenia as primary diagnosis",
+        "Agent should assess for mental_status, mmse, capacity"
+      ]
+    }
+  },
+  {
+    "id": "psych_bipolar_disorder_type_1_college_student_019",
+    "ticket": "A 25-year-old female (college student) presents with decreased need for sleep, grandiosity, pressured speech, impulsive spending for 1 week. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: bipolar disorder type 1. Key assessments: mental_status, suicide_risk, substance_use. First-line treatment: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar_disorder_type_1",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider bipolar disorder type 1 as primary diagnosis",
+        "Agent should assess for mental_status, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_major_depressive_disorder_061",
+    "ticket": "A 68-year-old male presents with depressed mood for 3 weeks, anhedonia, insomnia, poor concentration, weight loss. What is the MOST appropriate initial pharmacotherapy for this patient?",
+    "options": {
+      "A": "observation only",
+      "B": "CBT",
+      "C": "SNRIs",
+      "D": "SSRIs",
+      "E": "mirtazapine"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_panic_disorder_085",
+    "ticket": "A 25-year-old female presents with unexpected panic attacks 3x/week, agoraphobia developing, avoids crowded places. What is the MOST appropriate initial pharmacotherapy for this patient?",
+    "options": {
+      "A": "CBT with exposure",
+      "B": "benzodiazepines short-term",
+      "C": "observation only",
+      "D": "SSRIs"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_OCD_093",
+    "ticket": "A 59-year-old female presents with intrusive violent thoughts, checking locks/stove 30+ times, significantly impaired function. What is the MOST appropriate initial pharmacotherapy for this patient?",
+    "options": {
+      "A": "clomipramine",
+      "B": "ERP therapy",
+      "C": "observation only",
+      "D": "fluvoxamine",
+      "E": "high-dose SSRIs"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_alcohol_use_disorder_working_mother_036",
+    "ticket": "A 38-year-old female (working mother) presents with daily drinking 12 beers, neglecting responsibilities, failed attempts to cut down. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. Key assessments: cage, mental_status, suicide_risk. First-line treatment: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol_use_disorder",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider alcohol use disorder as primary diagnosis",
+        "Agent should assess for cage, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_alcohol_use_disorder_082",
+    "ticket": "A 14-year-old male presents with daily drinking 12 beers, neglecting responsibilities, failed attempts to cut down. Which screening instrument is MOST appropriate for this patient's presentation?",
+    "options": {
+      "A": "MDQ",
+      "B": "CAGE",
+      "C": "DAST-10",
+      "D": "CAGE",
+      "E": "AUDIT-C"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol_use_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_bipolar_disorder_type_1_recently_widowed_020",
+    "ticket": "A 58-year-old female (recently widowed) presents with decreased need for sleep, grandiosity, pressured speech, impulsive spending for 1 week. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: bipolar disorder type 1. Key assessments: mental_status, suicide_risk, substance_use. First-line treatment: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar_disorder_type_1",
+      "patient_type": "recently widowed",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider bipolar disorder type 1 as primary diagnosis",
+        "Agent should assess for mental_status, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_panic_disorder_working_mother_037",
+    "ticket": "A 40-year-old female (working mother) presents with recurrent episodes of palpitations, chest tightness, derealization, fear of dying. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: panic disorder. Key assessments: gad7, mental_status, phq9. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic_disorder",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider panic disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_bipolar_disorder_type_1_073",
+    "ticket": "A 17-year-old male presents with irritability, psychomotor agitation, flight of ideas, decreased sleep for 10 days. What is the MOST appropriate initial pharmacotherapy for this patient?",
+    "options": {
+      "A": "quetiapine",
+      "B": "valproate",
+      "C": "lamotrigine",
+      "D": "observation only",
+      "E": "lithium"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar_disorder_type_1",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_bipolar_disorder_type_1_working_mother_023",
+    "ticket": "A 32-year-old female (working mother) presents with irritability, psychomotor agitation, flight of ideas, decreased sleep for 10 days. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: bipolar disorder type 1. Key assessments: mental_status, suicide_risk, substance_use. First-line treatment: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar_disorder_type_1",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider bipolar disorder type 1 as primary diagnosis",
+        "Agent should assess for mental_status, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_OCD_high_school_student_049",
+    "ticket": "A 15-year-old male (high school student) presents with repetitive handwashing 4+ hours/day, contamination fears, raw skin on hands. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: OCD. Key assessments: mental_status, phq9, gad7. First-line treatment: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider OCD as primary diagnosis",
+        "Agent should assess for mental_status, phq9, gad7"
+      ]
+    }
+  },
+  {
+    "id": "psych_OCD_recently_widowed_054",
+    "ticket": "A 68-year-old female (recently widowed) presents with symmetry obsessions, counting rituals, unable to leave house on time for work. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: OCD. Key assessments: mental_status, phq9, gad7. First-line treatment: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "patient_type": "recently widowed",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider OCD as primary diagnosis",
+        "Agent should assess for mental_status, phq9, gad7"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_anorexia_nervosa_089",
+    "ticket": "A 64-year-old male presents with 17yo male, significant weight loss, food rituals, purging behavior, dental erosion. What is the MOST appropriate initial pharmacotherapy for this patient?",
+    "options": {
+      "A": "olanzapine for severe cases",
+      "B": "observation only",
+      "C": "nutritional rehabilitation",
+      "D": "CBT-E",
+      "E": "FBT"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia_nervosa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_schizophrenia_college_student_017",
+    "ticket": "A 23-year-old male (college student) presents with persecutory delusions, thought broadcasting, deteriorating self-care for 6 months. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. Key assessments: mental_status, mmse, capacity. First-line treatment: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "capacity"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider schizophrenia as primary diagnosis",
+        "Agent should assess for mental_status, mmse, capacity"
+      ]
+    }
+  },
+  {
+    "id": "psych_panic_disorder_recently_widowed_038",
+    "ticket": "A 56-year-old female (recently widowed) presents with recurrent episodes of palpitations, chest tightness, derealization, fear of dying. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: panic disorder. Key assessments: gad7, mental_status, phq9. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic_disorder",
+      "patient_type": "recently widowed",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider panic disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_OCD_college_student_052",
+    "ticket": "A 19-year-old female (college student) presents with intrusive violent thoughts, checking locks/stove 30+ times, significantly impaired function. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: OCD. Key assessments: mental_status, phq9, gad7. First-line treatment: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider OCD as primary diagnosis",
+        "Agent should assess for mental_status, phq9, gad7"
+      ]
+    }
+  },
+  {
+    "id": "psych_panic_disorder_professional_042",
+    "ticket": "A 36-year-old male (professional) presents with unexpected panic attacks 3x/week, agoraphobia developing, avoids crowded places. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: panic disorder. Key assessments: gad7, mental_status, phq9. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic_disorder",
+      "patient_type": "professional",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider panic disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_OCD_professional_053",
+    "ticket": "A 35-year-old male (professional) presents with symmetry obsessions, counting rituals, unable to leave house on time for work. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: OCD. Key assessments: mental_status, phq9, gad7. First-line treatment: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "patient_type": "professional",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider OCD as primary diagnosis",
+        "Agent should assess for mental_status, phq9, gad7"
+      ]
+    }
+  },
+  {
+    "id": "psych_panic_disorder_high_school_student_040",
+    "ticket": "A 16-year-old male (high school student) presents with sudden onset shortness of breath, tingling, dizziness, feeling of impending doom. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: panic disorder. Key assessments: gad7, mental_status, phq9. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic_disorder",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider panic disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_generalized_anxiety_disorder_065",
+    "ticket": "A 25-year-old male presents with excessive worry about multiple domains for 8 months, muscle tension, restlessness, difficulty sleeping. What is the MOST appropriate initial pharmacotherapy for this patient?",
+    "options": {
+      "A": "CBT",
+      "B": "SNRIs",
+      "C": "SSRIs",
+      "D": "buspirone",
+      "E": "observation only"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_panic_disorder_working_mother_039",
+    "ticket": "A 31-year-old female (working mother) presents with sudden onset shortness of breath, tingling, dizziness, feeling of impending doom. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: panic disorder. Key assessments: gad7, mental_status, phq9. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic_disorder",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider panic disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_schizophrenia_college_student_016",
+    "ticket": "A 24-year-old female (college student) presents with disorganized speech, bizarre behavior, hearing voices for 1 year, declining function. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. Key assessments: mental_status, mmse, capacity. First-line treatment: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "capacity"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider schizophrenia as primary diagnosis",
+        "Agent should assess for mental_status, mmse, capacity"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_OCD_096",
+    "ticket": "A 68-year-old female presents with symmetry obsessions, counting rituals, unable to leave house on time for work. Which condition should be ruled out FIRST in the differential diagnosis?",
+    "options": {
+      "A": "none of the above",
+      "B": "tic disorder",
+      "C": "GAD",
+      "D": "body dysmorphic disorder",
+      "E": "hoarding disorder"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_anorexia_nervosa_recently_widowed_043",
+    "ticket": "A 70-year-old female (recently widowed) presents with 18yo female, BMI 16.5, amenorrhea, excessive exercise, body image distortion. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. Key assessments: eating_disorder, mental_status, suicide_risk. First-line treatment: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia_nervosa",
+      "patient_type": "recently widowed",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider anorexia nervosa as primary diagnosis",
+        "Agent should assess for eating_disorder, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_generalized_anxiety_disorder_high_school_student_009",
+    "ticket": "A 17-year-old male (high school student) presents with persistent anxiety, irritability, fatigue, difficulty concentrating for over a year. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: generalized anxiety disorder. Key assessments: gad7, mental_status, substance_use. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider generalized anxiety disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_panic_disorder_086",
+    "ticket": "A 59-year-old male presents with sudden onset shortness of breath, tingling, dizziness, feeling of impending doom. Which screening instrument is MOST appropriate for this patient's presentation?",
+    "options": {
+      "A": "MDQ",
+      "B": "DAST-10",
+      "C": "CAGE",
+      "D": "AUDIT-C",
+      "E": "GAD7"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_anorexia_nervosa_working_mother_047",
+    "ticket": "A 38-year-old female (working mother) presents with 17yo male, significant weight loss, food rituals, purging behavior, dental erosion. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. Key assessments: eating_disorder, mental_status, suicide_risk. First-line treatment: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia_nervosa",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider anorexia nervosa as primary diagnosis",
+        "Agent should assess for eating_disorder, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_PTSD_high_school_student_026",
+    "ticket": "A 14-year-old male (high school student) presents with nightmares, hypervigilance, avoidance of trauma reminders, emotional numbness after combat 6 months ago. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: PTSD. Key assessments: pcl5, suicide_risk, substance_use. First-line treatment: CPT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider PTSD as primary diagnosis",
+        "Agent should assess for pcl5, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_schizophrenia_069",
+    "ticket": "A 30-year-old female presents with auditory hallucinations, paranoid delusions, social withdrawal, flat affect for 8 months. What is the MOST appropriate initial pharmacotherapy for this patient?",
+    "options": {
+      "A": "clozapine",
+      "B": "aripiprazole",
+      "C": "observation only",
+      "D": "olanzapine",
+      "E": "risperidone"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_generalized_anxiety_disorder_067",
+    "ticket": "A 67-year-old male presents with chronic worry, GI complaints, palpitations, tension headaches for 6 months. Which of the following is the MOST likely diagnosis?",
+    "options": {
+      "A": "Generalized Anxiety Disorder",
+      "B": "panic disorder",
+      "C": "PTSD",
+      "D": "caffeine excess",
+      "E": "hyperthyroidism"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_major_depressive_disorder_college_student_001",
+    "ticket": "A 22-year-old male (college student) presents with depressed mood for 3 weeks, anhedonia, insomnia, poor concentration, weight loss. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: major depressive disorder. Key assessments: phq9, suicide_risk, mental_status. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider major depressive disorder as primary diagnosis",
+        "Agent should assess for phq9, suicide_risk, mental_status"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_OCD_095",
+    "ticket": "A 37-year-old male presents with repetitive handwashing 4+ hours/day, contamination fears, raw skin on hands. Which of the following is the MOST likely diagnosis?",
+    "options": {
+      "A": "tic disorder",
+      "B": "hoarding disorder",
+      "C": "Ocd",
+      "D": "body dysmorphic disorder",
+      "E": "GAD"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_major_depressive_disorder_college_student_006",
+    "ticket": "A 19-year-old female (college student) presents with crying spells, insomnia for 6 weeks, difficulty at work, loss of interest in hobbies. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: major depressive disorder. Key assessments: phq9, suicide_risk, mental_status. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider major depressive disorder as primary diagnosis",
+        "Agent should assess for phq9, suicide_risk, mental_status"
+      ]
+    }
+  },
+  {
+    "id": "psych_alcohol_use_disorder_college_student_033",
+    "ticket": "A 20-year-old male (college student) presents with blackouts, withdrawal seizure history, drinking to avoid shaking, liver enzyme elevation. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. Key assessments: cage, mental_status, suicide_risk. First-line treatment: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol_use_disorder",
+      "patient_type": "college student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider alcohol use disorder as primary diagnosis",
+        "Agent should assess for cage, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_PTSD_working_mother_025",
+    "ticket": "A 39-year-old female (working mother) presents with nightmares, hypervigilance, avoidance of trauma reminders, emotional numbness after combat 6 months ago. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: PTSD. Key assessments: pcl5, suicide_risk, substance_use. First-line treatment: CPT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider PTSD as primary diagnosis",
+        "Agent should assess for pcl5, suicide_risk, substance_use"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_bipolar_disorder_type_1_074",
+    "ticket": "A 58-year-old female presents with decreased need for sleep, grandiosity, pressured speech, impulsive spending for 1 week. Which screening instrument is MOST appropriate for this patient's presentation?",
+    "options": {
+      "A": "MENTAL-STATUS",
+      "B": "CAGE",
+      "C": "DAST-10",
+      "D": "MDQ",
+      "E": "AUDIT-C"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar_disorder_type_1",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_OCD_professional_050",
+    "ticket": "A 34-year-old male (professional) presents with repetitive handwashing 4+ hours/day, contamination fears, raw skin on hands. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: OCD. Key assessments: mental_status, phq9, gad7. First-line treatment: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "patient_type": "professional",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider OCD as primary diagnosis",
+        "Agent should assess for mental_status, phq9, gad7"
+      ]
+    }
+  },
+  {
+    "id": "psych_schizophrenia_recently_widowed_015",
+    "ticket": "A 57-year-old female (recently widowed) presents with disorganized speech, bizarre behavior, hearing voices for 1 year, declining function. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. Key assessments: mental_status, mmse, capacity. First-line treatment: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "patient_type": "recently widowed",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "capacity"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider schizophrenia as primary diagnosis",
+        "Agent should assess for mental_status, mmse, capacity"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_generalized_anxiety_disorder_066",
+    "ticket": "A 38-year-old male presents with chronic worry, GI complaints, palpitations, tension headaches for 6 months. Which screening instrument is MOST appropriate for this patient's presentation?",
+    "options": {
+      "A": "AUDIT-C",
+      "B": "DAST-10",
+      "C": "GAD7",
+      "D": "CAGE",
+      "E": "MDQ"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_PTSD_078",
+    "ticket": "A 42-year-old male presents with nightmares, hypervigilance, avoidance of trauma reminders, emotional numbness after combat 6 months ago. Which screening instrument is MOST appropriate for this patient's presentation?",
+    "options": {
+      "A": "PCL5",
+      "B": "MDQ",
+      "C": "AUDIT-C",
+      "D": "DAST-10",
+      "E": "CAGE"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_ADHD_adult_099",
+    "ticket": "A 57-year-old male presents with chronic procrastination, job changes, relationship difficulties, childhood history of hyperactivity. Which of the following is the MOST likely diagnosis?",
+    "options": {
+      "A": "Adhd Adult",
+      "B": "anxiety disorder",
+      "C": "thyroid dysfunction",
+      "D": "bipolar disorder",
+      "E": "sleep disorder"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD_adult",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_panic_disorder_high_school_student_041",
+    "ticket": "A 14-year-old male (high school student) presents with unexpected panic attacks 3x/week, agoraphobia developing, avoids crowded places. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: panic disorder. Key assessments: gad7, mental_status, phq9. First-line treatment: SSRIs.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic_disorder",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider panic disorder as primary diagnosis",
+        "Agent should assess for gad7, mental_status, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_OCD_094",
+    "ticket": "A 23-year-old female presents with repetitive handwashing 4+ hours/day, contamination fears, raw skin on hands. Which screening instrument is MOST appropriate for this patient's presentation?",
+    "options": {
+      "A": "CAGE",
+      "B": "DAST-10",
+      "C": "MDQ",
+      "D": "MENTAL-STATUS",
+      "E": "AUDIT-C"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psych_anorexia_nervosa_high_school_student_045",
+    "ticket": "A 16-year-old female (high school student) presents with 22yo female, restricting intake to 500cal/day, lanugo hair, bradycardia, electrolyte abnormalities. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. Key assessments: eating_disorder, mental_status, suicide_risk. First-line treatment: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia_nervosa",
+      "patient_type": "high school student",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider anorexia nervosa as primary diagnosis",
+        "Agent should assess for eating_disorder, mental_status, suicide_risk"
+      ]
+    }
+  },
+  {
+    "id": "psych_ADHD_adult_working_mother_056",
+    "ticket": "A 44-year-old female (working mother) presents with lifelong difficulty concentrating, loses items frequently, poor time management, impulsivity. No prior psychiatric history. Perform a comprehensive psychiatric evaluation and provide your assessment and management plan.",
+    "correct_answer": "Diagnosis: ADHD adult. Key assessments: mental_status, substance_use, phq9. First-line treatment: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD_adult",
+      "patient_type": "working mother",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "substance_use"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "assertions": [
+        "Agent should consider ADHD adult as primary diagnosis",
+        "Agent should assess for mental_status, substance_use, phq9"
+      ]
+    }
+  },
+  {
+    "id": "psych_mcqa_PTSD_077",
+    "ticket": "A 43-year-old male presents with flashbacks, startle response, insomnia, irritability following sexual assault 1 year ago. What is the MOST appropriate initial pharmacotherapy for this patient?",
+    "options": {
+      "A": "sertraline",
+      "B": "CPT",
+      "C": "observation only",
+      "D": "PE therapy",
+      "E": "prazosin for nightmares"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  }
+]

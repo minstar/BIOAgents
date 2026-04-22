@@ -57,14 +57,17 @@ SUBMIT_ANSWER_TOOL = {
 
 OPENAI_TOOLS = [SUBMIT_ANSWER_TOOL]
 
-# Build system prompt with tool schema embedded (matching apply_chat_template(tools=) output)
-_TOOL_JSON = json.dumps(SUBMIT_ANSWER_TOOL)
-SYSTEM_PROMPT = f"""# Tools
+# Load training-aligned system prompt with full domain tools
+_TRAINING_PROMPTS_PATH = Path(__file__).parent / "verl" / "training_system_prompts.json"
+
+def _build_system_prompt():
+    """Build system prompt matching training format: tool-call instructions + domain tools."""
+    _TOOL_CALL_INSTRUCTIONS = """# Tools
 
 You have access to the following functions:
 
 <tools>
-{_TOOL_JSON}
+""" + json.dumps(SUBMIT_ANSWER_TOOL) + """
 </tools>
 
 If you choose to call a function ONLY reply in the following format with NO suffix:
@@ -90,7 +93,18 @@ Reminder:
 - If there is no function call available, answer the question like normal with your current knowledge and do not tell the user about function calls
 </IMPORTANT>
 
-You are a medical expert. Provide detailed, accurate, evidence-based answers to medical questions. Submit your answer by calling the submit_answer tool with a comprehensive response."""
+"""
+    if _TRAINING_PROMPTS_PATH.exists():
+        with open(_TRAINING_PROMPTS_PATH) as f:
+            training_prompts = json.load(f)
+        domain_prompt = training_prompts.get("medical_qa", "")
+        print(f"  Loaded training system prompt: medical_qa ({len(domain_prompt)} chars)", flush=True)
+        return _TOOL_CALL_INSTRUCTIONS + domain_prompt
+    else:
+        print(f"  WARNING: training_system_prompts.json not found, using fallback", flush=True)
+        return _TOOL_CALL_INSTRUCTIONS + "You are a medical expert. Provide detailed, accurate, evidence-based answers to medical questions. Submit your answer by calling the submit_answer tool with a comprehensive response."
+
+SYSTEM_PROMPT = _build_system_prompt()
 
 MEDLFQA_DATASETS = {
     "kqa_golden": {

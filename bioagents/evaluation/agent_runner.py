@@ -697,7 +697,8 @@ class AgentRunner:
             self.processor = None
 
         # Load model using profile's model class
-        self.model = profile.load_model(device_map="auto")
+        # B041: Qwen3.5 SDPA + batch>1 hangs generate(); force eager attention
+        self.model = profile.load_model(device_map="auto", attn_implementation="eager")
         logger.info(
             f"Model loaded via ModelProfile "
             f"(VL={profile.is_vl_model}, class={profile.model_class})"
@@ -818,7 +819,7 @@ class AgentRunner:
 
         # For VL models, use processor if available
         if self._is_vl_model and self.processor is not None:
-            # Text-only input for VL model
+            # Apply chat template (handles both text-only and multimodal messages)
             try:
                 text = self.processor.apply_chat_template(
                     messages, tools=tools if tools else None,
@@ -828,8 +829,16 @@ class AgentRunner:
                 text = self.processor.apply_chat_template(
                     messages, tokenize=False, add_generation_prompt=True
                 )
+            # Extract vision info from multimodal messages
+            image_inputs, video_inputs = None, None
+            try:
+                from qwen_vl_utils import process_vision_info
+                image_inputs, video_inputs = process_vision_info(messages)
+            except Exception:
+                pass
             inputs = self.processor(
-                text=[text], padding=True, return_tensors="pt"
+                text=[text], images=image_inputs, videos=video_inputs,
+                padding=True, return_tensors="pt"
             ).to(self.model.device)
         else:
             # Apply chat template

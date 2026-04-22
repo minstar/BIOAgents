@@ -105,6 +105,8 @@ def main():
                         help="Max turns per task")
     parser.add_argument("--max-new-tokens", type=int, default=1024,
                         help="Max new tokens per generation")
+    parser.add_argument("--offset", type=int, default=0,
+                        help="Offset into task list (for parallel splitting)")
     args = parser.parse_args()
 
     # Build model dict from registered + custom models
@@ -138,7 +140,8 @@ def main():
 
     with open(tasks_file) as f:
         all_tasks = json.load(f)
-        test_ids = [t["id"] for t in all_tasks[:args.num_tasks]]
+        subset = all_tasks[args.offset:args.offset + args.num_tasks] if args.num_tasks > 0 else all_tasks[args.offset:]
+        test_ids = [t["id"] for t in subset]
 
     logger.info(f"Evaluating {len(test_ids)} test tasks from {args.domain}")
     logger.info(f"Models: {list(eval_models.keys())}")

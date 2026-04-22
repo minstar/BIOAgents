@@ -24,6 +24,9 @@ from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
+import torch
+torch.backends.cudnn.enabled = False  # Workaround for cuDNN init failure with Qwen3.5-VL Conv3D
+
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 os.chdir(PROJECT_ROOT)
@@ -51,14 +54,22 @@ SUBMIT_ANSWER_TOOL = {
     },
 }
 
-# Tools passed to apply_chat_template
+# Tools passed to apply_chat_template — single placeholder to trigger tool-call instructions
 OPENAI_TOOLS = [SUBMIT_ANSWER_TOOL]
 
-# System prompt for VQA
-SYSTEM_PROMPT = (
-    "You are a medical imaging expert. Analyze the medical image and answer the question. "
-    "Submit your answer by calling the submit_answer tool."
-)
+# Load training-aligned system prompt with full domain tools
+_TRAINING_PROMPTS_PATH = Path(__file__).parent / "verl" / "training_system_prompts.json"
+if _TRAINING_PROMPTS_PATH.exists():
+    with open(_TRAINING_PROMPTS_PATH) as _f:
+        _TRAINING_PROMPTS = json.load(_f)
+    SYSTEM_PROMPT = _TRAINING_PROMPTS.get("visual_diagnosis", "")
+    print(f"  Loaded training system prompt: visual_diagnosis ({len(SYSTEM_PROMPT)} chars)", flush=True)
+else:
+    SYSTEM_PROMPT = (
+        "You are a medical imaging expert. Analyze the medical image and answer the question. "
+        "Submit your answer by calling the submit_answer tool."
+    )
+    print(f"  WARNING: training_system_prompts.json not found, using fallback prompt", flush=True)
 
 # VQA benchmarks to evaluate
 VQA_BENCHMARKS = ["vqa_rad", "slake", "pathvqa", "pmc_vqa", "vqa_med_2021", "quilt_vqa"]
@@ -187,6 +198,8 @@ def main():
     parser.add_argument("--batch-size", type=int, default=1, help="Batch size (default=1 for VQA)")
     parser.add_argument("--no-think", action="store_true",
                         help="Disable thinking by appending </think> to prompt")
+    parser.add_argument("--benchmarks", type=str, default="",
+                        help="Comma-separated subset of benchmarks to run (default: all)")
     args = parser.parse_args()
 
     # Only set CUDA_VISIBLE_DEVICES if not already set by shell
@@ -273,7 +286,8 @@ def main():
 
     all_results = {}
 
-    for benchmark in VQA_BENCHMARKS:
+    benchmarks_to_run = args.benchmarks.split(",") if args.benchmarks else VQA_BENCHMARKS
+    for benchmark in benchmarks_to_run:
         if benchmark not in VQA_DATASET_REGISTRY:
             print(f"  [SKIP] Unknown benchmark: {benchmark}", flush=True)
             continue

@@ -1,0 +1,4326 @@
+[
+  {
+    "id": "tri_bal_allergic_reaction_1_103",
+    "ticket": "A 41-year-old female arrives at the ED with allergic reaction. Onset: 3 days ago. Vitals: HR 151, BP 70/45, RR 33, SpO2 83%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_150",
+    "ticket": "A 41-year-old male presents with acute acute vision loss and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "musculoskeletal strain",
+      "C": "retinal detachment",
+      "D": "stroke",
+      "E": "CRAO"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "acute vision loss",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_029",
+    "ticket": "A 72-year-old male presents to the ED with shortness of breath. Vitals: HR 139, BP 85/45, RR 31, SpO2 80%. PMH: atrial_fibrillation, CKD, diabetes. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "CXR",
+      "B": "D-dimer",
+      "C": "ABG",
+      "D": "observation only",
+      "E": "discharge home"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_syncope_3_122",
+    "ticket": "A 9-year-old male arrives at the ED with syncope. Onset: 3 days ago. Vitals: HR 96, BP 139/82, RR 20, SpO2 94%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "syncope",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_160",
+    "ticket": "A 72-year-old female presents with acute severe back pain and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "viral syndrome",
+      "C": "cauda equina",
+      "D": "aortic dissection",
+      "E": "epidural abscess"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "severe back pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_GI_bleeding_2_131",
+    "ticket": "A 13-year-old female arrives at the ED with GI bleeding. Onset: 2 days ago. Vitals: HR 102, BP 86/63, RR 27, SpO2 93%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_049",
+    "ticket": "A 58-year-old female presents to the ED with abdominal pain. Vitals: HR 101, BP 109/70, RR 25, SpO2 90%. PMH: osteoarthritis, hypothyroidism. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "observation only",
+      "B": "lipase",
+      "C": "discharge home",
+      "D": "CBC",
+      "E": "CT abdomen"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_seizure_1_072",
+    "ticket": "A 23-year-old female arrives at the ED with seizure. Onset: 2 days ago. Vitals: HR 138, BP 62/38, RR 31, SpO2 85%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "seizure",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_overdose/ingestion_1_092",
+    "ticket": "A 20-year-old male arrives at the ED with overdose/ingestion. Onset: 2 days ago. Vitals: HR 152, BP 64/40, RR 37, SpO2 80%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "overdose/ingestion",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_075",
+    "ticket": "A 70-year-old male presents with acute seizure and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "eclampsia",
+      "C": "musculoskeletal strain",
+      "D": "anxiety",
+      "E": "status epilepticus"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "seizure",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_syncope_3_121",
+    "ticket": "A 42-year-old male arrives at the ED with syncope. Onset: 30 minutes ago. Vitals: HR 101, BP 113/74, RR 20, SpO2 95%. PMH: hypertension, obesity. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "syncope",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_084",
+    "ticket": "A 50-year-old female presents to the ED with major trauma. Vitals: HR 125, BP 72/46, RR 35, SpO2 78%. PMH: osteoarthritis, hypothyroidism. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "discharge home",
+      "B": "observation only",
+      "C": "FAST exam",
+      "D": "type and screen",
+      "E": "CT"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "major trauma",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_215",
+    "ticket": "A 53-year-old male presents with acute burns and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "anxiety",
+      "B": "circumferential burns",
+      "C": "musculoskeletal strain",
+      "D": "inhalation injury",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_094",
+    "ticket": "A 80-year-old male presents to the ED with overdose/ingestion. Vitals: HR 156, BP 69/45, RR 28, SpO2 80%. PMH: atrial_fibrillation, CKD, diabetes. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "observation only",
+      "B": "discharge home",
+      "C": "ECG",
+      "D": "tox screen",
+      "E": "acetaminophen level"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "overdose/ingestion",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_074",
+    "ticket": "A 70-year-old male presents to the ED with seizure. Vitals: HR 157, BP 78/34, RR 30, SpO2 85%. PMH: atrial_fibrillation, CKD, diabetes. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "electrolytes",
+      "B": "glucose",
+      "C": "observation only",
+      "D": "CT head",
+      "E": "discharge home"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "seizure",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_214",
+    "ticket": "A 53-year-old male presents to the ED with burns. Vitals: HR 142, BP 71/44, RR 37, SpO2 77%. PMH: COPD, hypertension. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "airway eval",
+      "B": "observation only",
+      "C": "discharge home",
+      "D": "TBSA assessment",
+      "E": "IV access"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_124",
+    "ticket": "A 32-year-old male presents to the ED with syncope. Vitals: HR 123, BP 104/61, RR 28, SpO2 93%. PMH: smoking. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "orthostatics",
+      "B": "ECG",
+      "C": "glucose",
+      "D": "observation only",
+      "E": "discharge home"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "syncope",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_105",
+    "ticket": "A 17-year-old male presents with acute allergic reaction and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "anxiety",
+      "C": "anaphylaxis",
+      "D": "viral syndrome",
+      "E": "angioedema"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_abdominal_pain_3_046",
+    "ticket": "A 15-year-old female arrives at the ED with abdominal pain. Onset: 3 days ago. Vitals: HR 95, BP 130/65, RR 18, SpO2 94%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_fever_with_neutropenia_2_143",
+    "ticket": "A 27-year-old female arrives at the ED with fever with neutropenia. Onset: 3 days ago. Vitals: HR 116, BP 92/63, RR 26, SpO2 90%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "fever with neutropenia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_palpitations_4_176",
+    "ticket": "A 9-year-old male arrives at the ED with palpitations. Onset: 3 days ago. Vitals: HR 69, BP 140/67, RR 18, SpO2 99%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 4",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_104",
+    "ticket": "A 17-year-old male presents to the ED with allergic reaction. Vitals: HR 137, BP 69/33, RR 37, SpO2 85%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "vitals",
+      "B": "observation only",
+      "C": "airway assessment",
+      "D": "discharge home",
+      "E": "None of the above"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_080",
+    "ticket": "A 56-year-old female presents with acute seizure and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "anxiety",
+      "B": "musculoskeletal strain",
+      "C": "eclampsia",
+      "D": "status epilepticus",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "seizure",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_headache_3_062",
+    "ticket": "A 74-year-old male arrives at the ED with headache. Onset: 3 days ago. Vitals: HR 109, BP 125/66, RR 17, SpO2 95%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_allergic_reaction_2_107",
+    "ticket": "A 22-year-old female arrives at the ED with allergic reaction. Onset: 2 days ago. Vitals: HR 122, BP 93/54, RR 23, SpO2 92%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_palpitations_4_178",
+    "ticket": "A 45-year-old female arrives at the ED with palpitations. Onset: 30 minutes ago. Vitals: HR 85, BP 123/79, RR 17, SpO2 98%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 4",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_testicular_pain_2_191",
+    "ticket": "A 14-year-old male arrives at the ED with testicular pain. Onset: 1 day ago. Vitals: HR 126, BP 105/69, RR 24, SpO2 90%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "testicular pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_abdominal_pain_3_048",
+    "ticket": "A 3-year-old male arrives at the ED with abdominal pain. Onset: 6 hours ago. Vitals: HR 109, BP 119/76, RR 22, SpO2 98%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_overdose/ingestion_1_091",
+    "ticket": "A 66-year-old male arrives at the ED with overdose/ingestion. Onset: 2 hours ago. Vitals: HR 141, BP 85/45, RR 36, SpO2 82%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "overdose/ingestion",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_205",
+    "ticket": "A 19-year-old female presents with acute postpartum bleeding and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "anxiety",
+      "B": "DIC",
+      "C": "viral syndrome",
+      "D": "musculoskeletal strain",
+      "E": "uterine atony"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "postpartum bleeding",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_acute_vision_loss_2_146",
+    "ticket": "A 62-year-old male arrives at the ED with acute vision loss. Onset: 2 hours ago. Vitals: HR 124, BP 102/65, RR 25, SpO2 94%. PMH: COPD, hypertension. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "acute vision loss",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_030",
+    "ticket": "A 72-year-old male presents with acute shortness of breath and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "tension pneumothorax",
+      "B": "anaphylaxis",
+      "C": "PE",
+      "D": "musculoskeletal strain",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_230",
+    "ticket": "A 30-year-old male presents with acute diabetic emergency and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "HHS",
+      "B": "musculoskeletal strain",
+      "C": "viral syndrome",
+      "D": "severe hypoglycemia",
+      "E": "DKA"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "diabetic emergency",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_allergic_reaction_2_108",
+    "ticket": "A 42-year-old female arrives at the ED with allergic reaction. Onset: 2 hours ago. Vitals: HR 101, BP 106/66, RR 25, SpO2 93%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_165",
+    "ticket": "A 10-year-old male presents with acute severe back pain and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "cauda equina",
+      "B": "aortic dissection",
+      "C": "viral syndrome",
+      "D": "epidural abscess",
+      "E": "musculoskeletal strain"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "severe back pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_044",
+    "ticket": "A 35-year-old male presents to the ED with abdominal pain. Vitals: HR 111, BP 110/52, RR 27, SpO2 89%. PMH: hypertension, obesity. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "lipase",
+      "B": "observation only",
+      "C": "discharge home",
+      "D": "CT abdomen",
+      "E": "CBC"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_allergic_reaction_3_112",
+    "ticket": "A 42-year-old male arrives at the ED with allergic reaction. Onset: 2 days ago. Vitals: HR 103, BP 133/61, RR 18, SpO2 97%. PMH: hypertension, obesity. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_shortness_of_breath_1_016",
+    "ticket": "A 5-year-old female arrives at the ED with shortness of breath. Onset: 30 minutes ago. Vitals: HR 135, BP 82/44, RR 35, SpO2 83%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_headache_3_063",
+    "ticket": "A 52-year-old male arrives at the ED with headache. Onset: 1 day ago. Vitals: HR 85, BP 138/82, RR 23, SpO2 94%. PMH: COPD, hypertension. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_burns_3_221",
+    "ticket": "A 50-year-old female arrives at the ED with burns. Onset: 2 hours ago. Vitals: HR 89, BP 111/68, RR 19, SpO2 98%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_209",
+    "ticket": "A 27-year-old male presents to the ED with postpartum bleeding. Vitals: HR 160, BP 81/43, RR 34, SpO2 75%. PMH: smoking. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "CBC",
+      "B": "uterine assessment",
+      "C": "observation only",
+      "D": "coags",
+      "E": "discharge home"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "postpartum bleeding",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_abdominal_pain_2_042",
+    "ticket": "A 35-year-old male arrives at the ED with abdominal pain. Onset: 3 days ago. Vitals: HR 102, BP 101/61, RR 23, SpO2 92%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_159",
+    "ticket": "A 72-year-old female presents to the ED with severe back pain. Vitals: HR 115, BP 102/70, RR 27, SpO2 90%. PMH: heart_failure, osteoporosis. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "BMP",
+      "B": "MRI spine",
+      "C": "UA",
+      "D": "discharge home",
+      "E": "observation only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "severe back pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_GI_bleeding_3_137",
+    "ticket": "A 31-year-old male arrives at the ED with GI bleeding. Onset: 2 days ago. Vitals: HR 92, BP 136/67, RR 19, SpO2 97%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_130",
+    "ticket": "A 12-year-old male presents with acute GI bleeding and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "anxiety",
+      "C": "variceal bleeding",
+      "D": "massive hemorrhage",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_shortness_of_breath_2_021",
+    "ticket": "A 9-year-old male arrives at the ED with shortness of breath. Onset: 2 hours ago. Vitals: HR 119, BP 107/52, RR 26, SpO2 92%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_headache_2_057",
+    "ticket": "A 10-year-old male arrives at the ED with headache. Onset: 30 minutes ago. Vitals: HR 104, BP 87/57, RR 27, SpO2 90%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_140",
+    "ticket": "A 17-year-old male presents with acute GI bleeding and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "variceal bleeding",
+      "B": "viral syndrome",
+      "C": "anxiety",
+      "D": "massive hemorrhage",
+      "E": "musculoskeletal strain"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_stroke_symptoms_2_186",
+    "ticket": "A 5-year-old female arrives at the ED with stroke symptoms. Onset: 3 days ago. Vitals: HR 112, BP 90/54, RR 26, SpO2 90%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "stroke symptoms",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_altered_mental_status_1_033",
+    "ticket": "A 33-year-old male arrives at the ED with altered mental status. Onset: 2 hours ago. Vitals: HR 147, BP 62/37, RR 35, SpO2 80%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "altered mental status",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_abdominal_pain_4_053",
+    "ticket": "A 59-year-old female arrives at the ED with abdominal pain. Onset: 6 hours ago. Vitals: HR 68, BP 117/75, RR 19, SpO2 99%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 4",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_palpitations_3_173",
+    "ticket": "A 52-year-old male arrives at the ED with palpitations. Onset: 3 days ago. Vitals: HR 109, BP 118/77, RR 16, SpO2 95%. PMH: COPD, hypertension. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_stroke_symptoms_1_181",
+    "ticket": "A 5-year-old female arrives at the ED with stroke symptoms. Onset: 3 days ago. Vitals: HR 144, BP 70/41, RR 29, SpO2 76%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "stroke symptoms",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_GI_bleeding_1_126",
+    "ticket": "A 67-year-old male arrives at the ED with GI bleeding. Onset: 2 days ago. Vitals: HR 127, BP 61/47, RR 36, SpO2 78%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_seizure_2_076",
+    "ticket": "A 9-year-old male arrives at the ED with seizure. Onset: 2 days ago. Vitals: HR 120, BP 85/65, RR 30, SpO2 90%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "seizure",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_040",
+    "ticket": "A 22-year-old female presents with acute altered mental status and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "hypoglycemia",
+      "B": "musculoskeletal strain",
+      "C": "meningitis",
+      "D": "stroke",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "altered mental status",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_170",
+    "ticket": "A 29-year-old female presents with acute palpitations and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "SVT",
+      "B": "viral syndrome",
+      "C": "Afib with RVR",
+      "D": "musculoskeletal strain",
+      "E": "VT"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_149",
+    "ticket": "A 41-year-old male presents to the ED with acute vision loss. Vitals: HR 110, BP 105/52, RR 29, SpO2 94%. PMH: hypertension, obesity. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "fundoscopy",
+      "B": "observation only",
+      "C": "discharge home",
+      "D": "visual acuity",
+      "E": "CT/MRI"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "acute vision loss",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_129",
+    "ticket": "A 12-year-old male presents to the ED with GI bleeding. Vitals: HR 149, BP 64/46, RR 34, SpO2 82%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "observation only",
+      "B": "type and screen",
+      "C": "BMP",
+      "D": "CBC",
+      "E": "discharge home"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_stroke_symptoms_1_183",
+    "ticket": "A 4-year-old male arrives at the ED with stroke symptoms. Onset: 2 hours ago. Vitals: HR 147, BP 74/47, RR 36, SpO2 83%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "stroke symptoms",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_134",
+    "ticket": "A 64-year-old male presents to the ED with GI bleeding. Vitals: HR 144, BP 72/32, RR 38, SpO2 85%. PMH: COPD, hypertension. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "CBC",
+      "B": "observation only",
+      "C": "BMP",
+      "D": "type and screen",
+      "E": "discharge home"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_045",
+    "ticket": "A 35-year-old male presents with acute abdominal pain and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "perforated viscus",
+      "B": "ruptured AAA",
+      "C": "musculoskeletal strain",
+      "D": "anxiety",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_120",
+    "ticket": "A 20-year-old female presents with acute syncope and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "cardiac arrhythmia",
+      "C": "PE",
+      "D": "musculoskeletal strain",
+      "E": "aortic stenosis"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "syncope",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_GI_bleeding_1_128",
+    "ticket": "A 41-year-old female arrives at the ED with GI bleeding. Onset: 3 days ago. Vitals: HR 157, BP 75/32, RR 36, SpO2 82%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_GI_bleeding_3_138",
+    "ticket": "A 8-year-old female arrives at the ED with GI bleeding. Onset: 2 hours ago. Vitals: HR 88, BP 116/83, RR 17, SpO2 94%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_115",
+    "ticket": "A 7-year-old female presents with acute allergic reaction and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "angioedema",
+      "C": "anaphylaxis",
+      "D": "musculoskeletal strain",
+      "E": "anxiety"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_testicular_pain_2_192",
+    "ticket": "A 45-year-old female arrives at the ED with testicular pain. Onset: 2 days ago. Vitals: HR 130, BP 107/56, RR 29, SpO2 90%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "testicular pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_allergic_reaction_1_101",
+    "ticket": "A 61-year-old female arrives at the ED with allergic reaction. Onset: 3 days ago. Vitals: HR 136, BP 79/45, RR 31, SpO2 78%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_chest_pain_2_008",
+    "ticket": "A 26-year-old female arrives at the ED with chest pain. Onset: 2 hours ago. Vitals: HR 108, BP 91/55, RR 24, SpO2 94%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_chest_pain_2_006",
+    "ticket": "A 8-year-old female arrives at the ED with chest pain. Onset: 2 hours ago. Vitals: HR 102, BP 101/70, RR 23, SpO2 92%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_shortness_of_breath_3_028",
+    "ticket": "A 34-year-old male arrives at the ED with shortness of breath. Onset: 6 hours ago. Vitals: HR 104, BP 133/85, RR 23, SpO2 95%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_severe_back_pain_3_162",
+    "ticket": "A 78-year-old male arrives at the ED with severe back pain. Onset: 2 hours ago. Vitals: HR 106, BP 130/67, RR 17, SpO2 95%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "severe back pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_diabetic_emergency_1_226",
+    "ticket": "A 13-year-old female arrives at the ED with diabetic emergency. Onset: 3 days ago. Vitals: HR 157, BP 82/41, RR 39, SpO2 84%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "diabetic emergency",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_009",
+    "ticket": "A 17-year-old male presents to the ED with chest pain. Vitals: HR 124, BP 65/50, RR 35, SpO2 82%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "ECG",
+      "B": "troponin",
+      "C": "CXR",
+      "D": "observation only",
+      "E": "discharge home"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_144",
+    "ticket": "A 20-year-old male presents to the ED with fever with neutropenia. Vitals: HR 120, BP 106/63, RR 30, SpO2 91%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "discharge home",
+      "B": "blood cultures",
+      "C": "observation only",
+      "D": "CXR",
+      "E": "CBC"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "fever with neutropenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_fever_with_neutropenia_2_142",
+    "ticket": "A 60-year-old female arrives at the ED with fever with neutropenia. Onset: 2 days ago. Vitals: HR 119, BP 109/60, RR 25, SpO2 90%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "fever with neutropenia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_headache_3_061",
+    "ticket": "A 53-year-old female arrives at the ED with headache. Onset: 6 hours ago. Vitals: HR 104, BP 118/82, RR 23, SpO2 95%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_135",
+    "ticket": "A 64-year-old male presents with acute GI bleeding and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "anxiety",
+      "B": "musculoskeletal strain",
+      "C": "viral syndrome",
+      "D": "variceal bleeding",
+      "E": "massive hemorrhage"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_070",
+    "ticket": "A 16-year-old female presents with acute headache and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "SAH",
+      "C": "temporal arteritis",
+      "D": "viral syndrome",
+      "E": "meningitis"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_major_trauma_2_086",
+    "ticket": "A 38-year-old male arrives at the ED with major trauma. Onset: 1 day ago. Vitals: HR 104, BP 93/61, RR 28, SpO2 90%. PMH: hypertension, obesity. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "major trauma",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_054",
+    "ticket": "A 49-year-old male presents to the ED with abdominal pain. Vitals: HR 119, BP 107/63, RR 24, SpO2 93%. PMH: hypertension, obesity. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "discharge home",
+      "B": "CBC",
+      "C": "lipase",
+      "D": "CT abdomen",
+      "E": "observation only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_diabetic_emergency_1_227",
+    "ticket": "A 24-year-old female arrives at the ED with diabetic emergency. Onset: 2 hours ago. Vitals: HR 159, BP 64/36, RR 31, SpO2 87%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "diabetic emergency",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_acute_vision_loss_3_153",
+    "ticket": "A 26-year-old female arrives at the ED with acute vision loss. Onset: 3 days ago. Vitals: HR 104, BP 125/67, RR 19, SpO2 97%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "acute vision loss",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_shortness_of_breath_1_017",
+    "ticket": "A 20-year-old female arrives at the ED with shortness of breath. Onset: 6 hours ago. Vitals: HR 143, BP 69/42, RR 34, SpO2 87%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_testicular_pain_3_197",
+    "ticket": "A 27-year-old female arrives at the ED with testicular pain. Onset: 3 days ago. Vitals: HR 89, BP 117/68, RR 18, SpO2 97%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "testicular pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_abdominal_pain_3_047",
+    "ticket": "A 17-year-old male arrives at the ED with abdominal pain. Onset: 1 day ago. Vitals: HR 81, BP 119/66, RR 16, SpO2 95%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_chest_pain_1_002",
+    "ticket": "A 10-year-old female arrives at the ED with chest pain. Onset: 30 minutes ago. Vitals: HR 140, BP 78/43, RR 37, SpO2 81%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_headache_4_068",
+    "ticket": "A 31-year-old male arrives at the ED with headache. Onset: 3 days ago. Vitals: HR 88, BP 130/81, RR 17, SpO2 100%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 4",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_010",
+    "ticket": "A 17-year-old male presents with acute chest pain and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "STEMI",
+      "C": "viral syndrome",
+      "D": "aortic dissection",
+      "E": "PE"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_210",
+    "ticket": "A 27-year-old male presents with acute postpartum bleeding and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "DIC",
+      "B": "anxiety",
+      "C": "viral syndrome",
+      "D": "uterine atony",
+      "E": "musculoskeletal strain"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "postpartum bleeding",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_major_trauma_1_082",
+    "ticket": "A 24-year-old female arrives at the ED with major trauma. Onset: 2 hours ago. Vitals: HR 130, BP 70/48, RR 39, SpO2 80%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "major trauma",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_diabetic_emergency_2_231",
+    "ticket": "A 5-year-old female arrives at the ED with diabetic emergency. Onset: 3 days ago. Vitals: HR 110, BP 92/62, RR 29, SpO2 89%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "diabetic emergency",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_overdose/ingestion_2_097",
+    "ticket": "A 21-year-old male arrives at the ED with overdose/ingestion. Onset: 30 minutes ago. Vitals: HR 118, BP 107/53, RR 25, SpO2 88%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "overdose/ingestion",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_015",
+    "ticket": "A 51-year-old female presents with acute chest pain and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "PE",
+      "B": "aortic dissection",
+      "C": "musculoskeletal strain",
+      "D": "viral syndrome",
+      "E": "STEMI"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_050",
+    "ticket": "A 58-year-old female presents with acute abdominal pain and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "anxiety",
+      "C": "perforated viscus",
+      "D": "ruptured AAA",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_064",
+    "ticket": "A 17-year-old male presents to the ED with headache. Vitals: HR 130, BP 95/61, RR 23, SpO2 92%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "observation only",
+      "B": "CT head",
+      "C": "LP",
+      "D": "ESR",
+      "E": "discharge home"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_164",
+    "ticket": "A 10-year-old male presents to the ED with severe back pain. Vitals: HR 121, BP 100/50, RR 22, SpO2 92%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "UA",
+      "B": "BMP",
+      "C": "MRI spine",
+      "D": "observation only",
+      "E": "discharge home"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "severe back pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_chest_pain_2_007",
+    "ticket": "A 41-year-old female arrives at the ED with chest pain. Onset: 6 hours ago. Vitals: HR 111, BP 108/70, RR 24, SpO2 89%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_184",
+    "ticket": "A 53-year-old male presents to the ED with stroke symptoms. Vitals: HR 121, BP 62/41, RR 36, SpO2 76%. PMH: COPD, hypertension. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "observation only",
+      "B": "CT head",
+      "C": "CTA",
+      "D": "glucose",
+      "E": "discharge home"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "stroke symptoms",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_altered_mental_status_2_038",
+    "ticket": "A 13-year-old female arrives at the ED with altered mental status. Onset: 2 days ago. Vitals: HR 130, BP 108/69, RR 30, SpO2 91%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "altered mental status",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_abdominal_pain_4_051",
+    "ticket": "A 62-year-old male arrives at the ED with abdominal pain. Onset: 6 hours ago. Vitals: HR 70, BP 130/80, RR 16, SpO2 99%. PMH: COPD, hypertension. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 4",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_190",
+    "ticket": "A 35-year-old female presents with acute stroke symptoms and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "ischemic stroke",
+      "B": "hemorrhagic stroke",
+      "C": "anxiety",
+      "D": "viral syndrome",
+      "E": "musculoskeletal strain"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "stroke symptoms",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_burns_1_211",
+    "ticket": "A 26-year-old female arrives at the ED with burns. Onset: 2 days ago. Vitals: HR 126, BP 85/47, RR 30, SpO2 80%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_headache_4_066",
+    "ticket": "A 21-year-old female arrives at the ED with headache. Onset: 1 day ago. Vitals: HR 65, BP 126/82, RR 18, SpO2 99%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 4",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_syncope_2_116",
+    "ticket": "A 45-year-old male arrives at the ED with syncope. Onset: 2 hours ago. Vitals: HR 123, BP 99/70, RR 26, SpO2 93%. PMH: hypertension, obesity. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "syncope",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_headache_4_067",
+    "ticket": "A 32-year-old female arrives at the ED with headache. Onset: 2 days ago. Vitals: HR 69, BP 134/67, RR 14, SpO2 99%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 4",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_155",
+    "ticket": "A 33-year-old female presents with acute acute vision loss and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "CRAO",
+      "C": "retinal detachment",
+      "D": "viral syndrome",
+      "E": "stroke"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "acute vision loss",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_139",
+    "ticket": "A 17-year-old male presents to the ED with GI bleeding. Vitals: HR 146, BP 79/30, RR 31, SpO2 78%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "type and screen",
+      "B": "observation only",
+      "C": "BMP",
+      "D": "discharge home",
+      "E": "CBC"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_085",
+    "ticket": "A 50-year-old female presents with acute major trauma and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "hemorrhagic shock",
+      "B": "tension pneumothorax",
+      "C": "anxiety",
+      "D": "musculoskeletal strain",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "major trauma",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_allergic_reaction_3_111",
+    "ticket": "A 14-year-old male arrives at the ED with allergic reaction. Onset: 3 days ago. Vitals: HR 81, BP 139/84, RR 17, SpO2 98%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_severe_back_pain_3_163",
+    "ticket": "A 3-year-old male arrives at the ED with severe back pain. Onset: 2 hours ago. Vitals: HR 96, BP 124/71, RR 16, SpO2 98%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "severe back pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_004",
+    "ticket": "A 34-year-old male presents to the ED with chest pain. Vitals: HR 149, BP 82/41, RR 29, SpO2 81%. PMH: smoking. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "discharge home",
+      "B": "CXR",
+      "C": "observation only",
+      "D": "troponin",
+      "E": "ECG"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_089",
+    "ticket": "A 16-year-old female presents to the ED with major trauma. Vitals: HR 159, BP 63/34, RR 29, SpO2 81%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "FAST exam",
+      "B": "CT",
+      "C": "observation only",
+      "D": "discharge home",
+      "E": "type and screen"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "major trauma",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_100",
+    "ticket": "A 80-year-old male presents with acute overdose/ingestion and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "respiratory depression",
+      "C": "cardiac arrest",
+      "D": "musculoskeletal strain",
+      "E": "anxiety"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "overdose/ingestion",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_224",
+    "ticket": "A 66-year-old male presents to the ED with burns. Vitals: HR 148, BP 77/36, RR 34, SpO2 76%. PMH: atrial_fibrillation, CKD, diabetes. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "observation only",
+      "B": "discharge home",
+      "C": "TBSA assessment",
+      "D": "IV access",
+      "E": "airway eval"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_testicular_pain_3_198",
+    "ticket": "A 62-year-old female arrives at the ED with testicular pain. Onset: 30 minutes ago. Vitals: HR 94, BP 129/75, RR 22, SpO2 98%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "testicular pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_testicular_pain_2_193",
+    "ticket": "A 55-year-old female arrives at the ED with testicular pain. Onset: 1 day ago. Vitals: HR 130, BP 95/59, RR 29, SpO2 92%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "testicular pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_119",
+    "ticket": "A 20-year-old female presents to the ED with syncope. Vitals: HR 104, BP 100/60, RR 25, SpO2 88%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "discharge home",
+      "B": "orthostatics",
+      "C": "ECG",
+      "D": "observation only",
+      "E": "glucose"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "syncope",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_189",
+    "ticket": "A 35-year-old female presents to the ED with stroke symptoms. Vitals: HR 151, BP 79/49, RR 31, SpO2 82%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "glucose",
+      "B": "discharge home",
+      "C": "observation only",
+      "D": "CTA",
+      "E": "CT head"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "stroke symptoms",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_burns_2_216",
+    "ticket": "A 20-year-old female arrives at the ED with burns. Onset: 2 days ago. Vitals: HR 112, BP 98/69, RR 24, SpO2 92%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_220",
+    "ticket": "A 49-year-old female presents with acute burns and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "inhalation injury",
+      "B": "viral syndrome",
+      "C": "circumferential burns",
+      "D": "anxiety",
+      "E": "musculoskeletal strain"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_chest_pain_3_011",
+    "ticket": "A 59-year-old female arrives at the ED with chest pain. Onset: 6 hours ago. Vitals: HR 98, BP 111/71, RR 24, SpO2 94%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_229",
+    "ticket": "A 30-year-old male presents to the ED with diabetic emergency. Vitals: HR 138, BP 69/48, RR 32, SpO2 88%. PMH: smoking. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "ABG",
+      "B": "BMP",
+      "C": "ketones",
+      "D": "glucose",
+      "E": "observation only"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "diabetic emergency",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_169",
+    "ticket": "A 29-year-old female presents to the ED with palpitations. Vitals: HR 121, BP 87/70, RR 22, SpO2 88%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "ECG",
+      "B": "TSH",
+      "C": "electrolytes",
+      "D": "discharge home",
+      "E": "observation only"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_GI_bleeding_2_132",
+    "ticket": "A 19-year-old male arrives at the ED with GI bleeding. Onset: 2 days ago. Vitals: HR 101, BP 87/65, RR 22, SpO2 90%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_acute_vision_loss_2_147",
+    "ticket": "A 28-year-old male arrives at the ED with acute vision loss. Onset: 6 hours ago. Vitals: HR 127, BP 107/54, RR 29, SpO2 88%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "acute vision loss",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_185",
+    "ticket": "A 53-year-old male presents with acute stroke symptoms and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "anxiety",
+      "B": "ischemic stroke",
+      "C": "hemorrhagic stroke",
+      "D": "musculoskeletal strain",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "stroke symptoms",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_154",
+    "ticket": "A 33-year-old female presents to the ED with acute vision loss. Vitals: HR 110, BP 109/59, RR 28, SpO2 91%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "visual acuity",
+      "B": "observation only",
+      "C": "fundoscopy",
+      "D": "CT/MRI",
+      "E": "discharge home"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "acute vision loss",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_stroke_symptoms_1_182",
+    "ticket": "A 12-year-old male arrives at the ED with stroke symptoms. Onset: 6 hours ago. Vitals: HR 148, BP 71/38, RR 29, SpO2 77%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "stroke symptoms",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_225",
+    "ticket": "A 66-year-old male presents with acute burns and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "circumferential burns",
+      "C": "inhalation injury",
+      "D": "anxiety",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_severe_back_pain_2_158",
+    "ticket": "A 63-year-old female arrives at the ED with severe back pain. Onset: 6 hours ago. Vitals: HR 104, BP 91/60, RR 25, SpO2 91%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "severe back pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_postpartum_bleeding_2_208",
+    "ticket": "A 45-year-old male arrives at the ED with postpartum bleeding. Onset: 2 days ago. Vitals: HR 113, BP 99/57, RR 28, SpO2 93%. PMH: hypertension, obesity. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "postpartum bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_acute_vision_loss_3_151",
+    "ticket": "A 16-year-old female arrives at the ED with acute vision loss. Onset: 3 days ago. Vitals: HR 101, BP 127/66, RR 23, SpO2 95%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "acute vision loss",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_diabetic_emergency_1_228",
+    "ticket": "A 25-year-old female arrives at the ED with diabetic emergency. Onset: 2 days ago. Vitals: HR 142, BP 77/38, RR 37, SpO2 83%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "diabetic emergency",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_severe_back_pain_2_157",
+    "ticket": "A 6-year-old female arrives at the ED with severe back pain. Onset: 3 days ago. Vitals: HR 104, BP 85/58, RR 30, SpO2 92%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "severe back pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_235",
+    "ticket": "A 7-year-old female presents with acute diabetic emergency and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "HHS",
+      "C": "musculoskeletal strain",
+      "D": "DKA",
+      "E": "severe hypoglycemia"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "diabetic emergency",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_179",
+    "ticket": "A 47-year-old female presents to the ED with palpitations. Vitals: HR 113, BP 90/68, RR 28, SpO2 88%. PMH: diabetes. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "electrolytes",
+      "B": "observation only",
+      "C": "ECG",
+      "D": "TSH",
+      "E": "discharge home"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_allergic_reaction_2_106",
+    "ticket": "A 10-year-old female arrives at the ED with allergic reaction. Onset: 3 days ago. Vitals: HR 108, BP 108/65, RR 25, SpO2 89%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_039",
+    "ticket": "A 22-year-old female presents to the ED with altered mental status. Vitals: HR 135, BP 69/33, RR 28, SpO2 78%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "CT head",
+      "B": "tox screen",
+      "C": "glucose",
+      "D": "discharge home",
+      "E": "observation only"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "altered mental status",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_burns_2_217",
+    "ticket": "A 31-year-old male arrives at the ED with burns. Onset: 1 day ago. Vitals: HR 105, BP 100/70, RR 30, SpO2 93%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_090",
+    "ticket": "A 16-year-old female presents with acute major trauma and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "hemorrhagic shock",
+      "B": "musculoskeletal strain",
+      "C": "viral syndrome",
+      "D": "anxiety",
+      "E": "tension pneumothorax"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "major trauma",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_postpartum_bleeding_2_206",
+    "ticket": "A 36-year-old female arrives at the ED with postpartum bleeding. Onset: 3 days ago. Vitals: HR 103, BP 85/60, RR 23, SpO2 93%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "postpartum bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_stroke_symptoms_2_187",
+    "ticket": "A 73-year-old male arrives at the ED with stroke symptoms. Onset: 1 day ago. Vitals: HR 104, BP 87/55, RR 28, SpO2 90%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "stroke symptoms",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_palpitations_2_166",
+    "ticket": "A 24-year-old male arrives at the ED with palpitations. Onset: 2 hours ago. Vitals: HR 103, BP 88/66, RR 24, SpO2 89%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_burns_3_222",
+    "ticket": "A 29-year-old male arrives at the ED with burns. Onset: 2 hours ago. Vitals: HR 104, BP 124/78, RR 23, SpO2 98%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_GI_bleeding_3_136",
+    "ticket": "A 72-year-old male arrives at the ED with GI bleeding. Onset: 30 minutes ago. Vitals: HR 104, BP 110/69, RR 23, SpO2 98%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_shortness_of_breath_1_018",
+    "ticket": "A 75-year-old male arrives at the ED with shortness of breath. Onset: 3 days ago. Vitals: HR 158, BP 61/50, RR 38, SpO2 80%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_altered_mental_status_2_037",
+    "ticket": "A 34-year-old male arrives at the ED with altered mental status. Onset: 30 minutes ago. Vitals: HR 128, BP 87/50, RR 26, SpO2 89%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "altered mental status",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_035",
+    "ticket": "A 24-year-old male presents with acute altered mental status and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "hypoglycemia",
+      "C": "musculoskeletal strain",
+      "D": "meningitis",
+      "E": "stroke"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "altered mental status",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_overdose/ingestion_2_098",
+    "ticket": "A 79-year-old female arrives at the ED with overdose/ingestion. Onset: 6 hours ago. Vitals: HR 113, BP 89/63, RR 25, SpO2 91%. PMH: heart_failure, osteoporosis. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "overdose/ingestion",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_altered_mental_status_2_036",
+    "ticket": "A 12-year-old male arrives at the ED with altered mental status. Onset: 6 hours ago. Vitals: HR 129, BP 100/54, RR 29, SpO2 91%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "altered mental status",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_seizure_2_077",
+    "ticket": "A 35-year-old female arrives at the ED with seizure. Onset: 6 hours ago. Vitals: HR 115, BP 92/62, RR 26, SpO2 91%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "seizure",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_095",
+    "ticket": "A 80-year-old male presents with acute overdose/ingestion and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "anxiety",
+      "C": "cardiac arrest",
+      "D": "musculoskeletal strain",
+      "E": "respiratory depression"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "overdose/ingestion",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_major_trauma_1_081",
+    "ticket": "A 64-year-old female arrives at the ED with major trauma. Onset: 2 hours ago. Vitals: HR 129, BP 63/31, RR 32, SpO2 81%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "major trauma",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_severe_back_pain_2_156",
+    "ticket": "A 14-year-old male arrives at the ED with severe back pain. Onset: 2 hours ago. Vitals: HR 111, BP 95/63, RR 22, SpO2 92%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "severe back pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_shortness_of_breath_3_027",
+    "ticket": "A 66-year-old female arrives at the ED with shortness of breath. Onset: 1 day ago. Vitals: HR 91, BP 131/83, RR 19, SpO2 97%. PMH: heart_failure, osteoporosis. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_shortness_of_breath_2_023",
+    "ticket": "A 17-year-old female arrives at the ED with shortness of breath. Onset: 3 days ago. Vitals: HR 113, BP 101/61, RR 22, SpO2 90%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_099",
+    "ticket": "A 80-year-old male presents to the ED with overdose/ingestion. Vitals: HR 123, BP 82/34, RR 36, SpO2 78%. PMH: atrial_fibrillation, CKD, diabetes. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "tox screen",
+      "B": "ECG",
+      "C": "observation only",
+      "D": "acetaminophen level",
+      "E": "discharge home"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "overdose/ingestion",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_059",
+    "ticket": "A 49-year-old female presents to the ED with headache. Vitals: HR 124, BP 87/68, RR 24, SpO2 92%. PMH: diabetes. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "CT head",
+      "B": "discharge home",
+      "C": "LP",
+      "D": "observation only",
+      "E": "ESR"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_019",
+    "ticket": "A 23-year-old female presents to the ED with shortness of breath. Vitals: HR 126, BP 77/42, RR 32, SpO2 79%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "D-dimer",
+      "B": "CXR",
+      "C": "observation only",
+      "D": "ABG",
+      "E": "discharge home"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_174",
+    "ticket": "A 14-year-old female presents to the ED with palpitations. Vitals: HR 100, BP 91/68, RR 24, SpO2 94%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "TSH",
+      "B": "discharge home",
+      "C": "electrolytes",
+      "D": "ECG",
+      "E": "observation only"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_palpitations_3_172",
+    "ticket": "A 56-year-old female arrives at the ED with palpitations. Onset: 3 days ago. Vitals: HR 108, BP 128/75, RR 20, SpO2 94%. PMH: osteoarthritis, hypothyroidism. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_109",
+    "ticket": "A 25-year-old female presents to the ED with allergic reaction. Vitals: HR 126, BP 73/40, RR 39, SpO2 82%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "discharge home",
+      "B": "observation only",
+      "C": "None of the above",
+      "D": "airway assessment",
+      "E": "vitals"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_altered_mental_status_1_031",
+    "ticket": "A 14-year-old male arrives at the ED with altered mental status. Onset: 30 minutes ago. Vitals: HR 150, BP 71/47, RR 29, SpO2 86%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "altered mental status",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_burns_2_218",
+    "ticket": "A 40-year-old female arrives at the ED with burns. Onset: 2 days ago. Vitals: HR 105, BP 100/59, RR 24, SpO2 89%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_stroke_symptoms_2_188",
+    "ticket": "A 31-year-old female arrives at the ED with stroke symptoms. Onset: 6 hours ago. Vitals: HR 115, BP 110/52, RR 27, SpO2 90%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "stroke symptoms",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_chest_pain_1_003",
+    "ticket": "A 35-year-old female arrives at the ED with chest pain. Onset: 1 day ago. Vitals: HR 138, BP 63/42, RR 28, SpO2 80%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_114",
+    "ticket": "A 7-year-old female presents to the ED with allergic reaction. Vitals: HR 122, BP 60/39, RR 37, SpO2 84%. PMH: asthma. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "None of the above",
+      "B": "discharge home",
+      "C": "airway assessment",
+      "D": "observation only",
+      "E": "vitals"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_GI_bleeding_2_133",
+    "ticket": "A 9-year-old female arrives at the ED with GI bleeding. Onset: 2 hours ago. Vitals: HR 124, BP 89/70, RR 28, SpO2 90%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_headache_2_058",
+    "ticket": "A 15-year-old male arrives at the ED with headache. Onset: 2 days ago. Vitals: HR 101, BP 104/54, RR 29, SpO2 90%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_acute_vision_loss_3_152",
+    "ticket": "A 23-year-old female arrives at the ED with acute vision loss. Onset: 6 hours ago. Vitals: HR 110, BP 139/60, RR 19, SpO2 95%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "acute vision loss",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_200",
+    "ticket": "A 78-year-old male presents with acute testicular pain and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "anxiety",
+      "C": "viral syndrome",
+      "D": "testicular torsion",
+      "E": "Fournier's gangrene"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "testicular pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_020",
+    "ticket": "A 23-year-old female presents with acute shortness of breath and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "PE",
+      "B": "anaphylaxis",
+      "C": "viral syndrome",
+      "D": "tension pneumothorax",
+      "E": "musculoskeletal strain"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_syncope_3_123",
+    "ticket": "A 44-year-old female arrives at the ED with syncope. Onset: 6 hours ago. Vitals: HR 99, BP 117/67, RR 18, SpO2 97%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "syncope",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_diabetic_emergency_2_232",
+    "ticket": "A 34-year-old male arrives at the ED with diabetic emergency. Onset: 3 days ago. Vitals: HR 108, BP 105/63, RR 28, SpO2 91%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "diabetic emergency",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_204",
+    "ticket": "A 19-year-old female presents to the ED with postpartum bleeding. Vitals: HR 129, BP 71/39, RR 33, SpO2 82%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "CBC",
+      "B": "uterine assessment",
+      "C": "discharge home",
+      "D": "observation only",
+      "E": "coags"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "postpartum bleeding",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_025",
+    "ticket": "A 40-year-old male presents with acute shortness of breath and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "tension pneumothorax",
+      "C": "anaphylaxis",
+      "D": "musculoskeletal strain",
+      "E": "PE"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_195",
+    "ticket": "A 13-year-old male presents with acute testicular pain and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "Fournier's gangrene",
+      "C": "viral syndrome",
+      "D": "testicular torsion",
+      "E": "anxiety"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "testicular pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_194",
+    "ticket": "A 13-year-old male presents to the ED with testicular pain. Vitals: HR 110, BP 97/58, RR 28, SpO2 90%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "discharge home",
+      "B": "None of the above",
+      "C": "observation only",
+      "D": "UA",
+      "E": "doppler US"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "testicular pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_postpartum_bleeding_1_203",
+    "ticket": "A 54-year-old male arrives at the ED with postpartum bleeding. Onset: 6 hours ago. Vitals: HR 121, BP 75/33, RR 32, SpO2 81%. PMH: COPD, hypertension. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "postpartum bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_060",
+    "ticket": "A 49-year-old female presents with acute headache and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "temporal arteritis",
+      "C": "viral syndrome",
+      "D": "SAH",
+      "E": "meningitis"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_180",
+    "ticket": "A 47-year-old female presents with acute palpitations and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "SVT",
+      "C": "musculoskeletal strain",
+      "D": "Afib with RVR",
+      "E": "VT"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_079",
+    "ticket": "A 56-year-old female presents to the ED with seizure. Vitals: HR 141, BP 79/34, RR 33, SpO2 88%. PMH: osteoarthritis, hypothyroidism. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "observation only",
+      "B": "glucose",
+      "C": "electrolytes",
+      "D": "discharge home",
+      "E": "CT head"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "seizure",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_diabetic_emergency_2_233",
+    "ticket": "A 26-year-old female arrives at the ED with diabetic emergency. Onset: 3 days ago. Vitals: HR 125, BP 109/52, RR 28, SpO2 92%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "diabetic emergency",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_allergic_reaction_1_102",
+    "ticket": "A 73-year-old male arrives at the ED with allergic reaction. Onset: 2 days ago. Vitals: HR 139, BP 67/39, RR 40, SpO2 79%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_014",
+    "ticket": "A 51-year-old female presents to the ED with chest pain. Vitals: HR 148, BP 85/48, RR 38, SpO2 78%. PMH: osteoarthritis, hypothyroidism. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "troponin",
+      "B": "ECG",
+      "C": "discharge home",
+      "D": "observation only",
+      "E": "CXR"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_abdominal_pain_2_043",
+    "ticket": "A 35-year-old male arrives at the ED with abdominal pain. Onset: 1 day ago. Vitals: HR 127, BP 100/51, RR 28, SpO2 90%. PMH: hypertension, obesity. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_199",
+    "ticket": "A 78-year-old male presents to the ED with testicular pain. Vitals: HR 117, BP 86/61, RR 30, SpO2 92%. PMH: atrial_fibrillation, CKD, diabetes. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "observation only",
+      "B": "UA",
+      "C": "discharge home",
+      "D": "None of the above",
+      "E": "doppler US"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "testicular pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_palpitations_3_171",
+    "ticket": "A 23-year-old female arrives at the ED with palpitations. Onset: 2 days ago. Vitals: HR 107, BP 113/76, RR 16, SpO2 95%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_overdose/ingestion_2_096",
+    "ticket": "A 10-year-old female arrives at the ED with overdose/ingestion. Onset: 2 hours ago. Vitals: HR 116, BP 105/69, RR 28, SpO2 89%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "overdose/ingestion",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_shortness_of_breath_2_022",
+    "ticket": "A 9-year-old female arrives at the ED with shortness of breath. Onset: 3 days ago. Vitals: HR 125, BP 95/54, RR 30, SpO2 88%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_065",
+    "ticket": "A 17-year-old male presents with acute headache and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "musculoskeletal strain",
+      "B": "SAH",
+      "C": "viral syndrome",
+      "D": "temporal arteritis",
+      "E": "meningitis"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_overdose/ingestion_1_093",
+    "ticket": "A 13-year-old male arrives at the ED with overdose/ingestion. Onset: 1 day ago. Vitals: HR 159, BP 83/39, RR 37, SpO2 80%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "overdose/ingestion",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_palpitations_2_168",
+    "ticket": "A 9-year-old female arrives at the ED with palpitations. Onset: 30 minutes ago. Vitals: HR 111, BP 97/64, RR 25, SpO2 93%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_024",
+    "ticket": "A 40-year-old male presents to the ED with shortness of breath. Vitals: HR 133, BP 70/45, RR 31, SpO2 78%. PMH: hypertension, obesity. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "D-dimer",
+      "B": "observation only",
+      "C": "CXR",
+      "D": "discharge home",
+      "E": "ABG"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_seizure_1_071",
+    "ticket": "A 13-year-old female arrives at the ED with seizure. Onset: 6 hours ago. Vitals: HR 130, BP 65/40, RR 39, SpO2 78%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "seizure",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_postpartum_bleeding_2_207",
+    "ticket": "A 20-year-old female arrives at the ED with postpartum bleeding. Onset: 3 days ago. Vitals: HR 107, BP 101/55, RR 30, SpO2 89%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "postpartum bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_seizure_2_078",
+    "ticket": "A 67-year-old female arrives at the ED with seizure. Onset: 3 days ago. Vitals: HR 101, BP 90/64, RR 28, SpO2 91%. PMH: heart_failure, osteoporosis. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "seizure",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_palpitations_2_167",
+    "ticket": "A 71-year-old male arrives at the ED with palpitations. Onset: 2 days ago. Vitals: HR 116, BP 93/61, RR 26, SpO2 94%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_burns_3_223",
+    "ticket": "A 19-year-old female arrives at the ED with burns. Onset: 2 days ago. Vitals: HR 83, BP 118/84, RR 24, SpO2 96%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_palpitations_4_177",
+    "ticket": "A 66-year-old male arrives at the ED with palpitations. Onset: 30 minutes ago. Vitals: HR 78, BP 122/67, RR 16, SpO2 100%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 4",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_abdominal_pain_4_052",
+    "ticket": "A 4-year-old female arrives at the ED with abdominal pain. Onset: 3 days ago. Vitals: HR 78, BP 117/78, RR 18, SpO2 98%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 4",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_234",
+    "ticket": "A 7-year-old female presents to the ED with diabetic emergency. Vitals: HR 143, BP 74/45, RR 33, SpO2 84%. PMH: asthma. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "ketones",
+      "B": "BMP",
+      "C": "ABG",
+      "D": "observation only",
+      "E": "glucose"
+    },
+    "correct_answer": "E",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "diabetic emergency",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_chest_pain_1_001",
+    "ticket": "A 76-year-old male arrives at the ED with chest pain. Onset: 30 minutes ago. Vitals: HR 145, BP 83/31, RR 34, SpO2 75%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_syncope_2_117",
+    "ticket": "A 27-year-old female arrives at the ED with syncope. Onset: 30 minutes ago. Vitals: HR 123, BP 95/59, RR 25, SpO2 89%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "syncope",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_allergic_reaction_3_113",
+    "ticket": "A 40-year-old female arrives at the ED with allergic reaction. Onset: 30 minutes ago. Vitals: HR 106, BP 122/85, RR 23, SpO2 95%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_abdominal_pain_2_041",
+    "ticket": "A 9-year-old female arrives at the ED with abdominal pain. Onset: 30 minutes ago. Vitals: HR 119, BP 96/57, RR 28, SpO2 89%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_altered_mental_status_1_032",
+    "ticket": "A 68-year-old female arrives at the ED with altered mental status. Onset: 6 hours ago. Vitals: HR 125, BP 84/35, RR 32, SpO2 82%. PMH: heart_failure, osteoporosis. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "altered mental status",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_005",
+    "ticket": "A 34-year-old male presents with acute chest pain and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "PE",
+      "C": "aortic dissection",
+      "D": "STEMI",
+      "E": "musculoskeletal strain"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_syncope_2_118",
+    "ticket": "A 24-year-old female arrives at the ED with syncope. Onset: 1 day ago. Vitals: HR 116, BP 95/52, RR 28, SpO2 93%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "syncope",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_postpartum_bleeding_1_201",
+    "ticket": "A 12-year-old male arrives at the ED with postpartum bleeding. Onset: 30 minutes ago. Vitals: HR 126, BP 68/37, RR 36, SpO2 86%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "postpartum bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_severe_back_pain_3_161",
+    "ticket": "A 25-year-old male arrives at the ED with severe back pain. Onset: 2 days ago. Vitals: HR 81, BP 136/62, RR 16, SpO2 94%. PMH: smoking. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "severe back pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_shortness_of_breath_3_026",
+    "ticket": "A 16-year-old male arrives at the ED with shortness of breath. Onset: 1 day ago. Vitals: HR 84, BP 115/65, RR 18, SpO2 97%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "shortness of breath",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_chest_pain_3_012",
+    "ticket": "A 14-year-old female arrives at the ED with chest pain. Onset: 1 day ago. Vitals: HR 94, BP 111/61, RR 21, SpO2 96%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_chest_pain_3_013",
+    "ticket": "A 4-year-old male arrives at the ED with chest pain. Onset: 3 days ago. Vitals: HR 107, BP 137/62, RR 24, SpO2 97%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "chest pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_testicular_pain_3_196",
+    "ticket": "A 7-year-old female arrives at the ED with testicular pain. Onset: 3 days ago. Vitals: HR 82, BP 136/85, RR 22, SpO2 97%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 3",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "testicular pain",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_175",
+    "ticket": "A 14-year-old female presents with acute palpitations and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "VT",
+      "B": "viral syndrome",
+      "C": "Afib with RVR",
+      "D": "SVT",
+      "E": "musculoskeletal strain"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "palpitations",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_major_trauma_2_088",
+    "ticket": "A 22-year-old male arrives at the ED with major trauma. Onset: 30 minutes ago. Vitals: HR 112, BP 101/64, RR 30, SpO2 90%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "major trauma",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_postpartum_bleeding_1_202",
+    "ticket": "A 42-year-old female arrives at the ED with postpartum bleeding. Onset: 1 day ago. Vitals: HR 143, BP 72/44, RR 40, SpO2 85%. PMH: diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "postpartum bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_125",
+    "ticket": "A 32-year-old male presents with acute syncope and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "musculoskeletal strain",
+      "C": "aortic stenosis",
+      "D": "cardiac arrhythmia",
+      "E": "PE"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "syncope",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_219",
+    "ticket": "A 49-year-old female presents to the ED with burns. Vitals: HR 159, BP 61/41, RR 28, SpO2 82%. PMH: diabetes. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "TBSA assessment",
+      "B": "IV access",
+      "C": "observation only",
+      "D": "discharge home",
+      "E": "airway eval"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_145",
+    "ticket": "A 20-year-old male presents with acute fever with neutropenia and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "sepsis",
+      "B": "fungal infection",
+      "C": "musculoskeletal strain",
+      "D": "viral syndrome",
+      "E": "anxiety"
+    },
+    "correct_answer": "A",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "fever with neutropenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_034",
+    "ticket": "A 24-year-old male presents to the ED with altered mental status. Vitals: HR 123, BP 72/46, RR 33, SpO2 78%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "tox screen",
+      "B": "discharge home",
+      "C": "CT head",
+      "D": "glucose",
+      "E": "observation only"
+    },
+    "correct_answer": "D",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "altered mental status",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_acute_vision_loss_2_148",
+    "ticket": "A 48-year-old male arrives at the ED with acute vision loss. Onset: 1 day ago. Vitals: HR 117, BP 101/54, RR 28, SpO2 89%. PMH: hypertension, obesity. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "acute vision loss",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_fever_with_neutropenia_2_141",
+    "ticket": "A 56-year-old male arrives at the ED with fever with neutropenia. Onset: 30 minutes ago. Vitals: HR 104, BP 101/59, RR 25, SpO2 94%. PMH: COPD, hypertension. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "fever with neutropenia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_major_trauma_2_087",
+    "ticket": "A 66-year-old male arrives at the ED with major trauma. Onset: 1 day ago. Vitals: HR 101, BP 103/67, RR 25, SpO2 90%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "major trauma",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_seizure_1_073",
+    "ticket": "A 73-year-old male arrives at the ED with seizure. Onset: 2 hours ago. Vitals: HR 160, BP 69/49, RR 36, SpO2 76%. PMH: atrial_fibrillation, CKD, diabetes. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "seizure",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_burns_1_213",
+    "ticket": "A 10-year-old female arrives at the ED with burns. Onset: 2 days ago. Vitals: HR 160, BP 70/49, RR 34, SpO2 84%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_major_trauma_1_083",
+    "ticket": "A 41-year-old male arrives at the ED with major trauma. Onset: 2 hours ago. Vitals: HR 151, BP 76/44, RR 35, SpO2 79%. PMH: hypertension, obesity. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "major trauma",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa_069",
+    "ticket": "A 16-year-old female presents to the ED with headache. Vitals: HR 102, BP 89/60, RR 23, SpO2 91%. Which diagnostic study should be ordered FIRST?",
+    "options": {
+      "A": "LP",
+      "B": "discharge home",
+      "C": "CT head",
+      "D": "ESR",
+      "E": "observation only"
+    },
+    "correct_answer": "C",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_GI_bleeding_1_127",
+    "ticket": "A 5-year-old female arrives at the ED with GI bleeding. Onset: 2 hours ago. Vitals: HR 140, BP 76/44, RR 29, SpO2 85%. PMH: asthma. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "GI bleeding",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_055",
+    "ticket": "A 49-year-old male presents with acute abdominal pain and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "anxiety",
+      "B": "ruptured AAA",
+      "C": "perforated viscus",
+      "D": "musculoskeletal strain",
+      "E": "viral syndrome"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "abdominal pain",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_burns_1_212",
+    "ticket": "A 45-year-old male arrives at the ED with burns. Onset: 2 hours ago. Vitals: HR 149, BP 63/38, RR 38, SpO2 88%. PMH: hypertension, obesity. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 1",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "burns",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "tri_mcqa2_110",
+    "ticket": "A 25-year-old female presents with acute allergic reaction and hemodynamic instability. Which life-threatening condition must be ruled out FIRST?",
+    "options": {
+      "A": "viral syndrome",
+      "B": "anaphylaxis",
+      "C": "angioedema",
+      "D": "anxiety",
+      "E": "musculoskeletal strain"
+    },
+    "correct_answer": "B",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "allergic reaction",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "tri_bal_headache_2_056",
+    "ticket": "A 24-year-old female arrives at the ED with headache. Onset: 6 hours ago. Vitals: HR 116, BP 110/55, RR 22, SpO2 89%. Perform triage assessment and assign ESI level.",
+    "correct_answer": "ESI 2",
+    "_source_domain": "triage_emergency",
+    "description": {
+      "condition": "headache",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  }
+]

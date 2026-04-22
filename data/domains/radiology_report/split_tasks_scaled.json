@@ -1,0 +1,34 @@
+{
+  "train": [
+    "rad_ct_lung_mass_015",
+    "rad_mri_multiple_sclerosis_018",
+    "rad_ct_hemorrhagic_stroke_007",
+    "rad_xr_pneumonia_001",
+    "rad_ct_mediastinal_mass_016",
+    "rad_mri_abscess_019",
+    "rad_mri_spinal_stenosis_021",
+    "rad_xr_pneumothorax_003",
+    "rad_ct_pancreatitis_013",
+    "rad_ct_normal_009",
+    "rad_mri_disc_herniation_020",
+    "rad_mg_mass_suspicious_026",
+    "rad_us_liver_mass_024",
+    "rad_mg_calcifications_027",
+    "rad_ct_pulmonary_embolism_014",
+    "rad_us_cholecystitis_023",
+    "rad_us_aortic_aneurysm_025",
+    "rad_ct_renal_stone_012",
+    "rad_ct_subdural_hematoma_008"
+  ],
+  "test": [
+    "rad_ct_bowel_obstruction_011",
+    "rad_mri_cord_compression_022",
+    "rad_ct_ischemic_stroke_006",
+    "rad_ct_appendicitis_010",
+    "rad_xr_normal_005",
+    "rad_mri_brain_tumor_017",
+    "rad_xr_cardiomegaly_004",
+    "rad_xr_pleural_effusion_002",
+    "rad_mg_normal_028"
+  ]
+}

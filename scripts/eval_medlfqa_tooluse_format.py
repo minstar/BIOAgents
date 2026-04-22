@@ -51,14 +51,22 @@ SUBMIT_ANSWER_TOOL = {
     },
 }
 
-# Tools passed to apply_chat_template
+# Tools passed to apply_chat_template — single placeholder to trigger tool-call instructions
 OPENAI_TOOLS = [SUBMIT_ANSWER_TOOL]
 
-# System prompt for long-form medical QA
-SYSTEM_PROMPT = (
-    "You are a medical expert. Provide detailed, accurate, evidence-based answers to medical questions. "
-    "Submit your answer by calling the submit_answer tool with a comprehensive response."
-)
+# Load training-aligned system prompt with full domain tools
+_TRAINING_PROMPTS_PATH = Path(__file__).parent / "verl" / "training_system_prompts.json"
+if _TRAINING_PROMPTS_PATH.exists():
+    with open(_TRAINING_PROMPTS_PATH) as _f:
+        _TRAINING_PROMPTS = json.load(_f)
+    SYSTEM_PROMPT = _TRAINING_PROMPTS.get("medical_qa", "")
+    print(f"  Loaded training system prompt: medical_qa ({len(SYSTEM_PROMPT)} chars)", flush=True)
+else:
+    SYSTEM_PROMPT = (
+        "You are a medical expert. Provide detailed, accurate, evidence-based answers to medical questions. "
+        "Submit your answer by calling the submit_answer tool with a comprehensive response."
+    )
+    print(f"  WARNING: training_system_prompts.json not found, using fallback prompt", flush=True)
 
 # ── MedLFQA datasets ──
 MEDLFQA_DATASETS = {

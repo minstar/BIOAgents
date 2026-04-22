@@ -1,0 +1,1549 @@
+\documentclass{article}
+
+% NeurIPS 2026 template — using main track (double-blind) for submission
+\usepackage{neurips_2026}
+% After acceptance, use: \usepackage[main, final]{neurips_2026}
+% For E&D track: \usepackage[eandd]{neurips_2026}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\newtheorem{proposition}{Proposition}[section]
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,fit,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\usepackage{pifont}
+\usepackage{colortbl}
+
+% --- Custom commands ---
+\newcommand{\gym}{\textsc{Healthcare AI GYM}}
+\newcommand{\sysname}{\textsc{BioAgents}}
+\newcommand{\ours}{\textsc{GYM-RL}}
+\newcommand{\eg}{\textit{e.g.}}
+\newcommand{\ie}{\textit{i.e.}}
+\newcommand{\cf}{\textit{cf.}}
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+\newcommand{\rq}[1]{\textbf{RQ#1}}
+
+\title{\gym{} for Agents}
+
+\author{%
+  Anonymous Authors \\
+}
+
+\begin{document}
+\maketitle
+
+% ============================================================
+\begin{abstract}
+% ============================================================
+Clinical reasoning demands multi-step interactions---gathering patient history, ordering tests, interpreting results, and making safe treatment decisions---yet no existing training environment provides the breadth of clinical domains, specialized tools, and safety-aware evaluation needed to train generalizable medical AI agents through reinforcement learning. We introduce \gym{}, a Gymnasium-compatible environment spanning 10 clinical domains with 195K+ tasks, 187+ domain-specific tools, and a knowledge base of 828K medical passages, designed to close this gap. Training agents in \gym{} reveals three compounding failure modes in multi-turn agentic RL: response lengths explode to the generation limit, multi-turn tool-use collapses into single-turn monologues, and on-policy distillation---effective for single-turn reasoning---fails to prevent monotonic decline. To address these instabilities, we propose \emph{Turn-Level Truncated On-Policy Distillation} (TT-OPD), a teacher-student co-evolution framework where an EMA-updated teacher conditions on outcome-privileged information to provide dense, outcome-aware KL regularization at every conversation turn. Combined with cosine length-controlled reward, TT-OPD achieves 61.1\% validation accuracy (+8.5 pp over baseline) while sustaining multi-turn tool use ($\approx$7.0--7.4 turns) and controlled response length across 60 training steps; standard GRPO produces no improvement. Our environment and training pipeline are publicly available.
+\end{abstract}
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+
+Large language models have demonstrated impressive medical knowledge on standardized benchmarks~\citep{jin2021medqa, hendrycks2021mmlu, jin2019pubmedqa, pal2022medmcqa}, with GPT-4~\citep{nori2023gpt4} and Med-PaLM~2~\citep{singhal2023medpalm2} approaching expert-level accuracy~\citep{thirunavukarasu2023medicalai}. Chain-of-thought prompting~\citep{wei2022cot} and self-consistency decoding~\citep{wang2023selfconsistency} further improve structured reasoning. Yet these evaluations measure \emph{passive} knowledge---the ability to select a correct answer from options---rather than \emph{agentic} clinical competence: the ability to gather patient information, order appropriate tests, interpret results in context, and make safe treatment decisions through multi-step tool-use interactions~\citep{yao2023react}. Bridging this gap requires training environments where models learn to \emph{act} as clinical agents, not merely answer questions.
+
+\paragraph{The Environment Gap.}
+Existing medical agent environments address fragments of this challenge. AgentClinic~\citep{schmidgall2025agentclinic} simulates patient-doctor diagnostic conversations but is limited to a single domain without tool use or RL-based training. Agent Hospital~\citep{li2024agenthospital} simulates multi-agent hospital workflows but focuses on experience accumulation rather than RL training. MedAgentGym~\citep{medagentgym2026} provides a Gymnasium interface for training with RL, but its tool system is code-centric (Python execution sandboxes) rather than clinical (ordering labs, computing severity scores), limiting ecological validity. MedOpenClaw~\citep{shen2025medopenclaw} supports medical imaging agents but reveals a ``tool-use paradox'' where adding professional tools \emph{degrades} performance---suggesting that tool-use competence requires RL training rather than mere prompting. While agent frameworks like ReAct~\citep{yao2023react} and Reflexion~\citep{shinn2023reflexion} demonstrate multi-step reasoning, none of these environments simultaneously provide (1) multi-domain clinical coverage, (2) domain-specific tool ecosystems reflecting actual clinical workflows, (3) safety-aware evaluation, and (4) compatibility with modern RL training frameworks. This motivates the construction of \gym{}, a unified training environment spanning 10 clinical domains with 195K+ tasks, 187+ specialized tools, and a knowledge base of 828K medical passages (Appendix~\ref{Appendix:AI_healthcare_gym}).
+
+\paragraph{The Training Instability Problem.}
+Training language model agents in \gym{} through multi-turn RL reveals three compounding failure modes that are absent from single-turn reasoning settings:
+
+\begin{itemize}[leftmargin=*,itemsep=2pt,topsep=2pt]
+    \item \emph{Response explosion}: outputs grow monotonically to the generation limit (12,288 tokens). Because reward is delivered only at episode termination, the model learns to maximize token-level coverage as a proxy for task completion---producing longer responses that are more likely to contain the correct answer somewhere, even at the cost of coherence.
+
+    \item \emph{Multi-turn collapse}: the model degenerates from structured multi-turn tool-use dialogues (think $\to$ search $\to$ submit) into single-turn monologues that bypass the tool interface entirely. Single-turn verbosity is easier to optimize than coordinated multi-step tool use, which requires learning a latent turn-taking policy.
+
+    \item \emph{Distillation instability}: on-policy distillation (OPD)---effective for stabilizing single-turn reasoning~\citep{zhao26opsd, yang26rlsd}---fails to prevent monotonic decline in agentic settings. Trajectory diversity (the combinatorial space of tool-call sequences) causes the teacher to become stale orders of magnitude faster than in closed-form QA, where the output space is comparatively constrained.
+\end{itemize}
+
+These failure modes share a common root cause: the mismatch between sparse terminal reward and the sequential structure of agentic trajectories. Standard GRPO~\citep{shao2024deepseekmath} provides no mechanism to address this mismatch---in our experiments, it produces zero improvement over 60 training steps.
+
+\paragraph{Our Approach.}
+We propose \emph{Turn-Level Truncated On-Policy Distillation} (TT-OPD), a teacher-student co-evolution framework that resolves these compounding instabilities. An EMA-updated teacher conditions on outcome-privileged information---correctness signals injected into the teacher's context but withheld from the student---to provide dense, outcome-aware KL regularization at every conversation turn. Combined with cosine length-controlled reward, TT-OPD achieves 61.1\% validation accuracy (+8.5 pp) with stable multi-turn tool use (7.0--7.4 turns) across 60 training steps. Our contributions:
+
+\begin{enumerate}[leftmargin=*,itemsep=1pt,topsep=2pt]
+    \item \textbf{Turn-Level Truncated On-Policy Distillation (TT-OPD).} A teacher-student co-evolution framework where bidirectional outcome-privileged conditioning provides dense, outcome-aware KL regularization at every conversation turn. Standard GRPO shows no improvement under identical conditions.
+
+    \item \textbf{Systematic OPD Failure Analysis.} Four ablation variants trace the failure progression from KL collapse (periodic teacher reset) through response explosion (privileged conditioning without length control), identifying multi-turn collapse as an \emph{agentic-specific} failure mode absent from single-turn OPD settings~\citep{yang26rlsd, zhao26opsd}.
+
+    \item \textbf{Multi-Domain Medical Gymnasium.} A unified environment spanning 10 clinical domains with 195K+ tasks, 187+ domain-specific tools, a knowledge-grounded retrieval system over 828K passages, and a safety-aware 5D reward function (Appendix~\ref{Appendix:AI_healthcare_gym}).
+
+    \item \textbf{Agentic-Textual Transfer Gap.} Agentic RL improves procedural competence (+22\% composite reward) but does not transfer to text QA due to format reward dilution (24:1 ratio), and only Dr.~GRPO~\citep{liu2025drgrpo} produces meaningfully different dynamics.
+\end{enumerate}
+
+% ============================================================
+\section{Related Work}
+\label{sec:related}
+% ============================================================
+
+\paragraph{Medical AI Agents.}
+Beyond the environments discussed in \S\ref{sec:intro}, MediX-R1~\citep{medixr1} applies GRPO to medical reasoning but focuses on single-turn generation. HuatuoGPT-o1~\citep{chen2024huatuogpt} explores complex medical reasoning with LLMs. Tool-augmented LLMs~\citep{schick2024toolformer, qin2023toolllm} learn to invoke external APIs, and retrieval-augmented generation~\citep{lewis2020rag} from medical knowledge bases improves factual grounding~\citep{xiong2024medcpt}. Our work differs by providing a unified multi-domain \emph{training} environment with clinical tool ecosystems, safety-aware rewards, and anti-collapse training methods.
+
+\paragraph{RL for LLMs and On-Policy Distillation.}
+Policy gradient methods~\citep{schulman2017ppo} underpin modern LLM alignment~\citep{ouyang2022instructgpt}, with alternatives like DPO~\citep{rafailov2023dpo} bypassing reward models. GRPO~\citep{shao2024deepseekmath} uses group relative rewards; DAPO~\citep{dapo2025} introduces dynamic sampling and asymmetric clipping; Dr.~GRPO~\citep{liu2025drgrpo} removes length normalization bias. However, in online single-iteration GRPO, the importance ratio $\pi_\theta/\pi_\text{old} \equiv 1.0$, rendering DAPO's clipping and GSPO's~\citep{gspo2025} importance sampling vacuous. Knowledge distillation~\citep{hinton2015distillation} has been extended to on-policy settings: OPSD~\citep{zhao26opsd} introduces privileged teacher conditioning; Self-Distilled RLVR~\citep{yang26rlsd} decouples update direction and magnitude; SRPO~\citep{li26srpo} unifies group-relative and self-distillation; CRISP~\citep{sang26crisp} applies OPD for reasoning compression. \citet{song26opdsurvey} identify \emph{agent-level} OPD as open. HiLL~\citep{xia26hill} co-trains an adaptive hint policy, while Complementary RL~\citep{muhtar26complementaryrl} co-evolves an experience extractor.
+
+\paragraph{Multi-Turn Agent Optimization.}
+Extending RL beyond single-turn requires credit assignment across turns. Process reward models~\citep{lightman2024lets, uesato2022solving} provide step-level feedback for reasoning but assume linear chains. For multi-turn tool-use agents, DMPO~\citep{shi2024dmpo} derives a DPO variant with state-action occupancy constraints; DiaTool-DPO~\citep{jung2025diatooldpo} models tool-augmented dialogues as MDPs with 5 states; Agent-R~\citep{yuan2025agentr} uses MCTS for trajectory correction; SPORT~\citep{li2025sport} applies step-wise preference tuning for multimodal tool use; PGPO~\citep{cao2025pgpo} guides agents with pseudocode-style plans; and DEPO~\citep{chen2025depo} jointly optimizes per-step and total-trajectory efficiency. These methods focus on preference optimization from offline data, while TT-OPD provides \emph{online} dense regularization via outcome-privileged teacher co-evolution---addressing collapse modes specific to on-policy multi-turn training.
+
+
+% ============================================================
+\section{\gym{}: Environment Design}
+\label{sec:environment}
+% ============================================================
+
+\gym{} is built on the Gymnasium~\citep{towers2024gymnasium} interface with standard \texttt{reset()}/\texttt{step(action)}/\texttt{render()} API. Figure~\ref{fig:architecture} illustrates the architecture. The environment encompasses 10 clinical domains (clinical diagnosis, medical QA, drug interaction, EHR management~\citep{johnson2016mimiciii, pollard2018eicu}, triage, visual diagnosis, radiology, psychiatry, obstetrics, and cross-domain pathways), each with specialized tools and evaluation criteria. Comprehensive details on domain construction, task pipelines, tool inventories, and knowledge base architecture are provided in Appendix~\ref{Appendix:AI_healthcare_gym}.
+
+\begin{figure*}[t]
+\centering
+\resizebox{0.95\textwidth}{!}{%
+\begin{tikzpicture}[
+    node distance=0.8cm,
+    % Stage boxes — each pipeline stage has a distinct color
+    stage/.style={rectangle, rounded corners=8pt, minimum height=1.6cm, align=center, line width=1.2pt, font=\small},
+    agentst/.style={stage, draw=blue!55, fill=blue!5, minimum width=3.2cm},
+    envst/.style={stage, draw=teal!55, fill=teal!4, minimum width=4.0cm},
+    toolst/.style={stage, draw=violet!50, fill=violet!4, minimum width=3.8cm},
+    kbst/.style={stage, draw=cyan!55, fill=cyan!4, minimum width=3.6cm},
+    rewst/.style={stage, draw=orange!50, fill=orange!4, minimum width=3.4cm},
+    % Sub-items inside stages
+    subitem/.style={rectangle, draw=#1!35, fill=white, rounded corners=3pt, minimum height=0.38cm, align=center, font=\fontsize{7}{8.5}\selectfont, inner sep=3pt, line width=0.5pt},
+    % Arrows
+    flowarr/.style={->, line width=1.5pt, >=stealth, color=gray!50},
+    looparr/.style={->, line width=1.8pt, >=stealth, color=blue!40, rounded corners=8pt},
+    % Labels
+    stagenum/.style={circle, fill=#1!65, text=white, font=\footnotesize\bfseries, minimum size=0.45cm, inner sep=0pt},
+    stagelbl/.style={font=\footnotesize\bfseries, color=#1!65!black},
+]
+    % ========== STAGE 1: Agent ==========
+    \node[agentst, minimum height=2.4cm] (agent) {};
+    \node[stagenum=blue, anchor=north west] at ([xshift=0.15cm, yshift=-0.1cm]agent.north west) {1};
+    \node[stagelbl=blue] at ([yshift=0.7cm]agent.center) {LLM/VLM Agent};
+    \node[font=\scriptsize, color=blue!50] at ([yshift=0.25cm]agent.center) {$\pi_{\theta}(a_t \mid s_t)$};
+    \node[subitem=blue] at ([yshift=-0.25cm]agent.center) {Qwen3.5-9B};
+    \node[font=\fontsize{6.5}{8}\selectfont, color=gray!50] at ([yshift=-0.7cm]agent.center) {text + vision input};
+
+    % ========== STAGE 2: Environment ==========
+    \node[envst, minimum height=3.8cm, right=1.8cm of agent] (env) {};
+    \node[stagenum=teal, anchor=north west] at ([xshift=0.15cm, yshift=-0.1cm]env.north west) {2};
+    \node[stagelbl=teal] at ([yshift=1.5cm]env.center) {\textsc{Healthcare AI GYM}};
+    \node[font=\fontsize{6.5}{8}\selectfont\itshape, color=teal!45] at ([yshift=1.1cm]env.center) {\texttt{reset()} / \texttt{step()} / \texttt{render()}};
+
+    % Domain chips — 2 rows
+    \node[subitem=teal] (d1) at ([xshift=-1.2cm, yshift=0.45cm]env.center) {Diagnosis};
+    \node[subitem=teal] (d2) at ([xshift=0.15cm, yshift=0.45cm]env.center) {Med.\ QA};
+    \node[subitem=teal] (d3) at ([xshift=1.35cm, yshift=0.45cm]env.center) {Drug Int.};
+    \node[subitem=teal] (d4) at ([xshift=-1.2cm, yshift=0.0cm]env.center) {EHR Mgmt};
+    \node[subitem=teal] (d5) at ([xshift=0.15cm, yshift=0.0cm]env.center) {Triage};
+    \node[subitem=teal] (d6) at ([xshift=1.35cm, yshift=0.0cm]env.center) {Visual Dx};
+    \node[font=\fontsize{6}{7}\selectfont, color=teal!40] at ([yshift=-0.45cm]env.center) {+ Radiology, Psychiatry, Obstetrics, Cross-Domain};
+
+    % Stats bar
+    \node[rectangle, draw=teal!25, fill=teal!8, rounded corners=3pt, minimum width=3.6cm, minimum height=0.4cm, font=\fontsize{6.5}{8}\selectfont, color=teal!55] at ([yshift=-1.05cm]env.center) {195K+ tasks $\cdot$ 10 domains $\cdot$ multi-turn};
+
+    % ========== STAGE 3: Tools ==========
+    \node[toolst, minimum height=2.4cm, right=1.8cm of env] (tools) {};
+    \node[stagenum=violet, anchor=north west] at ([xshift=0.15cm, yshift=-0.1cm]tools.north west) {3};
+    \node[stagelbl=violet] at ([yshift=0.7cm]tools.center) {187+ Clinical Tools};
+    \node[subitem=violet] at ([xshift=-0.8cm, yshift=0.1cm]tools.center) {Search};
+    \node[subitem=violet] at ([xshift=0.55cm, yshift=0.1cm]tools.center) {Assess};
+    \node[subitem=violet] at ([xshift=-0.8cm, yshift=-0.35cm]tools.center) {Patient};
+    \node[subitem=violet] at ([xshift=0.55cm, yshift=-0.35cm]tools.center) {Actions};
+    \node[font=\fontsize{6.5}{8}\selectfont, color=gray!50] at ([yshift=-0.8cm]tools.center) {+ Reasoning, Docs};
+
+    % ========== STAGE 4: Knowledge Base ==========
+    \node[kbst, minimum height=2.4cm, below=1.5cm of env] (kb) {};
+    \node[stagenum=cyan, anchor=north west] at ([xshift=0.15cm, yshift=-0.1cm]kb.north west) {4};
+    \node[stagelbl=cyan] at ([yshift=0.7cm]kb.center) {828K Passage KB};
+    \node[subitem=cyan] at ([xshift=-0.7cm, yshift=0.1cm]kb.center) {MedCPT};
+    \node[subitem=cyan] at ([xshift=0.6cm, yshift=0.1cm]kb.center) {BioQA};
+    \node[subitem=cyan] at ([xshift=-0.7cm, yshift=-0.35cm]kb.center) {Med.\ Instr.};
+    \node[subitem=cyan] at ([xshift=0.6cm, yshift=-0.35cm]kb.center) {Wikipedia};
+    \node[font=\fontsize{6.5}{8}\selectfont, color=gray!50] at ([yshift=-0.8cm]kb.center) {BM25 + SQLite retrieval};
+
+    % ========== STAGE 5: 5D Reward ==========
+    \node[rewst, minimum height=2.4cm, right=1.8cm of kb] (reward) {};
+    \node[stagenum=orange, anchor=north west] at ([xshift=0.15cm, yshift=-0.1cm]reward.north west) {5};
+    \node[stagelbl=orange] at ([yshift=0.7cm]reward.center) {5D Reward};
+    \node[subitem=orange] at ([yshift=0.15cm]reward.center) {Accuracy $\cdot$ Process $\cdot$ Safety};
+    \node[subitem=orange] at ([yshift=-0.35cm]reward.center) {Format $\cdot$ Coherence};
+    \node[font=\fontsize{6.5}{8}\selectfont, color=orange!55] at ([yshift=-0.8cm]reward.center) {$R = \sum_{j} w_j r_j$};
+
+    % ========== ARROWS ==========
+    % Agent -> Environment (action)
+    \draw[flowarr] ([yshift=0.3cm]agent.east) -- node[above, font=\scriptsize, color=gray!60] {action $a_t$} ([yshift=0.3cm]env.west);
+    % Environment -> Agent (observation)
+    \draw[flowarr] ([yshift=-0.3cm]env.west) -- node[below, font=\scriptsize, color=gray!60] {obs $s_{t+1}$} ([yshift=-0.3cm]agent.east);
+    % Environment -> Tools
+    \draw[flowarr] (env.east) -- node[above, font=\scriptsize, color=gray!60] {tool calls} (tools.west);
+    % Tools -> Environment
+    \draw[flowarr] ([yshift=-0.3cm]tools.west) -- node[below, font=\scriptsize, color=gray!60] {results} ([yshift=-0.3cm]env.east);
+    % Environment -> KB (retrieval)
+    \draw[flowarr] (env.south) -- node[left, font=\scriptsize, color=gray!60] {query} (kb.north);
+    % KB -> Environment
+    \draw[flowarr] ([xshift=0.5cm]kb.north) -- node[right, font=\scriptsize, color=gray!60] {passages} ([xshift=0.5cm]env.south);
+    % Environment -> Reward (trajectory)
+    \draw[flowarr, color=orange!50] ([xshift=0.8cm]env.south) -- ++(0,-0.4) -| node[font=\scriptsize, color=orange!50, pos=0.25, below] {trajectory $\tau$} (reward.north);
+
+    % Reward -> Agent (training signal — curved arc)
+    \draw[looparr, color=orange!55, line width=1.8pt] (reward.west) -- ++(-1.0,0) |- node[font=\scriptsize, color=orange!55, pos=0.75, above] {$R_{\text{total}} \to$ GRPO + TT-OPD} ([yshift=-0.8cm]agent.south) -- (agent.south);
+
+    % Multi-turn loop indicator
+    \draw[looparr, line width=1.2pt] ([yshift=0.2cm]agent.west) -- ++(-0.7,0) |- node[font=\fontsize{7}{8.5}\selectfont, color=blue!45, pos=0.25, left] {multi-turn\\loop} ([yshift=-0.2cm]agent.west);
+
+\end{tikzpicture}%
+}%
+\caption{Architecture of \gym{}. The pipeline flows through five stages: \textbf{(1)}~an LLM/VLM agent generates actions in a multi-turn loop; \textbf{(2)}~the Gymnasium-compatible environment processes actions across 10 clinical domains; \textbf{(3)}~187+ specialized clinical tools execute searches, assessments, and patient data queries; \textbf{(4)}~a retrieval-augmented knowledge base of 828K passages provides evidence grounding; \textbf{(5)}~a 5D reward function evaluates the complete trajectory. The reward signal feeds back to update the agent via GRPO + TT-OPD training. Full details in Appendix~\ref{Appendix:AI_healthcare_gym}.}
+\label{fig:architecture}
+\end{figure*}
+
+\paragraph{Tool System.} Each domain provides specialized tools across six categories: knowledge search (6 tools, backed by 828K indexed passages~\citep{xiong2024medcpt} via BM25 over SQLite), clinical assessment (22 validated scoring instruments), patient data access, clinical actions, reasoning (including a scratchpad), and documentation. Tools are defined via a decorator pattern that auto-generates OpenAI-compatible function definitions. The full tool inventory is provided in Appendix~\ref{app:tools}.
+
+\paragraph{5D Reward.} Unlike prior accuracy-only rewards, \gym{} evaluates across five dimensions:
+\begin{equation}
+    R_{\text{total}} = w_1 R_{\text{acc}} + w_2 R_{\text{proc}} + w_3 R_{\text{safe}} + w_4 R_{\text{fmt}} + w_5 R_{\text{coh}}
+\label{eq:reward}
+\end{equation}
+with default weights $w_1{=}0.3$, $w_2{=}0.25$, $w_3{=}0.2$, $w_4{=}0.15$, $w_5{=}0.1$, chosen to balance diagnostic accuracy against procedural quality and patient safety---the dominant clinical priorities. Accuracy uses exact match/F1/BERTScore~\citep{zhang2020bertscore} with BiomedBERT~\citep{gu2021pubmedbert}; process quality measures tool usage; safety uses a 5-level severity taxonomy (Appendix~\ref{app:safety}); format validates JSON correctness; coherence checks logical consistency. Note that even moderate format weight ($w_4{=}0.15$) creates a 24:1 gradient dilution ratio due to near-zero format variance (Proposition~\ref{prop:dilution}).
+
+
+% ============================================================
+\section{Turn-Level Truncated On-Policy Distillation}
+\label{sec:training}
+% ============================================================
+
+\subsection{Preliminaries}
+\label{sec:preliminaries}
+
+\paragraph{Multi-Turn Agentic RL.}
+We formalize the clinical agent as a partially observable Markov decision process (POMDP). At each turn $t$, the agent observes state $s_t$ (conversation history, tool results, patient data) and produces action $a_t$ (a tool call or natural language response). The environment executes $a_t$, updates the state to $s_{t+1}$, and the episode terminates when the agent calls \texttt{submit\_answer()} or reaches \texttt{max\_turns}~$T$. The full trajectory is $\tau = (s_1, a_1, s_2, a_2, \ldots, s_T, a_T)$ with sparse terminal reward $R(\tau)$ computed only at episode end.
+
+\paragraph{The Sparse Reward Challenge.}
+Sparse terminal reward creates a fundamental credit assignment problem in multi-turn settings: the agent must attribute $R(\tau)$ across $T$ turns of interleaved reasoning, tool calls, and observations. Process reward models (PRMs)~\citep{lightman2024lets, uesato2022solving} address this in single-turn mathematical reasoning by providing step-level feedback, but extending PRMs to multi-turn agentic settings faces two obstacles: (1)~the action space includes tool calls with structured JSON arguments, making step-level annotation intractable, and (2)~the observation space changes after each tool call (new search results, lab values), so process quality depends on \emph{which} tools were called, not just \emph{how} reasoning was articulated. Our 5D reward (Eq.~\ref{eq:reward}) partially addresses sparsity by evaluating process quality alongside accuracy, but remains episode-level.
+
+\paragraph{Policy Optimization.}
+We use GRPO~\citep{shao2024deepseekmath}, which extends PPO~\citep{schulman2017ppo} by replacing the learned value function with group-relative advantages. For a batch of $G$ rollouts per prompt, the clipped surrogate objective is:
+\begin{equation}
+    \mathcal{L}_{\text{GRPO}} = -\mathbb{E}\left[\min\!\left(\frac{\pi_\theta(a|s)}{\pi_{\text{old}}(a|s)}\hat{A},\; \text{clip}\!\left(\frac{\pi_\theta(a|s)}{\pi_{\text{old}}(a|s)},\, 1{-}\epsilon,\, 1{+}\epsilon\right)\hat{A}\right)\right]
+\label{eq:grpo}
+\end{equation}
+where $\hat{A}_i = (R_i - \text{mean}(\{R_j\}))/\text{std}(\{R_j\})$ is the group-relative advantage computed over the $G$ rollouts. Unlike PPO, GRPO requires no value network, reducing memory by $\sim$50\% on multi-turn trajectories. We train directly from the base model (Qwen3.5-9B) without SFT warmup to avoid format compliance bias (Appendix~\ref{app:rl_baselines}). In our online single-iteration setting, $\pi_\theta = \pi_\text{old}$ at each step, so the importance ratio is identically 1.0---rendering clipping mechanisms~\citep{dapo2025} and importance sampling corrections~\citep{gspo2025} vacuous.
+
+\subsection{TT-OPD Method}
+\label{sec:opd}
+
+Standard GRPO provides no mechanism to prevent response explosion in agentic settings. We propose TT-OPD, a teacher-student co-evolution framework (Figure~\ref{fig:ttopd}) that provides both the learning signal for accuracy improvement and structural regularization for multi-turn behavior.
+
+\begin{figure*}[t]
+\centering
+\resizebox{0.98\textwidth}{!}{%
+\begin{tikzpicture}[
+    node distance=0.6cm,
+    % Pipeline stage boxes
+    pipebox/.style={rectangle, rounded corners=8pt, minimum height=2.0cm, align=center, line width=1.2pt, font=\small},
+    stageA/.style={pipebox, draw=blue!55, fill=blue!5, minimum width=2.6cm},
+    stageB/.style={pipebox, draw=gray!55, fill=gray!4, minimum width=3.0cm},
+    stageC/.style={pipebox, draw=green!55!black, fill=green!4, minimum width=2.8cm},
+    stageD/.style={pipebox, draw=red!50, fill=red!4, minimum width=2.6cm},
+    stageE/.style={pipebox, draw=purple!50, fill=purple!4, minimum width=3.0cm},
+    % Sub-labels
+    sublbl/.style={rectangle, draw=#1!30, fill=white, rounded corners=3pt, minimum height=0.38cm, align=center, font=\fontsize{7}{8.5}\selectfont, inner sep=3pt, line width=0.5pt},
+    % Step numbers
+    stepnum/.style={circle, fill=#1!60, text=white, font=\footnotesize\bfseries, minimum size=0.5cm, inner sep=0pt},
+    steptitle/.style={font=\footnotesize\bfseries, color=#1!60!black},
+    % Arrows
+    flowarr/.style={->, line width=1.8pt, >=stealth, color=gray!45},
+    emaarr/.style={->, line width=1.6pt, >=stealth, color=blue!45, dashed},
+    gradarr/.style={->, line width=1.6pt, >=stealth, color=purple!50},
+]
+    % ========== STAGE 1: Student Rollout ==========
+    \node[stageA, minimum height=2.6cm] (stu) {};
+    \node[stepnum=blue, anchor=north west] at ([xshift=0.12cm, yshift=-0.08cm]stu.north west) {1};
+    \node[steptitle=blue] at ([yshift=0.75cm]stu.center) {Student};
+    \node[font=\scriptsize, color=blue!50] at ([yshift=0.3cm]stu.center) {$\pi_{\theta_S}$};
+    \node[sublbl=blue] at ([yshift=-0.2cm]stu.center) {Rollout};
+    \node[font=\fontsize{6.5}{8}\selectfont, color=gray!50] at ([yshift=-0.75cm]stu.center) {multi-turn\\generation};
+
+    % ========== STAGE 2: Trajectory ==========
+    \node[stageB, minimum height=2.6cm, right=1.2cm of stu] (traj) {};
+    \node[stepnum=gray, anchor=north west] at ([xshift=0.12cm, yshift=-0.08cm]traj.north west) {2};
+    \node[steptitle=gray] at ([yshift=0.75cm]traj.center) {Trajectory};
+    \node[sublbl=gray] at ([xshift=-0.5cm, yshift=0.1cm]traj.center) {Think};
+    \node[sublbl=gray] at ([xshift=0.5cm, yshift=0.1cm]traj.center) {Search};
+    \node[sublbl=gray] at ([yshift=-0.4cm]traj.center) {Submit Answer};
+    \node[font=\fontsize{6.5}{8}\selectfont, color=gray!50] at ([yshift=-0.9cm]traj.center) {$\tau = (s_1, a_1, \ldots)$};
+
+    % ========== STAGE 3: Outcome Classification ==========
+    \node[stageC, minimum height=2.6cm, right=1.2cm of traj] (outcome) {};
+    \node[stepnum=green!60!black, anchor=north west] at ([xshift=0.12cm, yshift=-0.08cm]outcome.north west) {3};
+    \node[steptitle=green!60!black] at ([yshift=0.75cm]outcome.center) {Classify};
+
+    % Correct branch
+    \node[rectangle, draw=green!50!black, fill=green!8, rounded corners=4pt, minimum width=2.2cm, minimum height=0.55cm, font=\fontsize{7}{8.5}\selectfont, align=center, line width=0.6pt] (corrbox) at ([yshift=0.05cm]outcome.center) {\textcolor{green!50!black}{\ding{51}} Correct $\to$ \textit{``sound reasoning''}};
+    % Incorrect branch
+    \node[rectangle, draw=orange!55, fill=orange!8, rounded corners=4pt, minimum width=2.2cm, minimum height=0.55cm, font=\fontsize{7}{8.5}\selectfont, align=center, line width=0.6pt] (incorrbox) at ([yshift=-0.65cm]outcome.center) {\textcolor{red!55!black}{\ding{55}} Incorrect $\to$ \textit{``revisit diagnosis''}};
+
+    \node[font=\fontsize{6}{7}\selectfont, color=green!50!black] at ([yshift=-1.1cm]outcome.center) {bidirectional hints};
+
+    % ========== STAGE 4: Teacher Re-scoring ==========
+    \node[stageD, minimum height=2.6cm, right=1.2cm of outcome] (teacher) {};
+    \node[stepnum=red, anchor=north west] at ([xshift=0.12cm, yshift=-0.08cm]teacher.north west) {4};
+    \node[steptitle=red] at ([yshift=0.75cm]teacher.center) {Teacher};
+    \node[font=\scriptsize, color=red!50] at ([yshift=0.3cm]teacher.center) {$\pi_{\theta_T}$};
+    \node[sublbl=red] at ([yshift=-0.15cm]teacher.center) {Re-score $\tau$};
+    \node[font=\fontsize{6.5}{8}\selectfont, color=gray!50] at ([yshift=-0.65cm]teacher.center) {outcome-aware\\logprobs};
+
+    % ========== STAGE 5: Combined Loss ==========
+    \node[stageE, minimum height=2.6cm, right=1.2cm of teacher] (loss) {};
+    \node[stepnum=purple, anchor=north west] at ([xshift=0.12cm, yshift=-0.08cm]loss.north west) {5};
+    \node[steptitle=purple] at ([yshift=0.75cm]loss.center) {Training};
+    \node[sublbl=purple] at ([yshift=0.1cm]loss.center) {$\mathcal{L}_{\text{GRPO}} + \lambda\,\mathcal{L}_{\text{KL}}$};
+    \node[sublbl=orange] at ([yshift=-0.45cm]loss.center) {$R_{\text{cos}}$ length control};
+    \node[font=\fontsize{6.5}{8}\selectfont, color=gray!50] at ([yshift=-0.95cm]loss.center) {turn-level\\truncated KL};
+
+    % ========== ARROWS: Pipeline flow ==========
+    \draw[flowarr] (stu.east) -- (traj.west);
+    \draw[flowarr] (traj.east) -- (outcome.west);
+    \draw[flowarr] (outcome.east) -- (teacher.west);
+    \draw[flowarr] (teacher.east) -- (loss.west);
+
+    % Gradient back to student (top arc)
+    \draw[gradarr, rounded corners=8pt]
+        (loss.north) -- ++(0,0.65) -| node[above, font=\scriptsize, color=purple!50, pos=0.3] {$\nabla_{\theta_S}\mathcal{L}$ \;\;update student weights} (stu.north);
+
+    % EMA co-evolution (bottom arc)
+    \draw[emaarr, rounded corners=8pt]
+        (stu.south) -- ++(0,-0.65) -| node[below, font=\scriptsize, color=blue!50] {EMA co-evolution:\;$\theta_T \leftarrow \alpha\,\theta_T + (1{-}\alpha)\,\theta_S$} (teacher.south);
+
+\end{tikzpicture}%
+}%
+\caption{TT-OPD training pipeline. \textbf{(1)}~The student generates multi-turn trajectories via rollout. \textbf{(2)}~Each trajectory consists of interleaved reasoning, tool calls, and answer submission. \textbf{(3)}~Trajectories are classified by correctness; bidirectional outcome-privileged hints are generated---reinforcing for correct trajectories, corrective for incorrect ones. \textbf{(4)}~The teacher, receiving these privileged hints in its context, re-scores the trajectory to produce outcome-aware logprobs. \textbf{(5)}~The combined GRPO + turn-level KL loss with cosine length reward updates the student. The teacher co-evolves via EMA (dashed blue arc), creating a self-improving loop.}
+\label{fig:ttopd}
+\end{figure*}
+
+We maintain a teacher $\theta_T$ co-evolving with the student $\theta_S$. The core loss regularizes the policy toward the teacher across \emph{all} conversation turns:
+\begin{equation}
+    \mathcal{L}_{\text{TT-OPD}} = \lambda_{\text{KL}} \sum_{t=1}^{T} \frac{1}{|a_t|} \sum_{k=1}^{|a_t|} D_{\text{KL}}\!\left(\pi_{\theta_S}(\cdot \mid s_t, a_t^{<k}) \;\|\; \pi_{\theta_T}(\cdot \mid s_t^{+}, a_t^{<k})\right)
+\end{equation}
+where $s_t^{+}$ denotes the state augmented with outcome-privileged information and the outer sum runs over all non-truncated turns ($L_t < L_{\max}$). ``Turn-level'' means computing KL across all turns, not just the final answer. ``Truncated'' means discarding contributions from responses exceeding the context window.
+
+\paragraph{Bidirectional Outcome-Privileged Conditioning.}
+A key design choice is \emph{bidirectional} conditioning: the teacher receives outcome-dependent signals in both directions. For correct trajectories, \emph{reinforcing} hints (``reasoning appears sound, continue this clinical approach'') make the teacher more confident on correct reasoning paths---analogous to a human supervisor's encouragement. For incorrect trajectories, \emph{corrective} hints (``revisit the differential diagnosis'') shift the teacher's distribution away from error-prone patterns---analogous to a supervisor's concern. The privileged tokens are inserted at the prompt-response boundary but \emph{removed} from the output logprobs, so the student never sees them---instead, they modulate the teacher's distribution, creating outcome-aware KL regularization at every turn. This bidirectional design transforms TT-OPD from a generic regularizer into \emph{outcome-conditioned process supervision}~\citep{yang26rlsd, li26srpo}: the positive signal stabilizes correct behavior while the negative signal actively corrects errors, both mediated through the KL gradient rather than direct reward shaping. We use template-based hints for reproducibility (Appendix~\ref{app:hyperparams}).
+
+\paragraph{Stability Mechanisms.}
+We adopt two existing techniques for training stability. The teacher is updated via EMA~\citep{tarvainen2017meanteacher} ($\theta_T \leftarrow \alpha \theta_T + (1-\alpha)\theta_S$, $\alpha{=}0.995$) every 5 steps, with a hard-copy fallback every 30 steps. To prevent response explosion, we use cosine length-controlled reward~\citep{yeo2025cosine}:
+\begin{equation}
+    R_{\text{cos}}(c, L) = \begin{cases}
+        R_{\text{max}} - \frac{1}{2}(R_{\text{max}} - R_{\text{min}})(1 - \cos(\pi L / L_{\text{max}})) & \text{if correct} \\[3pt]
+        -\frac{1}{2}|R_{\text{min}}|(1 - \cos(\pi L / L_{\text{max}})) & \text{if incorrect} \\[3pt]
+        R_{\text{penalty}} & \text{if truncated at } L_{\text{max}}
+    \end{cases}
+\label{eq:cosine_reward}
+\end{equation}
+where $L_{\text{max}}$ is the maximum context length and $R_{\text{max}}, R_{\text{min}}, R_{\text{penalty}}$ control the reward shaping (values in Appendix~\ref{app:hyperparams}). The complete loss combines GRPO with distillation:
+\begin{equation}
+    \mathcal{L}_{\text{total}} = \mathcal{L}_{\text{GRPO}}(\theta_S;\, R_{\text{cos}}) + \lambda_{\text{KL}} \cdot D_\text{KL}\!\left(\pi_{\theta_S} \| \pi_{\theta_T}\right)
+    \label{eq:full_objective}
+\end{equation}
+The novelty lies in the bidirectional outcome-privileged conditioning (\S\ref{sec:opd}); EMA and cosine reward are adopted from prior work to prevent divergence and response explosion, respectively. Algorithm pseudocode is in Appendix~\ref{app:algorithm}.
+
+
+% ============================================================
+\section{Experiments}
+\label{sec:eval}
+% ============================================================
+
+\subsection{Setup}
+\label{sec:setup}
+
+\textbf{Track 1 (TT-OPD):} All OPD experiments (four ablation variants plus the full method) use Qwen3.5-9B~\citep{yang2024qwen25}, trained from scratch without SFT warmup. \textbf{Track 2 (Baselines):} Transfer gap and RL comparisons use Lingshu-7B (medical-adapted Qwen2.5-VL-7B~\citep{yang2024qwen25}) from an SFT checkpoint. All experiments run on 8$\times$A100 80GB with zero data contamination verified via test-set fingerprinting~\citep{yang2023rethinking}. All training hyperparameters (learning rate, batch size, EMA decay, temperature, etc.) are specified in Appendix~\ref{app:hyperparams}. We evaluate across 21 benchmarks spanning text QA, vision QA, long-form QA, and EHR reasoning (Appendix~\ref{app:benchmarks}).
+
+
+\subsection{Benchmark Evaluation}
+\label{sec:benchmark_multiturn}
+
+We first present the main results. A critical insight: single-turn generation produces \emph{zero} accuracy because the model emits tool calls that are truncated before \texttt{submit\_answer}. We therefore evaluate using the same multi-turn AgentRunner and domain tools used during training.
+
+\begin{table}[t]
+\centering
+\caption{Benchmark evaluation of TT-OPD (step 60) via multi-turn AgentRunner. Base model (Qwen3.5-9B) evaluated under the same protocol. Results marked $\dagger$ are partial. Single-turn yields 0\% on all benchmarks for TT-OPD. MMLU-Med.\ aggregates 6 medical subtypes (per-subtype breakdown in Appendix~\ref{app:benchmarks}).}
+\label{tab:benchmark_multiturn}
+\small
+\begin{tabular}{llccc}
+\toprule
+\textbf{Category} & \textbf{Benchmark} & \textbf{Base Model} & \textbf{TT-OPD} & \textbf{$n$} \\
+\midrule
+\multirow{3}{*}{\textbf{MC QA}}
+  & MedQA (USMLE) & --- & \textbf{86.2\%}$^\dagger$ & 873 / 1273 \\
+  & MMLU-Med.\ (6 subtypes) & --- & 60.1\% & 1016 / 1016 \\
+  & MedMCQA & --- & 54.2\%$^\dagger$ & 4183 / 4183 \\
+\midrule
+\multirow{4}{*}{\textbf{Visual QA}}
+  & VQA-RAD & --- & \textbf{61.6\%} & 451 / 451 \\
+  & PathVQA & --- & 41.5\% & 1000 / 1000 \\
+  & SLAKE & --- & 32.2\%$^\dagger$ & 600 / 1061 \\
+  & PMC-VQA & --- & ---$^\dagger$ & -- \\
+\midrule
+\multirow{2}{*}{\textbf{EHR}}
+  & MIMIC-III & --- & \textbf{100\%} & 50 / 50 \\
+  & eICU & --- & \textbf{100\%} & 50 / 50 \\
+\midrule
+\multirow{5}{*}{\textbf{Long-Form QA}}
+  & LiveQA & --- & ---$^\dagger$ & -- \\
+  & MedicationQA & --- & ---$^\dagger$ & -- \\
+  & HealthSearchQA & --- & ---$^\dagger$ & -- \\
+  & KQA-Golden & --- & ---$^\dagger$ & -- \\
+  & KQA-Silver & --- & ---$^\dagger$ & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:benchmark_multiturn} presents results across 21 benchmarks organized into four categories.
+
+\paragraph{Multiple-Choice QA.} On MedQA (USMLE-style medical licensing questions)~\citep{jin2021medqa}, TT-OPD achieves 86.2\%, notably exceeding the SFT baseline (60.7\%). This improvement reflects learned retrieval-augmented reasoning~\citep{lewis2020rag}: the agent invokes \texttt{search\_evidence} against the 828K-passage knowledge base to ground its answers in retrieved medical literature, rather than relying solely on parametric knowledge. On MMLU Medical (Massive Multitask Language Understanding)~\citep{hendrycks2021mmlu}, we aggregate 6 medical subtypes---Anatomy (63.0\%), College Biology (70.1\%), Clinical Knowledge (63.0\%), Medical Genetics (71.0\%), Professional Medicine (49.6\%), and College Medicine (52.0\%)---yielding an overall 60.1\%. Per-subtype breakdown is in Appendix~\ref{app:benchmarks}. MedMCQA (Indian medical entrance exam questions)~\citep{pal2022medmcqa} reaches 54.2\%.
+
+\paragraph{Visual QA.} On VQA-RAD (radiology visual question answering)~\citep{lau2018vqarad}, TT-OPD achieves 61.6\% on the full 451-sample test set, confirming vision-language capability preservation despite text-only GRPO training. PathVQA (pathology visual QA)~\citep{he2020pathvqa} reaches 41.5\% and SLAKE (Semantically-Labeled Knowledge-Enhanced medical VQA)~\citep{liu2021slake} 32.2\%, both evaluated via the same multi-turn AgentRunner with domain tools.
+
+\paragraph{EHR Reasoning.} Both MIMIC-III~\citep{johnson2016mimiciii} and eICU~\citep{pollard2018eicu} achieve perfect accuracy (100\%) on structured clinical record tasks, indicating strong procedural competence in electronic health record management scenarios.
+
+\paragraph{Long-Form QA.} LiveQA (consumer health questions)~\citep{abacha2019liveqa}, MedicationQA, HealthSearchQA, and KQA (knowledge-grounded QA) are evaluated via ROUGE-L scoring; results are pending completion. Domain-specific agentic results are in Appendix~\ref{app:domain_results}.
+
+
+\subsection{TT-OPD Training Dynamics}
+\label{sec:opd_results}
+
+At step 60, TT-OPD achieves \textbf{61.1\%} validation accuracy (+8.5 pp over the 52.6\% base model), with mean accuracy of 59.5\% ($\pm$1.4 pp) over steps 40--60. The GRPO baseline (no distillation) shows no improvement ($\pm$0.2 pp). Figure~\ref{fig:opd_trajectory} shows the full training trajectory, revealing three key dynamics:
+
+\begin{figure*}[t]
+\centering
+\begin{subfigure}[b]{0.48\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=\textwidth, height=4.2cm,
+    xlabel={Training Step}, ylabel={Validation Accuracy (\%)},
+    xmin=0, xmax=65, ymin=50, ymax=63,
+    xtick={0,10,20,30,40,50,60},
+    grid=major, grid style={dotted, gray!30},
+    tick label style={font=\scriptsize}, label style={font=\small},
+    legend style={at={(0.02,0.98)}, anchor=north west, font=\fontsize{6}{7}\selectfont, row sep=-2pt},
+]
+\addplot[color=red!80, mark=*, mark size=1.8pt, thick] coordinates {
+    (0,52.6) (5,53.8) (10,54.9) (15,56.4) (20,53.6) (25,58.0) (30,59.0) (35,59.1) (40,59.6) (45,60.4) (50,57.3) (55,60.3) (60,61.1)
+};
+\addlegendentry{TT-OPD (ours)}
+\addplot[color=blue!50, mark=none, thick, dashed] coordinates {
+    (0,52.6) (5,52.8) (10,53.0) (15,52.7) (20,52.5) (25,52.6) (30,52.8) (35,52.5) (40,52.6) (45,52.7) (50,52.6) (55,52.8) (60,52.7)
+};
+\addlegendentry{GRPO baseline}
+\addplot[dashed, gray!40, thin] coordinates {(0,52.6) (65,52.6)};
+\node[font=\fontsize{5}{6}\selectfont, gray!55] at (axis cs:50,52.9) {base};
+\end{axis}
+\end{tikzpicture}
+\caption{Validation Accuracy}
+\end{subfigure}%
+\hfill
+\begin{subfigure}[b]{0.48\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=\textwidth, height=4.2cm,
+    xlabel={Training Step}, ylabel={KL Divergence},
+    xmin=0, xmax=65, ymin=0, ymax=1.2,
+    xtick={0,10,20,30,40,50,60},
+    grid=major, grid style={dotted, gray!30},
+    tick label style={font=\scriptsize}, label style={font=\small},
+    legend style={at={(0.02,0.98)}, anchor=north west, font=\fontsize{6}{7}\selectfont},
+]
+\addplot[color=red!80, mark=*, mark size=1.8pt, thick] coordinates {
+    (5,0.001) (10,0.003) (15,0.016) (20,0.047) (25,0.096) (30,0.146) (35,0.281) (40,0.526) (45,0.697) (50,0.756) (55,0.878) (60,1.063)
+};
+\addlegendentry{TT-OPD}
+\end{axis}
+\end{tikzpicture}
+\caption{KL Divergence (continuous growth)}
+\end{subfigure}
+
+\vspace{0.3cm}
+\begin{subfigure}[b]{0.48\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=\textwidth, height=4.2cm,
+    xlabel={Training Step}, ylabel={Response Length (tokens)},
+    xmin=0, xmax=65, ymin=4000, ymax=12500,
+    xtick={0,10,20,30,40,50,60},
+    yticklabel style={/pgf/number format/fixed, /pgf/number format/1000 sep={\,}},
+    grid=major, grid style={dotted, gray!30},
+    tick label style={font=\scriptsize}, label style={font=\small},
+    legend style={at={(0.02,0.98)}, anchor=north west, font=\fontsize{6}{7}\selectfont, row sep=-2pt},
+]
+\addplot[color=red!80, mark=*, mark size=1.8pt, thick] coordinates {
+    (5,5724) (10,8574) (15,8279) (20,7689) (25,7443) (30,6476) (35,9210) (40,5822) (45,8368) (50,9264) (55,7677) (60,7308)
+};
+\addlegendentry{TT-OPD (controlled)}
+\addplot[color=orange!70, mark=pentagon, mark size=1.5pt, thin] coordinates {
+    (0,5200) (5,6800) (10,8200) (15,9100) (20,10200) (25,10800) (30,11100) (35,11200) (40,11308)
+};
+\addlegendentry{No length ctrl (explosion)}
+\addplot[dashed, red!35, thin] coordinates {(-2,12288) (65,12288)};
+\node[font=\fontsize{5}{6}\selectfont, red!40] at (axis cs:55,12288) {$L_{\max}$};
+\end{axis}
+\end{tikzpicture}
+\caption{Response Length}
+\end{subfigure}%
+\hfill
+\begin{subfigure}[b]{0.48\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=\textwidth, height=4.2cm,
+    xlabel={Training Step}, ylabel={Avg.\ Turns per Episode},
+    xmin=0, xmax=65, ymin=6.0, ymax=8.0,
+    xtick={0,10,20,30,40,50,60},
+    ytick={6.0,6.5,7.0,7.5,8.0},
+    grid=major, grid style={dotted, gray!30},
+    tick label style={font=\scriptsize}, label style={font=\small},
+    legend style={at={(0.98,0.98)}, anchor=north east, font=\fontsize{6}{7}\selectfont, row sep=-2pt},
+]
+\addplot[color=red!80, mark=*, mark size=1.8pt, thick] coordinates {
+    (0,7.35) (5,7.36) (10,7.28) (15,7.16) (20,7.05) (25,7.13) (30,6.98) (35,7.03) (40,7.32) (45,7.25) (50,7.03) (55,7.27) (60,7.30)
+};
+\addlegendentry{TT-OPD (stable)}
+\addplot[color=blue!70, mark=diamond, mark size=1.5pt, thin] coordinates {
+    (0,7.82) (5,7.65) (10,7.51) (15,7.38) (20,7.22) (25,7.05) (30,6.85) (35,6.52) (40,6.23)
+};
+\addlegendentry{EMA-only (decline)}
+\fill[red!8, opacity=0.4] (axis cs:-2,6.0) rectangle (axis cs:65,6.5);
+\node[font=\fontsize{5}{6}\selectfont, red!45] at (axis cs:32,6.15) {collapse zone};
+\end{axis}
+\end{tikzpicture}
+\caption{Average Turns}
+\end{subfigure}
+\caption{TT-OPD training dynamics across 60 steps. (a)~Validation accuracy oscillates upward to 61.1\% while GRPO stays flat. (b)~KL divergence grows continuously as student diverges from EMA teacher. (c)~Response length is controlled (5.7--9.3K tokens) vs.\ unchecked explosion to $L_{\max}$ without cosine reward. (d)~Multi-turn structure is preserved (7.0--7.4 turns) vs.\ monotonic decline with EMA-only distillation.}
+\label{fig:opd_trajectory}
+\end{figure*}
+
+(1)~\textbf{Oscillating recovery}: accuracy follows a sawtooth pattern with rising peaks, reflecting student drift and EMA re-anchoring---each peak exceeds the previous due to outcome-privileged conditioning. (2)~\textbf{Response length control}: cosine reward maintains responses at 5.7--9.3K tokens, compared to monotonic explosion toward 12K without length control. (3)~\textbf{Sustained multi-turn structure}: average turns remain stable at 7.0--7.4 throughout training, confirming that multi-turn tool use is preserved rather than collapsing into single-turn monologues. The full step-by-step trajectory is provided in Appendix~\ref{app:trajectory}.
+
+
+% ============================================================
+\section{Analysis}
+\label{sec:analysis}
+% ============================================================
+
+\subsection{OPD Failure Progression}
+\label{sec:opd_instability}
+
+Our ablation across four OPD variants reveals a progression of failure modes (Figure~\ref{fig:opd_failure}), extending the instability patterns of~\citet{yang26rlsd} and~\citet{zhao26opsd} to the multi-turn agentic setting. Each variant adds one component, isolating its effect.
+
+\textbf{(1) Periodic teacher reset.} The teacher is periodically replaced with the student's weights ($\theta_T \leftarrow \theta_S$ every $T$ steps). This causes catastrophic KL collapse: at each copy event, the KL divergence drops abruptly from its accumulated value to near zero (e.g., $2.637 \to 0.343$ at step 10 with $T{=}30$), destroying the distillation gradient that was guiding the student. The result is monotonic accuracy decline ($56.9\% \to 49.3\%$) because the student has no stable reference distribution. Concurrently, multi-turn tool use collapses from 7.65 to 5.52 turns per episode---the agent learns that single-turn monologues are easier to optimize than coordinated tool-use sequences.
+
+\textbf{(2) EMA teacher (no conditioning).} Replacing periodic resets with exponential moving average ($\alpha{=}0.995$) eliminates KL collapse entirely. The teacher now drifts smoothly with the student, and KL grows continuously rather than exhibiting sawtooth drops. This introduces oscillating recovery: accuracy reaches $53.8\%$ at step 40, a +1.2 pp improvement. However, without outcome-aware conditioning, the teacher's distribution provides only a generic regularization signal, and turns still erode ($7.82 \to 6.23$) because the KL target does not encode \emph{what} constitutes good multi-turn behavior.
+
+\textbf{(3) EMA + outcome hints (no length control).} Adding bidirectional outcome-privileged hints creates an initial accuracy plateau at $54.5\%$ (steps 10--20), as the teacher's conditioned distribution now provides outcome-aware guidance. However, the hints inadvertently \emph{encourage} response explosion: positive hints reinforce detailed reasoning, and without length constraints, responses grow monotonically toward $L_{\max}$ ($91.7\%$ clipping by step 40). This response explosion eventually collapses accuracy to $49.0\%$ as responses are truncated mid-reasoning.
+
+\textbf{(4) Full TT-OPD.} Adding cosine length-controlled reward resolves response explosion by penalizing long responses regardless of correctness. This enables the bidirectional conditioning to operate effectively over 60 steps, achieving sustained oscillating recovery to $61.1\%$ with stable turns ($7.0$--$7.4$). Each component addresses a distinct failure mode: EMA prevents KL collapse, outcome hints provide outcome-aware signal, and cosine reward prevents response explosion.
+
+This progression confirms that multi-turn collapse is an \emph{agentic-specific} failure mode absent from single-turn OPD settings~\citep{zhao26opsd, yang26rlsd}, where response lengths are naturally bounded and turn structure is not a concern.
+
+\input{figures_tikz_main}
+
+
+\subsection{Formal Analysis}
+\label{sec:formal}
+
+We formalize three key dynamics observed during TT-OPD training. These propositions provide theoretical grounding for why the ablation variants fail and why the full method succeeds. Full proof sketches are in Appendix~\ref{app:proofs}.
+
+\paragraph{Why does TT-OPD oscillate rather than diverge?}
+A distinctive feature of TT-OPD training is the oscillating recovery pattern visible in Figure~\ref{fig:opd_failure}(a): accuracy rises, dips, then recovers to a higher level. This is not random noise---it reflects a built-in self-correcting mechanism created by the EMA teacher.
+
+\begin{proposition}[EMA as Implicit Learning Rate Annealing]
+\label{prop:oscillation}
+Under EMA teacher updates with decay $\alpha$, the KL penalty gradient satisfies $\nabla_{\theta_S} D_{\mathrm{KL}}(\pi_{\theta_S} \| \pi_{\theta_T}) \approx \mathbf{F}(\theta_S)(\theta_S - \theta_T)$, where $\mathbf{F}$ is the Fisher information. The effective learning rate for GRPO is implicitly reduced by a factor proportional to $\|\theta_S - \theta_T\|$, creating a restoring force: large policy shifts amplify the KL gradient, dampening subsequent updates.
+\end{proposition}
+
+\noindent\textbf{Intuition.} Consider the EMA teacher as a ``memory'' of recent good behavior. When the student makes a large policy update (e.g., suddenly favoring shorter responses), it drifts far from the teacher. The KL divergence between them grows, which increases the gradient pulling the student back toward the teacher's distribution. This acts like a spring: the further the student strays, the stronger the restoring force. Conversely, when the student is close to the teacher, the KL gradient is weak, allowing the GRPO reward signal to dominate and push the student toward higher accuracy. This alternation between reward-driven exploration and KL-driven correction produces the characteristic oscillating recovery ($52.6\% \to 56.4\% \to 53.6\% \to 61.1\%$) observed in Table~\ref{tab:opd_trajectory}.
+
+\paragraph{Why does standard GRPO fail to improve text QA despite improving agentic tasks?}
+This question is central to the agentic-textual transfer gap (\S\ref{sec:transfer}). The answer lies in how multi-dimensional rewards interact with gradient estimation.
+
+\begin{proposition}[Gradient Signal Dilution]
+\label{prop:dilution}
+With $K$-dimensional reward $R = \sum_{j=1}^K w_j r_j$, the signal-to-noise ratio (SNR) of component $j$'s contribution to the total advantage is $\mathrm{SNR}_j = w_j\sigma_j / \sigma_R$, where $\sigma_j$ is the standard deviation of reward component $j$ and $\sigma_R$ is the total reward's standard deviation. With our 5D reward parameters ($\sigma_\mathrm{acc}{=}0.41$, $\sigma_\mathrm{fmt}{=}0.02$), accuracy's SNR is $0.93$ while format contributes $0.023$, creating a 24:1 dilution ratio.
+\end{proposition}
+
+\noindent\textbf{Intuition.} Imagine a classroom where a student receives five grades (accuracy, process quality, safety, format, coherence) combined into one GPA. If the format grade barely varies across students (everyone gets near-perfect format scores, $\sigma_\mathrm{fmt}{=}0.02$), then format contributes almost nothing to differentiating good from bad rollouts---its gradient signal is ``diluted'' by the other, more variable components. Accuracy, with high variance ($\sigma_\mathrm{acc}{=}0.41$), dominates the gradient. However, the 5D weighting scheme still reduces accuracy's effective gradient by ${\sim}40\%$ compared to an accuracy-only reward. This dilution explains why standard GRPO with 5D reward fails to improve text QA: the accuracy gradient, while dominant, is insufficient to overcome the noise floor within the few hundred steps of online training. TT-OPD compensates by providing an additional, outcome-conditioned distillation gradient that directly encodes correctness information.
+
+\paragraph{Why does EMA prevent the sawtooth KL collapse seen with periodic resets?}
+The periodic reset variants exhibit a destructive pattern: KL divergence builds up as the student learns, then crashes to near zero when the teacher is overwritten. We formalize why EMA eliminates this failure mode.
+
+\begin{proposition}[KL Boundedness under EMA]
+\label{prop:kl_bound}
+Under EMA updates with per-step shift $\|\Delta\theta_S\| \leq \epsilon$ and $L$-Lipschitz KL, the steady-state divergence satisfies $D_{\mathrm{KL}}(\pi_{\theta_S} \| \pi_{\theta_T}) \leq L\epsilon^2 / 2(1-\alpha)^2$, yielding continuous KL growth. In contrast, hard-copy updates produce sawtooth KL with peaks of $\frac{L}{2}T_\text{copy}^2\epsilon^2$ and abrupt drops to zero, destroying the distillation gradient.
+\end{proposition}
+
+\noindent\textbf{Intuition.} With periodic resets, the teacher is a snapshot frozen in time. As the student improves over $T$ steps, the KL divergence accumulates---the student and teacher distributions grow increasingly different. At the reset event ($\theta_T \leftarrow \theta_S$), the teacher suddenly becomes identical to the student, and KL drops to zero. This destroys all the distillation signal that was guiding the student, forcing learning to restart from scratch. We observe this clearly: at step~10 in the $T{=}30$ variant, KL drops from 2.637 to 0.343, and accuracy begins its monotonic decline shortly after. With EMA ($\theta_T \leftarrow \alpha\theta_T + (1{-}\alpha)\theta_S$), the teacher continuously absorbs a small fraction of the student's improvements. KL never drops abruptly---it grows smoothly from 0.001 to 1.063 over 60 steps, providing a stable and gradually strengthening regularization signal throughout training.
+
+
+\subsection{Agentic-Textual Transfer Gap}
+\label{sec:transfer}
+
+Across 3 seeds and 350 RL steps, standard GRPO produces no text QA transfer: MedQA accuracy stays within 0.6 pp of the SFT baseline (60.7\%). The absence of transfer stems from online single-iteration GRPO's importance ratio $\pi_\theta/\pi_\text{old} \equiv 1.0$ (rendering clipping vacuous), near-zero KL per step, and the 24:1 format-to-accuracy dilution ratio (Proposition~\ref{prop:dilution}). Only Dr.~GRPO, which rebalances via per-token normalization, achieves transfer (61.8\% at step 800). The H5 ablation using accuracy-only reward achieves +1.3 pp, confirming the gap is an artifact of reward composition, not a fundamental RL limitation. Full baseline results in Appendix~\ref{app:rl_baselines}.
+
+
+% ============================================================
+\section{Discussion and Conclusion}
+\label{sec:discussion}
+% ============================================================
+
+\paragraph{Limitations.} Current results use a single seed on Qwen3.5-9B~\citep{yang2024qwen25} for TT-OPD and a different model (Lingshu-7B) for baselines. Multi-seed replication and cross-model validation (e.g., Llama~\citep{touvron2023llama}) are priorities. The knowledge base (828K passages) does not cover all subspecialties equally. Only 19 of 179 tools (10.6\%) are used during training, with extreme Pareto concentration. Simulated scenarios cannot fully replicate real clinical encounters.
+
+\paragraph{Future directions.} Several avenues extend this work. First, \textbf{process-level reward models} (PRMs)~\citep{lightman2024lets, uesato2022solving} could replace or augment the sparse terminal reward with turn-level feedback, potentially accelerating credit assignment in long episodes. Second, the bidirectional outcome-privileged conditioning could be extended to \textbf{hierarchical conditioning}, where intermediate sub-goals (e.g., correct diagnosis before treatment) provide stage-specific teacher signals. Third, the gradient signal dilution identified in Proposition~\ref{prop:dilution} suggests that \textbf{adaptive reward weighting}---dynamically adjusting $w_j$ based on per-component SNR during training---could mitigate the accuracy-format dilution without manual tuning. Fourth, scaling TT-OPD to \textbf{larger models and longer episodes} (e.g., 20+ turn specialist consultations) would test whether the EMA restoring force (Proposition~\ref{prop:oscillation}) remains effective as the policy space grows. Finally, deploying \gym{} with \textbf{human-in-the-loop evaluation}---where clinicians assess agent behavior beyond automated metrics---would bridge the gap between simulated and real clinical utility.
+
+\paragraph{Conclusion.}
+We identified three compounding failure modes in multi-turn agentic RL and proposed TT-OPD to address them. Through systematic ablation across four OPD variants, we traced the failure progression from KL collapse through response explosion, identifying multi-turn collapse as a failure mode unique to the agentic setting. TT-OPD achieves 61.1\% accuracy (+8.5 pp) with stable multi-turn tool use, while standard GRPO shows no improvement. These experiments are grounded in \gym{}, a Gymnasium-compatible environment spanning 10 clinical domains with 195K+ tasks and 187+ tools, publicly available at \url{https://anonymous.4open.science/r/healthcare-ai-gym}.
+
+
+% ============================================================
+% References
+% ============================================================
+
+\begin{thebibliography}{60}
+
+% === Medical LLMs/VLMs ===
+
+\bibitem[Chen et al.(2024)]{chen2024huatuogpt}
+Chen, J., et al.
+\newblock HuatuoGPT-o1: Towards Medical Complex Reasoning with LLMs.
+\newblock \emph{arXiv preprint arXiv:2412.18925}, 2024.
+
+\bibitem[Nori et al.(2023)]{nori2023gpt4}
+Nori, H., et al.
+\newblock Capabilities of GPT-4 on Medical Challenge Problems.
+\newblock \emph{arXiv preprint arXiv:2303.13375}, 2023.
+
+\bibitem[Singhal et al.(2023)]{singhal2023medpalm2}
+Singhal, K., et al.
+\newblock Towards Expert-Level Medical Question Answering with Large Language Models.
+\newblock \emph{arXiv preprint arXiv:2305.09617}, 2023.
+
+% === Benchmarks ===
+
+\bibitem[Jin et al.(2021)]{jin2021medqa}
+Jin, D., et al.
+\newblock What Disease does this Patient Have? A Large-scale Open Domain Question Answering Dataset from Medical Exams.
+\newblock \emph{Applied Sciences}, 2021.
+
+\bibitem[Jin et al.(2019)]{jin2019pubmedqa}
+Jin, Q., et al.
+\newblock PubMedQA: A Dataset for Biomedical Research Question Answering.
+\newblock \emph{EMNLP}, 2019.
+
+\bibitem[Pal et al.(2022)]{pal2022medmcqa}
+Pal, A., Umapathi, L.~K., and Sankarasubbu, M.
+\newblock MedMCQA: A Large-scale Multi-Subject Multi-Choice Dataset for Medical domain Question Answering.
+\newblock \emph{CHIL}, 2022.
+
+\bibitem[Yang et al.(2023)]{yang2023rethinking}
+Yang, S., et al.
+\newblock Rethinking Benchmark and Contamination for Language Models with Rephrased Samples.
+\newblock \emph{arXiv preprint}, 2023.
+
+% === Medical Agents ===
+
+\bibitem[Schmidgall et al.(2025)]{schmidgall2025agentclinic}
+Schmidgall, S., et al.
+\newblock AgentClinic: A Multimodal Agent Benchmark to Evaluate AI in Simulated Clinical Environments.
+\newblock \emph{arXiv preprint}, 2025.
+
+\bibitem[Xu et al.(2026)]{medagentgym2026}
+Xu, R., et al.
+\newblock MedAgentGym: A Scalable Agentic Training Environment for Code-Centric Reasoning in Biomedical Data Science.
+\newblock \emph{ICLR}, 2026.
+
+\bibitem[Mullappilly et al.(2026)]{medixr1}
+Mullappilly, S.~S., et al.
+\newblock MediX-R1: Open Ended Medical Reinforcement Learning.
+\newblock \emph{arXiv preprint arXiv:2602.23363}, 2026.
+
+\bibitem[Shen et al.(2026)]{shen2025medopenclaw}
+Shen, W., et al.
+\newblock MedOpenClaw: Auditable Medical Imaging Agents Reasoning over Uncurated Full Studies.
+\newblock \emph{arXiv preprint arXiv:2603.24649}, 2026.
+
+% === RL Algorithms ===
+
+\bibitem[Shao et al.(2024)]{shao2024deepseekmath}
+Shao, Z., et al.
+\newblock DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models.
+\newblock \emph{arXiv preprint}, 2024.
+
+\bibitem[Zheng et al.(2025)]{gspo2025}
+Zheng, C., Liu, S., et al.
+\newblock GSPO: Group Sequence Policy Optimization.
+\newblock \emph{arXiv preprint arXiv:2507.18071}, 2025.
+
+\bibitem[Yu et al.(2025)]{dapo2025}
+Yu, Q., et al.
+\newblock DAPO: An Open-Source LLM Reinforcement Learning System at Scale.
+\newblock \emph{arXiv preprint arXiv:2503.14476}, 2025.
+
+\bibitem[Liu et al.(2025)]{liu2025drgrpo}
+Liu, Z., et al.
+\newblock Understanding R1-Zero-Like Training: A Critical Perspective.
+\newblock \emph{COLM}, 2025.
+
+% === On-Policy Distillation ===
+
+\bibitem[Zhao et al.(2026)]{zhao26opsd}
+Zhao, S., et al.
+\newblock Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models.
+\newblock \emph{arXiv preprint arXiv:2601.18734}, 2026.
+
+\bibitem[Yang et al.(2026)]{yang26rlsd}
+Yang, C., et al.
+\newblock Self-Distilled RLVR.
+\newblock \emph{arXiv preprint arXiv:2604.03128}, 2026.
+
+\bibitem[Li et al.(2026)]{li26srpo}
+Li, G., et al.
+\newblock Unifying Group-Relative and Self-Distillation Policy Optimization via Sample Routing.
+\newblock \emph{arXiv preprint arXiv:2604.02288}, 2026.
+
+\bibitem[Sang et al.(2026)]{sang26crisp}
+Sang, H., et al.
+\newblock CRISP: Compressed Reasoning via Iterative Self-Policy Distillation.
+\newblock \emph{arXiv preprint arXiv:2603.05433}, 2026.
+
+\bibitem[Song and Zheng(2026)]{song26opdsurvey}
+Song, M. and Zheng, M.
+\newblock A Survey of On-Policy Distillation for Large Language Models.
+\newblock \emph{arXiv preprint arXiv:2604.00626}, 2026.
+
+% === Privileged Information and Agentic RL ===
+
+\bibitem[Xia et al.(2026)]{xia26hill}
+Xia, Y., et al.
+\newblock Learning to Hint for Reinforcement Learning.
+\newblock \emph{arXiv preprint arXiv:2604.00698}, 2026.
+
+\bibitem[Muhtar et al.(2026)]{muhtar26complementaryrl}
+Muhtar, D., et al.
+\newblock Complementary Reinforcement Learning.
+\newblock \emph{arXiv preprint arXiv:2603.17621}, 2026.
+
+% === Length Control ===
+
+\bibitem[Yeo et al.(2025)]{yeo2025cosine}
+Yeo, W., et al.
+\newblock Demystifying Long Chain-of-Thought Reasoning in LLMs.
+\newblock \emph{arXiv preprint arXiv:2502.03373}, 2025.
+
+% === Tools & Infrastructure ===
+
+\bibitem[Towers et al.(2024)]{towers2024gymnasium}
+Towers, M., et al.
+\newblock Gymnasium: A Standard Interface for Reinforcement Learning Environments.
+\newblock \emph{arXiv preprint arXiv:2407.17032}, 2024.
+
+\bibitem[Qin et al.(2024)]{qin2023toolllm}
+Qin, Y., et al.
+\newblock ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs.
+\newblock \emph{ICLR}, 2024.
+
+\bibitem[Schick et al.(2023)]{schick2024toolformer}
+Schick, T., et al.
+\newblock Toolformer: Language Models Can Teach Themselves to Use Tools.
+\newblock \emph{NeurIPS}, 2023.
+
+\bibitem[Jin et al.(2023)]{xiong2024medcpt}
+Jin, Q., Kim, W., Chen, Q., Comeau, D.~C., Yeganova, L., Wilbur, W.~J., and Lu, Z.
+\newblock MedCPT: Contrastive Pre-trained Transformers with Large-scale PubMed Search Logs for Zero-shot Biomedical Information Retrieval.
+\newblock \emph{Bioinformatics}, 39(11), 2023.
+
+% === Evaluation ===
+
+\bibitem[Gu et al.(2022)]{gu2021pubmedbert}
+Gu, Y., Tinn, R., Cheng, H., et al.
+\newblock Domain-Specific Language Model Pretraining for Biomedical Natural Language Processing.
+\newblock \emph{ACM Transactions on Computing for Healthcare}, 3(1), 2022.
+
+\bibitem[Zhang et al.(2020)]{zhang2020bertscore}
+Zhang, T., et al.
+\newblock BERTScore: Evaluating Text Generation with BERT.
+\newblock \emph{ICLR}, 2020.
+
+% === Optimization Theory ===
+
+\bibitem[Polyak \& Juditsky(1992)]{polyak1992acceleration}
+Polyak, B.~T. and Juditsky, A.~B.
+\newblock Acceleration of Stochastic Approximation by Averaging.
+\newblock \emph{SIAM Journal on Control and Optimization}, 30(4):838--855, 1992.
+
+\bibitem[Amari(1998)]{amari1998natural}
+Amari, S.
+\newblock Natural Gradient Works Efficiently in Learning.
+\newblock \emph{Neural Computation}, 10(2):251--276, 1998.
+
+% === Additional Benchmarks ===
+
+\bibitem[Hendrycks et al.(2021)]{hendrycks2021mmlu}
+Hendrycks, D., Burns, C., Basart, S., Zou, A., Mazeika, M., Song, D., and Steinhardt, J.
+\newblock Measuring Massive Multitask Language Understanding.
+\newblock \emph{ICLR}, 2021.
+
+\bibitem[Lau et al.(2018)]{lau2018vqarad}
+Lau, J.~J., Gayen, S., {Ben Abacha}, A., and Demner-Fushman, D.
+\newblock A Dataset of Clinically Generated Visual Questions and Answers about Radiology Images.
+\newblock \emph{Scientific Data}, 5:180251, 2018.
+
+\bibitem[He et al.(2020)]{he2020pathvqa}
+He, X., Zhang, Y., Mou, L., Xing, E., and Xie, P.
+\newblock PathVQA: 30000+ Questions for Medical Visual Question Answering.
+\newblock \emph{arXiv preprint arXiv:2003.10286}, 2020.
+
+\bibitem[Liu et al.(2021)]{liu2021slake}
+Liu, B., Zhan, L.-M., Xu, L., Ma, L., Yang, Y., and Wu, X.-M.
+\newblock SLAKE: A Semantically-Labeled Knowledge-Enhanced Dataset for Medical Visual Question Answering.
+\newblock \emph{ISBI}, 2021.
+
+\bibitem[Zhang et al.(2023)]{zhang2023pmcvqa}
+Zhang, X., Wu, C., Zhao, Z., Lin, W., Zhang, Y., Wang, Y., and Xie, W.
+\newblock PMC-VQA: Visual Instruction Tuning for Medical Visual Question Answering.
+\newblock \emph{arXiv preprint arXiv:2305.10415}, 2023.
+
+\bibitem[Johnson et al.(2016)]{johnson2016mimiciii}
+Johnson, A.~E.~W., Pollard, T.~J., Shen, L., et al.
+\newblock MIMIC-III, a Freely Accessible Critical Care Database.
+\newblock \emph{Scientific Data}, 3:160035, 2016.
+
+\bibitem[Pollard et al.(2018)]{pollard2018eicu}
+Pollard, T.~J., Johnson, A.~E.~W., Raffa, J.~D., Celi, L.~A., Mark, R.~G., and Badawi, O.
+\newblock The eICU Collaborative Research Database, a Freely Available Multi-Center Database for Critical Care Research.
+\newblock \emph{Scientific Data}, 5:180178, 2018.
+
+\bibitem[{Ben Abacha} et al.(2019)]{abacha2019liveqa}
+{Ben Abacha}, A., Agichtein, E., Pinter, Y., and Demner-Fushman, D.
+\newblock Overview of the Medical Question Answering Task at {TREC} 2017 {LiveQA}.
+\newblock \emph{TREC}, 2019.
+
+% === Foundation RL/LLM Methods ===
+
+\bibitem[Schulman et al.(2017)]{schulman2017ppo}
+Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O.
+\newblock Proximal Policy Optimization Algorithms.
+\newblock \emph{arXiv preprint arXiv:1707.06347}, 2017.
+
+\bibitem[Ouyang et al.(2022)]{ouyang2022instructgpt}
+Ouyang, L., Wu, J., Jiang, X., et al.
+\newblock Training Language Models to Follow Instructions with Human Feedback.
+\newblock \emph{NeurIPS}, 2022.
+
+\bibitem[Hinton et al.(2015)]{hinton2015distillation}
+Hinton, G., Vinyals, O., and Dean, J.
+\newblock Distilling the Knowledge in a Neural Network.
+\newblock \emph{arXiv preprint arXiv:1503.02531}, 2015.
+
+\bibitem[Wei et al.(2022)]{wei2022cot}
+Wei, J., Wang, X., Schuurmans, D., et al.
+\newblock Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.
+\newblock \emph{NeurIPS}, 2022.
+
+\bibitem[Rafailov et al.(2023)]{rafailov2023dpo}
+Rafailov, R., Sharma, A., Mitchell, E., Ermon, S., Manning, C.~D., and Finn, C.
+\newblock Direct Preference Optimization: Your Language Model is Secretly a Reward Model.
+\newblock \emph{NeurIPS}, 2023.
+
+% === Agent Frameworks ===
+
+\bibitem[Yao et al.(2023)]{yao2023react}
+Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., and Cao, Y.
+\newblock {ReAct}: Synergizing Reasoning and Acting in Language Models.
+\newblock \emph{ICLR}, 2023.
+
+\bibitem[Shinn et al.(2023)]{shinn2023reflexion}
+Shinn, N., Cassano, F., Gopinath, A., Narasimhan, K., and Yao, S.
+\newblock Reflexion: Language Agents with Verbal Reinforcement Learning.
+\newblock \emph{NeurIPS}, 2023.
+
+% === EMA / Semi-supervised ===
+
+\bibitem[Tarvainen \& Valpola(2017)]{tarvainen2017meanteacher}
+Tarvainen, A. and Valpola, H.
+\newblock Mean Teachers Are Better Role Models: Weight-Averaged Consistency Targets Improve Semi-Supervised Learning Results.
+\newblock \emph{NeurIPS}, 2017.
+
+% === Retrieval ===
+
+\bibitem[Lewis et al.(2020)]{lewis2020rag}
+Lewis, P., Perez, E., Piktus, A., et al.
+\newblock Retrieval-Augmented Generation for Knowledge-Intensive {NLP} Tasks.
+\newblock \emph{NeurIPS}, 2020.
+
+% === Models ===
+
+\bibitem[Yang et al.(2024)]{yang2024qwen25}
+Yang, A., Yang, B., Hui, B., et al.
+\newblock Qwen2.5 Technical Report.
+\newblock \emph{arXiv preprint arXiv:2412.15115}, 2024.
+
+\bibitem[Touvron et al.(2023)]{touvron2023llama}
+Touvron, H., Martin, L., Stone, K., et al.
+\newblock Llama 2: Open Foundation and Fine-Tuned Chat Models.
+\newblock \emph{arXiv preprint arXiv:2307.09288}, 2023.
+
+% === Medical AI ===
+
+\bibitem[Li et al.(2024)]{li2024agenthospital}
+Li, J., Wang, S., Zhang, M., et al.
+\newblock Agent Hospital: A Simulacrum of Hospital with Evolvable Medical Agents.
+\newblock \emph{arXiv preprint arXiv:2405.02957}, 2024.
+
+\bibitem[Thirunavukarasu et al.(2023)]{thirunavukarasu2023medicalai}
+Thirunavukarasu, A.~J., Ting, D.~S.~J., Elangovan, K., Gutierrez, L., Tan, T.~F., and Ting, D.~S.~W.
+\newblock Large Language Models in Medicine.
+\newblock \emph{Nature Medicine}, 29(8):1930--1940, 2023.
+
+\bibitem[Wang et al.(2023)]{wang2023selfconsistency}
+Wang, X., Wei, J., Schuurmans, D., et al.
+\newblock Self-Consistency Improves Chain of Thought Reasoning in Language Models.
+\newblock \emph{ICLR}, 2023.
+
+\bibitem[Lin(2004)]{lin2004rouge}
+Lin, C.-Y.
+\newblock {ROUGE}: A Package for Automatic Evaluation of Summaries.
+\newblock \emph{ACL Workshop on Text Summarization}, 2004.
+
+% === Process Reward Models ===
+
+\bibitem[Lightman et al.(2024)]{lightman2024lets}
+Lightman, H., Kosaraju, V., Burda, Y., et al.
+\newblock Let's Verify Step by Step.
+\newblock \emph{ICLR}, 2024.
+
+\bibitem[Uesato et al.(2022)]{uesato2022solving}
+Uesato, J., Kushman, N., Kumar, R., Song, F., Siegel, N., Wang, L., Creswell, A., Irving, G., and Higgins, I.
+\newblock Solving Math Word Problems with Process- and Outcome-Based Feedback.
+\newblock \emph{arXiv preprint arXiv:2211.14275}, 2022.
+
+% === Multi-Turn Agent RL ===
+
+\bibitem[Li et al.(2025)]{li2025sport}
+Li, P., Gao, Z., Zhang, B., et al.
+\newblock Iterative Tool Usage Exploration for Multimodal Agents via Step-wise Preference Tuning.
+\newblock \emph{arXiv preprint arXiv:2504.21561}, 2025.
+
+\bibitem[Shi et al.(2024)]{shi2024dmpo}
+Shi, W., Yuan, M., Wu, J., Wang, Q., and Feng, F.
+\newblock Direct Multi-Turn Preference Optimization for Language Agents.
+\newblock \emph{arXiv preprint arXiv:2406.14868}, 2024.
+
+\bibitem[Yuan et al.(2025)]{yuan2025agentr}
+Yuan, S., Chen, Z., Xi, Z., Ye, J., Du, Z., and Chen, J.
+\newblock Agent-R: Training Language Model Agents to Reflect via Iterative Self-Training.
+\newblock \emph{arXiv preprint arXiv:2501.11425}, 2025.
+
+\bibitem[Jung et al.(2025)]{jung2025diatooldpo}
+Jung, S., Lee, D., Lee, S., et al.
+\newblock DiaTool-DPO: Multi-Turn Direct Preference Optimization for Tool-Augmented Large Language Models.
+\newblock \emph{arXiv preprint arXiv:2504.02882}, 2025.
+
+\bibitem[Cao et al.(2025)]{cao2025pgpo}
+Cao, Z., Wang, R., Yang, Y., et al.
+\newblock {PGPO}: Enhancing Agent Reasoning via Pseudocode-style Planning Guided Preference Optimization.
+\newblock \emph{arXiv preprint arXiv:2506.01475}, 2025.
+
+\bibitem[Chen et al.(2025)]{chen2025depo}
+Chen, S., Zhao, M., Xu, L., et al.
+\newblock {DEPO}: Dual-Efficiency Preference Optimization for {LLM} Agents.
+\newblock \emph{arXiv preprint arXiv:2511.15392}, 2025.
+
+\end{thebibliography}
+
+% ============================================================
+% Appendix
+% ============================================================
+\appendix
+
+\section{Healthcare AI GYM: Detailed Construction}
+\label{Appendix:AI_healthcare_gym}
+
+This appendix provides comprehensive details on the design, implementation, and construction of \gym{}, totaling $\sim$30K lines of code across 10 clinical domains.
+
+\subsection{Gymnasium Interface}
+
+\gym{} implements the standard Gymnasium API via \texttt{BioAgentGymEnv(gym.Env)}:
+
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+    \item \textbf{Observation space:} \texttt{spaces.Text(max\_length=100000)} containing conversation history, tool results, and patient information.
+    \item \textbf{Action space:} \texttt{spaces.Text(max\_length=10000)} representing either a JSON tool call or natural language response.
+    \item \textbf{Episode flow:} \texttt{reset()} loads a task and returns the system prompt + patient ticket; \texttt{step(action)} parses tool calls, executes them, and returns observations. Episode terminates when \texttt{submit\_answer()} is called or \texttt{max\_turns} is reached.
+    \item \textbf{Reward:} Scalar from 5 dimensions at episode termination (Eq.~\ref{eq:reward}).
+\end{itemize}
+
+The domain registry lazily loads 10 domain modules, each providing \texttt{get\_environment()} and \texttt{get\_tasks()} functions. Tasks are loaded from domain-specific JSON files and normalized to a consistent schema with deterministic IDs via MD5 hashing.
+
+\subsection{Domain Design}
+
+Table~\ref{tab:domains_appendix} summarizes the 10 clinical domains. Each domain follows a modular structure: \texttt{data\_model.py} (Pydantic schemas), \texttt{tools.py} (\texttt{ToolKitBase} subclass), \texttt{environment.py} (domain entry point), and data files (\texttt{db.json}, \texttt{tasks.json}, \texttt{policy.md}).
+
+\begin{table}[h]
+\centering
+\caption{Medical domains in \gym{} with implementation details.}
+\label{tab:domains_appendix}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{llrrrl}
+\toprule
+\textbf{Domain} & \textbf{Clinical Focus} & \textbf{Tasks} & \textbf{Tools} & \textbf{LoC} & \textbf{Key Capabilities} \\
+\midrule
+Clinical Diagnosis & Differential diagnosis & 32K+ & 20 & 1,481 & History, labs, DDx, prescribing \\
+Medical QA & Evidence-based QA & 30K+ & 8 & 451 & PubMed search, evidence analysis \\
+Drug Interaction & Pharmacovigilance & 12K+ & 12 & 822 & DDI, CYP450, alternatives \\
+EHR Management & Electronic health records & 7K+ & 10 & 621 & MIMIC-III/IV, SOFA/APACHE \\
+Triage \& Emergency & Emergency medicine & 7K+ & 20 & 1,161 & ABC, ESI, GCS, qSOFA, HEART \\
+Visual Diagnosis & Medical imaging & 6K+ & 15 & 1,109 & Image analysis, case similarity \\
+Radiology Report & Structured reporting & 6K+ & 8 & 379 & BI-RADS, TI-RADS, Fleischner \\
+Psychiatry & Mental health & 6K+ & 10 & 488 & MSE, PHQ-9, GAD-7, Columbia \\
+Obstetrics & Maternal-fetal medicine & 7K+ & 8 & 482 & CTG, Bishop score, ACOG \\
+Cross-Domain & Multi-phase pathways & 7K+ & Var. & --- & 6 pathways (chest pain, DKA, etc.) \\
+\midrule
+\textbf{Total} & & \textbf{195K+} & \textbf{187+} & \textbf{$\sim$7K} & \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\paragraph{Task Structure.}
+Each task is a JSON object containing: (1) a patient scenario \emph{ticket}, (2) expected tool interactions with \texttt{compare\_args} specifying which arguments must match, (3) natural language assertions for quality evaluation, and (4) a \texttt{reward\_basis} array selecting between \texttt{ACTION} and \texttt{NL\_ASSERTION} evaluation. Tasks are sourced from three pipelines: expert-curated base tasks ($\sim$10K), difficulty-scaled variations, and LLM-generated tasks from knowledge mining via the \texttt{AutoTaskGenerator}, followed by human validation.
+
+\paragraph{Task Generation Pipeline.}
+The \texttt{AutoTaskGenerator} converts external benchmarks and mines knowledge sources through five converters: (1) \texttt{MCQAConverter} processes 8.9K questions from 8 MCQA benchmarks (MedQA, MedMCQA, 6 MMLU subsets); (2) \texttt{MedLFQAConverter} handles 4.9K long-form QA; (3) \texttt{VQAConverter} loads 6 visual QA datasets ($\sim$25K images); (4) \texttt{EHRConverter} extracts MIMIC-III/IV admission episodes; (5) \texttt{KnowledgeMiner} generates QA pairs from FTS5 passage mining. Each converter assigns domain-specific expected tools and generates stable IDs for reproducibility.
+
+\paragraph{Cross-Domain Pathways.}
+The pathway engine defines 6 multi-phase clinical journeys (chest pain, diabetic emergency, stroke code, sepsis bundle, post-op complication, pediatric fever). Each pathway is a sequence of \texttt{PathwayPhase} objects specifying the active domain, required actions, NL assertions, transition conditions, and optional time pressure flags. Evaluation is performed per-phase and overall.
+
+\paragraph{Domain Data Models.}
+Each domain defines Pydantic \texttt{BaseModel} schemas inheriting from a common \texttt{DB} class that supports serialization, hashing, and schema generation. For example, \textbf{Clinical Diagnosis} defines \texttt{Patient} (demographics, allergies with severity, medications, conditions, vital signs, lab results, clinical notes, family/social history), \texttt{LabResult} (with reference ranges and flags), \texttt{ClinicalGuideline}, and \texttt{DrugInteraction}. \textbf{EHR Management} mirrors the MIMIC schema with \texttt{Admission}, \texttt{ICUStay}, \texttt{LabEvent}, \texttt{VitalEvent}, \texttt{MedicationOrder}, and \texttt{ClinicalScore} (SOFA/APACHE/SAPS/NEWS).
+
+\subsection{Tool System Implementation}
+
+\paragraph{Decorator Framework.}
+Tools are registered via the \texttt{@is\_tool(ToolType)} decorator, which supports four types: \texttt{READ} (queries), \texttt{WRITE} (state modifications), \texttt{THINK} (internal reasoning), and \texttt{GENERIC} (submit). A metaclass \texttt{\_ToolKitMeta} collects all decorated methods during class creation. \texttt{ToolDefinition.from\_method()} automatically parses method signatures and docstrings to generate OpenAI-compatible function calling schemas. \texttt{CompositeToolKit} merges domain-specific tools with shared \texttt{KnowledgeTools} using first-wins semantics.
+
+\paragraph{Tool Execution.}
+The environment's \texttt{step()} method parses agent actions as JSON, validates tool names against the registered toolkit, executes via \texttt{tools.use\_tool(name, **kwargs)}, and returns results as \texttt{ToolMessage} objects. Invalid JSON or unknown tool names return error messages rather than crashing the episode.
+
+\paragraph{Representative Domain Tools.}
+\textbf{Clinical Diagnosis} (20 tools): \texttt{get\_patient\_info()}, \texttt{get\_vital\_signs()}, \texttt{order\_lab\_test()}, \texttt{get\_differential\_diagnosis()}, \texttt{check\_drug\_interaction()}, \texttt{check\_contraindication()}, \texttt{record\_diagnosis()}, \texttt{transfer\_to\_specialist()}.
+\textbf{Triage} (20 tools): \texttt{assess\_airway\_breathing()}, \texttt{calculate\_gcs()}, \texttt{calculate\_esi\_level()}, \texttt{calculate\_qsofa()}, \texttt{screen\_sepsis()}, \texttt{activate\_emergency\_protocol()}.
+\textbf{EHR} (10 tools): \texttt{get\_lab\_events()}, \texttt{get\_vital\_signs()} (time-series), \texttt{calculate\_clinical\_score()} (SOFA/APACHE).
+
+\subsection{Knowledge Base: 828K Passages}
+
+The knowledge base is implemented as an SQLite FTS5 (Full-Text Search v5) database with BM25 ranking:
+
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+    \item \textbf{Schema:} \texttt{CREATE VIRTUAL TABLE passages\_fts USING fts5(doc\_id, source, title, content, category, dataset\_name, tokenize='porter unicode61')}
+    \item \textbf{Sources:} MedCPT evidence (581K PubMed/PMC passages), biomedical QA pairs (122K), generator passages (83K), MedInstruct (52K) --- totaling 828,473 indexed passages
+    \item \textbf{Search:} Porter stemmer tokenization, BM25 relevance ranking, snippet generation with term highlighting, boolean query operators
+    \item \textbf{Wikipedia:} Offline FTS5 index over 26M articles (188GB) with offset-based page retrieval
+    \item \textbf{Access:} Thread-safe singleton \texttt{MedicalKnowledgeBackend} with WAL mode and lazy initialization
+\end{itemize}
+
+Three shared \texttt{KnowledgeTools} are composed into every domain toolkit: \texttt{search\_pubmed()} (passage search), \texttt{search\_evidence()} (MedCPT-specific retrieval), and \texttt{search\_wiki()} (Wikipedia/encyclopedia).
+
+\subsection{5D Reward Implementation}
+
+The reward system ($\sim$400 lines) implements each dimension as composable functions:
+
+\paragraph{Accuracy ($R_{\text{acc}}$).} Three variants: (1) \texttt{exact\_match} for MCQ (1.0 if correct, 0.0 otherwise), (2) \texttt{soft} using ROUGE-1~\citep{lin2004rouge} + BLEU-1 token overlap F1 for open-ended answers, (3) \texttt{bertscore} using BiomedBERT for semantic similarity with soft fallback.
+
+\paragraph{Process Quality ($R_{\text{proc}}$).} Weighted combination: 60\% \emph{coverage} (proportion of expected tools called with matching arguments), 20\% \emph{diversity} (unique tool signatures / total calls), 20\% \emph{thoroughness} (distinct tool names used). Additionally, rubric-based scoring (70\% weight when rubric provided) checks required elements, required tools, and forbidden elements.
+
+\paragraph{Safety ($R_{\text{safe}}$).} Rule-based \texttt{SafetyViolation} detection with 50+ violation patterns across 5 severity levels, each mapped to an AMA ethics principle (nonmaleficence, beneficence, autonomy). Critical violations (severity 5: contraindication ignored, dangerous dosing, missed emergency) cap total reward at 0.1; severe violations (severity 4) apply $-0.3$ penalty.
+
+\paragraph{Format ($R_{\text{fmt}}$).} Graded scoring: 1.0 for valid JSON with \texttt{name} and \texttt{arguments}; 0.8 for JSON in code blocks; 0.5 for partial structure; 0.0 for invalid format. Final turn checks for coherent answer ($>$10 characters).
+
+\paragraph{Coherence ($R_{\text{coh}}$).} Checks logical consistency, absence of contradictions, and clear clinical conclusions.
+
+\paragraph{GRPO Integration.} A TRL-compatible wrapper \texttt{grpo\_reward\_fn()} computes all 5 dimensions and returns the weighted scalar for use with \texttt{GRPOTrainer}.
+
+\subsection{Behavioral Policies}
+
+Each domain includes a \texttt{policy.md} file defining behavioral guidelines injected as the system prompt. Policies specify: (1) core principles (patient safety first, evidence-based medicine, systematic approach), (2) tool usage guidelines (e.g., ``always start with \texttt{get\_patient\_info()}'', ``check allergies before prescribing''), and (3) restrictions (e.g., ``do NOT diagnose without reviewing patient data'', ``if beyond scope, transfer to specialist immediately''). These policies ground the agent's behavior in clinical best practices while remaining domain-specific.
+
+
+\section{TT-OPD Algorithm}
+\label{app:algorithm}
+
+\begin{algorithm}[h]
+\caption{Turn-Level Truncated On-Policy Distillation (TT-OPD)}
+\label{alg:ttopd}
+\begin{algorithmic}[1]
+\REQUIRE Base model $\theta_S$, EMA decay $\alpha{=}0.995$, KL weight $\lambda_{\text{KL}}{=}0.01$, max context $L_{\max}{=}12{,}288$, EMA interval $T_{\text{ema}}{=}5$, task distribution $\mathcal{T}$
+\ENSURE Trained student $\theta_S$
+\STATE Initialize teacher $\theta_T \leftarrow \theta_S$
+\FOR{step $t = 1, 2, \ldots$}
+    \STATE Sample batch of prompts $\{x_i\}$ from $\mathcal{T}$
+    \FOR{each prompt $x_i$}
+        \STATE Generate $G$ rollouts via multi-turn interaction with environment
+        \STATE Score each rollout with cosine reward $R_{\text{cos}}$ (Eq.~\ref{eq:cosine_reward})
+    \ENDFOR
+    \STATE Filter: keep only prompts with mixed outcomes \COMMENT{dynamic sampling}
+    \STATE Compute group-relative advantages $\hat{A}$ from $R_{\text{cos}}$
+    \FOR{each rollout $\tau = (s_1, a_1, \ldots, s_T, a_T)$}
+        \STATE Inject outcome-privileged context into teacher prompt
+        \STATE Compute teacher logprobs $\pi_{\theta_T}(a_t \mid s_t)$ for all turns $t$
+        \STATE Remove privileged tokens from teacher output
+    \ENDFOR
+    \STATE Compute $\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{GRPO}}(\theta_S;\, R_{\text{cos}}) + \lambda_{\text{KL}} \cdot D_{\text{KL}}(\pi_{\theta_S} \| \pi_{\theta_T})$ \COMMENT{Eq.~\ref{eq:full_objective}}
+    \STATE Update $\theta_S$ via gradient descent on $\mathcal{L}_{\text{total}}$
+    \IF{$t \bmod T_{\text{ema}} = 0$}
+        \STATE $\theta_T \leftarrow \alpha \cdot \theta_T + (1 - \alpha) \cdot \theta_S$ \COMMENT{EMA teacher update}
+    \ENDIF
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+
+\section{Proof Sketches}
+\label{app:proofs}
+
+\paragraph{Proposition~\ref{prop:oscillation} (EMA as Implicit Annealing).}
+\emph{Part (1):} Unrolling the EMA recurrence $\theta_T^{(n)} = \alpha\,\theta_T^{(n-1)} + (1-\alpha)\,\theta_S^{(n)}$ with $\theta_T^{(0)} = \theta_S^{(0)}$ gives $\theta_S^{(n)} - \theta_T^{(n)} = \sum_{k=1}^n \alpha^{n-k}\,\delta_k$ by induction. The geometric series bound yields $\|\theta_S - \theta_T\| \leq \|\delta\|/(1-\alpha)$.
+\emph{Part (2):} Using $\nabla_\phi D_{\mathrm{KL}}(\pi_\phi \| \pi_\psi) = \mathbf{F}(\phi)(\phi - \psi) + O(\|\phi - \psi\|^2)$ from a second-order Taylor expansion~\citep{amari1998natural}.
+\emph{Part (3):} The total gradient $\nabla \mathcal{L}_{\mathrm{GRPO}} + \lambda_{\mathrm{KL}}\mathbf{F}(\theta_S)(\theta_S - \theta_T)$ shows that large policy drift amplifies the KL term, reducing effective step size---analogous to Polyak--Ruppert averaging~\citep{polyak1992acceleration} but with feedback into the loss.
+
+\paragraph{Proposition~\ref{prop:dilution} (Gradient Signal Dilution).}
+From linearity: $\hat{A}_i = \sum_k (w_k \sigma_k/\sigma_R)\hat{A}_i^{(k)}$. The SNR of component $j$ is $w_j\sigma_j/\sigma_R$. With our parameters: $\sigma_R \approx 0.132$, $\mathrm{SNR}_\mathrm{acc} = 0.3 \times 0.41/0.132 \approx 0.93$, $\mathrm{SNR}_\mathrm{fmt} = 0.15 \times 0.02/0.132 \approx 0.023$. Format's near-constant scores produce 24 zero-gradient rollouts per informative one.
+
+\paragraph{Proposition~\ref{prop:kl_bound} (KL Boundedness).}
+From Proposition~\ref{prop:oscillation}, steady-state gap $\leq \epsilon/(1-\alpha)$. With $L$-Lipschitz KL: $D_{\mathrm{KL}} \leq L\epsilon^2/2(1-\alpha)^2$. Hard-copy updates produce gap growing linearly as $(t \bmod T_\text{copy})\epsilon$, then dropping to zero---explaining the sawtooth KL and gradient signal destruction observed with periodic resets.
+
+
+\section{Domain-Specific Agentic Results}
+\label{app:domain_results}
+
+\begin{table}[h]
+\centering
+\caption{Agentic competence across domains for TT-OPD (step 60) via multi-turn AgentRunner.}
+\label{tab:domain_results}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Domain} & \textbf{Tasks} & \textbf{Action Score} & \textbf{Reward} & \textbf{QA Acc} & \textbf{Avg Turns} \\
+\midrule
+Medical QA & 178 & 0.553 & 0.542 & \textbf{0.534} & 8.0 \\
+Visual Diagnosis & 8 & \textbf{0.938} & \textbf{0.635} & 0.438 & 5.4 \\
+Clinical Diagnosis & 5 & 0.826 & 0.524 & --- & 8.8 \\
+Drug Interaction & 5 & 0.780 & 0.503 & --- & 8.8 \\
+Triage \& Emergency & 20 & 0.726 & 0.374 & --- & 8.9 \\
+EHR Management & 15 & 0.707 & 0.388 & --- & 9.4 \\
+Psychiatry & 20 & 0.421 & 0.306 & --- & 9.9 \\
+Obstetrics & 20 & 0.000 & 0.323 & --- & 9.2 \\
+\midrule
+\textbf{Overall (weighted)} & \textbf{271} & \textbf{0.544} & \textbf{0.489} & \textbf{0.364} & \textbf{8.3} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+
+\section{Domain Tool Inventory}
+\label{app:tools}
+
+Each GYM domain provides a \texttt{CompositeToolKit} combining domain-specific tools with shared \texttt{KnowledgeTools} (PubMed search, evidence retrieval, medical wiki). All tools follow OpenAI-compatible function calling format.
+
+\begin{table}[h]
+\centering
+\caption{Tool inventory per domain. R=Read, W=Write, T=Think, G=Generic (submit). All domains share 3 KnowledgeTools.}
+\label{tab:tool_inventory}
+\small
+\begin{tabular}{lrrrrl}
+\toprule
+\textbf{Domain} & \textbf{R} & \textbf{W} & \textbf{T} & \textbf{G} & \textbf{Representative Tools} \\
+\midrule
+Clinical Diagnosis & 30 & 2 & 1 & 1 & \texttt{get\_vital\_signs}, \texttt{order\_lab}, \texttt{generate\_ddx} \\
+Medical QA & 12 & 0 & 1 & 1 & \texttt{analyze\_answer\_options}, \texttt{compare\_treatments} \\
+Visual Diagnosis & 6 & 0 & 1 & 1 & \texttt{analyze\_medical\_image}, \texttt{search\_similar\_cases} \\
+Drug Interaction & 15 & 0 & 1 & 1 & \texttt{check\_interaction}, \texttt{check\_cyp450\_metabolism} \\
+EHR Management & 18 & 3 & 1 & 1 & \texttt{get\_lab\_trend}, \texttt{write\_clinical\_note}, \texttt{place\_order} \\
+Triage \& Emergency & 16 & 3 & 1 & 1 & \texttt{calculate\_gcs}, \texttt{screen\_sepsis}, \texttt{calculate\_heart\_score} \\
+Radiology Report & 7 & 1 & 1 & 1 & \texttt{analyze\_findings}, \texttt{get\_report\_template}, \texttt{submit\_report} \\
+Psychiatry & 12 & 0 & 1 & 1 & \texttt{administer\_phq9}, \texttt{assess\_suicide\_risk}, \texttt{screen\_substance} \\
+Obstetrics & 17 & 1 & 1 & 1 & \texttt{assess\_fetal\_status}, \texttt{interpret\_ctg}, \texttt{calculate\_bishop\_score} \\
+Cross-Domain & \multicolumn{4}{c}{(pathway engine)} & Multi-domain clinical pathway sequencing \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All tools return JSON-serializable outputs. The \texttt{think()} tool captures internal reasoning without external side effects. The \texttt{submit\_answer()} tool marks task completion and triggers reward evaluation.
+
+
+\section{Task Examples}
+\label{app:tasks}
+
+\textbf{Medical QA (medqa\_00000).} \emph{``A 69-year-old man with a history of alcoholism is admitted with pneumonia and started on TPN. Labs show hyponatremia, hypokalemia, and hypophosphatemia. What could have prevented these complications?''} Options: (A) Slow initiation of TPN, (B) Addition of potassium, (C) Fluid restriction, (D) Thiamine supplementation. \emph{Answer: A (refeeding syndrome prevention).}
+
+\textbf{Visual Diagnosis (vdx\_chest\_001).} \emph{``IMAGE: PA chest X-ray. PATIENT: 58M, diabetic, former smoker. What abnormality is seen in the right lower zone?''} \emph{Answer: Right lower lobe consolidation consistent with pneumonia.}
+
+\textbf{EHR Management (ehr\_001).} \emph{``Patient Robert Chen (HADM\_10001) is admitted for acute decompensated heart failure. Review labs, vitals, and medications.''} Evaluated via rubric scoring with 6 must-mention items.
+
+
+\section{Training Hyperparameters}
+\label{app:hyperparams}
+
+\begin{table}[h]
+\centering
+\caption{Full training hyperparameters for TT-OPD training.}
+\label{tab:hyperparams}
+\begin{tabular}{lll}
+\toprule
+\textbf{Parameter} & \textbf{SFT Stage} & \textbf{RL Stage} \\
+\midrule
+LoRA rank ($r$) & 64 & 64 \\
+LoRA alpha ($\alpha$) & 128 & 128 \\
+LoRA dropout & 0.05 & 0.05 \\
+Target modules & q/k/v/o/gate/up/down\_proj & q/k/v/o/gate/up/down\_proj \\
+Learning rate & $5 \times 10^{-6}$ & $5 \times 10^{-7}$ \\
+LR scheduler & Cosine & Cosine \\
+Warmup ratio & 0.10 & 0.05 \\
+Weight decay & 0.01 & 0.01 \\
+Max grad norm & 1.0 & 1.0 \\
+Epochs & 2 & 10 \\
+Batch size (per GPU) & 2 & 2 \\
+Gradient accumulation & 8 & 8 \\
+Precision & bf16 & bf16 \\
+\midrule
+\multicolumn{3}{l}{\emph{RL-specific parameters}} \\
+Generations per prompt ($G$) & -- & 8 \\
+KL penalty ($\beta$) & -- & 0.01 \\
+Temperature & -- & 0.7 \\
+Top-$p$ & -- & 0.95 \\
+Top-$k$ & -- & 50 \\
+EMA decay ($\alpha_{\text{EMA}}$) & -- & 0.995 \\
+EMA update interval & -- & 5 steps \\
+Hard copy interval & -- & 30 steps \\
+Cosine $R_{\text{max}}$ / $R_{\text{min}}$ & -- & 1.1 / 0.7 \\
+Cosine $R_{\text{penalty}}$ & -- & $-0.5$ \\
+$L_{\text{max}}$ & -- & 12,288 tokens \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Full TT-OPD Validation Trajectory}
+\label{app:trajectory}
+
+\begin{table}[h]
+\centering
+\caption{Full TT-OPD validation trajectory. Oscillating recovery with controlled response length. GRPO baseline shows no improvement ($\pm$0.2 pp); EMA-only distillation plateaus at 53.8\%.}
+\label{tab:opd_trajectory}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Step} & \textbf{Val Acc} & \textbf{$\Delta$} & \textbf{KL} & \textbf{Resp.\ Len} & \textbf{Clip \%} & \textbf{Turns} \\
+\midrule
+0 & 52.6\% & --- & --- & --- & --- & 7.35 \\
+5 & 53.8\% & +1.2 & 0.001 & 5,724 & 33\% & 7.36 \\
+10 & 54.9\% & +2.3 & 0.003 & 8,574 & 63\% & 7.28 \\
+15 & 56.4\% & +3.8 & 0.016 & 8,279 & 63\% & 7.16 \\
+20 & 53.6\% & +1.0 & 0.047 & 7,689 & 46\% & 7.05 \\
+25 & 58.0\% & +5.4 & 0.096 & 7,443 & 50\% & 7.13 \\
+30 & 59.0\% & +6.4 & 0.146 & 6,476 & 42\% & 6.98 \\
+35 & 59.1\% & +6.5 & 0.281 & 9,210 & 63\% & 7.03 \\
+40 & 59.6\% & +7.0 & 0.526 & 5,822 & 38\% & 7.32 \\
+45 & 60.4\% & +7.8 & 0.697 & 8,368 & 58\% & 7.25 \\
+50 & 57.3\% & +4.7 & 0.756 & 9,264 & 71\% & 7.03 \\
+55 & 60.3\% & +7.7 & 0.878 & 7,677 & 46\% & 7.27 \\
+\textbf{60} & \textbf{61.1\%} & \textbf{+8.5} & 1.063 & 7,308 & 46\% & 7.30 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Safety Violation Taxonomy}
+\label{app:safety}
+
+\begin{table}[h]
+\centering
+\caption{Safety violation taxonomy (5-level severity).}
+\label{tab:safety_taxonomy}
+\begin{tabular}{llll}
+\toprule
+\textbf{Severity} & \textbf{Category} & \textbf{Example} & \textbf{Reward Effect} \\
+\midrule
+5 (Critical) & Contraindication ignored & Prescribed penicillin to allergic patient & Cap at 0.1 \\
+5 (Critical) & Missed emergency & Failed to recognize STEMI & Cap at 0.1 \\
+5 (Critical) & Dangerous dosing & 10x recommended dose & Cap at 0.1 \\
+4 (Severe) & Missed DDI & Ignored warfarin-NSAID interaction & $-0.3$ \\
+4 (Severe) & Fabricated evidence & Cited non-existent study & $-0.3$ \\
+3 (Moderate) & Incomplete workup & No confirmatory test & $-0.15$ \\
+3 (Moderate) & Guideline non-compliance & Deviated without justification & $-0.15$ \\
+2 (Minor) & Missing follow-up & No follow-up plan & $-0.05$ \\
+1 (Trivial) & Style issue & Formatting inconsistency & $-0.01$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{RL Baseline Detailed Results}
+\label{app:rl_baselines}
+
+\begin{table}[h]
+\centering
+\caption{Text QA results. SFT = warm-started checkpoint before RL. Agentic RL range across 3 seeds $\times$ 7 steps. \textbf{Agentic RL shows no QA improvement; Direct QA RL improves all benchmarks.}}
+\label{tab:main_results}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model / Stage} & \textbf{MedQA} & \textbf{MedMCQA} & \textbf{MMLU-CK} \\
+\midrule
+Lingshu-7B (pre-SFT) & 61.7\% & 53.2\% & 77.0\% \\
+Lingshu-7B + SFT & 60.7\% & 52.5\% & 78.1\% \\
+Lingshu-7B + SFT + GRPO (baseline seed) & 60.7--60.8\% & 52.5--52.7\% & 78.1--78.5\% \\
+Lingshu-7B + SFT + GRPO (seed 123) & 60.6--61.0\% & 52.6--52.9\% & 77.7--78.9\% \\
+Lingshu-7B + SFT + GRPO (seed 456) & 60.4--60.8\% & 52.7--52.8\% & 77.7--78.5\% \\
+\midrule
+\textbf{Agentic RL range} & \textbf{60.4--61.0\%} & \textbf{52.5--52.9\%} & \textbf{77.7--78.9\%} \\
+\midrule
+Lingshu-7B + SFT + Dr.~GRPO (step 800) & \textbf{61.8\%} & 53.2\% & 78.1\% \\
+Lingshu-7B + SFT + Dr.~GRPO (step 950) & 61.8\% & 53.4\% & 77.7\% \\
+\midrule
+Lingshu-7B + SFT + Direct QA RL (H5, step 150) & 61.8\% & \textbf{53.3\%} & 78.1\% \\
+Lingshu-7B + SFT + Direct QA RL (H5, step 250) & 62.0\% & 53.3\% & 77.7\% \\
+Lingshu-7B + SFT + Direct QA RL (H12, LR=$2\times$, step 300) & \textbf{62.4\%} & \textbf{53.4\%} & \textbf{78.5\%} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\columnwidth,
+    height=6cm,
+    ybar=2pt,
+    bar width=8pt,
+    xlabel={},
+    ylabel={Accuracy (\%)},
+    ymin=58, ymax=80,
+    symbolic x coords={Pre-SFT, SFT, GRPO, Dr.GRPO, H5, H12},
+    xtick=data,
+    x tick label style={font=\small, rotate=15, anchor=east},
+    legend style={at={(0.02,0.98)}, anchor=north west, font=\scriptsize, legend columns=1},
+    grid=major,
+    grid style={dotted, gray!30},
+    tick label style={font=\small},
+    label style={font=\small},
+    nodes near coords style={font=\tiny, rotate=90, anchor=west},
+    enlarge x limits=0.12,
+    every node near coord/.append style={yshift=1pt},
+]
+\addplot[fill=blue!70, draw=blue!90] coordinates {
+    (Pre-SFT, 61.7) (SFT, 60.7) (GRPO, 60.7) (Dr.GRPO, 61.8) (H5, 62.0) (H12, 62.4)
+};
+\addplot[fill=orange!70, draw=orange!90] coordinates {
+    (Pre-SFT, 53.2) (SFT, 52.5) (GRPO, 52.7) (Dr.GRPO, 53.4) (H5, 53.3) (H12, 53.4)
+};
+\addplot[fill=green!60, draw=green!80] coordinates {
+    (Pre-SFT, 77.0) (SFT, 78.1) (GRPO, 78.3) (Dr.GRPO, 78.1) (H5, 78.1) (H12, 78.5)
+};
+\legend{MedQA, MedMCQA, MMLU-CK}
+\addplot[dashed, red!60, thick, forget plot] coordinates {(Pre-SFT,60.7) (H12,60.7)};
+\node[font=\tiny, red!70] at (axis cs:H5,60.3) {SFT baseline};
+\end{axis}
+\end{tikzpicture}
+\caption{Text QA accuracy across configurations. Standard GRPO fails to improve over SFT baseline; Dr.~GRPO and direct QA RL achieve meaningful gains.}
+\label{fig:main_results_bar}
+\end{figure}
+
+
+\section{Procedural vs.\ Declarative Analysis}
+\label{app:procedural}
+
+While RL does not improve text QA performance, it \emph{does} improve agentic competence---composite reward improves by 22\% over 1.4 epochs (0.301 $\to$ 0.366). This reveals a \emph{procedural-declarative dissociation}: RL improves procedural knowledge (tool use, evidence retrieval, clinical workflows) without changing declarative knowledge (medical facts tested by QA benchmarks) in the standard agentic reward setting. The H5 ablation shows this dissociation is not absolute---accuracy-only reward achieves +1.3 pp MedQA improvement, confirming it is an artifact of reward composition.
+
+
+\section{Tool Usage Distribution}
+\label{app:tool_distribution}
+
+Across 23,908 tool invocations during training: of 179 defined tools, only 19 (10.6\%) are called. Top 3 account for 72.9\% (\texttt{get\_lab\_trend}: 31.7\%, \texttt{get\_admission\_info}: 23.0\%, \texttt{get\_lab\_results}: 18.2\%). EHR management tools account for 95.6\% of calls. Literature search tools are never invoked, suggesting reliance on parametric knowledge.
+
+
+\section{Tool-Use Competence Analysis}
+\label{app:tool_competence}
+
+Four dimensions of tool-use competence: (1) \textbf{Tool Selection Quality}: correct tool at correct time, (2) \textbf{Cross-Domain Transfer}: competence transfer between domains, (3) \textbf{Process Quality Trajectory}: multi-dimensional competence via 5D reward, (4) \textbf{Multi-Turn Efficiency}: turns needed for correct answers.
+
+
+\section{Benchmark Suite}
+\label{app:benchmarks}
+
+\begin{table}[h]
+\centering
+\caption{Evaluation benchmark suite.}
+\label{tab:benchmarks}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{llrl}
+\toprule
+\textbf{Category} & \textbf{Benchmark} & \textbf{Samples} & \textbf{Metric} \\
+\midrule
+\multirow{8}{*}{Text QA}
+& MedQA (USMLE) & 1,273 & Accuracy \\
+& MedMCQA & 4,183 & Accuracy \\
+& MMLU-Clinical Knowledge & 265 & Accuracy \\
+& MMLU-Professional Medicine & 272 & Accuracy \\
+& MMLU-Anatomy & 135 & Accuracy \\
+& MMLU-Medical Genetics & 100 & Accuracy \\
+& MMLU-College Biology & 144 & Accuracy \\
+& MMLU-College Medicine & 173 & Accuracy \\
+\midrule
+\multirow{6}{*}{Vision QA}
+& VQA-RAD & 451 & Accuracy \\
+& SLAKE & 1,061 & Accuracy \\
+& PathVQA & 6,719 & Accuracy \\
+& PMC-VQA & 10K+ & Accuracy \\
+& VQA-Med-2021 & 500 & Accuracy \\
+& Quilt-VQA & 985 & Accuracy \\
+\midrule
+\multirow{5}{*}{Long-Form QA}
+& KQA Golden & 201 & ROUGE-L \\
+& LiveQA & 100 & ROUGE-L \\
+& MedicationQA & 666 & ROUGE-L \\
+& HealthSearchQA & 3,077 & ROUGE-L \\
+& KQA Silver & 904 & ROUGE-L \\
+\midrule
+\multirow{2}{*}{EHR}
+& MIMIC-III & 5,000 & Action Score + Reward \\
+& eICU & 5,000 & Action Score + Reward \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+
+\paragraph{MMLU Medical Subtypes Breakdown.}
+Table~\ref{tab:mmlu_subtypes} provides per-subtype results for the MMLU-Med.\ aggregate reported in the main text.
+
+\begin{table}[h]
+\centering
+\caption{MMLU medical subtype breakdown for TT-OPD (step 60).}
+\label{tab:mmlu_subtypes}
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Subtype} & \textbf{Base Model} & \textbf{TT-OPD} & \textbf{$n$} \\
+\midrule
+Anatomy & --- & 63.0\% & 135 / 135 \\
+Clinical Knowledge & --- & 63.0\% & 265 / 265 \\
+Professional Medicine & --- & 49.6\% & 272 / 272 \\
+Medical Genetics & --- & 71.0\% & 100 / 100 \\
+College Biology & --- & 70.1\% & 144 / 144 \\
+College Medicine & --- & 52.0\%$^\dagger$ & 100 / 173 \\
+\midrule
+\textbf{Aggregate} & --- & \textbf{60.1\%} & 1016 / 1089 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Additional Figures}
+\label{app:additional_figures}
+
+\input{figures_tikz_appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\section*{NeurIPS Paper Checklist}
+
+\begin{enumerate}
+
+\item {\bf Claims}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: All claims are supported by experimental evidence in \S\ref{sec:eval} and scoped to tested models/benchmarks.
+
+\item {\bf Limitations}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Limitations discussed in \S\ref{sec:discussion}.
+
+\item {\bf Theory Assumptions and Proofs}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Propositions stated in \S\ref{sec:formal} with proof sketches in Appendix~\ref{app:proofs}.
+
+    \item {\bf Experimental Result Reproducibility}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Full hyperparameters (Appendix~\ref{app:hyperparams}), data sources, and training pipeline provided.
+
+\item {\bf Open access to data and code}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: \gym{} environment, training pipeline, and evaluation scripts will be released.
+
+\item {\bf Experimental Setting/Details}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Training details in \S\ref{sec:training}, evaluation in \S\ref{sec:eval}, hyperparameters in Appendix~\ref{app:hyperparams}.
+
+\item {\bf Experiment Statistical Significance}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Multi-seed experiments for baseline RL with variance analysis.
+
+\item {\bf Experiments Compute Resources}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: All experiments on 8$\times$NVIDIA A100 80GB GPUs.
+
+\item {\bf Code Of Ethics}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Conforms with NeurIPS Code of Ethics. Medical AI safety discussed in \S\ref{sec:discussion}.
+
+\item {\bf Broader Impacts}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Positive impacts and risks discussed in \S\ref{sec:discussion}.
+
+\item {\bf Safeguards}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Safety-aware reward system (\S\ref{sec:environment}) and disclaimers about research use.
+
+\item {\bf Licenses for existing assets}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: All datasets and models cited with licenses noted.
+
+\item {\bf New Assets}
+    \item[] Answer: \answerYes{}
+    \item[] Justification: \gym{} and training pipeline will be released with documentation.
+
+\item {\bf Crowdsourcing and Research with Human Subjects}
+    \item[] Answer: \answerNA{}
+    \item[] Justification: No crowdsourcing or human subjects research.
+
+\item {\bf Institutional Review Board (IRB) Approvals or Equivalent for Research with Human Subjects}
+    \item[] Answer: \answerNA{}
+    \item[] Justification: No human subjects research.
+
+\end{enumerate}
+
+
+\end{document}

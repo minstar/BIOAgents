@@ -1,0 +1,4052 @@
+[
+  {
+    "id": "psy_mcqa_major_depressive_disorder_006",
+    "ticket": "A 10-year-old male presents with guilt, insomnia, depressed mood, anhedonia. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Major Depressive Disorder",
+      "B": "Bipolar",
+      "C": "Grief",
+      "D": "Adjustment Disorder",
+      "E": "Hypothyroidism"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_social anxiety disorder_128",
+    "ticket": "A 10-year-old female presents with fear of judgment, fear of social situations, avoidance, trembling. PMH: asthma. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "hypnotherapy",
+      "B": "biofeedback",
+      "C": "art therapy",
+      "D": "CBT with exposure",
+      "E": "psychoanalysis"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "social anxiety disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_alcohol use disorder_080",
+    "ticket": "A 63-year-old female presents with tolerance, morning tremors, craving, blackouts. PMH: osteoarthritis, hypothyroidism. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Physical exam",
+      "B": "Genetic testing",
+      "C": "Sleep study",
+      "D": "Suicide risk assessment",
+      "E": "Neuroimaging"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol use disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_delirium_143",
+    "ticket": "A 31-year-old male (office worker) presents with perceptual disturbances, disorganized thinking and fluctuating consciousness for 1 year. PMH: smoking. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: delirium. First-line: treat underlying cause.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "delirium",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_PTSD_044",
+    "ticket": "A 64-year-old male (retired engineer) presents with emotional numbing, flashbacks, hypervigilance, startle response and nightmares for 2 weeks. PMH: COPD, hypertension. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: PTSD. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_bipolar I disorder_031",
+    "ticket": "A 60-year-old female (homemaker) presents with decreased sleep, increased goal-directed activity, grandiosity, distractibility and pressured speech for 2 weeks. PMH: osteoarthritis, hypothyroidism. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: bipolar I disorder. First-line: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar I disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_ADHD_100",
+    "ticket": "A 33-year-old male presents with impulsivity, hyperactivity, difficulty with tasks requiring sustained focus, forgetfulness. PMH: smoking. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Genetic testing",
+      "B": "Suicide risk assessment",
+      "C": "Physical exam",
+      "D": "Neuroimaging",
+      "E": "Sleep study"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_bipolar I disorder_040",
+    "ticket": "A 5-year-old male presents with pressured speech, distractibility, increased goal-directed activity, decreased sleep. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Genetic testing",
+      "B": "Neuroimaging",
+      "C": "Suicide risk assessment",
+      "D": "Physical exam",
+      "E": "Sleep study"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar I disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_schizophrenia_024",
+    "ticket": "A 4-year-old male (pediatric) presents with auditory hallucinations, social withdrawal, flat affect and disorganized speech for 3 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. First-line: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_insomnia disorder_134",
+    "ticket": "A 30-year-old female (nurse) presents with difficulty maintaining sleep, difficulty initiating sleep and daytime fatigue for 6 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: insomnia disorder. First-line: CBT-I.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "insomnia disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_opioid use disorder_088",
+    "ticket": "A 53-year-old male presents with pinpoint pupils, tolerance, respiratory depression risk, craving. PMH: COPD, hypertension. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "biofeedback",
+      "B": "psychoanalysis",
+      "C": "art therapy",
+      "D": "counseling",
+      "E": "hypnotherapy"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "opioid use disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_major_depressive_disorder_009",
+    "ticket": "A 71-year-old female presents with weight change, depressed mood, suicidal ideation, anhedonia. PMH: heart_failure, osteoporosis. Which screening instrument should be administered?",
+    "options": {
+      "A": "PHQ9",
+      "B": "Y-BOCS",
+      "C": "DAST-10",
+      "D": "AUDIT-C",
+      "E": "MoCA"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_major_depressive_disorder_007",
+    "ticket": "A 8-year-old female presents with suicidal ideation, depressed mood, poor concentration, anhedonia. PMH: asthma. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "no medication needed",
+      "B": "venlafaxine",
+      "C": "fluoxetine",
+      "D": "CBT",
+      "E": "sertraline"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_OCD_060",
+    "ticket": "A 55-year-old female presents with compulsive rituals, intrusive thoughts, contamination fears, symmetry obsessions. PMH: osteoarthritis, hypothyroidism. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Neuroimaging",
+      "B": "Genetic testing",
+      "C": "Suicide risk assessment",
+      "D": "Sleep study",
+      "E": "Physical exam"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_bipolar I disorder_038",
+    "ticket": "A 38-year-old female presents with pressured speech, distractibility, increased goal-directed activity, decreased sleep. PMH: diabetes. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "valproate",
+      "B": "art therapy",
+      "C": "psychoanalysis",
+      "D": "biofeedback",
+      "E": "hypnotherapy"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar I disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_borderline personality disorder_102",
+    "ticket": "A 57-year-old male (retired engineer) presents with emotional lability, identity disturbance and fear of abandonment for 1 year. PMH: COPD, hypertension. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: borderline personality disorder. First-line: DBT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "borderline personality disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_major_depressive_disorder_002",
+    "ticket": "A 57-year-old female (homemaker) presents with poor concentration, weight change, anhedonia, depressed mood and suicidal ideation for 6 months. PMH: osteoarthritis, hypothyroidism. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: major_depressive_disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_generalized_anxiety_disorder_016",
+    "ticket": "A 7-year-old female presents with difficulty concentrating, muscle tension, restlessness, irritability. PMH: asthma. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Social Anxiety",
+      "B": "Generalized Anxiety Disorder",
+      "C": "Ptsd",
+      "D": "Hyperthyroidism",
+      "E": "Panic Disorder"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_insomnia disorder_136",
+    "ticket": "A 57-year-old male presents with difficulty initiating sleep, irritability, early morning awakening, difficulty maintaining sleep. PMH: COPD, hypertension. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Restless Legs",
+      "B": "Insomnia Disorder",
+      "C": "Depression",
+      "D": "Sleep Apnea",
+      "E": "Substance Use"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "insomnia disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_ADHD_098",
+    "ticket": "A 51-year-old female presents with forgetfulness, impulsivity, disorganization, difficulty with tasks requiring sustained focus. PMH: osteoarthritis, hypothyroidism. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "hypnotherapy",
+      "B": "art therapy",
+      "C": "amphetamine salts",
+      "D": "biofeedback",
+      "E": "psychoanalysis"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_schizophrenia_022",
+    "ticket": "A 15-year-old female (adolescent) presents with avolition, flat affect and paranoid delusions for 1 month. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. First-line: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_panic disorder_068",
+    "ticket": "A 54-year-old male presents with palpitations, dizziness, shortness of breath, derealization. PMH: COPD, hypertension. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "hypnotherapy",
+      "B": "art therapy",
+      "C": "biofeedback",
+      "D": "CBT with interoceptive exposure",
+      "E": "psychoanalysis"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_panic disorder_070",
+    "ticket": "A 65-year-old female presents with dizziness, tingling, derealization, fear of dying. PMH: heart_failure, osteoporosis. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Genetic testing",
+      "B": "Physical exam",
+      "C": "Sleep study",
+      "D": "Suicide risk assessment",
+      "E": "Neuroimaging"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_panic disorder_061",
+    "ticket": "A 78-year-old female (nursing home resident) presents with tingling, palpitations, derealization and fear of dying for 6 months. PMH: heart_failure, osteoporosis. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: panic disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_generalized_anxiety_disorder_014",
+    "ticket": "A 15-year-old male (adolescent) presents with restlessness, sleep disturbance and muscle tension for 1 year. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: generalized_anxiety_disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_anorexia nervosa_113",
+    "ticket": "A 7-year-old female (pediatric) presents with hypothermia, lanugo, restriction, body image distortion and bradycardia for 6 months. PMH: asthma. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. First-line: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia nervosa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_panic disorder_064",
+    "ticket": "A 3-year-old male (pediatric) presents with chest tightness, shortness of breath and fear of dying for 6 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: panic disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_generalized_anxiety_disorder_017",
+    "ticket": "A 14-year-old male presents with irritability, sleep disturbance, difficulty concentrating, muscle tension. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "venlafaxine",
+      "B": "sertraline",
+      "C": "buspirone",
+      "D": "CBT",
+      "E": "no medication needed"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_generalized_anxiety_disorder_019",
+    "ticket": "A 43-year-old male presents with restlessness, excessive worry, muscle tension, irritability. PMH: hypertension, obesity. Which screening instrument should be administered?",
+    "options": {
+      "A": "MoCA",
+      "B": "DAST-10",
+      "C": "AUDIT-C",
+      "D": "GAD7",
+      "E": "Y-BOCS"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_PTSD_045",
+    "ticket": "A 71-year-old male (retired) presents with emotional numbing, avoidance, hypervigilance, irritability and flashbacks for 1 month. PMH: atrial_fibrillation, CKD, diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: PTSD. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_opioid use disorder_086",
+    "ticket": "A 33-year-old female presents with tolerance, constipation, respiratory depression risk, pinpoint pupils. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Opioid Use Disorder",
+      "B": "Chronic Pain Syndrome",
+      "C": "Depression",
+      "D": "Other Suds",
+      "E": "None of the above"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "opioid use disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_insomnia disorder_132",
+    "ticket": "A 16-year-old male (adolescent) presents with difficulty maintaining sleep, daytime fatigue, irritability, early morning awakening and difficulty initiating sleep for 1 month. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: insomnia disorder. First-line: CBT-I.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "insomnia disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_schizophrenia_026",
+    "ticket": "A 54-year-old female presents with auditory hallucinations, paranoid delusions, flat affect, social withdrawal. PMH: osteoarthritis, hypothyroidism. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Delusional Disorder",
+      "B": "Substance-Induced Psychosis",
+      "C": "Schizoaffective",
+      "D": "Brief Psychotic Disorder",
+      "E": "Schizophrenia"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_opioid use disorder_090",
+    "ticket": "A 65-year-old female presents with needle marks, tolerance, craving, constipation. PMH: heart_failure, osteoporosis. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Sleep study",
+      "B": "Suicide risk assessment",
+      "C": "Neuroimaging",
+      "D": "Physical exam",
+      "E": "Genetic testing"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "opioid use disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_delirium_150",
+    "ticket": "A 77-year-old male presents with fluctuating consciousness, psychomotor changes, perceptual disturbances, inattention. PMH: atrial_fibrillation, CKD, diabetes. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Sleep study",
+      "B": "Suicide risk assessment",
+      "C": "Neuroimaging",
+      "D": "Genetic testing",
+      "E": "Physical exam"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "delirium",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_OCD_054",
+    "ticket": "A 16-year-old female (adolescent) presents with compulsive rituals, symmetry obsessions, mental rituals, checking behavior and intrusive thoughts for 1 month. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: OCD. First-line: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_opioid use disorder_082",
+    "ticket": "A 56-year-old male (retired engineer) presents with respiratory depression risk, pinpoint pupils, craving, withdrawal and tolerance for 1 year. PMH: COPD, hypertension. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: opioid use disorder. First-line: buprenorphine/naloxone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "opioid use disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_alcohol use disorder_078",
+    "ticket": "A 5-year-old female presents with morning tremors, tolerance, withdrawal, continued use despite consequences. PMH: asthma. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "hypnotherapy",
+      "B": "art therapy",
+      "C": "biofeedback",
+      "D": "motivational interviewing",
+      "E": "psychoanalysis"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol use disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_opioid use disorder_085",
+    "ticket": "A 73-year-old male (retired) presents with craving, constipation, needle marks and pinpoint pupils for 1 year. PMH: atrial_fibrillation, CKD, diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: opioid use disorder. First-line: buprenorphine/naloxone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "opioid use disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_insomnia disorder_138",
+    "ticket": "A 4-year-old female presents with difficulty maintaining sleep, daytime fatigue, difficulty initiating sleep, irritability. PMH: asthma. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "biofeedback",
+      "B": "CBT-I",
+      "C": "psychoanalysis",
+      "D": "hypnotherapy",
+      "E": "art therapy"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "insomnia disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_bipolar I disorder_035",
+    "ticket": "A 33-year-old female (nurse) presents with impulsivity, grandiosity and pressured speech for 6 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: bipolar I disorder. First-line: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar I disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_schizophrenia_021",
+    "ticket": "A 51-year-old male (retired engineer) presents with avolition, flat affect and paranoid delusions for 1 year. PMH: COPD, hypertension. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. First-line: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_delirium_142",
+    "ticket": "A 65-year-old male (retired) presents with inattention, perceptual disturbances, fluctuating consciousness, disorganized thinking and acute confusion for 1 year. PMH: atrial_fibrillation, CKD, diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: delirium. First-line: treat underlying cause.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "delirium",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_insomnia disorder_140",
+    "ticket": "A 80-year-old male presents with difficulty maintaining sleep, irritability, early morning awakening, daytime fatigue. PMH: atrial_fibrillation, CKD, diabetes. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Sleep study",
+      "B": "Suicide risk assessment",
+      "C": "Physical exam",
+      "D": "Genetic testing",
+      "E": "Neuroimaging"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "insomnia disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_borderline personality disorder_101",
+    "ticket": "A 61-year-old female (homemaker) presents with identity disturbance, impulsivity, fear of abandonment and self-harm for 1 year. PMH: osteoarthritis, hypothyroidism. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: borderline personality disorder. First-line: DBT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "borderline personality disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_major_depressive_disorder_004",
+    "ticket": "A 26-year-old male (office worker) presents with depressed mood, suicidal ideation, weight change and guilt for 2 weeks. PMH: smoking. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: major_depressive_disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_schizophrenia_025",
+    "ticket": "A 39-year-old female (teacher) presents with disorganized speech, flat affect and auditory hallucinations for 3 months. PMH: diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. First-line: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_insomnia disorder_131",
+    "ticket": "A 25-year-old female (college student) presents with difficulty initiating sleep, difficulty maintaining sleep and daytime fatigue for 2 weeks. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: insomnia disorder. First-line: CBT-I.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "insomnia disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_borderline personality disorder_104",
+    "ticket": "A 13-year-old male (adolescent) presents with impulsivity, fear of abandonment, self-harm and identity disturbance for 6 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: borderline personality disorder. First-line: DBT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "borderline personality disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_borderline personality disorder_108",
+    "ticket": "A 41-year-old female presents with self-harm, chronic emptiness, emotional lability, fear of abandonment. PMH: diabetes. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "DBT",
+      "B": "biofeedback",
+      "C": "psychoanalysis",
+      "D": "art therapy",
+      "E": "hypnotherapy"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "borderline personality disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_panic disorder_069",
+    "ticket": "A 66-year-old female presents with dizziness, fear of dying, tingling, palpitations. PMH: heart_failure, osteoporosis. Which screening instrument should be administered?",
+    "options": {
+      "A": "AUDIT-C",
+      "B": "Y-BOCS",
+      "C": "DAST-10",
+      "D": "MoCA",
+      "E": "GAD7"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_alcohol use disorder_079",
+    "ticket": "A 14-year-old male presents with blackouts, morning tremors, tolerance, continued use despite consequences. Which screening instrument should be administered?",
+    "options": {
+      "A": "AUDIT-C",
+      "B": "DAST-10",
+      "C": "Y-BOCS",
+      "D": "CAGE",
+      "E": "MoCA"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol use disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_PTSD_048",
+    "ticket": "A 28-year-old female presents with startle response, irritability, avoidance, hypervigilance. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "prolonged exposure",
+      "B": "biofeedback",
+      "C": "art therapy",
+      "D": "psychoanalysis",
+      "E": "hypnotherapy"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_generalized_anxiety_disorder_015",
+    "ticket": "A 8-year-old female (pediatric) presents with difficulty concentrating, irritability, restlessness, excessive worry and muscle tension for 1 year. PMH: asthma. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: generalized_anxiety_disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_PTSD_050",
+    "ticket": "A 14-year-old female presents with irritability, nightmares, emotional numbing, startle response. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Physical exam",
+      "B": "Genetic testing",
+      "C": "Sleep study",
+      "D": "Suicide risk assessment",
+      "E": "Neuroimaging"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_social anxiety disorder_124",
+    "ticket": "A 43-year-old female (teacher) presents with blushing, avoidance and performance anxiety for 3 months. PMH: diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: social anxiety disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "social anxiety disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_panic disorder_065",
+    "ticket": "A 34-year-old female (nurse) presents with tingling, palpitations, chest tightness, dizziness and derealization for 6 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: panic disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_OCD_056",
+    "ticket": "A 26-year-old female presents with contamination fears, mental rituals, compulsive rituals, intrusive thoughts. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Ocd",
+      "B": "Body Dysmorphic",
+      "C": "Tic Disorder",
+      "D": "Hoarding",
+      "E": "Gad"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_delirium_146",
+    "ticket": "A 25-year-old female presents with fluctuating consciousness, acute confusion, perceptual disturbances, inattention. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Delirium",
+      "B": "Dementia",
+      "C": "Psychosis",
+      "D": "Seizure",
+      "E": "Depression"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "delirium",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_alcohol use disorder_076",
+    "ticket": "A 16-year-old female presents with continued use despite consequences, blackouts, craving, morning tremors. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Depression",
+      "B": "Other Suds",
+      "C": "Alcohol Use Disorder",
+      "D": "Anxiety",
+      "E": "Liver Disease"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol use disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_OCD_053",
+    "ticket": "A 4-year-old male (pediatric) presents with contamination fears, symmetry obsessions, intrusive thoughts and mental rituals for 1 month. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: OCD. First-line: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_OCD_057",
+    "ticket": "A 51-year-old female presents with intrusive thoughts, contamination fears, mental rituals, symmetry obsessions. PMH: osteoarthritis, hypothyroidism. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "fluvoxamine",
+      "B": "high-dose sertraline",
+      "C": "clomipramine",
+      "D": "ERP therapy",
+      "E": "no medication needed"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_ADHD_097",
+    "ticket": "A 58-year-old female presents with disorganization, hyperactivity, impulsivity, forgetfulness. PMH: osteoarthritis, hypothyroidism. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "atomoxetine",
+      "B": "behavioral strategies",
+      "C": "methylphenidate",
+      "D": "no medication needed",
+      "E": "amphetamine salts"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_delirium_145",
+    "ticket": "A 37-year-old male (truck driver) presents with fluctuating consciousness, psychomotor changes and acute confusion for 1 month. PMH: hypertension, obesity. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: delirium. First-line: treat underlying cause.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "delirium",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_major_depressive_disorder_008",
+    "ticket": "A 76-year-old male presents with anhedonia, depressed mood, suicidal ideation, weight change. PMH: atrial_fibrillation, CKD, diabetes. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "hypnotherapy",
+      "B": "art therapy",
+      "C": "CBT",
+      "D": "biofeedback",
+      "E": "psychoanalysis"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_generalized_anxiety_disorder_011",
+    "ticket": "A 63-year-old female (homemaker) presents with sleep disturbance, irritability, restlessness, muscle tension and excessive worry for 1 month. PMH: osteoarthritis, hypothyroidism. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: generalized_anxiety_disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_social anxiety disorder_127",
+    "ticket": "A 20-year-old male presents with fear of social situations, trembling, fear of judgment, blushing. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "propranolol for performance",
+      "B": "no medication needed",
+      "C": "CBT with exposure",
+      "D": "venlafaxine",
+      "E": "sertraline"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "social anxiety disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_delirium_149",
+    "ticket": "A 4-year-old female presents with inattention, acute confusion, fluctuating consciousness, psychomotor changes. PMH: asthma. Which screening instrument should be administered?",
+    "options": {
+      "A": "AUDIT-C",
+      "B": "MoCA",
+      "C": "DAST-10",
+      "D": "Y-BOCS",
+      "E": "MENTAL-STATUS"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "delirium",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_insomnia disorder_135",
+    "ticket": "A 60-year-old male (retired engineer) presents with difficulty maintaining sleep, early morning awakening and daytime fatigue for 2 weeks. PMH: COPD, hypertension. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: insomnia disorder. First-line: CBT-I.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "insomnia disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_anorexia nervosa_116",
+    "ticket": "A 26-year-old male presents with hypothermia, amenorrhea, fear of weight gain, body image distortion. PMH: smoking. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Malabsorption",
+      "B": "Anorexia Nervosa",
+      "C": "Hyperthyroidism",
+      "D": "Arfid",
+      "E": "Bulimia"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia nervosa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_panic disorder_063",
+    "ticket": "A 20-year-old female (college student) presents with fear of dying, shortness of breath, tingling, palpitations and chest tightness for 1 month. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: panic disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_schizophrenia_023",
+    "ticket": "A 14-year-old male (adolescent) presents with paranoid delusions, auditory hallucinations, avolition and disorganized speech for 1 year. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: schizophrenia. First-line: risperidone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_social anxiety disorder_129",
+    "ticket": "A 48-year-old female presents with performance anxiety, blushing, fear of judgment, avoidance. PMH: diabetes. Which screening instrument should be administered?",
+    "options": {
+      "A": "AUDIT-C",
+      "B": "MoCA",
+      "C": "Y-BOCS",
+      "D": "DAST-10",
+      "E": "GAD7"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "social anxiety disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_PTSD_042",
+    "ticket": "A 69-year-old female (nursing home resident) presents with nightmares, irritability and emotional numbing for 3 months. PMH: heart_failure, osteoporosis. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: PTSD. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_major_depressive_disorder_010",
+    "ticket": "A 24-year-old female presents with depressed mood, guilt, poor concentration, fatigue. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Neuroimaging",
+      "B": "Sleep study",
+      "C": "Physical exam",
+      "D": "Genetic testing",
+      "E": "Suicide risk assessment"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_borderline personality disorder_105",
+    "ticket": "A 44-year-old female (teacher) presents with self-harm, chronic emptiness, unstable relationships and impulsivity for 2 weeks. PMH: diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: borderline personality disorder. First-line: DBT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "borderline personality disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_alcohol use disorder_073",
+    "ticket": "A 56-year-old female (homemaker) presents with morning tremors, tolerance and blackouts for 1 year. PMH: osteoarthritis, hypothyroidism. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. First-line: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol use disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_OCD_052",
+    "ticket": "A 76-year-old male (retired) presents with compulsive rituals, symmetry obsessions, contamination fears and intrusive thoughts for 6 months. PMH: atrial_fibrillation, CKD, diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: OCD. First-line: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_ADHD_095",
+    "ticket": "A 71-year-old male (retired) presents with forgetfulness, impulsivity and hyperactivity for 2 weeks. PMH: atrial_fibrillation, CKD, diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: ADHD. First-line: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_generalized_anxiety_disorder_012",
+    "ticket": "A 19-year-old male (college student) presents with difficulty concentrating, irritability, muscle tension and sleep disturbance for 6 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: generalized_anxiety_disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_borderline personality disorder_107",
+    "ticket": "A 46-year-old male presents with identity disturbance, self-harm, emotional lability, chronic emptiness. PMH: hypertension, obesity. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "no medication needed",
+      "B": "brief CBT",
+      "C": "mentalization-based therapy",
+      "D": "DBT",
+      "E": "mood stabilizers adjunct"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "borderline personality disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_social anxiety disorder_122",
+    "ticket": "A 74-year-old male (retired) presents with avoidance, fear of social situations, performance anxiety, trembling and fear of judgment for 1 year. PMH: atrial_fibrillation, CKD, diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: social anxiety disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "social anxiety disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_schizophrenia_030",
+    "ticket": "A 53-year-old male presents with social withdrawal, flat affect, disorganized speech, auditory hallucinations. PMH: COPD, hypertension. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Suicide risk assessment",
+      "B": "Physical exam",
+      "C": "Genetic testing",
+      "D": "Neuroimaging",
+      "E": "Sleep study"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_bipolar I disorder_032",
+    "ticket": "A 21-year-old male (college student) presents with distractibility, grandiosity, racing thoughts, decreased sleep and impulsivity for 1 year. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: bipolar I disorder. First-line: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar I disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_alcohol use disorder_075",
+    "ticket": "A 38-year-old female (teacher) presents with continued use despite consequences, blackouts and craving for 3 months. PMH: diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. First-line: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol use disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_social anxiety disorder_121",
+    "ticket": "A 25-year-old male (college student) presents with fear of social situations, blushing, trembling, avoidance and fear of judgment for 6 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: social anxiety disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "social anxiety disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_bipolar I disorder_034",
+    "ticket": "A 3-year-old male (pediatric) presents with decreased sleep, increased goal-directed activity and grandiosity for 3 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: bipolar I disorder. First-line: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar I disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_delirium_147",
+    "ticket": "A 23-year-old male presents with fluctuating consciousness, perceptual disturbances, acute confusion, disorganized thinking. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "haloperidol PRN",
+      "B": "no medication needed",
+      "C": "treat underlying cause",
+      "D": "avoid benzodiazepines",
+      "E": "reorientation"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "delirium",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_ADHD_094",
+    "ticket": "A 15-year-old female (adolescent) presents with hyperactivity, difficulty with tasks requiring sustained focus, forgetfulness, disorganization and inattention for 1 month. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: ADHD. First-line: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_PTSD_046",
+    "ticket": "A 22-year-old female presents with emotional numbing, flashbacks, nightmares, hypervigilance. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Ptsd",
+      "B": "Adjustment Disorder",
+      "C": "Acute Stress Disorder",
+      "D": "Tbi",
+      "E": "Mdd"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_OCD_059",
+    "ticket": "A 77-year-old male presents with contamination fears, mental rituals, checking behavior, compulsive rituals. PMH: atrial_fibrillation, CKD, diabetes. Which screening instrument should be administered?",
+    "options": {
+      "A": "AUDIT-C",
+      "B": "MoCA",
+      "C": "DAST-10",
+      "D": "MENTAL-STATUS",
+      "E": "Y-BOCS"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_anorexia nervosa_115",
+    "ticket": "A 65-year-old female (nursing home resident) presents with bradycardia, restriction, hypothermia and fear of weight gain for 1 year. PMH: heart_failure, osteoporosis. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. First-line: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia nervosa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_generalized_anxiety_disorder_013",
+    "ticket": "A 78-year-old male (retired) presents with difficulty concentrating, restlessness, muscle tension, irritability and sleep disturbance for 3 months. PMH: atrial_fibrillation, CKD, diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: generalized_anxiety_disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_generalized_anxiety_disorder_020",
+    "ticket": "A 21-year-old female presents with difficulty concentrating, irritability, sleep disturbance, excessive worry. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Physical exam",
+      "B": "Suicide risk assessment",
+      "C": "Genetic testing",
+      "D": "Neuroimaging",
+      "E": "Sleep study"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_social anxiety disorder_123",
+    "ticket": "A 31-year-old male (office worker) presents with avoidance, fear of judgment, blushing and trembling for 1 month. PMH: smoking. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: social anxiety disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "social anxiety disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_alcohol use disorder_074",
+    "ticket": "A 50-year-old male (retired engineer) presents with morning tremors, withdrawal, craving and blackouts for 3 months. PMH: COPD, hypertension. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. First-line: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol use disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_alcohol use disorder_072",
+    "ticket": "A 15-year-old male (adolescent) presents with tolerance, craving and continued use despite consequences for 3 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. First-line: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol use disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_panic disorder_066",
+    "ticket": "A 80-year-old female presents with dizziness, derealization, shortness of breath, fear of dying. PMH: heart_failure, osteoporosis. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Gad",
+      "B": "Panic Disorder",
+      "C": "Hyperthyroidism",
+      "D": "Cardiac Arrhythmia",
+      "E": "Pheochromocytoma"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_social anxiety disorder_125",
+    "ticket": "A 43-year-old male (truck driver) presents with avoidance, fear of social situations, fear of judgment and trembling for 3 months. PMH: hypertension, obesity. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: social anxiety disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "social anxiety disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_bipolar I disorder_036",
+    "ticket": "A 64-year-old male presents with distractibility, racing thoughts, increased goal-directed activity, pressured speech. PMH: COPD, hypertension. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Schizoaffective",
+      "B": "Bpd",
+      "C": "Adhd",
+      "D": "Hyperthyroidism",
+      "E": "Bipolar I Disorder"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar I disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_opioid use disorder_089",
+    "ticket": "A 73-year-old male presents with constipation, needle marks, respiratory depression risk, pinpoint pupils. PMH: atrial_fibrillation, CKD, diabetes. Which screening instrument should be administered?",
+    "options": {
+      "A": "MENTAL-STATUS",
+      "B": "MoCA",
+      "C": "Y-BOCS",
+      "D": "DAST-10",
+      "E": "AUDIT-C"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "opioid use disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_social anxiety disorder_126",
+    "ticket": "A 25-year-old female presents with trembling, blushing, performance anxiety, fear of judgment. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Avoidant Pd",
+      "B": "Gad",
+      "C": "Social Anxiety Disorder",
+      "D": "Selective Mutism",
+      "E": "Agoraphobia"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "social anxiety disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_anorexia nervosa_112",
+    "ticket": "A 40-year-old male (truck driver) presents with lanugo, restriction and body image distortion for 1 month. PMH: hypertension, obesity. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. First-line: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia nervosa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_insomnia disorder_139",
+    "ticket": "A 24-year-old male presents with early morning awakening, difficulty maintaining sleep, daytime fatigue, difficulty initiating sleep. Which screening instrument should be administered?",
+    "options": {
+      "A": "MENTAL-STATUS",
+      "B": "AUDIT-C",
+      "C": "DAST-10",
+      "D": "Y-BOCS",
+      "E": "MoCA"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "insomnia disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_schizophrenia_028",
+    "ticket": "A 23-year-old female presents with paranoid delusions, avolition, flat affect, disorganized speech. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "biofeedback",
+      "B": "psychoanalysis",
+      "C": "olanzapine",
+      "D": "art therapy",
+      "E": "hypnotherapy"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_schizophrenia_029",
+    "ticket": "A 65-year-old male presents with auditory hallucinations, flat affect, social withdrawal, avolition. PMH: atrial_fibrillation, CKD, diabetes. Which screening instrument should be administered?",
+    "options": {
+      "A": "DAST-10",
+      "B": "MoCA",
+      "C": "MENTAL-STATUS",
+      "D": "AUDIT-C",
+      "E": "Y-BOCS"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_borderline personality disorder_109",
+    "ticket": "A 17-year-old male presents with impulsivity, unstable relationships, chronic emptiness, identity disturbance. Which screening instrument should be administered?",
+    "options": {
+      "A": "DAST-10",
+      "B": "Y-BOCS",
+      "C": "SUICIDE-RISK",
+      "D": "AUDIT-C",
+      "E": "MoCA"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "borderline personality disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_anorexia nervosa_117",
+    "ticket": "A 33-year-old male presents with lanugo, body image distortion, restriction, bradycardia. PMH: smoking. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "nutritional rehabilitation",
+      "B": "olanzapine",
+      "C": "FBT",
+      "D": "no medication needed",
+      "E": "CBT-E"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia nervosa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_bipolar I disorder_039",
+    "ticket": "A 17-year-old female presents with decreased sleep, racing thoughts, grandiosity, impulsivity. Which screening instrument should be administered?",
+    "options": {
+      "A": "MENTAL-STATUS",
+      "B": "Y-BOCS",
+      "C": "DAST-10",
+      "D": "MoCA",
+      "E": "AUDIT-C"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar I disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_generalized_anxiety_disorder_018",
+    "ticket": "A 68-year-old male presents with excessive worry, sleep disturbance, restlessness, difficulty concentrating. PMH: atrial_fibrillation, CKD, diabetes. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "hypnotherapy",
+      "B": "art therapy",
+      "C": "biofeedback",
+      "D": "psychoanalysis",
+      "E": "CBT"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "generalized_anxiety_disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_panic disorder_067",
+    "ticket": "A 73-year-old female presents with shortness of breath, tingling, chest tightness, derealization. PMH: heart_failure, osteoporosis. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "paroxetine",
+      "B": "CBT with interoceptive exposure",
+      "C": "alprazolam short-term",
+      "D": "sertraline",
+      "E": "no medication needed"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_major_depressive_disorder_003",
+    "ticket": "A 16-year-old male (adolescent) presents with anhedonia, poor concentration, weight change and guilt for 3 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: major_depressive_disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_alcohol use disorder_077",
+    "ticket": "A 80-year-old male presents with withdrawal, craving, continued use despite consequences, morning tremors. PMH: atrial_fibrillation, CKD, diabetes. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "naltrexone",
+      "B": "acamprosate",
+      "C": "motivational interviewing",
+      "D": "no medication needed",
+      "E": "disulfiram"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol use disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_bipolar I disorder_037",
+    "ticket": "A 65-year-old male presents with distractibility, increased goal-directed activity, impulsivity, decreased sleep. PMH: atrial_fibrillation, CKD, diabetes. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "valproate",
+      "B": "lamotrigine",
+      "C": "quetiapine",
+      "D": "lithium",
+      "E": "no medication needed"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar I disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_major_depressive_disorder_005",
+    "ticket": "A 18-year-old female (college student) presents with fatigue, suicidal ideation and poor concentration for 1 month. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: major_depressive_disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_ADHD_093",
+    "ticket": "A 65-year-old male (retired engineer) presents with impulsivity, hyperactivity, difficulty with tasks requiring sustained focus and inattention for 1 month. PMH: COPD, hypertension. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: ADHD. First-line: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_major_depressive_disorder_001",
+    "ticket": "A 80-year-old male (retired) presents with weight change, insomnia, poor concentration and depressed mood for 1 year. PMH: atrial_fibrillation, CKD, diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: major_depressive_disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "major_depressive_disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_OCD_051",
+    "ticket": "A 24-year-old male (college student) presents with compulsive rituals, intrusive thoughts, contamination fears, checking behavior and mental rituals for 1 month. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: OCD. First-line: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_anorexia nervosa_120",
+    "ticket": "A 12-year-old male presents with amenorrhea, fear of weight gain, hypothermia, lanugo. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Sleep study",
+      "B": "Suicide risk assessment",
+      "C": "Genetic testing",
+      "D": "Physical exam",
+      "E": "Neuroimaging"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia nervosa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_OCD_058",
+    "ticket": "A 70-year-old female presents with checking behavior, mental rituals, contamination fears, symmetry obsessions. PMH: heart_failure, osteoporosis. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "biofeedback",
+      "B": "art therapy",
+      "C": "psychoanalysis",
+      "D": "hypnotherapy",
+      "E": "ERP therapy"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_delirium_144",
+    "ticket": "A 59-year-old female (homemaker) presents with disorganized thinking, inattention, acute confusion and psychomotor changes for 1 year. PMH: osteoarthritis, hypothyroidism. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: delirium. First-line: treat underlying cause.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "delirium",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_bipolar I disorder_033",
+    "ticket": "A 48-year-old male (truck driver) presents with increased goal-directed activity, decreased sleep, grandiosity, distractibility and impulsivity for 3 months. PMH: hypertension, obesity. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: bipolar I disorder. First-line: lithium.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "bipolar I disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_insomnia disorder_133",
+    "ticket": "A 3-year-old female (pediatric) presents with irritability, difficulty initiating sleep, difficulty maintaining sleep, early morning awakening and daytime fatigue for 1 month. PMH: asthma. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: insomnia disorder. First-line: CBT-I.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "insomnia disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_anorexia nervosa_119",
+    "ticket": "A 9-year-old male presents with bradycardia, hypothermia, lanugo, fear of weight gain. Which screening instrument should be administered?",
+    "options": {
+      "A": "AUDIT-C",
+      "B": "EATING-DISORDER",
+      "C": "Y-BOCS",
+      "D": "MoCA",
+      "E": "DAST-10"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia nervosa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_alcohol use disorder_071",
+    "ticket": "A 34-year-old female (nurse) presents with morning tremors, blackouts, tolerance, withdrawal and continued use despite consequences for 3 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: alcohol use disorder. First-line: naltrexone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "alcohol use disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "cage"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_ADHD_099",
+    "ticket": "A 35-year-old female presents with inattention, hyperactivity, disorganization, impulsivity. PMH: diabetes. Which screening instrument should be administered?",
+    "options": {
+      "A": "Y-BOCS",
+      "B": "MoCA",
+      "C": "AUDIT-C",
+      "D": "DAST-10",
+      "E": "MENTAL-STATUS"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_PTSD_049",
+    "ticket": "A 64-year-old female presents with avoidance, hypervigilance, startle response, irritability. PMH: osteoarthritis, hypothyroidism. Which screening instrument should be administered?",
+    "options": {
+      "A": "AUDIT-C",
+      "B": "DAST-10",
+      "C": "MoCA",
+      "D": "PCL5",
+      "E": "Y-BOCS"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_OCD_055",
+    "ticket": "A 69-year-old female (nursing home resident) presents with mental rituals, checking behavior, contamination fears, intrusive thoughts and symmetry obsessions for 6 months. PMH: heart_failure, osteoporosis. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: OCD. First-line: fluvoxamine.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "OCD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_panic disorder_062",
+    "ticket": "A 6-year-old female (pediatric) presents with shortness of breath, tingling, derealization, palpitations and fear of dying for 2 weeks. PMH: asthma. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: panic disorder. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "panic disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "gad7"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_opioid use disorder_083",
+    "ticket": "A 16-year-old male (adolescent) presents with constipation, withdrawal, pinpoint pupils, respiratory depression risk and craving for 2 weeks. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: opioid use disorder. First-line: buprenorphine/naloxone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "opioid use disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_anorexia nervosa_111",
+    "ticket": "A 9-year-old male (pediatric) presents with amenorrhea, fear of weight gain, bradycardia and lanugo for 6 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. First-line: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia nervosa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_borderline personality disorder_106",
+    "ticket": "A 5-year-old female presents with unstable relationships, fear of abandonment, identity disturbance, impulsivity. PMH: asthma. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Histrionic Pd",
+      "B": "Bipolar Ii",
+      "C": "Ptsd",
+      "D": "Mdd",
+      "E": "Borderline Personality Disorder"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "borderline personality disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_ADHD_096",
+    "ticket": "A 19-year-old female presents with difficulty with tasks requiring sustained focus, disorganization, inattention, impulsivity. What is the MOST likely diagnosis?",
+    "options": {
+      "A": "Thyroid",
+      "B": "Sleep Disorder",
+      "C": "Anxiety",
+      "D": "Bipolar",
+      "E": "Adhd"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_opioid use disorder_084",
+    "ticket": "A 76-year-old female (nursing home resident) presents with constipation, tolerance and withdrawal for 2 weeks. PMH: heart_failure, osteoporosis. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: opioid use disorder. First-line: buprenorphine/naloxone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "opioid use disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_opioid use disorder_081",
+    "ticket": "A 7-year-old female (pediatric) presents with pinpoint pupils, tolerance, withdrawal, needle marks and respiratory depression risk for 2 weeks. PMH: asthma. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: opioid use disorder. First-line: buprenorphine/naloxone.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "opioid use disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_ADHD_091",
+    "ticket": "A 16-year-old male (adolescent) presents with difficulty with tasks requiring sustained focus, impulsivity and hyperactivity for 3 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: ADHD. First-line: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_anorexia nervosa_114",
+    "ticket": "A 12-year-old male (adolescent) presents with restriction, amenorrhea and bradycardia for 2 weeks. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: anorexia nervosa. First-line: nutritional rehabilitation.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia nervosa",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "eating_disorder"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_insomnia disorder_137",
+    "ticket": "A 27-year-old female presents with daytime fatigue, difficulty initiating sleep, early morning awakening, difficulty maintaining sleep. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "melatonin",
+      "B": "trazodone",
+      "C": "sleep hygiene",
+      "D": "no medication needed",
+      "E": "CBT-I"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "insomnia disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_PTSD_041",
+    "ticket": "A 19-year-old male (college student) presents with nightmares, startle response, hypervigilance and irritability for 6 months. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: PTSD. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_opioid use disorder_087",
+    "ticket": "A 43-year-old female presents with withdrawal, pinpoint pupils, respiratory depression risk, needle marks. PMH: diabetes. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "naltrexone XR",
+      "B": "no medication needed",
+      "C": "methadone",
+      "D": "buprenorphine/naloxone",
+      "E": "counseling"
+    },
+    "correct_answer": "D",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "opioid use disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_social anxiety disorder_130",
+    "ticket": "A 22-year-old male presents with blushing, fear of social situations, fear of judgment, trembling. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Genetic testing",
+      "B": "Suicide risk assessment",
+      "C": "Sleep study",
+      "D": "Neuroimaging",
+      "E": "Physical exam"
+    },
+    "correct_answer": "B",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "social anxiety disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_borderline personality disorder_103",
+    "ticket": "A 31-year-old female (nurse) presents with fear of abandonment, chronic emptiness, emotional lability and impulsivity for 2 weeks. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: borderline personality disorder. First-line: DBT.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "borderline personality disorder",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_delirium_141",
+    "ticket": "A 22-year-old female (college student) presents with inattention, disorganized thinking, acute confusion, psychomotor changes and fluctuating consciousness for 1 month. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: delirium. First-line: treat underlying cause.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "delirium",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mmse"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_PTSD_047",
+    "ticket": "A 5-year-old female presents with emotional numbing, irritability, hypervigilance, startle response. PMH: asthma. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "prolonged exposure",
+      "B": "no medication needed",
+      "C": "sertraline",
+      "D": "CPT",
+      "E": "prazosin"
+    },
+    "correct_answer": "C",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_PTSD_043",
+    "ticket": "A 13-year-old male (adolescent) presents with nightmares, startle response and emotional numbing for 2 weeks. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: PTSD. First-line: sertraline.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "PTSD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "pcl5"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "suicide_risk"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_schizophrenia_027",
+    "ticket": "A 23-year-old female presents with disorganized speech, paranoid delusions, avolition, flat affect. What is the FIRST-LINE pharmacotherapy?",
+    "options": {
+      "A": "no medication needed",
+      "B": "aripiprazole",
+      "C": "clozapine",
+      "D": "olanzapine",
+      "E": "risperidone"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "schizophrenia",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_borderline personality disorder_110",
+    "ticket": "A 62-year-old male presents with chronic emptiness, unstable relationships, emotional lability, fear of abandonment. PMH: COPD, hypertension. What is the MOST important safety assessment?",
+    "options": {
+      "A": "Suicide risk assessment",
+      "B": "Sleep study",
+      "C": "Genetic testing",
+      "D": "Physical exam",
+      "E": "Neuroimaging"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "borderline personality disorder",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_anorexia nervosa_118",
+    "ticket": "A 16-year-old female presents with fear of weight gain, bradycardia, amenorrhea, body image distortion. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "FBT",
+      "B": "biofeedback",
+      "C": "hypnotherapy",
+      "D": "psychoanalysis",
+      "E": "art therapy"
+    },
+    "correct_answer": "A",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "anorexia nervosa",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "psy_bal_ADHD_092",
+    "ticket": "A 37-year-old female (teacher) presents with difficulty with tasks requiring sustained focus, impulsivity, inattention and forgetfulness for 1 month. PMH: diabetes. Perform psychiatric assessment and provide diagnosis with management plan.",
+    "correct_answer": "Diagnosis: ADHD. First-line: methylphenidate.",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "ADHD",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "mental_status"
+          },
+          "compare_args": []
+        },
+        {
+          "name": "perform_assessment",
+          "arguments": {
+            "assessment_type": "phq9"
+          },
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "psy_mcqa_delirium_148",
+    "ticket": "A 17-year-old male presents with acute confusion, inattention, disorganized thinking, fluctuating consciousness. Which psychotherapy approach is MOST evidence-based?",
+    "options": {
+      "A": "psychoanalysis",
+      "B": "art therapy",
+      "C": "biofeedback",
+      "D": "hypnotherapy",
+      "E": "reorientation"
+    },
+    "correct_answer": "E",
+    "_source_domain": "psychiatry",
+    "description": {
+      "condition": "delirium",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  }
+]

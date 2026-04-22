@@ -13,6 +13,82 @@ from typing import Any, Optional
 _DEBUG_LOG = os.environ.get("REWARD_DEBUG_LOG", "")
 _debug_count = 0
 
+# ── Degenerate response detection ────────────────────────────────────
+# Detect repetitive/degenerate responses and assign penalty reward.
+# Enable via DEGENERATE_FILTER=1 (default: disabled for backwards compat)
+DEGENERATE_FILTER_ENABLED = os.environ.get("DEGENERATE_FILTER", "") == "1"
+DEGENERATE_REWARD = float(os.environ.get("DEGENERATE_REWARD", "-1.0"))
+DEGENERATE_NGRAM_THRESHOLD = float(os.environ.get("DEGENERATE_NGRAM_THRESHOLD", "0.3"))
+DEGENERATE_MIN_LENGTH = int(os.environ.get("DEGENERATE_MIN_LENGTH", "200"))
+
+
+def _strip_tool_markup(text: str) -> str:
+    """Strip tool/turn markup to isolate unique model-generated content."""
+    # Remove tool responses (environment output, not model text)
+    cleaned = re.sub(r"<tool_response>.*?</tool_response>", " ", text, flags=re.DOTALL)
+    # Remove tool call XML tags
+    cleaned = re.sub(r"</?(?:tool_call|function=[^>]*)>", " ", cleaned)
+    # Remove JSON arguments in tool calls
+    cleaned = re.sub(r"\{[^}]{0,500}\}", " ", cleaned)
+    # Remove turn markers that repeat in every multi-turn exchange
+    cleaned = re.sub(r"</?think>", " ", cleaned)
+    cleaned = re.sub(r"\b(user|assistant|system)\b", " ", cleaned)
+    # Remove common filler phrases that naturally repeat across turns
+    cleaned = re.sub(r"I'm here and ready to help[.!]?", " ", cleaned)
+    cleaned = re.sub(r"What would you like to ask or discuss\?", " ", cleaned)
+    cleaned = re.sub(r"please (?:try )?typ(?:e|ing) (?:it )?(?:out )?again", " ", cleaned, flags=re.IGNORECASE)
+    # Collapse whitespace
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned
+
+
+def is_degenerate_response(text: str) -> bool:
+    """Detect degenerate/repetitive responses.
+
+    Strips tool markup first to avoid false positives from repeated XML
+    structure in multi-turn tool-use responses.
+
+    Checks for:
+    1. High ratio of repeated n-grams (n=4) in model-generated text
+    2. Exact phrase repetition loops
+    3. Very short responses with no tool calls (model gave up)
+    """
+    if len(text) < DEGENERATE_MIN_LENGTH:
+        if "<function=" not in text and "<tool_call>" not in text:
+            return True
+        return False
+
+    # Strip tool markup before checking repetition
+    cleaned = _strip_tool_markup(text)
+
+    # Check the latter half for repetition
+    half = cleaned[len(cleaned) // 2:]
+    words = half.lower().split()
+
+    if len(words) < 30:
+        return False
+
+    # 4-gram repetition ratio on cleaned text
+    ngrams = [tuple(words[i:i+4]) for i in range(len(words) - 3)]
+    if not ngrams:
+        return False
+    unique_ratio = len(set(ngrams)) / len(ngrams)
+    # Low unique ratio = high repetition (threshold: <15% unique = degenerate)
+    if unique_ratio < 0.15:
+        return True
+
+    # Check for exact phrase loops (same phrase repeated many times)
+    for phrase_len in [5, 10, 20]:
+        if len(words) < phrase_len * 6:
+            continue
+        phrases = [tuple(words[i:i+phrase_len]) for i in range(0, len(words) - phrase_len, phrase_len)]
+        if phrases:
+            most_common = max(set(phrases), key=phrases.count)
+            if phrases.count(most_common) >= len(phrases) * 0.6:
+                return True
+
+    return False
+
 # ── Cosine length-scaling reward (arXiv:2502.03373) ──────────────────
 # CosFn(t, T, η_min, η_max) = η_min + ½(η_max − η_min)(1 + cos(tπ/T))
 # Goes from η_max at t=0 to η_min at t=T.
@@ -59,55 +135,20 @@ def cosine_length_reward(is_correct: bool, response_len_chars: int) -> float:
     else:
         return _cosine_fn(est_tokens, COSINE_L_MAX, COSINE_RL_WRONG, COSINE_R0_WRONG)
 
-# Valid tool names from tool_config_full.yaml (135 tools)
+# Valid tool names from tool_config_consolidated.yaml (25 tools)
 VALID_TOOLS = frozenset({
-    "activate_emergency_protocol", "add_clinical_note", "administer_cage",
-    "administer_gad7", "administer_mmse", "administer_pcl5", "administer_phq9",
-    "analyze_answer_options", "analyze_medical_image", "annotate_regions",
-    "assess_airway_breathing", "assess_capacity", "assess_fetal_status",
-    "assess_image_quality", "assess_labor_progress", "assess_preterm_risk",
-    "assess_suicide_risk", "assess_violence_risk", "browse_article",
-    "browse_wiki_entry", "calculate_apache2", "calculate_bishop_score",
-    "calculate_bmi", "calculate_chads2_vasc", "calculate_clinical_score",
-    "calculate_curb65", "calculate_esi_level", "calculate_gcs",
-    "calculate_gestational_age", "calculate_heart_score",
-    "calculate_hepatic_dose_adjustment", "calculate_image_metrics",
-    "calculate_interaction_severity_score", "calculate_meld_score",
-    "calculate_modified_bpp", "calculate_qsofa", "calculate_readmission_risk",
-    "calculate_renal_dose_adjustment", "calculate_sirs_criteria",
-    "calculate_trauma_score", "calculate_wells_score", "check_allergies",
-    "check_all_interactions", "check_cyp450_metabolism",
-    "check_diagnostic_criteria", "check_dosage", "check_drug_interaction",
-    "check_drug_interactions", "check_food_interactions", "check_interaction",
-    "check_medication_safety", "check_ob_protocol", "check_pregnancy_safety",
-    "check_protocol", "check_rh_status", "check_therapeutic_drug_monitoring",
-    "check_toxicology", "classify_finding", "compare_treatments",
-    "compare_with_prior", "detect_vital_alerts", "get_admission_history",
-    "get_admission_info", "get_allergy_list", "get_bed_assignment",
-    "get_biophysical_profile", "get_clinical_notes", "get_clinical_scores",
-    "get_code_status", "get_current_medications", "get_differential_diagnosis",
-    "get_differential_visual", "get_discharge_summary", "get_drug_info",
-    "get_drug_information", "get_ed_status", "get_gyn_assessment",
-    "get_image_report", "get_immunization_history",
-    "get_involuntary_hold_criteria", "get_lab_results", "get_lab_trend",
-    "get_medical_history", "get_medication_orders", "get_medications",
-    "get_nursing_assessments", "get_obstetric_history", "get_patient_context",
-    "get_patient_history", "get_patient_info", "get_patient_medications",
-    "get_patient_presentation", "get_patient_summary", "get_pharmacokinetics",
-    "get_prenatal_labs", "get_procedures", "get_psychiatric_history",
-    "get_quality_indicators", "get_risk_assessment", "get_social_history",
-    "get_vital_signs", "get_vital_signs_trend", "interpret_ctg",
-    "lookup_icd_code", "measure_lesion", "order_imaging", "order_labs",
-    "order_lab_test", "order_stat_labs", "perform_mental_status_exam",
-    "place_order", "prescribe_medication", "record_diagnosis",
-    "record_visual_diagnosis", "request_consult", "retrieve_evidence",
-    "review_treatment_guidelines", "screen_eating_disorder",
-    "screen_gestational_diabetes", "screen_sepsis", "screen_substance_use",
-    "search_alternatives", "search_clinical_guidelines",
-    "search_drugs_by_class", "search_imaging_knowledge",
-    "search_medical_literature", "search_medical_wiki", "search_pubmed",
-    "search_similar_cases", "submit_answer", "summarize_evidence", "think",
-    "track_lesion_changes", "transfer_to_specialist", "write_clinical_note",
+    "think", "submit_answer",
+    "search_pubmed", "search_medical_wiki", "search_medical_literature",
+    "retrieve_evidence",
+    "analyze_answer_options", "get_differential_diagnosis",
+    "check_diagnostic_criteria", "compare_treatments",
+    "get_drug_info", "check_interaction", "check_medication_safety",
+    "get_patient_info", "get_patient_records",
+    "get_vital_signs", "get_lab_results", "order_test",
+    "analyze_medical_image", "get_image_report", "search_imaging_knowledge",
+    "calculate_clinical_score", "search_clinical_guidelines",
+    "record_clinical_action", "perform_assessment",
+    "assess_obstetric_status", "get_ed_status",
 })
 
 # Penalty per invalid tool call (tool name not in VALID_TOOLS)
@@ -166,6 +207,9 @@ def compute_score(
     # During validation, use binary accuracy (no cosine scaling)
     is_validate = extra_info.get("validate", False)
 
+    # Degenerate response filter: applied AFTER normal scoring below
+    # (we need to know if the answer was correct first)
+
     # Normalize ground_truth: extract answer letter from formats like "ANSWER: (D)", "(D)", "D"
     if ground_truth:
         gt_stripped = ground_truth.strip()
@@ -218,7 +262,13 @@ def compute_score(
         # Penalty for calling tools not in the provided tool list
         n_invalid = count_invalid_tool_calls(solution_str)
         penalty = n_invalid * INVALID_TOOL_PENALTY
-        return base_reward - penalty
+        reward = base_reward - penalty
+
+        # Degenerate filter: wrong answer + repetitive = hard penalty
+        if DEGENERATE_FILTER_ENABLED and not is_validate and not is_correct:
+            if is_degenerate_response(solution_str):
+                return DEGENERATE_REWARD
+        return reward
     else:
         # Open-ended: simple keyword overlap scoring
         if not ground_truth or not solution_str:
@@ -243,4 +293,10 @@ def compute_score(
         # Penalty for calling tools not in the provided tool list
         n_invalid = count_invalid_tool_calls(solution_str)
         penalty = n_invalid * INVALID_TOOL_PENALTY
-        return base_reward - penalty
+        reward = base_reward - penalty
+
+        # Degenerate filter: low-quality + repetitive = hard penalty
+        if DEGENERATE_FILTER_ENABLED and not is_validate and not is_correct:
+            if is_degenerate_response(solution_str):
+                return DEGENERATE_REWARD
+        return reward

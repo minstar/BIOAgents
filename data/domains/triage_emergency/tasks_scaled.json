@@ -1,0 +1,4248 @@
+[
+  {
+    "id": "triage_allergic_reaction_esi2_pediatric_046",
+    "ticket": "A 7-year-old male presents to the ED with allergic reaction. Onset: 2 days ago. Vitals: HR 126, BP 94/55, RR 23, SpO2 93%, Temp 39.1C. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "allergic_reaction",
+      "esi_level": 2,
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify allergic reaction as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_trauma_fall_esi3_pregnant_037",
+    "ticket": "A 37-year-old female presents to the ED with trauma fall. Onset: 3 hours ago. Vitals: HR 102, BP 130/51, RR 22, SpO2 96%, Temp 36.7C. PMH: pregnancy. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "trauma_fall",
+      "esi_level": 3,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify trauma fall as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_gi_bleeding_esi1_young_female_073",
+    "ticket": "A 28-year-old female presents to the ED with gi bleeding. Onset: 12 hours ago. Vitals: HR 128, BP 61/61, RR 33, SpO2 83%, Temp 37.5C. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "gi_bleeding",
+      "esi_level": 1,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify gi bleeding as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_laceration_esi3_young_male_057",
+    "ticket": "A 28-year-old male presents to the ED with laceration. Onset: 1 hour ago. Vitals: HR 108, BP 134/60, RR 18, SpO2 98%, Temp 37.1C. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "laceration",
+      "esi_level": 3,
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify laceration as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_shortness_of_breath_esi1_pregnant_007",
+    "ticket": "A 29-year-old female presents to the ED with shortness of breath. Onset: 3 hours ago. Vitals: HR 146, BP 80/76, RR 29, SpO2 88%, Temp 38.0C. PMH: pregnancy. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "shortness_of_breath",
+      "esi_level": 1,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify shortness of breath as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_back_pain_esi4_pediatric_052",
+    "ticket": "A 12-year-old male presents to the ED with back pain. Onset: 1 hour ago. Vitals: HR 77, BP 124/87, RR 16, SpO2 98%, Temp 37.0C. ",
+    "correct_answer": "ESI 4",
+    "description": {
+      "complaint": "back_pain",
+      "esi_level": 4,
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 4
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 4",
+        "Agent should identify back pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_trauma_fall_esi2_middle_age_male_035",
+    "ticket": "A 62-year-old male presents to the ED with trauma fall. Onset: 10 minutes ago. Vitals: HR 122, BP 92/72, RR 30, SpO2 92%, Temp 39.0C. PMH: hypertension, diabetes. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "trauma_fall",
+      "esi_level": 2,
+      "patient_type": "middle_age_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify trauma fall as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_shortness_of_breath_esi1_elderly_male_008",
+    "ticket": "A 66-year-old male presents to the ED with shortness of breath. Onset: 10 minutes ago. Vitals: HR 143, BP 66/73, RR 35, SpO2 82%, Temp 39.4C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "shortness_of_breath",
+      "esi_level": 1,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify shortness of breath as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_abdominal_pain_esi4_pregnant_021",
+    "ticket": "A 28-year-old female presents to the ED with abdominal pain. Onset: 12 hours ago. Vitals: HR 75, BP 128/59, RR 16, SpO2 99%, Temp 37.1C. PMH: pregnancy. ",
+    "correct_answer": "ESI 4",
+    "description": {
+      "complaint": "abdominal_pain",
+      "esi_level": 4,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 4
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 4",
+        "Agent should identify abdominal pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_chest_pain_esi1_young_female_001",
+    "ticket": "A 20-year-old female presents to the ED with chest pain. Onset: 2 days ago. Vitals: HR 129, BP 84/75, RR 31, SpO2 88%, Temp 38.5C. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "chest_pain",
+      "esi_level": 1,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify chest pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_fever_immunocompromised_esi2_middle_age_male_054",
+    "ticket": "A 62-year-old male presents to the ED with fever immunocompromised. Onset: 10 minutes ago. Vitals: HR 112, BP 105/83, RR 27, SpO2 94%, Temp 36.9C. PMH: hypertension, diabetes. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "fever_immunocompromised",
+      "esi_level": 2,
+      "patient_type": "middle_age_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify fever immunocompromised as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_back_pain_esi3_pediatric_050",
+    "ticket": "A 10-year-old male presents to the ED with back pain. Onset: 12 hours ago. Vitals: HR 96, BP 129/68, RR 18, SpO2 96%, Temp 37.1C. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "back_pain",
+      "esi_level": 3,
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify back pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_fever_immunocompromised_esi2_elderly_female_053",
+    "ticket": "A 85-year-old female presents to the ED with fever immunocompromised. Onset: 3 hours ago. Vitals: HR 122, BP 106/55, RR 28, SpO2 89%, Temp 38.3C. PMH: osteoporosis, hypertension, heart_failure. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "fever_immunocompromised",
+      "esi_level": 2,
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify fever immunocompromised as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_allergic_reaction_esi3_middle_age_female_048",
+    "ticket": "A 55-year-old female presents to the ED with allergic reaction. Onset: 10 minutes ago. Vitals: HR 99, BP 125/78, RR 24, SpO2 95%, Temp 37.9C. PMH: obesity, hypothyroidism. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "allergic_reaction",
+      "esi_level": 3,
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify allergic reaction as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_chest_pain_esi3_elderly_female_006",
+    "ticket": "A 68-year-old female presents to the ED with chest pain. Onset: 2 days ago. Vitals: HR 87, BP 138/73, RR 24, SpO2 95%, Temp 37.1C. PMH: osteoporosis, hypertension, heart_failure. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "chest_pain",
+      "esi_level": 3,
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify chest pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_altered_mental_status_esi1_young_male_013",
+    "ticket": "A 18-year-old male presents to the ED with altered mental status. Onset: 1 hour ago. Vitals: HR 142, BP 85/51, RR 40, SpO2 78%, Temp 38.3C. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "altered_mental_status",
+      "esi_level": 1,
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify altered mental status as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_eye_injury_esi2_elderly_male_064",
+    "ticket": "A 78-year-old male presents to the ED with eye injury. Onset: 3 hours ago. Vitals: HR 101, BP 97/55, RR 30, SpO2 90%, Temp 37.2C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "eye_injury",
+      "esi_level": 2,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify eye injury as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_abdominal_pain_esi2_young_female_017",
+    "ticket": "A 32-year-old female presents to the ED with abdominal pain. Onset: 3 hours ago. Vitals: HR 102, BP 87/58, RR 27, SpO2 92%, Temp 36.9C. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "abdominal_pain",
+      "esi_level": 2,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify abdominal pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_headache_esi4_elderly_male_027",
+    "ticket": "A 70-year-old male presents to the ED with headache. Onset: 10 minutes ago. Vitals: HR 73, BP 137/72, RR 20, SpO2 99%, Temp 37.9C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 4",
+    "description": {
+      "complaint": "headache",
+      "esi_level": 4,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 4
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 4",
+        "Agent should identify headache as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_seizure_esi1_elderly_female_030",
+    "ticket": "A 75-year-old female presents to the ED with seizure. Onset: 10 minutes ago. Vitals: HR 156, BP 79/89, RR 29, SpO2 75%, Temp 37.0C. PMH: osteoporosis, hypertension, heart_failure. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "seizure",
+      "esi_level": 1,
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify seizure as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_eye_injury_esi4_elderly_male_067",
+    "ticket": "A 69-year-old male presents to the ED with eye injury. Onset: 1 hour ago. Vitals: HR 82, BP 138/68, RR 18, SpO2 100%, Temp 36.7C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 4",
+    "description": {
+      "complaint": "eye_injury",
+      "esi_level": 4,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 4
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 4",
+        "Agent should identify eye injury as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_seizure_esi2_middle_age_male_032",
+    "ticket": "A 61-year-old male presents to the ED with seizure. Onset: 12 hours ago. Vitals: HR 103, BP 96/87, RR 28, SpO2 88%, Temp 37.3C. PMH: hypertension, diabetes. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "seizure",
+      "esi_level": 2,
+      "patient_type": "middle_age_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify seizure as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_allergic_reaction_esi1_pregnant_044",
+    "ticket": "A 45-year-old female presents to the ED with allergic reaction. Onset: 3 hours ago. Vitals: HR 140, BP 64/90, RR 35, SpO2 76%, Temp 37.9C. PMH: pregnancy. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "allergic_reaction",
+      "esi_level": 1,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify allergic reaction as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_shortness_of_breath_esi3_young_male_012",
+    "ticket": "A 18-year-old male presents to the ED with shortness of breath. Onset: 10 minutes ago. Vitals: HR 88, BP 137/61, RR 18, SpO2 95%, Temp 37.3C. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "shortness_of_breath",
+      "esi_level": 3,
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify shortness of breath as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_altered_mental_status_esi2_pediatric_015",
+    "ticket": "A 7-year-old male presents to the ED with altered mental status. Onset: 10 minutes ago. Vitals: HR 116, BP 103/89, RR 23, SpO2 91%, Temp 38.0C. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "altered_mental_status",
+      "esi_level": 2,
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify altered mental status as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_abdominal_pain_esi4_elderly_female_022",
+    "ticket": "A 67-year-old female presents to the ED with abdominal pain. Onset: 1 hour ago. Vitals: HR 67, BP 117/73, RR 14, SpO2 100%, Temp 36.6C. PMH: osteoporosis, hypertension, heart_failure. ",
+    "correct_answer": "ESI 4",
+    "description": {
+      "complaint": "abdominal_pain",
+      "esi_level": 4,
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 4
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 4",
+        "Agent should identify abdominal pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_trauma_fall_esi2_middle_age_female_036",
+    "ticket": "A 57-year-old female presents to the ED with trauma fall. Onset: 3 hours ago. Vitals: HR 127, BP 108/54, RR 22, SpO2 91%, Temp 36.6C. PMH: obesity, hypothyroidism. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "trauma_fall",
+      "esi_level": 2,
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify trauma fall as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_abdominal_pain_esi3_middle_age_female_020",
+    "ticket": "A 58-year-old female presents to the ED with abdominal pain. Onset: 12 hours ago. Vitals: HR 94, BP 138/79, RR 19, SpO2 97%, Temp 37.0C. PMH: obesity, hypothyroidism. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "abdominal_pain",
+      "esi_level": 3,
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify abdominal pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_eye_injury_esi4_young_female_068",
+    "ticket": "A 27-year-old female presents to the ED with eye injury. Onset: 12 hours ago. Vitals: HR 68, BP 116/89, RR 15, SpO2 100%, Temp 37.5C. ",
+    "correct_answer": "ESI 4",
+    "description": {
+      "complaint": "eye_injury",
+      "esi_level": 4,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 4
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 4",
+        "Agent should identify eye injury as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_abdominal_pain_esi3_elderly_male_019",
+    "ticket": "A 81-year-old male presents to the ED with abdominal pain. Onset: 1 hour ago. Vitals: HR 99, BP 123/85, RR 17, SpO2 94%, Temp 37.8C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "abdominal_pain",
+      "esi_level": 3,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify abdominal pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_seizure_esi2_young_female_031",
+    "ticket": "A 32-year-old female presents to the ED with seizure. Onset: 1 hour ago. Vitals: HR 121, BP 98/67, RR 29, SpO2 92%, Temp 37.8C. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "seizure",
+      "esi_level": 2,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify seizure as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_headache_esi3_pediatric_025",
+    "ticket": "A 3-year-old male presents to the ED with headache. Onset: 2 days ago. Vitals: HR 91, BP 137/67, RR 24, SpO2 96%, Temp 36.7C. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "headache",
+      "esi_level": 3,
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify headache as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_trauma_fall_esi1_young_male_034",
+    "ticket": "A 26-year-old male presents to the ED with trauma fall. Onset: 1 hour ago. Vitals: HR 138, BP 70/77, RR 29, SpO2 75%, Temp 38.0C. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "trauma_fall",
+      "esi_level": 1,
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify trauma fall as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_laceration_esi5_young_female_062",
+    "ticket": "A 35-year-old female presents to the ED with laceration. Onset: 3 hours ago. Vitals: HR 68, BP 137/60, RR 20, SpO2 97%, Temp 36.9C. ",
+    "correct_answer": "ESI 5",
+    "description": {
+      "complaint": "laceration",
+      "esi_level": 5,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 5
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 5",
+        "Agent should identify laceration as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_altered_mental_status_esi2_pregnant_016",
+    "ticket": "A 41-year-old female presents to the ED with altered mental status. Onset: 12 hours ago. Vitals: HR 109, BP 99/75, RR 22, SpO2 88%, Temp 39.5C. PMH: pregnancy. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "altered_mental_status",
+      "esi_level": 2,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify altered mental status as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_back_pain_esi3_elderly_female_049",
+    "ticket": "A 67-year-old female presents to the ED with back pain. Onset: 12 hours ago. Vitals: HR 96, BP 130/78, RR 18, SpO2 94%, Temp 36.9C. PMH: osteoporosis, hypertension, heart_failure. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "back_pain",
+      "esi_level": 3,
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify back pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_shortness_of_breath_esi2_elderly_female_009",
+    "ticket": "A 85-year-old female presents to the ED with shortness of breath. Onset: 12 hours ago. Vitals: HR 111, BP 86/57, RR 28, SpO2 90%, Temp 37.1C. PMH: osteoporosis, hypertension, heart_failure. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "shortness_of_breath",
+      "esi_level": 2,
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify shortness of breath as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_eye_injury_esi3_middle_age_female_065",
+    "ticket": "A 55-year-old female presents to the ED with eye injury. Onset: 12 hours ago. Vitals: HR 109, BP 113/68, RR 21, SpO2 95%, Temp 36.7C. PMH: obesity, hypothyroidism. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "eye_injury",
+      "esi_level": 3,
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify eye injury as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_laceration_esi4_pediatric_059",
+    "ticket": "A 6-year-old male presents to the ED with laceration. Onset: 3 hours ago. Vitals: HR 89, BP 138/65, RR 20, SpO2 100%, Temp 36.9C. ",
+    "correct_answer": "ESI 4",
+    "description": {
+      "complaint": "laceration",
+      "esi_level": 4,
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 4
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 4",
+        "Agent should identify laceration as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_overdose_esi1_pregnant_039",
+    "ticket": "A 37-year-old female presents to the ED with overdose. Onset: 1 hour ago. Vitals: HR 153, BP 62/71, RR 34, SpO2 88%, Temp 37.4C. PMH: pregnancy. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "overdose",
+      "esi_level": 1,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify overdose as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_shortness_of_breath_esi2_elderly_male_010",
+    "ticket": "A 67-year-old male presents to the ED with shortness of breath. Onset: 1 hour ago. Vitals: HR 121, BP 91/65, RR 22, SpO2 88%, Temp 38.9C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "shortness_of_breath",
+      "esi_level": 2,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify shortness of breath as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_chest_pain_esi1_middle_age_female_002",
+    "ticket": "A 56-year-old female presents to the ED with chest pain. Onset: 12 hours ago. Vitals: HR 125, BP 85/57, RR 34, SpO2 75%, Temp 37.3C. PMH: obesity, hypothyroidism. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "chest_pain",
+      "esi_level": 1,
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify chest pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_eye_injury_esi2_pediatric_063",
+    "ticket": "A 4-year-old male presents to the ED with eye injury. Onset: 10 minutes ago. Vitals: HR 126, BP 98/72, RR 23, SpO2 89%, Temp 39.0C. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "eye_injury",
+      "esi_level": 2,
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify eye injury as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_trauma_fall_esi1_elderly_male_033",
+    "ticket": "A 72-year-old male presents to the ED with trauma fall. Onset: 1 hour ago. Vitals: HR 145, BP 79/63, RR 28, SpO2 75%, Temp 37.1C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "trauma_fall",
+      "esi_level": 1,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify trauma fall as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_gi_bleeding_esi1_pregnant_074",
+    "ticket": "A 40-year-old female presents to the ED with gi bleeding. Onset: 10 minutes ago. Vitals: HR 160, BP 65/79, RR 40, SpO2 77%, Temp 36.7C. PMH: pregnancy. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "gi_bleeding",
+      "esi_level": 1,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify gi bleeding as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_headache_esi3_young_female_026",
+    "ticket": "A 25-year-old female presents to the ED with headache. Onset: 10 minutes ago. Vitals: HR 105, BP 123/85, RR 24, SpO2 98%, Temp 37.4C. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "headache",
+      "esi_level": 3,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify headache as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_back_pain_esi4_pregnant_051",
+    "ticket": "A 35-year-old female presents to the ED with back pain. Onset: 2 days ago. Vitals: HR 86, BP 134/56, RR 14, SpO2 99%, Temp 36.6C. PMH: pregnancy. ",
+    "correct_answer": "ESI 4",
+    "description": {
+      "complaint": "back_pain",
+      "esi_level": 4,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 4
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 4",
+        "Agent should identify back pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_allergic_reaction_esi1_pediatric_043",
+    "ticket": "A 11-year-old male presents to the ED with allergic reaction. Onset: 3 hours ago. Vitals: HR 157, BP 74/89, RR 38, SpO2 84%, Temp 38.4C. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "allergic_reaction",
+      "esi_level": 1,
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify allergic reaction as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_chest_pain_esi3_elderly_male_005",
+    "ticket": "A 78-year-old male presents to the ED with chest pain. Onset: 10 minutes ago. Vitals: HR 83, BP 114/81, RR 16, SpO2 94%, Temp 37.0C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "chest_pain",
+      "esi_level": 3,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify chest pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_chest_pain_esi2_pediatric_004",
+    "ticket": "A 11-year-old male presents to the ED with chest pain. Onset: 12 hours ago. Vitals: HR 128, BP 102/54, RR 27, SpO2 92%, Temp 37.2C. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "chest_pain",
+      "esi_level": 2,
+      "patient_type": "pediatric"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify chest pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_overdose_esi2_elderly_female_041",
+    "ticket": "A 85-year-old female presents to the ED with overdose. Onset: 1 hour ago. Vitals: HR 126, BP 89/62, RR 25, SpO2 88%, Temp 36.9C. PMH: osteoporosis, hypertension, heart_failure. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "overdose",
+      "esi_level": 2,
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify overdose as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_abdominal_pain_esi2_middle_age_female_018",
+    "ticket": "A 64-year-old female presents to the ED with abdominal pain. Onset: 2 days ago. Vitals: HR 120, BP 103/88, RR 30, SpO2 93%, Temp 37.5C. PMH: obesity, hypothyroidism. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "abdominal_pain",
+      "esi_level": 2,
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify abdominal pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_headache_esi4_young_male_028",
+    "ticket": "A 23-year-old male presents to the ED with headache. Onset: 10 minutes ago. Vitals: HR 69, BP 133/90, RR 19, SpO2 100%, Temp 36.6C. ",
+    "correct_answer": "ESI 4",
+    "description": {
+      "complaint": "headache",
+      "esi_level": 4,
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 4
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 4",
+        "Agent should identify headache as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_eye_injury_esi3_young_male_066",
+    "ticket": "A 22-year-old male presents to the ED with eye injury. Onset: 10 minutes ago. Vitals: HR 104, BP 132/55, RR 23, SpO2 97%, Temp 37.4C. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "eye_injury",
+      "esi_level": 3,
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify eye injury as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_laceration_esi4_elderly_male_060",
+    "ticket": "A 80-year-old male presents to the ED with laceration. Onset: 12 hours ago. Vitals: HR 71, BP 126/68, RR 19, SpO2 100%, Temp 37.2C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 4",
+    "description": {
+      "complaint": "laceration",
+      "esi_level": 4,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 4
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 4",
+        "Agent should identify laceration as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_gi_bleeding_esi2_elderly_male_075",
+    "ticket": "A 66-year-old male presents to the ED with gi bleeding. Onset: 12 hours ago. Vitals: HR 125, BP 91/82, RR 22, SpO2 90%, Temp 39.3C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "gi_bleeding",
+      "esi_level": 2,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify gi bleeding as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_allergic_reaction_esi3_pregnant_047",
+    "ticket": "A 43-year-old female presents to the ED with allergic reaction. Onset: 1 hour ago. Vitals: HR 97, BP 140/86, RR 16, SpO2 97%, Temp 37.9C. PMH: pregnancy. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "allergic_reaction",
+      "esi_level": 3,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify allergic reaction as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_chest_pain_esi2_elderly_female_003",
+    "ticket": "A 73-year-old female presents to the ED with chest pain. Onset: 10 minutes ago. Vitals: HR 118, BP 97/80, RR 27, SpO2 88%, Temp 38.5C. PMH: osteoporosis, hypertension, heart_failure. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "chest_pain",
+      "esi_level": 2,
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify chest pain as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_laceration_esi5_pregnant_061",
+    "ticket": "A 31-year-old female presents to the ED with laceration. Onset: 3 hours ago. Vitals: HR 90, BP 134/80, RR 15, SpO2 99%, Temp 36.6C. PMH: pregnancy. ",
+    "correct_answer": "ESI 5",
+    "description": {
+      "complaint": "laceration",
+      "esi_level": 5,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 5
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 5",
+        "Agent should identify laceration as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_headache_esi2_young_male_023",
+    "ticket": "A 35-year-old male presents to the ED with headache. Onset: 10 minutes ago. Vitals: HR 117, BP 95/77, RR 23, SpO2 91%, Temp 37.6C. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "headache",
+      "esi_level": 2,
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify headache as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_seizure_esi1_young_female_029",
+    "ticket": "A 34-year-old female presents to the ED with seizure. Onset: 3 hours ago. Vitals: HR 133, BP 72/73, RR 34, SpO2 82%, Temp 37.5C. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "seizure",
+      "esi_level": 1,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify seizure as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_allergic_reaction_esi2_elderly_male_045",
+    "ticket": "A 66-year-old male presents to the ED with allergic reaction. Onset: 10 minutes ago. Vitals: HR 111, BP 101/52, RR 23, SpO2 90%, Temp 37.9C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "allergic_reaction",
+      "esi_level": 2,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify allergic reaction as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_syncope_esi2_young_female_069",
+    "ticket": "A 33-year-old female presents to the ED with syncope. Onset: 1 hour ago. Vitals: HR 119, BP 102/65, RR 22, SpO2 93%, Temp 38.0C. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "syncope",
+      "esi_level": 2,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify syncope as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_gi_bleeding_esi3_young_male_077",
+    "ticket": "A 28-year-old male presents to the ED with gi bleeding. Onset: 12 hours ago. Vitals: HR 88, BP 113/78, RR 21, SpO2 97%, Temp 37.8C. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "gi_bleeding",
+      "esi_level": 3,
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify gi bleeding as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_laceration_esi3_elderly_female_058",
+    "ticket": "A 84-year-old female presents to the ED with laceration. Onset: 1 hour ago. Vitals: HR 105, BP 138/73, RR 18, SpO2 97%, Temp 36.6C. PMH: osteoporosis, hypertension, heart_failure. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "laceration",
+      "esi_level": 3,
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify laceration as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_overdose_esi1_elderly_male_040",
+    "ticket": "A 75-year-old male presents to the ED with overdose. Onset: 1 hour ago. Vitals: HR 130, BP 62/82, RR 36, SpO2 85%, Temp 36.8C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "overdose",
+      "esi_level": 1,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify overdose as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_syncope_esi3_young_male_072",
+    "ticket": "A 30-year-old male presents to the ED with syncope. Onset: 1 hour ago. Vitals: HR 91, BP 118/72, RR 16, SpO2 96%, Temp 37.7C. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "syncope",
+      "esi_level": 3,
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify syncope as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_syncope_esi3_elderly_female_071",
+    "ticket": "A 81-year-old female presents to the ED with syncope. Onset: 10 minutes ago. Vitals: HR 97, BP 126/80, RR 24, SpO2 98%, Temp 36.5C. PMH: osteoporosis, hypertension, heart_failure. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "syncope",
+      "esi_level": 3,
+      "patient_type": "elderly_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify syncope as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_gi_bleeding_esi2_young_female_076",
+    "ticket": "A 35-year-old female presents to the ED with gi bleeding. Onset: 3 hours ago. Vitals: HR 115, BP 93/68, RR 22, SpO2 94%, Temp 38.4C. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "gi_bleeding",
+      "esi_level": 2,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify gi bleeding as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_altered_mental_status_esi1_young_female_014",
+    "ticket": "A 26-year-old female presents to the ED with altered mental status. Onset: 12 hours ago. Vitals: HR 123, BP 64/54, RR 39, SpO2 81%, Temp 38.1C. ",
+    "correct_answer": "ESI 1",
+    "description": {
+      "complaint": "altered_mental_status",
+      "esi_level": 1,
+      "patient_type": "young_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 1
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 1",
+        "Agent should identify altered mental status as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_overdose_esi2_middle_age_male_042",
+    "ticket": "A 64-year-old male presents to the ED with overdose. Onset: 12 hours ago. Vitals: HR 104, BP 109/90, RR 23, SpO2 89%, Temp 39.4C. PMH: hypertension, diabetes. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "overdose",
+      "esi_level": 2,
+      "patient_type": "middle_age_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify overdose as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_trauma_fall_esi3_elderly_male_038",
+    "ticket": "A 70-year-old male presents to the ED with trauma fall. Onset: 1 hour ago. Vitals: HR 105, BP 140/56, RR 23, SpO2 96%, Temp 36.6C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "trauma_fall",
+      "esi_level": 3,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify trauma fall as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_syncope_esi2_young_male_070",
+    "ticket": "A 27-year-old male presents to the ED with syncope. Onset: 10 minutes ago. Vitals: HR 113, BP 85/61, RR 27, SpO2 89%, Temp 38.2C. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "syncope",
+      "esi_level": 2,
+      "patient_type": "young_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify syncope as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_headache_esi2_elderly_male_024",
+    "ticket": "A 74-year-old male presents to the ED with headache. Onset: 1 hour ago. Vitals: HR 119, BP 94/63, RR 27, SpO2 88%, Temp 38.2C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 2",
+    "description": {
+      "complaint": "headache",
+      "esi_level": 2,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 2
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 2",
+        "Agent should identify headache as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_fever_immunocompromised_esi3_elderly_male_056",
+    "ticket": "A 71-year-old male presents to the ED with fever immunocompromised. Onset: 2 days ago. Vitals: HR 87, BP 114/56, RR 18, SpO2 94%, Temp 36.9C. PMH: COPD, atrial_fibrillation, CKD. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "fever_immunocompromised",
+      "esi_level": 3,
+      "patient_type": "elderly_male"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify fever immunocompromised as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_gi_bleeding_esi3_pregnant_078",
+    "ticket": "A 35-year-old female presents to the ED with gi bleeding. Onset: 3 hours ago. Vitals: HR 85, BP 125/83, RR 23, SpO2 96%, Temp 37.9C. PMH: pregnancy. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "gi_bleeding",
+      "esi_level": 3,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify gi bleeding as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_fever_immunocompromised_esi3_pregnant_055",
+    "ticket": "A 36-year-old female presents to the ED with fever immunocompromised. Onset: 12 hours ago. Vitals: HR 80, BP 121/71, RR 20, SpO2 95%, Temp 37.9C. PMH: pregnancy. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "fever_immunocompromised",
+      "esi_level": 3,
+      "patient_type": "pregnant"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify fever immunocompromised as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  },
+  {
+    "id": "triage_shortness_of_breath_esi3_middle_age_female_011",
+    "ticket": "A 62-year-old female presents to the ED with shortness of breath. Onset: 2 days ago. Vitals: HR 86, BP 128/59, RR 19, SpO2 95%, Temp 37.0C. PMH: obesity, hypothyroidism. ",
+    "correct_answer": "ESI 3",
+    "description": {
+      "complaint": "shortness_of_breath",
+      "esi_level": 3,
+      "patient_type": "middle_age_female"
+    },
+    "evaluation_criteria": {
+      "actions": [
+        {
+          "name": "get_patient_presentation",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "get_vital_signs",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "assess_airway_breathing",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "calculate_esi_level",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_protocol",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "submit_answer",
+          "arguments": {
+            "esi_level": 3
+          },
+          "compare_args": [
+            "esi_level"
+          ]
+        }
+      ],
+      "nl_assertions": [
+        "Agent should assign ESI level 3",
+        "Agent should identify shortness of breath as the chief complaint",
+        "Agent should assess ABC stability"
+      ],
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ]
+    }
+  }
+]

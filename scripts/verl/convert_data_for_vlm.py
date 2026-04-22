@@ -3,10 +3,11 @@
 Transforms text-based image references (IMAGE: /path/to/img.jpg) into
 proper multimodal format with <image> placeholders and image bytes column.
 
-v3: Embeds domain-specific tool schemas in system messages (XML format).
-    - Tools injected per-domain via Qwen3.5 XML tool format
-    - Thinking mode enabled (no "Do NOT use <think>" restriction)
-    - veRL inject_tool_schemas=False to avoid duplicate injection
+v6: Domain-specific system prompts WITHOUT embedded tool schemas.
+    - Tool schemas are loaded at runtime by veRL agent loop via tool_config_path
+    - veRL inject_tool_schemas=False (only 1 placeholder tool for template format)
+    - System prompts contain only domain instructions, no tool definitions
+    - This matches v16's approach which achieved 52.6% base val_acc
 """
 
 import json
@@ -17,39 +18,6 @@ from PIL import Image
 from io import BytesIO
 from pathlib import Path
 
-# Load domain tool schemas
-DOMAIN_TOOLS_PATH = os.path.join(os.path.dirname(__file__), "domain_tools_by_data_domain.json")
-with open(DOMAIN_TOOLS_PATH) as _f:
-    DOMAIN_TOOLS = json.load(_f)
-
-# Qwen3.5 tool call instruction (from chat_template.jinja)
-TOOL_CALL_INSTRUCTION = (
-    "If you choose to call a function ONLY reply in the following format with NO suffix:\n\n"
-    "<tool_call>\n"
-    "<function=example_function_name>\n"
-    "<parameter=example_parameter_1>\nvalue_1\n</parameter>\n"
-    "<parameter=example_parameter_2>\n"
-    "This is the value for the second parameter\n"
-    "that can span\nmultiple lines\n"
-    "</parameter>\n"
-    "</function>\n"
-    "</tool_call>\n\n"
-    "<IMPORTANT>\nReminder:\n"
-    "- Function calls MUST follow the specified format: "
-    "an inner <function=...></function> block must be nested within <tool_call></tool_call> XML tags\n"
-    "- Required parameters MUST be specified\n"
-    "- You may provide optional reasoning for your function call in natural language BEFORE the function call, but NOT after\n"
-    "</IMPORTANT>"
-)
-
-
-def build_tool_section(domain: str) -> str:
-    """Build the tool schema section for a domain in Qwen3.5 XML format."""
-    tools = DOMAIN_TOOLS.get(domain, [])
-    if not tools:
-        return ""
-    tool_lines = "\n".join(json.dumps(t) for t in tools)
-    return f"# Tools\n\nYou have access to the following functions:\n\n<tools>\n{tool_lines}\n</tools>\n\n{TOOL_CALL_INSTRUCTION}"
 
 
 # Domain-specific system prompts for thinking + tool use mode
@@ -122,12 +90,12 @@ DEFAULT_SYSTEM_PROMPT = (
 
 
 def get_system_prompt(domain: str) -> str:
-    """Get domain-specific system prompt with embedded tool schemas."""
-    tool_section = build_tool_section(domain)
-    domain_prompt = DOMAIN_SYSTEM_PROMPTS.get(domain, DEFAULT_SYSTEM_PROMPT)
-    if tool_section:
-        return f"{tool_section}\n\n{domain_prompt}"
-    return domain_prompt
+    """Get domain-specific system prompt (no tool schemas).
+
+    Tool schemas are injected at runtime by veRL's agent loop via tool_config_path.
+    System prompts only contain domain-specific instructions.
+    """
+    return DOMAIN_SYSTEM_PROMPTS.get(domain, DEFAULT_SYSTEM_PROMPT)
 
 
 def convert_row(row):

@@ -1,0 +1,6002 @@
+[
+  {
+    "id": "di_bal_methotrexate_trimethoprim_100",
+    "ticket": "During medication reconciliation at admission, a 44-year-old female is found to be taking methotrexate. The physician wants to prescribe trimethoprim. PMH: diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: reduced methotrexate clearance. Management: avoid combination, monitor CBC.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "methotrexate_trimethoprim",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_carbamazepine_erythromycin_164",
+    "ticket": "During outpatient follow-up, a 35-year-old female is found to be taking carbamazepine. The physician wants to prescribe erythromycin. PMH: diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases carbamazepine. Management: monitor carbamazepine levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "carbamazepine_erythromycin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_simvastatin_clarithromycin_063",
+    "ticket": "A 7-year-old male is taking simvastatin and clarithromycin. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "No interaction expected",
+      "C": "Monitor liver function only",
+      "D": "high",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_clarithromycin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_grapefruit_cyclosporine_192",
+    "ticket": "A 16-year-old female is taking grapefruit and cyclosporine. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "avoid grapefruit",
+      "B": "Switch to alternative medication",
+      "C": "Dose adjustment unnecessary",
+      "D": "Monitor liver function only",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "grapefruit_cyclosporine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_tamoxifen_paroxetine_240",
+    "ticket": "A 27-year-old female is taking tamoxifen and paroxetine. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Switch to alternative medication",
+      "C": "Dose adjustment unnecessary",
+      "D": "No interaction expected",
+      "E": "switch to venlafaxine or citalopram"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "tamoxifen_paroxetine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_metformin_IV contrast_031",
+    "ticket": "A 17-year-old female is taking metformin and IV contrast. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "high",
+      "D": "Dose adjustment unnecessary",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metformin_IV contrast",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_simvastatin_clarithromycin_058",
+    "ticket": "During pharmacist consultation, a 67-year-old female is found to be taking simvastatin. The physician wants to prescribe clarithromycin. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases statin levels. Management: hold statin during antibiotic course.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_clarithromycin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_phenytoin_valproate_089",
+    "ticket": "During new prescription review, a 63-year-old male is found to be taking phenytoin. The physician wants to prescribe valproate. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: displaced protein binding increases free phenytoin. Management: monitor free phenytoin levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "phenytoin_valproate",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lisinopril_NSAIDs_073",
+    "ticket": "During pharmacist consultation, a 48-year-old male is found to be taking lisinopril. The physician wants to prescribe NSAIDs. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: reduced ACEi efficacy + AKI risk. Management: monitor renal function, limit NSAID use.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_NSAIDs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_phenytoin_valproate_091",
+    "ticket": "During pre-operative medication review, a 30-year-old female is found to be taking phenytoin. The physician wants to prescribe valproate. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: displaced protein binding increases free phenytoin. Management: monitor free phenytoin levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "phenytoin_valproate",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_phenytoin_valproate_090",
+    "ticket": "During pharmacist consultation, a 23-year-old male is found to be taking phenytoin. The physician wants to prescribe valproate. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: displaced protein binding increases free phenytoin. Management: monitor free phenytoin levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "phenytoin_valproate",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_aspirin_003",
+    "ticket": "During pharmacist consultation, a 37-year-old male is found to be taking warfarin. The physician wants to prescribe aspirin. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased bleeding risk. Management: monitoring INR, consider PPI, use lowest aspirin dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_aspirin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_carbamazepine_erythromycin_166",
+    "ticket": "A 10-year-old female is taking carbamazepine and erythromycin. PMH: asthma. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "monitor carbamazepine levels",
+      "C": "Monitor liver function only",
+      "D": "Dose adjustment unnecessary",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "carbamazepine_erythromycin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_metronidazole_alcohol_214",
+    "ticket": "A 65-year-old male is taking metronidazole and alcohol. PMH: COPD, hypertension. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "avoid alcohol during treatment",
+      "B": "Switch to alternative medication",
+      "C": "Dose adjustment unnecessary",
+      "D": "Monitor liver function only",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metronidazole_alcohol",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_metronidazole_alcohol_211",
+    "ticket": "During new prescription review, a 70-year-old female is found to be taking metronidazole. The physician wants to prescribe alcohol. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: disulfiram-like reaction. Management: avoid alcohol during treatment.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metronidazole_alcohol",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_metronidazole_alcohol_213",
+    "ticket": "A 74-year-old female is taking metronidazole and alcohol. PMH: heart_failure, osteoporosis. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "disulfiram-like reaction",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metronidazole_alcohol",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_clopidogrel_omeprazole_082",
+    "ticket": "During outpatient follow-up, a 56-year-old male is found to be taking clopidogrel. The physician wants to prescribe omeprazole. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2C19 inhibition reduces clopidogrel efficacy. Management: switch to pantoprazole.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clopidogrel_omeprazole",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_SSRIs_triptans_193",
+    "ticket": "During medication reconciliation at admission, a 45-year-old female is found to be taking SSRIs. The physician wants to prescribe triptans. PMH: diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: monitor for symptoms, use lowest doses.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "SSRIs_triptans",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_fluconazole_013",
+    "ticket": "A 18-year-old female is taking warfarin and fluconazole. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Switch to alternative medication",
+      "C": "Monitor liver function only",
+      "D": "CYP2C9 inhibition increases warfarin levels",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_fluconazole",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_azithromycin_amiodarone_219",
+    "ticket": "During pre-operative medication review, a 38-year-old male is found to be taking azithromycin. The physician wants to prescribe amiodarone. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: QT prolongation risk. Management: ECG monitoring, avoid if possible.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "azithromycin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_aspirin_002",
+    "ticket": "During pre-operative medication review, a 19-year-old male is found to be taking warfarin. The physician wants to prescribe aspirin. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased bleeding risk. Management: monitoring INR, consider PPI, use lowest aspirin dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_aspirin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_azithromycin_amiodarone_221",
+    "ticket": "A 15-year-old male is taking azithromycin and amiodarone. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "QT prolongation risk",
+      "C": "Monitor liver function only",
+      "D": "Dose adjustment unnecessary",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "azithromycin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_sildenafil_nitrates_175",
+    "ticket": "A 78-year-old female is taking sildenafil and nitrates. PMH: heart_failure, osteoporosis. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Dose adjustment unnecessary",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "severe"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "sildenafil_nitrates",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_potassium_ACE inhibitors_181",
+    "ticket": "A 10-year-old male is taking potassium and ACE inhibitors. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "Dose adjustment unnecessary",
+      "D": "No interaction expected",
+      "E": "hyperkalemia"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "potassium_ACE inhibitors",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_tamoxifen_paroxetine_236",
+    "ticket": "During discharge medication check, a 78-year-old male is found to be taking tamoxifen. The physician wants to prescribe paroxetine. PMH: atrial_fibrillation, CKD, diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2D6 inhibition reduces tamoxifen efficacy. Management: switch to venlafaxine or citalopram.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "tamoxifen_paroxetine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lisinopril_spironolactone_067",
+    "ticket": "During pharmacist consultation, a 22-year-old female is found to be taking lisinopril. The physician wants to prescribe spironolactone. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: hyperkalemia risk. Management: monitor potassium, avoid K supplements.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_spironolactone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_fluoxetine_MAOIs_041",
+    "ticket": "During medication reconciliation at admission, a 25-year-old female is found to be taking fluoxetine. The physician wants to prescribe MAOIs. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: contraindicated, 14-day washout required.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_MAOIs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_tamoxifen_paroxetine_238",
+    "ticket": "A 23-year-old female is taking tamoxifen and paroxetine. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "switch to venlafaxine or citalopram"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "tamoxifen_paroxetine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_simvastatin_amiodarone_049",
+    "ticket": "During new prescription review, a 33-year-old female is found to be taking simvastatin. The physician wants to prescribe amiodarone. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased myopathy/rhabdomyolysis risk. Management: limit simvastatin to 20mg, monitor CK.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_ciprofloxacin_theophylline_143",
+    "ticket": "A 57-year-old female is taking ciprofloxacin and theophylline. PMH: osteoarthritis, hypothyroidism. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Dose adjustment unnecessary",
+      "C": "moderate",
+      "D": "Switch to alternative medication",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_theophylline",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_digoxin_verapamil_120",
+    "ticket": "A 24-year-old female is taking digoxin and verapamil. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "monitor ECG",
+      "D": "No interaction expected",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_verapamil",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_rifampin_023",
+    "ticket": "A 42-year-old female is taking warfarin and rifampin. PMH: diabetes. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Dose adjustment unnecessary",
+      "C": "high",
+      "D": "Monitor liver function only",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_rifampin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lithium_thiazide diuretics_121",
+    "ticket": "During discharge medication check, a 60-year-old male is found to be taking lithium. The physician wants to prescribe thiazide diuretics. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: decreased lithium clearance. Management: monitor lithium levels, reduce dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_thiazide diuretics",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_carbamazepine_erythromycin_168",
+    "ticket": "A 20-year-old male is taking carbamazepine and erythromycin. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "monitor carbamazepine levels",
+      "C": "No interaction expected",
+      "D": "Dose adjustment unnecessary",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "carbamazepine_erythromycin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_phenytoin_valproate_094",
+    "ticket": "A 69-year-old male is taking phenytoin and valproate. PMH: atrial_fibrillation, CKD, diabetes. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "monitor free phenytoin levels",
+      "C": "Dose adjustment unnecessary",
+      "D": "Switch to alternative medication",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "phenytoin_valproate",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_ciprofloxacin_theophylline_144",
+    "ticket": "A 42-year-old male is taking ciprofloxacin and theophylline. PMH: hypertension, obesity. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "monitor levels",
+      "B": "Switch to alternative medication",
+      "C": "Monitor liver function only",
+      "D": "Dose adjustment unnecessary",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_theophylline",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lithium_thiazide diuretics_127",
+    "ticket": "A 27-year-old female is taking lithium and thiazide diuretics. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Dose adjustment unnecessary",
+      "C": "Monitor liver function only",
+      "D": "No interaction expected",
+      "E": "high"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_thiazide diuretics",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_fluoxetine_MAOIs_042",
+    "ticket": "During pre-operative medication review, a 69-year-old male is found to be taking fluoxetine. The physician wants to prescribe MAOIs. PMH: atrial_fibrillation, CKD, diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: contraindicated, 14-day washout required.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_MAOIs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lisinopril_spironolactone_069",
+    "ticket": "A 16-year-old female is taking lisinopril and spironolactone. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "Monitor liver function only",
+      "D": "No interaction expected",
+      "E": "hyperkalemia risk"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_spironolactone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_metformin_IV contrast_032",
+    "ticket": "A 75-year-old female is taking metformin and IV contrast. PMH: heart_failure, osteoporosis. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Dose adjustment unnecessary",
+      "C": "No interaction expected",
+      "D": "Switch to alternative medication",
+      "E": "check renal function"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metformin_IV contrast",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_simvastatin_clarithromycin_064",
+    "ticket": "A 68-year-old female is taking simvastatin and clarithromycin. PMH: heart_failure, osteoporosis. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "hold statin during antibiotic course",
+      "B": "Monitor liver function only",
+      "C": "Dose adjustment unnecessary",
+      "D": "No interaction expected",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_clarithromycin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_ciprofloxacin_antacids_145",
+    "ticket": "During discharge medication check, a 60-year-old female is found to be taking ciprofloxacin. The physician wants to prescribe antacids. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: chelation reduces ciprofloxacin absorption. Management: separate by 2 hours.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_antacids",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lithium_NSAIDs_133",
+    "ticket": "A 68-year-old female is taking lithium and NSAIDs. PMH: heart_failure, osteoporosis. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "decreased lithium clearance",
+      "B": "No interaction expected",
+      "C": "Switch to alternative medication",
+      "D": "Monitor liver function only",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_NSAIDs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_simvastatin_amiodarone_051",
+    "ticket": "During new prescription review, a 50-year-old female is found to be taking simvastatin. The physician wants to prescribe amiodarone. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased myopathy/rhabdomyolysis risk. Management: limit simvastatin to 20mg, monitor CK.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_clopidogrel_omeprazole_088",
+    "ticket": "A 53-year-old male is taking clopidogrel and omeprazole. PMH: COPD, hypertension. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "switch to pantoprazole",
+      "C": "Monitor liver function only",
+      "D": "No interaction expected",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clopidogrel_omeprazole",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_simvastatin_amiodarone_054",
+    "ticket": "A 50-year-old male is taking simvastatin and amiodarone. PMH: COPD, hypertension. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "limit simvastatin to 20mg",
+      "B": "Switch to alternative medication",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lisinopril_NSAIDs_075",
+    "ticket": "During pre-operative medication review, a 52-year-old female is found to be taking lisinopril. The physician wants to prescribe NSAIDs. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: reduced ACEi efficacy + AKI risk. Management: monitor renal function, limit NSAID use.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_NSAIDs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_ciprofloxacin_antacids_147",
+    "ticket": "During discharge medication check, a 44-year-old female is found to be taking ciprofloxacin. The physician wants to prescribe antacids. PMH: diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: chelation reduces ciprofloxacin absorption. Management: separate by 2 hours.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_antacids",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_fluconazole_010",
+    "ticket": "During pre-operative medication review, a 59-year-old female is found to be taking warfarin. The physician wants to prescribe fluconazole. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2C9 inhibition increases warfarin levels. Management: reduce warfarin dose, frequent INR monitoring.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_fluconazole",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_ciprofloxacin_theophylline_137",
+    "ticket": "During pharmacist consultation, a 25-year-old female is found to be taking ciprofloxacin. The physician wants to prescribe theophylline. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP1A2 inhibition increases theophylline. Management: reduce theophylline dose, monitor levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_theophylline",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_aspirin_006",
+    "ticket": "A 9-year-old female is taking warfarin and aspirin. PMH: asthma. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Switch to alternative medication",
+      "C": "monitoring INR",
+      "D": "Dose adjustment unnecessary",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_aspirin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_fluoxetine_tramadol_039",
+    "ticket": "A 26-year-old female is taking fluoxetine and tramadol. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Switch to alternative medication",
+      "C": "Dose adjustment unnecessary",
+      "D": "No interaction expected",
+      "E": "high"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_tramadol",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_ciprofloxacin_antacids_146",
+    "ticket": "During discharge medication check, a 79-year-old male is found to be taking ciprofloxacin. The physician wants to prescribe antacids. PMH: atrial_fibrillation, CKD, diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: chelation reduces ciprofloxacin absorption. Management: separate by 2 hours.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_antacids",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_simvastatin_amiodarone_050",
+    "ticket": "During pre-operative medication review, a 18-year-old female is found to be taking simvastatin. The physician wants to prescribe amiodarone. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased myopathy/rhabdomyolysis risk. Management: limit simvastatin to 20mg, monitor CK.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_sildenafil_nitrates_173",
+    "ticket": "A 35-year-old male is taking sildenafil and nitrates. PMH: hypertension, obesity. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Switch to alternative medication",
+      "C": "Dose adjustment unnecessary",
+      "D": "severe hypotension",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "sildenafil_nitrates",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_fluoxetine_MAOIs_047",
+    "ticket": "A 24-year-old male is taking fluoxetine and MAOIs. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Dose adjustment unnecessary",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "severe"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_MAOIs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_carbamazepine_erythromycin_161",
+    "ticket": "During medication reconciliation at admission, a 26-year-old female is found to be taking carbamazepine. The physician wants to prescribe erythromycin. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases carbamazepine. Management: monitor carbamazepine levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "carbamazepine_erythromycin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_carbamazepine_erythromycin_167",
+    "ticket": "A 53-year-old male is taking carbamazepine and erythromycin. PMH: COPD, hypertension. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "high",
+      "D": "Dose adjustment unnecessary",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "carbamazepine_erythromycin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_fluconazole_011",
+    "ticket": "During pharmacist consultation, a 23-year-old female is found to be taking warfarin. The physician wants to prescribe fluconazole. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2C9 inhibition increases warfarin levels. Management: reduce warfarin dose, frequent INR monitoring.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_fluconazole",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lithium_NSAIDs_131",
+    "ticket": "During new prescription review, a 42-year-old male is found to be taking lithium. The physician wants to prescribe NSAIDs. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: decreased lithium clearance. Management: avoid NSAIDs, monitor lithium levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_NSAIDs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_SSRIs_triptans_196",
+    "ticket": "During new prescription review, a 31-year-old female is found to be taking SSRIs. The physician wants to prescribe triptans. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: monitor for symptoms, use lowest doses.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "SSRIs_triptans",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_metformin_IV contrast_027",
+    "ticket": "During pre-operative medication review, a 53-year-old female is found to be taking metformin. The physician wants to prescribe IV contrast. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: risk of lactic acidosis. Management: hold metformin 48h, check renal function.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metformin_IV contrast",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lithium_thiazide diuretics_128",
+    "ticket": "A 14-year-old male is taking lithium and thiazide diuretics. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "No interaction expected",
+      "C": "Monitor liver function only",
+      "D": "reduce dose",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_thiazide diuretics",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_methotrexate_trimethoprim_099",
+    "ticket": "During pre-operative medication review, a 28-year-old male is found to be taking methotrexate. The physician wants to prescribe trimethoprim. PMH: smoking. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: reduced methotrexate clearance. Management: avoid combination, monitor CBC.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "methotrexate_trimethoprim",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_clonidine_beta-blockers_206",
+    "ticket": "A 46-year-old female is taking clonidine and beta-blockers. PMH: diabetes. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "taper clonidine first",
+      "B": "Monitor liver function only",
+      "C": "Dose adjustment unnecessary",
+      "D": "Switch to alternative medication",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clonidine_beta-blockers",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_carbamazepine_erythromycin_162",
+    "ticket": "During medication reconciliation at admission, a 72-year-old female is found to be taking carbamazepine. The physician wants to prescribe erythromycin. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases carbamazepine. Management: monitor carbamazepine levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "carbamazepine_erythromycin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lisinopril_spironolactone_070",
+    "ticket": "A 20-year-old female is taking lisinopril and spironolactone. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "monitor potassium",
+      "B": "Monitor liver function only",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_spironolactone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_fluconazole_009",
+    "ticket": "During pharmacist consultation, a 19-year-old male is found to be taking warfarin. The physician wants to prescribe fluconazole. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2C9 inhibition increases warfarin levels. Management: reduce warfarin dose, frequent INR monitoring.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_fluconazole",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_simvastatin_amiodarone_052",
+    "ticket": "During medication reconciliation at admission, a 57-year-old male is found to be taking simvastatin. The physician wants to prescribe amiodarone. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased myopathy/rhabdomyolysis risk. Management: limit simvastatin to 20mg, monitor CK.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_sildenafil_nitrates_174",
+    "ticket": "A 66-year-old female is taking sildenafil and nitrates. PMH: heart_failure, osteoporosis. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "absolutely contraindicated",
+      "C": "No interaction expected",
+      "D": "Switch to alternative medication",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "sildenafil_nitrates",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_digoxin_amiodarone_105",
+    "ticket": "During pharmacist consultation, a 32-year-old male is found to be taking digoxin. The physician wants to prescribe amiodarone. PMH: smoking. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased digoxin levels. Management: reduce digoxin dose by 50%, monitor levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_tamoxifen_paroxetine_233",
+    "ticket": "During pharmacist consultation, a 63-year-old male is found to be taking tamoxifen. The physician wants to prescribe paroxetine. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2D6 inhibition reduces tamoxifen efficacy. Management: switch to venlafaxine or citalopram.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "tamoxifen_paroxetine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_azithromycin_amiodarone_224",
+    "ticket": "A 15-year-old female is taking azithromycin and amiodarone. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "No interaction expected",
+      "D": "avoid if possible",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "azithromycin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_fluoxetine_MAOIs_044",
+    "ticket": "During medication reconciliation at admission, a 32-year-old male is found to be taking fluoxetine. The physician wants to prescribe MAOIs. PMH: smoking. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: contraindicated, 14-day washout required.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_MAOIs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lithium_thiazide diuretics_124",
+    "ticket": "During outpatient follow-up, a 52-year-old female is found to be taking lithium. The physician wants to prescribe thiazide diuretics. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: decreased lithium clearance. Management: monitor lithium levels, reduce dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_thiazide diuretics",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_sildenafil_nitrates_172",
+    "ticket": "During pharmacist consultation, a 30-year-old male is found to be taking sildenafil. The physician wants to prescribe nitrates. PMH: smoking. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: severe hypotension. Management: absolutely contraindicated.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "sildenafil_nitrates",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_sildenafil_nitrates_171",
+    "ticket": "During outpatient follow-up, a 51-year-old male is found to be taking sildenafil. The physician wants to prescribe nitrates. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: severe hypotension. Management: absolutely contraindicated.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "sildenafil_nitrates",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_ciprofloxacin_theophylline_138",
+    "ticket": "During discharge medication check, a 47-year-old male is found to be taking ciprofloxacin. The physician wants to prescribe theophylline. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP1A2 inhibition increases theophylline. Management: reduce theophylline dose, monitor levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_theophylline",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_fluoxetine_tramadol_035",
+    "ticket": "During medication reconciliation at admission, a 69-year-old female is found to be taking fluoxetine. The physician wants to prescribe tramadol. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: avoid combination, use alternative analgesic.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_tramadol",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_grapefruit_cyclosporine_186",
+    "ticket": "During outpatient follow-up, a 27-year-old female is found to be taking grapefruit. The physician wants to prescribe cyclosporine. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases cyclosporine. Management: avoid grapefruit.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "grapefruit_cyclosporine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_azithromycin_amiodarone_218",
+    "ticket": "During pre-operative medication review, a 69-year-old female is found to be taking azithromycin. The physician wants to prescribe amiodarone. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: QT prolongation risk. Management: ECG monitoring, avoid if possible.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "azithromycin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_quetiapine_carbamazepine_226",
+    "ticket": "During outpatient follow-up, a 26-year-old female is found to be taking quetiapine. The physician wants to prescribe carbamazepine. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 induction reduces quetiapine levels. Management: increase quetiapine dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "quetiapine_carbamazepine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lisinopril_NSAIDs_079",
+    "ticket": "A 48-year-old female is taking lisinopril and NSAIDs. PMH: diabetes. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Monitor liver function only",
+      "C": "moderate",
+      "D": "Switch to alternative medication",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_NSAIDs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lisinopril_NSAIDs_080",
+    "ticket": "A 20-year-old male is taking lisinopril and NSAIDs. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "limit NSAID use",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_NSAIDs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_azithromycin_amiodarone_217",
+    "ticket": "During pre-operative medication review, a 35-year-old female is found to be taking azithromycin. The physician wants to prescribe amiodarone. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: QT prolongation risk. Management: ECG monitoring, avoid if possible.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "azithromycin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_digoxin_amiodarone_109",
+    "ticket": "A 42-year-old male is taking digoxin and amiodarone. PMH: hypertension, obesity. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "increased digoxin levels",
+      "C": "Dose adjustment unnecessary",
+      "D": "Monitor liver function only",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_potassium_ACE inhibitors_178",
+    "ticket": "During discharge medication check, a 58-year-old male is found to be taking potassium. The physician wants to prescribe ACE inhibitors. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: hyperkalemia. Management: monitor potassium closely.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "potassium_ACE inhibitors",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_methotrexate_trimethoprim_101",
+    "ticket": "A 13-year-old male is taking methotrexate and trimethoprim. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "No interaction expected",
+      "C": "Monitor liver function only",
+      "D": "Switch to alternative medication",
+      "E": "reduced methotrexate clearance"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "methotrexate_trimethoprim",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_fluoxetine_tramadol_036",
+    "ticket": "During pharmacist consultation, a 50-year-old male is found to be taking fluoxetine. The physician wants to prescribe tramadol. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: avoid combination, use alternative analgesic.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_tramadol",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_fluconazole_015",
+    "ticket": "A 35-year-old female is taking warfarin and fluconazole. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Switch to alternative medication",
+      "C": "Dose adjustment unnecessary",
+      "D": "No interaction expected",
+      "E": "high"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_fluconazole",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lithium_thiazide diuretics_125",
+    "ticket": "A 18-year-old male is taking lithium and thiazide diuretics. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "Dose adjustment unnecessary",
+      "D": "decreased lithium clearance",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_thiazide diuretics",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_grapefruit_cyclosporine_185",
+    "ticket": "During pre-operative medication review, a 19-year-old female is found to be taking grapefruit. The physician wants to prescribe cyclosporine. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases cyclosporine. Management: avoid grapefruit.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "grapefruit_cyclosporine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_metronidazole_alcohol_210",
+    "ticket": "During pre-operative medication review, a 59-year-old female is found to be taking metronidazole. The physician wants to prescribe alcohol. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: disulfiram-like reaction. Management: avoid alcohol during treatment.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metronidazole_alcohol",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_methotrexate_trimethoprim_102",
+    "ticket": "A 67-year-old female is taking methotrexate and trimethoprim. PMH: heart_failure, osteoporosis. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "avoid combination",
+      "B": "Switch to alternative medication",
+      "C": "Dose adjustment unnecessary",
+      "D": "No interaction expected",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "methotrexate_trimethoprim",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_azithromycin_amiodarone_222",
+    "ticket": "A 22-year-old female is taking azithromycin and amiodarone. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Dose adjustment unnecessary",
+      "C": "ECG monitoring",
+      "D": "No interaction expected",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "azithromycin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_simvastatin_clarithromycin_062",
+    "ticket": "A 41-year-old male is taking simvastatin and clarithromycin. PMH: hypertension, obesity. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "hold statin during antibiotic course",
+      "C": "Switch to alternative medication",
+      "D": "Dose adjustment unnecessary",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_clarithromycin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_tamoxifen_paroxetine_237",
+    "ticket": "A 23-year-old male is taking tamoxifen and paroxetine. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "No interaction expected",
+      "C": "CYP2D6 inhibition reduces tamoxifen efficacy",
+      "D": "Switch to alternative medication",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "tamoxifen_paroxetine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_rifampin_020",
+    "ticket": "During medication reconciliation at admission, a 60-year-old male is found to be taking warfarin. The physician wants to prescribe rifampin. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP induction decreases warfarin levels. Management: increase warfarin dose, monitor INR closely.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_rifampin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_potassium_ACE inhibitors_177",
+    "ticket": "During discharge medication check, a 37-year-old male is found to be taking potassium. The physician wants to prescribe ACE inhibitors. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: hyperkalemia. Management: monitor potassium closely.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "potassium_ACE inhibitors",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_quetiapine_carbamazepine_225",
+    "ticket": "During discharge medication check, a 33-year-old male is found to be taking quetiapine. The physician wants to prescribe carbamazepine. PMH: smoking. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 induction reduces quetiapine levels. Management: increase quetiapine dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "quetiapine_carbamazepine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lisinopril_NSAIDs_074",
+    "ticket": "During new prescription review, a 25-year-old male is found to be taking lisinopril. The physician wants to prescribe NSAIDs. PMH: smoking. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: reduced ACEi efficacy + AKI risk. Management: monitor renal function, limit NSAID use.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_NSAIDs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_clonidine_beta-blockers_208",
+    "ticket": "A 72-year-old female is taking clonidine and beta-blockers. PMH: heart_failure, osteoporosis. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Monitor liver function only",
+      "C": "taper clonidine first",
+      "D": "No interaction expected",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clonidine_beta-blockers",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_digoxin_verapamil_113",
+    "ticket": "During outpatient follow-up, a 63-year-old male is found to be taking digoxin. The physician wants to prescribe verapamil. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased digoxin levels + AV block. Management: reduce digoxin dose, monitor ECG.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_verapamil",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_clonidine_beta-blockers_204",
+    "ticket": "During outpatient follow-up, a 53-year-old female is found to be taking clonidine. The physician wants to prescribe beta-blockers. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: rebound hypertension if clonidine stopped. Management: taper clonidine first.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clonidine_beta-blockers",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lisinopril_NSAIDs_077",
+    "ticket": "A 23-year-old male is taking lisinopril and NSAIDs. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "reduced ACEi efficacy + AKI risk",
+      "D": "No interaction expected",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_NSAIDs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_fluoxetine_tramadol_037",
+    "ticket": "A 29-year-old male is taking fluoxetine and tramadol. PMH: smoking. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "serotonin syndrome risk",
+      "B": "Monitor liver function only",
+      "C": "Dose adjustment unnecessary",
+      "D": "Switch to alternative medication",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_tramadol",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_quetiapine_carbamazepine_229",
+    "ticket": "A 43-year-old female is taking quetiapine and carbamazepine. PMH: diabetes. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Monitor liver function only",
+      "C": "Switch to alternative medication",
+      "D": "CYP3A4 induction reduces quetiapine levels",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "quetiapine_carbamazepine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_SSRIs_triptans_198",
+    "ticket": "A 33-year-old male is taking SSRIs and triptans. PMH: smoking. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "No interaction expected",
+      "C": "Switch to alternative medication",
+      "D": "Monitor liver function only",
+      "E": "monitor for symptoms"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "SSRIs_triptans",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_simvastatin_amiodarone_055",
+    "ticket": "A 10-year-old female is taking simvastatin and amiodarone. PMH: asthma. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "high",
+      "D": "Dose adjustment unnecessary",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_methotrexate_trimethoprim_097",
+    "ticket": "During discharge medication check, a 67-year-old male is found to be taking methotrexate. The physician wants to prescribe trimethoprim. PMH: atrial_fibrillation, CKD, diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: reduced methotrexate clearance. Management: avoid combination, monitor CBC.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "methotrexate_trimethoprim",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_ciprofloxacin_antacids_148",
+    "ticket": "During new prescription review, a 28-year-old female is found to be taking ciprofloxacin. The physician wants to prescribe antacids. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: chelation reduces ciprofloxacin absorption. Management: separate by 2 hours.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_antacids",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_digoxin_amiodarone_112",
+    "ticket": "A 6-year-old female is taking digoxin and amiodarone. PMH: asthma. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "monitor levels",
+      "B": "Dose adjustment unnecessary",
+      "C": "No interaction expected",
+      "D": "Switch to alternative medication",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_fluoxetine_MAOIs_046",
+    "ticket": "A 48-year-old female is taking fluoxetine and MAOIs. PMH: diabetes. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Switch to alternative medication",
+      "C": "Dose adjustment unnecessary",
+      "D": "contraindicated",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_MAOIs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_simvastatin_amiodarone_053",
+    "ticket": "A 65-year-old male is taking simvastatin and amiodarone. PMH: COPD, hypertension. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Dose adjustment unnecessary",
+      "C": "increased myopathy/rhabdomyolysis risk",
+      "D": "Monitor liver function only",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_potassium_ACE inhibitors_182",
+    "ticket": "A 80-year-old female is taking potassium and ACE inhibitors. PMH: heart_failure, osteoporosis. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "Monitor liver function only",
+      "D": "No interaction expected",
+      "E": "monitor potassium closely"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "potassium_ACE inhibitors",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_clopidogrel_omeprazole_086",
+    "ticket": "A 47-year-old female is taking clopidogrel and omeprazole. PMH: diabetes. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Monitor liver function only",
+      "C": "No interaction expected",
+      "D": "Switch to alternative medication",
+      "E": "switch to pantoprazole"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clopidogrel_omeprazole",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_fluoxetine_MAOIs_043",
+    "ticket": "During pharmacist consultation, a 34-year-old female is found to be taking fluoxetine. The physician wants to prescribe MAOIs. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: contraindicated, 14-day washout required.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_MAOIs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_digoxin_verapamil_119",
+    "ticket": "A 5-year-old female is taking digoxin and verapamil. PMH: asthma. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Monitor liver function only",
+      "C": "Switch to alternative medication",
+      "D": "high",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_verapamil",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_grapefruit_cyclosporine_189",
+    "ticket": "A 15-year-old female is taking grapefruit and cyclosporine. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "CYP3A4 inhibition increases cyclosporine",
+      "C": "Dose adjustment unnecessary",
+      "D": "Monitor liver function only",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "grapefruit_cyclosporine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_metronidazole_alcohol_215",
+    "ticket": "A 74-year-old female is taking metronidazole and alcohol. PMH: heart_failure, osteoporosis. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "moderate"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metronidazole_alcohol",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_potassium_ACE inhibitors_183",
+    "ticket": "A 49-year-old male is taking potassium and ACE inhibitors. PMH: hypertension, obesity. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Monitor liver function only",
+      "C": "Dose adjustment unnecessary",
+      "D": "Switch to alternative medication",
+      "E": "moderate"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "potassium_ACE inhibitors",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lisinopril_spironolactone_072",
+    "ticket": "A 24-year-old female is taking lisinopril and spironolactone. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Monitor liver function only",
+      "C": "No interaction expected",
+      "D": "Switch to alternative medication",
+      "E": "avoid K supplements"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_spironolactone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_grapefruit_cyclosporine_188",
+    "ticket": "During outpatient follow-up, a 73-year-old male is found to be taking grapefruit. The physician wants to prescribe cyclosporine. PMH: atrial_fibrillation, CKD, diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases cyclosporine. Management: avoid grapefruit.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "grapefruit_cyclosporine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_methotrexate_trimethoprim_104",
+    "ticket": "A 27-year-old female is taking methotrexate and trimethoprim. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Monitor liver function only",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "monitor CBC"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "methotrexate_trimethoprim",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_fluoxetine_MAOIs_048",
+    "ticket": "A 79-year-old male is taking fluoxetine and MAOIs. PMH: atrial_fibrillation, CKD, diabetes. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "14-day washout required",
+      "B": "Dose adjustment unnecessary",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_MAOIs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_phenytoin_valproate_095",
+    "ticket": "A 74-year-old female is taking phenytoin and valproate. PMH: heart_failure, osteoporosis. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Dose adjustment unnecessary",
+      "C": "No interaction expected",
+      "D": "high",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "phenytoin_valproate",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_rifampin_oral contraceptives_159",
+    "ticket": "A 24-year-old female is taking rifampin and oral contraceptives. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "moderate",
+      "B": "Dose adjustment unnecessary",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "rifampin_oral contraceptives",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_potassium_ACE inhibitors_184",
+    "ticket": "A 5-year-old female is taking potassium and ACE inhibitors. PMH: asthma. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "No interaction expected",
+      "C": "Dose adjustment unnecessary",
+      "D": "monitor potassium closely",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "potassium_ACE inhibitors",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_ciprofloxacin_antacids_149",
+    "ticket": "A 6-year-old female is taking ciprofloxacin and antacids. PMH: asthma. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Dose adjustment unnecessary",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "chelation reduces ciprofloxacin absorption"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_antacids",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_SSRIs_triptans_197",
+    "ticket": "A 50-year-old female is taking SSRIs and triptans. PMH: diabetes. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "serotonin syndrome risk",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "SSRIs_triptans",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_rifampin_022",
+    "ticket": "A 33-year-old female is taking warfarin and rifampin. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "increase warfarin dose",
+      "B": "No interaction expected",
+      "C": "Dose adjustment unnecessary",
+      "D": "Monitor liver function only",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_rifampin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_rifampin_024",
+    "ticket": "A 12-year-old female is taking warfarin and rifampin. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "monitor INR closely",
+      "C": "Dose adjustment unnecessary",
+      "D": "Monitor liver function only",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_rifampin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_rifampin_018",
+    "ticket": "During new prescription review, a 29-year-old female is found to be taking warfarin. The physician wants to prescribe rifampin. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP induction decreases warfarin levels. Management: increase warfarin dose, monitor INR closely.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_rifampin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_SSRIs_triptans_200",
+    "ticket": "A 47-year-old female is taking SSRIs and triptans. PMH: diabetes. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "use lowest doses",
+      "B": "Switch to alternative medication",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "SSRIs_triptans",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_fluoxetine_tramadol_040",
+    "ticket": "A 19-year-old male is taking fluoxetine and tramadol. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "Monitor liver function only",
+      "D": "use alternative analgesic",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_tramadol",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_phenytoin_valproate_096",
+    "ticket": "A 31-year-old female is taking phenytoin and valproate. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "monitor free phenytoin levels",
+      "C": "No interaction expected",
+      "D": "Switch to alternative medication",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "phenytoin_valproate",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lisinopril_spironolactone_066",
+    "ticket": "During outpatient follow-up, a 40-year-old female is found to be taking lisinopril. The physician wants to prescribe spironolactone. PMH: diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: hyperkalemia risk. Management: monitor potassium, avoid K supplements.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_spironolactone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_ciprofloxacin_theophylline_140",
+    "ticket": "During medication reconciliation at admission, a 75-year-old female is found to be taking ciprofloxacin. The physician wants to prescribe theophylline. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP1A2 inhibition increases theophylline. Management: reduce theophylline dose, monitor levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_theophylline",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_potassium_ACE inhibitors_179",
+    "ticket": "During outpatient follow-up, a 19-year-old male is found to be taking potassium. The physician wants to prescribe ACE inhibitors. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: hyperkalemia. Management: monitor potassium closely.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "potassium_ACE inhibitors",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_clopidogrel_omeprazole_081",
+    "ticket": "During medication reconciliation at admission, a 25-year-old female is found to be taking clopidogrel. The physician wants to prescribe omeprazole. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2C19 inhibition reduces clopidogrel efficacy. Management: switch to pantoprazole.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clopidogrel_omeprazole",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_metformin_IV contrast_025",
+    "ticket": "During pharmacist consultation, a 58-year-old male is found to be taking metformin. The physician wants to prescribe IV contrast. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: risk of lactic acidosis. Management: hold metformin 48h, check renal function.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metformin_IV contrast",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_digoxin_amiodarone_107",
+    "ticket": "During medication reconciliation at admission, a 49-year-old female is found to be taking digoxin. The physician wants to prescribe amiodarone. PMH: diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased digoxin levels. Management: reduce digoxin dose by 50%, monitor levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_potassium_ACE inhibitors_180",
+    "ticket": "During new prescription review, a 33-year-old female is found to be taking potassium. The physician wants to prescribe ACE inhibitors. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: hyperkalemia. Management: monitor potassium closely.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "potassium_ACE inhibitors",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_rifampin_oral contraceptives_157",
+    "ticket": "A 15-year-old female is taking rifampin and oral contraceptives. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "CYP induction reduces OCP efficacy"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "rifampin_oral contraceptives",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_clopidogrel_omeprazole_087",
+    "ticket": "A 73-year-old female is taking clopidogrel and omeprazole. PMH: heart_failure, osteoporosis. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Dose adjustment unnecessary",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "moderate"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clopidogrel_omeprazole",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_digoxin_amiodarone_106",
+    "ticket": "During pharmacist consultation, a 63-year-old female is found to be taking digoxin. The physician wants to prescribe amiodarone. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased digoxin levels. Management: reduce digoxin dose by 50%, monitor levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_simvastatin_clarithromycin_059",
+    "ticket": "During pre-operative medication review, a 26-year-old male is found to be taking simvastatin. The physician wants to prescribe clarithromycin. PMH: smoking. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases statin levels. Management: hold statin during antibiotic course.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_clarithromycin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_SSRIs_triptans_194",
+    "ticket": "During pharmacist consultation, a 72-year-old female is found to be taking SSRIs. The physician wants to prescribe triptans. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: monitor for symptoms, use lowest doses.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "SSRIs_triptans",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_rifampin_oral contraceptives_154",
+    "ticket": "During outpatient follow-up, a 25-year-old female is found to be taking rifampin. The physician wants to prescribe oral contraceptives. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP induction reduces OCP efficacy. Management: use alternative contraception.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "rifampin_oral contraceptives",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_simvastatin_amiodarone_056",
+    "ticket": "A 66-year-old female is taking simvastatin and amiodarone. PMH: heart_failure, osteoporosis. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "No interaction expected",
+      "C": "Dose adjustment unnecessary",
+      "D": "Switch to alternative medication",
+      "E": "monitor CK"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_ciprofloxacin_theophylline_142",
+    "ticket": "A 65-year-old male is taking ciprofloxacin and theophylline. PMH: atrial_fibrillation, CKD, diabetes. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "Dose adjustment unnecessary",
+      "D": "No interaction expected",
+      "E": "reduce theophylline dose"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_theophylline",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_metronidazole_alcohol_216",
+    "ticket": "A 66-year-old female is taking metronidazole and alcohol. PMH: heart_failure, osteoporosis. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "avoid alcohol during treatment",
+      "B": "Monitor liver function only",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metronidazole_alcohol",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_metformin_IV contrast_026",
+    "ticket": "During pre-operative medication review, a 65-year-old female is found to be taking metformin. The physician wants to prescribe IV contrast. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: risk of lactic acidosis. Management: hold metformin 48h, check renal function.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metformin_IV contrast",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_digoxin_amiodarone_111",
+    "ticket": "A 37-year-old female is taking digoxin and amiodarone. PMH: diabetes. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "high",
+      "C": "Monitor liver function only",
+      "D": "Switch to alternative medication",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_rifampin_oral contraceptives_155",
+    "ticket": "During medication reconciliation at admission, a 23-year-old male is found to be taking rifampin. The physician wants to prescribe oral contraceptives. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP induction reduces OCP efficacy. Management: use alternative contraception.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "rifampin_oral contraceptives",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lithium_NSAIDs_130",
+    "ticket": "During new prescription review, a 21-year-old male is found to be taking lithium. The physician wants to prescribe NSAIDs. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: decreased lithium clearance. Management: avoid NSAIDs, monitor lithium levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_NSAIDs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_digoxin_verapamil_117",
+    "ticket": "A 47-year-old male is taking digoxin and verapamil. PMH: hypertension, obesity. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "increased digoxin levels + AV block",
+      "C": "Monitor liver function only",
+      "D": "No interaction expected",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_verapamil",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lisinopril_NSAIDs_076",
+    "ticket": "During pharmacist consultation, a 69-year-old female is found to be taking lisinopril. The physician wants to prescribe NSAIDs. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: reduced ACEi efficacy + AKI risk. Management: monitor renal function, limit NSAID use.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_NSAIDs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lithium_NSAIDs_136",
+    "ticket": "A 80-year-old female is taking lithium and NSAIDs. PMH: heart_failure, osteoporosis. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "monitor lithium levels",
+      "C": "No interaction expected",
+      "D": "Dose adjustment unnecessary",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_NSAIDs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_quetiapine_carbamazepine_232",
+    "ticket": "A 22-year-old male is taking quetiapine and carbamazepine. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Dose adjustment unnecessary",
+      "C": "Monitor liver function only",
+      "D": "Switch to alternative medication",
+      "E": "increase quetiapine dose"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "quetiapine_carbamazepine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_methotrexate_trimethoprim_098",
+    "ticket": "During new prescription review, a 60-year-old female is found to be taking methotrexate. The physician wants to prescribe trimethoprim. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: reduced methotrexate clearance. Management: avoid combination, monitor CBC.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "methotrexate_trimethoprim",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_clopidogrel_omeprazole_084",
+    "ticket": "During medication reconciliation at admission, a 72-year-old male is found to be taking clopidogrel. The physician wants to prescribe omeprazole. PMH: atrial_fibrillation, CKD, diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2C19 inhibition reduces clopidogrel efficacy. Management: switch to pantoprazole.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clopidogrel_omeprazole",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_ciprofloxacin_theophylline_141",
+    "ticket": "A 56-year-old female is taking ciprofloxacin and theophylline. PMH: osteoarthritis, hypothyroidism. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "CYP1A2 inhibition increases theophylline",
+      "B": "Monitor liver function only",
+      "C": "No interaction expected",
+      "D": "Switch to alternative medication",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_theophylline",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_ciprofloxacin_antacids_150",
+    "ticket": "A 10-year-old female is taking ciprofloxacin and antacids. PMH: asthma. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Monitor liver function only",
+      "C": "separate by 2 hours",
+      "D": "Dose adjustment unnecessary",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_antacids",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_carbamazepine_erythromycin_163",
+    "ticket": "During medication reconciliation at admission, a 37-year-old male is found to be taking carbamazepine. The physician wants to prescribe erythromycin. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases carbamazepine. Management: monitor carbamazepine levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "carbamazepine_erythromycin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_rifampin_oral contraceptives_160",
+    "ticket": "A 48-year-old male is taking rifampin and oral contraceptives. PMH: hypertension, obesity. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Monitor liver function only",
+      "C": "Dose adjustment unnecessary",
+      "D": "use alternative contraception",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "rifampin_oral contraceptives",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_quetiapine_carbamazepine_230",
+    "ticket": "A 50-year-old female is taking quetiapine and carbamazepine. PMH: osteoarthritis, hypothyroidism. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "increase quetiapine dose",
+      "C": "Dose adjustment unnecessary",
+      "D": "No interaction expected",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "quetiapine_carbamazepine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_clonidine_beta-blockers_207",
+    "ticket": "A 70-year-old female is taking clonidine and beta-blockers. PMH: heart_failure, osteoporosis. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Switch to alternative medication",
+      "C": "Dose adjustment unnecessary",
+      "D": "high",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clonidine_beta-blockers",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_clonidine_beta-blockers_201",
+    "ticket": "During medication reconciliation at admission, a 74-year-old male is found to be taking clonidine. The physician wants to prescribe beta-blockers. PMH: atrial_fibrillation, CKD, diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: rebound hypertension if clonidine stopped. Management: taper clonidine first.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clonidine_beta-blockers",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_quetiapine_carbamazepine_228",
+    "ticket": "During outpatient follow-up, a 53-year-old female is found to be taking quetiapine. The physician wants to prescribe carbamazepine. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 induction reduces quetiapine levels. Management: increase quetiapine dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "quetiapine_carbamazepine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_rifampin_oral contraceptives_156",
+    "ticket": "During discharge medication check, a 36-year-old male is found to be taking rifampin. The physician wants to prescribe oral contraceptives. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP induction reduces OCP efficacy. Management: use alternative contraception.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "rifampin_oral contraceptives",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_metronidazole_alcohol_212",
+    "ticket": "During discharge medication check, a 49-year-old female is found to be taking metronidazole. The physician wants to prescribe alcohol. PMH: diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: disulfiram-like reaction. Management: avoid alcohol during treatment.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metronidazole_alcohol",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_rifampin_021",
+    "ticket": "A 10-year-old male is taking warfarin and rifampin. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "CYP induction decreases warfarin levels",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_rifampin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_rifampin_019",
+    "ticket": "During pharmacist consultation, a 71-year-old female is found to be taking warfarin. The physician wants to prescribe rifampin. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP induction decreases warfarin levels. Management: increase warfarin dose, monitor INR closely.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_rifampin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_digoxin_verapamil_114",
+    "ticket": "During pharmacist consultation, a 18-year-old male is found to be taking digoxin. The physician wants to prescribe verapamil. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased digoxin levels + AV block. Management: reduce digoxin dose, monitor ECG.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_verapamil",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lithium_thiazide diuretics_126",
+    "ticket": "A 12-year-old male is taking lithium and thiazide diuretics. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "Dose adjustment unnecessary",
+      "D": "monitor lithium levels",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_thiazide diuretics",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_SSRIs_triptans_195",
+    "ticket": "During medication reconciliation at admission, a 62-year-old male is found to be taking SSRIs. The physician wants to prescribe triptans. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: monitor for symptoms, use lowest doses.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "SSRIs_triptans",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_sildenafil_nitrates_176",
+    "ticket": "A 45-year-old female is taking sildenafil and nitrates. PMH: diabetes. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "absolutely contraindicated",
+      "B": "Monitor liver function only",
+      "C": "Switch to alternative medication",
+      "D": "Dose adjustment unnecessary",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "sildenafil_nitrates",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_digoxin_amiodarone_110",
+    "ticket": "A 49-year-old male is taking digoxin and amiodarone. PMH: hypertension, obesity. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "reduce digoxin dose by 50%",
+      "B": "Switch to alternative medication",
+      "C": "Monitor liver function only",
+      "D": "No interaction expected",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_methotrexate_trimethoprim_103",
+    "ticket": "A 62-year-old female is taking methotrexate and trimethoprim. PMH: osteoarthritis, hypothyroidism. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "Monitor liver function only",
+      "D": "high",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "methotrexate_trimethoprim",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lithium_thiazide diuretics_123",
+    "ticket": "During discharge medication check, a 31-year-old female is found to be taking lithium. The physician wants to prescribe thiazide diuretics. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: decreased lithium clearance. Management: monitor lithium levels, reduce dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_thiazide diuretics",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_fluconazole_016",
+    "ticket": "A 32-year-old male is taking warfarin and fluconazole. PMH: smoking. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "frequent INR monitoring",
+      "B": "Monitor liver function only",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_fluconazole",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_aspirin_008",
+    "ticket": "A 19-year-old female is taking warfarin and aspirin. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "No interaction expected",
+      "D": "Dose adjustment unnecessary",
+      "E": "use lowest aspirin dose"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_aspirin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_carbamazepine_erythromycin_165",
+    "ticket": "A 65-year-old female is taking carbamazepine and erythromycin. PMH: osteoarthritis, hypothyroidism. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Dose adjustment unnecessary",
+      "C": "Monitor liver function only",
+      "D": "No interaction expected",
+      "E": "CYP3A4 inhibition increases carbamazepine"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "carbamazepine_erythromycin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_digoxin_verapamil_118",
+    "ticket": "A 48-year-old male is taking digoxin and verapamil. PMH: hypertension, obesity. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Dose adjustment unnecessary",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "reduce digoxin dose"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_verapamil",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lisinopril_NSAIDs_078",
+    "ticket": "A 36-year-old female is taking lisinopril and NSAIDs. PMH: diabetes. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "monitor renal function",
+      "C": "Dose adjustment unnecessary",
+      "D": "Switch to alternative medication",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_NSAIDs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lithium_NSAIDs_134",
+    "ticket": "A 23-year-old female is taking lithium and NSAIDs. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "No interaction expected",
+      "C": "avoid NSAIDs",
+      "D": "Switch to alternative medication",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_NSAIDs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_sildenafil_nitrates_169",
+    "ticket": "During outpatient follow-up, a 65-year-old female is found to be taking sildenafil. The physician wants to prescribe nitrates. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: severe hypotension. Management: absolutely contraindicated.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "sildenafil_nitrates",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_grapefruit_cyclosporine_187",
+    "ticket": "During pharmacist consultation, a 74-year-old female is found to be taking grapefruit. The physician wants to prescribe cyclosporine. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases cyclosporine. Management: avoid grapefruit.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "grapefruit_cyclosporine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_fluconazole_012",
+    "ticket": "During pre-operative medication review, a 28-year-old female is found to be taking warfarin. The physician wants to prescribe fluconazole. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2C9 inhibition increases warfarin levels. Management: reduce warfarin dose, frequent INR monitoring.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_fluconazole",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_rifampin_oral contraceptives_158",
+    "ticket": "A 66-year-old female is taking rifampin and oral contraceptives. PMH: heart_failure, osteoporosis. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "use alternative contraception",
+      "D": "Dose adjustment unnecessary",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "rifampin_oral contraceptives",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_simvastatin_clarithromycin_057",
+    "ticket": "During medication reconciliation at admission, a 67-year-old male is found to be taking simvastatin. The physician wants to prescribe clarithromycin. PMH: atrial_fibrillation, CKD, diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases statin levels. Management: hold statin during antibiotic course.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_clarithromycin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lithium_NSAIDs_129",
+    "ticket": "During outpatient follow-up, a 24-year-old female is found to be taking lithium. The physician wants to prescribe NSAIDs. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: decreased lithium clearance. Management: avoid NSAIDs, monitor lithium levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_NSAIDs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_digoxin_verapamil_116",
+    "ticket": "During discharge medication check, a 65-year-old female is found to be taking digoxin. The physician wants to prescribe verapamil. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased digoxin levels + AV block. Management: reduce digoxin dose, monitor ECG.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_verapamil",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_metformin_IV contrast_028",
+    "ticket": "During pre-operative medication review, a 43-year-old male is found to be taking metformin. The physician wants to prescribe IV contrast. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: risk of lactic acidosis. Management: hold metformin 48h, check renal function.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metformin_IV contrast",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_ciprofloxacin_antacids_152",
+    "ticket": "A 36-year-old male is taking ciprofloxacin and antacids. PMH: hypertension, obesity. Which monitoring parameter is MOST important?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "separate by 2 hours",
+      "C": "Monitor liver function only",
+      "D": "Dose adjustment unnecessary",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_antacids",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lithium_NSAIDs_132",
+    "ticket": "During pre-operative medication review, a 59-year-old female is found to be taking lithium. The physician wants to prescribe NSAIDs. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: decreased lithium clearance. Management: avoid NSAIDs, monitor lithium levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_NSAIDs",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_phenytoin_valproate_093",
+    "ticket": "A 44-year-old male is taking phenytoin and valproate. PMH: hypertension, obesity. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "displaced protein binding increases free phenytoin",
+      "B": "No interaction expected",
+      "C": "Switch to alternative medication",
+      "D": "Monitor liver function only",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "phenytoin_valproate",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_digoxin_verapamil_115",
+    "ticket": "During outpatient follow-up, a 31-year-old female is found to be taking digoxin. The physician wants to prescribe verapamil. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased digoxin levels + AV block. Management: reduce digoxin dose, monitor ECG.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_verapamil",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lithium_thiazide diuretics_122",
+    "ticket": "During discharge medication check, a 47-year-old female is found to be taking lithium. The physician wants to prescribe thiazide diuretics. PMH: diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: decreased lithium clearance. Management: monitor lithium levels, reduce dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_thiazide diuretics",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_rifampin_017",
+    "ticket": "During outpatient follow-up, a 23-year-old male is found to be taking warfarin. The physician wants to prescribe rifampin. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP induction decreases warfarin levels. Management: increase warfarin dose, monitor INR closely.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_rifampin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_grapefruit_cyclosporine_191",
+    "ticket": "A 16-year-old male is taking grapefruit and cyclosporine. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "No interaction expected",
+      "C": "Monitor liver function only",
+      "D": "Dose adjustment unnecessary",
+      "E": "moderate"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "grapefruit_cyclosporine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_metformin_IV contrast_030",
+    "ticket": "A 7-year-old female is taking metformin and IV contrast. PMH: asthma. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "No interaction expected",
+      "C": "Dose adjustment unnecessary",
+      "D": "hold metformin 48h",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metformin_IV contrast",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lithium_NSAIDs_135",
+    "ticket": "A 49-year-old female is taking lithium and NSAIDs. PMH: diabetes. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "high",
+      "B": "Switch to alternative medication",
+      "C": "Dose adjustment unnecessary",
+      "D": "No interaction expected",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lithium_NSAIDs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_digoxin_amiodarone_108",
+    "ticket": "During outpatient follow-up, a 65-year-old male is found to be taking digoxin. The physician wants to prescribe amiodarone. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased digoxin levels. Management: reduce digoxin dose by 50%, monitor levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "digoxin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_grapefruit_cyclosporine_190",
+    "ticket": "A 56-year-old male is taking grapefruit and cyclosporine. PMH: COPD, hypertension. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "No interaction expected",
+      "D": "Dose adjustment unnecessary",
+      "E": "avoid grapefruit"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "grapefruit_cyclosporine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_fluoxetine_tramadol_033",
+    "ticket": "During new prescription review, a 26-year-old female is found to be taking fluoxetine. The physician wants to prescribe tramadol. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: avoid combination, use alternative analgesic.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_tramadol",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_fluconazole_014",
+    "ticket": "A 58-year-old male is taking warfarin and fluconazole. PMH: COPD, hypertension. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "reduce warfarin dose",
+      "B": "Switch to alternative medication",
+      "C": "Monitor liver function only",
+      "D": "No interaction expected",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "A",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_fluconazole",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lisinopril_spironolactone_068",
+    "ticket": "During pre-operative medication review, a 50-year-old female is found to be taking lisinopril. The physician wants to prescribe spironolactone. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: hyperkalemia risk. Management: monitor potassium, avoid K supplements.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_spironolactone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_tamoxifen_paroxetine_239",
+    "ticket": "A 25-year-old female is taking tamoxifen and paroxetine. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "Monitor liver function only",
+      "D": "high",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "tamoxifen_paroxetine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_aspirin_005",
+    "ticket": "A 19-year-old male is taking warfarin and aspirin. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "Dose adjustment unnecessary",
+      "D": "increased bleeding risk",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_aspirin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_clopidogrel_omeprazole_083",
+    "ticket": "During discharge medication check, a 23-year-old male is found to be taking clopidogrel. The physician wants to prescribe omeprazole. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2C19 inhibition reduces clopidogrel efficacy. Management: switch to pantoprazole.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clopidogrel_omeprazole",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_ciprofloxacin_antacids_151",
+    "ticket": "A 42-year-old male is taking ciprofloxacin and antacids. PMH: hypertension, obesity. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "moderate",
+      "D": "Dose adjustment unnecessary",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_antacids",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_simvastatin_clarithromycin_061",
+    "ticket": "A 21-year-old female is taking simvastatin and clarithromycin. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Dose adjustment unnecessary",
+      "C": "No interaction expected",
+      "D": "CYP3A4 inhibition increases statin levels",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_clarithromycin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_tamoxifen_paroxetine_234",
+    "ticket": "During outpatient follow-up, a 54-year-old female is found to be taking tamoxifen. The physician wants to prescribe paroxetine. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2D6 inhibition reduces tamoxifen efficacy. Management: switch to venlafaxine or citalopram.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "tamoxifen_paroxetine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_clonidine_beta-blockers_203",
+    "ticket": "During pre-operative medication review, a 19-year-old female is found to be taking clonidine. The physician wants to prescribe beta-blockers. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: rebound hypertension if clonidine stopped. Management: taper clonidine first.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clonidine_beta-blockers",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_phenytoin_valproate_092",
+    "ticket": "During pre-operative medication review, a 26-year-old male is found to be taking phenytoin. The physician wants to prescribe valproate. PMH: smoking. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: displaced protein binding increases free phenytoin. Management: monitor free phenytoin levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "phenytoin_valproate",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_aspirin_004",
+    "ticket": "During new prescription review, a 78-year-old female is found to be taking warfarin. The physician wants to prescribe aspirin. PMH: heart_failure, osteoporosis. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased bleeding risk. Management: monitoring INR, consider PPI, use lowest aspirin dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_aspirin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_quetiapine_carbamazepine_227",
+    "ticket": "During discharge medication check, a 50-year-old male is found to be taking quetiapine. The physician wants to prescribe carbamazepine. PMH: COPD, hypertension. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 induction reduces quetiapine levels. Management: increase quetiapine dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "quetiapine_carbamazepine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_warfarin_aspirin_007",
+    "ticket": "A 9-year-old female is taking warfarin and aspirin. PMH: asthma. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Switch to alternative medication",
+      "B": "Monitor liver function only",
+      "C": "high",
+      "D": "No interaction expected",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_aspirin",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_sildenafil_nitrates_170",
+    "ticket": "During pharmacist consultation, a 37-year-old male is found to be taking sildenafil. The physician wants to prescribe nitrates. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: severe hypotension. Management: absolutely contraindicated.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "sildenafil_nitrates",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_metformin_IV contrast_029",
+    "ticket": "A 38-year-old female is taking metformin and IV contrast. PMH: diabetes. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "risk of lactic acidosis",
+      "C": "Switch to alternative medication",
+      "D": "No interaction expected",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metformin_IV contrast",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_fluoxetine_MAOIs_045",
+    "ticket": "A 15-year-old male is taking fluoxetine and MAOIs. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "Switch to alternative medication",
+      "C": "Monitor liver function only",
+      "D": "serotonin syndrome risk",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_MAOIs",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_clonidine_beta-blockers_205",
+    "ticket": "A 29-year-old male is taking clonidine and beta-blockers. PMH: smoking. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "No interaction expected",
+      "C": "Switch to alternative medication",
+      "D": "Dose adjustment unnecessary",
+      "E": "rebound hypertension if clonidine stopped"
+    },
+    "correct_answer": "E",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clonidine_beta-blockers",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_lisinopril_spironolactone_065",
+    "ticket": "During discharge medication check, a 30-year-old male is found to be taking lisinopril. The physician wants to prescribe spironolactone. PMH: smoking. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: hyperkalemia risk. Management: monitor potassium, avoid K supplements.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_spironolactone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_ciprofloxacin_theophylline_139",
+    "ticket": "During outpatient follow-up, a 50-year-old female is found to be taking ciprofloxacin. The physician wants to prescribe theophylline. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP1A2 inhibition increases theophylline. Management: reduce theophylline dose, monitor levels.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "ciprofloxacin_theophylline",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_fluoxetine_tramadol_034",
+    "ticket": "During new prescription review, a 25-year-old male is found to be taking fluoxetine. The physician wants to prescribe tramadol. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: serotonin syndrome risk. Management: avoid combination, use alternative analgesic.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_tramadol",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_tamoxifen_paroxetine_235",
+    "ticket": "During outpatient follow-up, a 38-year-old female is found to be taking tamoxifen. The physician wants to prescribe paroxetine. PMH: diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP2D6 inhibition reduces tamoxifen efficacy. Management: switch to venlafaxine or citalopram.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "tamoxifen_paroxetine",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_azithromycin_amiodarone_220",
+    "ticket": "During discharge medication check, a 36-year-old female is found to be taking azithromycin. The physician wants to prescribe amiodarone. PMH: diabetes. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: QT prolongation risk. Management: ECG monitoring, avoid if possible.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "azithromycin_amiodarone",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_lisinopril_spironolactone_071",
+    "ticket": "A 35-year-old female is taking lisinopril and spironolactone. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Dose adjustment unnecessary",
+      "B": "moderate",
+      "C": "No interaction expected",
+      "D": "Monitor liver function only",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "B",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "lisinopril_spironolactone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_warfarin_aspirin_001",
+    "ticket": "During medication reconciliation at admission, a 21-year-old female is found to be taking warfarin. The physician wants to prescribe aspirin. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: increased bleeding risk. Management: monitoring INR, consider PPI, use lowest aspirin dose.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "warfarin_aspirin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_bal_rifampin_oral contraceptives_153",
+    "ticket": "During outpatient follow-up, a 59-year-old female is found to be taking rifampin. The physician wants to prescribe oral contraceptives. PMH: osteoarthritis, hypothyroidism. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP induction reduces OCP efficacy. Management: use alternative contraception.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "rifampin_oral contraceptives",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_quetiapine_carbamazepine_231",
+    "ticket": "A 10-year-old male is taking quetiapine and carbamazepine. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Dose adjustment unnecessary",
+      "C": "Switch to alternative medication",
+      "D": "moderate",
+      "E": "Monitor liver function only"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "quetiapine_carbamazepine",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_clonidine_beta-blockers_202",
+    "ticket": "During outpatient follow-up, a 19-year-old male is found to be taking clonidine. The physician wants to prescribe beta-blockers. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: rebound hypertension if clonidine stopped. Management: taper clonidine first.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clonidine_beta-blockers",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_fluoxetine_tramadol_038",
+    "ticket": "A 61-year-old male is taking fluoxetine and tramadol. PMH: COPD, hypertension. What is the MOST appropriate management strategy?",
+    "options": {
+      "A": "No interaction expected",
+      "B": "Dose adjustment unnecessary",
+      "C": "avoid combination",
+      "D": "Monitor liver function only",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "fluoxetine_tramadol",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_SSRIs_triptans_199",
+    "ticket": "A 20-year-old male is taking SSRIs and triptans. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "Dose adjustment unnecessary",
+      "C": "Switch to alternative medication",
+      "D": "moderate",
+      "E": "No interaction expected"
+    },
+    "correct_answer": "D",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "SSRIs_triptans",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_clopidogrel_omeprazole_085",
+    "ticket": "A 21-year-old male is taking clopidogrel and omeprazole. What is the PRIMARY mechanism of this drug interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "No interaction expected",
+      "C": "CYP2C19 inhibition reduces clopidogrel efficacy",
+      "D": "Switch to alternative medication",
+      "E": "Dose adjustment unnecessary"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "clopidogrel_omeprazole",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_simvastatin_clarithromycin_060",
+    "ticket": "During outpatient follow-up, a 21-year-old male is found to be taking simvastatin. The physician wants to prescribe clarithromycin. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: CYP3A4 inhibition increases statin levels. Management: hold statin during antibiotic course.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "simvastatin_clarithromycin",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "di_mcqa_azithromycin_amiodarone_223",
+    "ticket": "A 16-year-old male is taking azithromycin and amiodarone. How would you classify the SEVERITY of this interaction?",
+    "options": {
+      "A": "Monitor liver function only",
+      "B": "No interaction expected",
+      "C": "high",
+      "D": "Dose adjustment unnecessary",
+      "E": "Switch to alternative medication"
+    },
+    "correct_answer": "C",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "azithromycin_amiodarone",
+      "task_type": "mcqa"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "MCQA"
+      ]
+    }
+  },
+  {
+    "id": "di_bal_metronidazole_alcohol_209",
+    "ticket": "During outpatient follow-up, a 35-year-old male is found to be taking metronidazole. The physician wants to prescribe alcohol. PMH: hypertension, obesity. Evaluate the potential drug interaction and provide recommendations.",
+    "correct_answer": "Interaction: disulfiram-like reaction. Management: avoid alcohol during treatment.",
+    "_source_domain": "drug_interaction",
+    "description": {
+      "condition": "metronidazole_alcohol",
+      "task_type": "clinical_scenario"
+    },
+    "evaluation_criteria": {
+      "reward_basis": [
+        "ACTION",
+        "NL_ASSERTION"
+      ],
+      "actions": [
+        {
+          "name": "get_drug_info",
+          "arguments": {},
+          "compare_args": []
+        },
+        {
+          "name": "check_interaction",
+          "arguments": {},
+          "compare_args": []
+        }
+      ]
+    }
+  }
+]

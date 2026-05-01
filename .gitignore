@@ -94,9 +94,26 @@ datasets/sft/contaminated_backup/
 wandb/
 mlruns/
 # --- Benchmark data (license restrictions) ---
-data/ehr_benchmarks/eicu_bench.json
-data/ehr_benchmarks/mimic_iii_bench.json
+data/ehr_benchmarks/
 data/verl_parquet/
 data/eval/
+data/clinical_cases_v2.json
+data/guidelines/
+
+# --- Paper / docs (confidential) ---
 Neurips_2026_paper_writing/
 paper_figures/
+daily_claude_check/
+healthcare gym/
+
+# --- Old submodules / references ---
+databases/
+GYM_reference/
+trains/
+tool_simulations/
+
+# --- Development logs ---
+BUGLOG.md
+PLANNING.md
+RESEARCH_LOG*.md
+AGENT_GUIDELINE.md

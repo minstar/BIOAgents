@@ -93,5 +93,10 @@ datasets/sft/contaminated_backup/
 # --- Wandb / MLflow ---
 wandb/
 mlruns/
+# --- Benchmark data (license restrictions) ---
 data/ehr_benchmarks/eicu_bench.json
 data/ehr_benchmarks/mimic_iii_bench.json
+data/verl_parquet/
+data/eval/
+Neurips_2026_paper_writing/
+paper_figures/

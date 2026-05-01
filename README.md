@@ -2,8 +2,6 @@
 
 **A Gymnasium-compatible reinforcement learning environment for training medical AI agents through multi-turn clinical tool use.**
 
-> Submitted to the 40th Conference on Neural Information Processing Systems (NeurIPS 2026).
-
 Healthcare AI GYM bridges the gap between static medical knowledge retrieval and agentic clinical execution. Built on the Gymnasium interface (`step(action)/render()`), it spans **10 clinical domains** with **3.6K+ tasks**, **135 domain-specific tools**, a **knowledge base of 828K medical passages**, and a **safety-aware 5D reward function** — enabling seamless integration with modern RL training pipelines.
 
 We propose **Turn-Level Truncated On-Policy Distillation (TT-OPD)**, a self-distillation framework that stabilizes multi-turn agentic RL via a gradient-free EMA teacher, outcome-conditioned privileged hints, and cosine length-controlled reward shaping. TT-OPD achieves the best performance on **10 of 18 benchmarks** with an average **+3.9 pp improvement** over the non-RL baseline.
@@ -335,12 +333,10 @@ Healthcare_GYM/
 ## Citation
 
 ```bibtex
-@inproceedings{healthcare_ai_gym_2026,
+@software{healthcare_ai_gym_2026,
   title={Healthcare AI GYM for Medical Agents},
-  author={Anonymous},
-  booktitle={Submitted to the 40th Conference on Neural Information Processing Systems (NeurIPS 2026)},
+  author={Jeong, Minbyul},
   year={2026},
-  note={Under review}
 }
 ```
 

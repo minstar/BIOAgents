@@ -93,3 +93,5 @@ datasets/sft/contaminated_backup/
 # --- Wandb / MLflow ---
 wandb/
 mlruns/
+data/ehr_benchmarks/eicu_bench.json
+data/ehr_benchmarks/mimic_iii_bench.json

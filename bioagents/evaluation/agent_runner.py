@@ -34,7 +34,8 @@ from bioagents.evaluation.rewards import compute_composite_reward
 class RunConfig:
     """Configuration for an agent run."""
     model_name_or_path: str
-    backend: Literal["vllm", "transformers"] = "transformers"
+    backend: Literal["vllm", "transformers", "sglang"] = "transformers"
+    server_url: Optional[str] = None  # SGLang server URL (e.g., http://localhost:30000)
     domain: str = "clinical_diagnosis"
     task_ids: Optional[list[str]] = None       # None = run all tasks
     task_split: Optional[str] = None
@@ -174,19 +175,24 @@ def _build_onboarding_guidance(domain: str) -> str:
     return f"""## Agent Behavior Guide
 **You are scored on 5 dimensions**: Accuracy (30%), Process (25%), Safety (20%), Format (15%), Coherence (10%).
 
-### IMPORTANT: Tool Usage Is Mandatory
-**You MUST call tools to gather information before answering.** Direct answers without tool usage receive a severe premature_stop penalty and near-zero Process score. Even if you think you know the answer, you MUST demonstrate systematic clinical reasoning by calling the appropriate tools first.
+### Tool Usage Guidelines
+**Use tools when they add value to your reasoning.** Direct answers without any tool usage receive a premature_stop penalty.
 
-**Minimum expected workflow:**
-1. Call at least 2-3 information-gathering tools (e.g. get patient data, labs, vitals)
-2. Use think() to reason about the gathered data
-3. Optionally search for evidence or guidelines
+**Recommended workflow:**
+1. Use think() to assess whether you need external evidence
+2. If the question requires clinical data, guidelines, or literature — call the appropriate tools
+3. If you are highly confident from your existing knowledge (e.g. well-known factual questions), you may submit after minimal tool use (think + submit_answer)
 4. Use submit_answer to provide your final assessment
 
-**Do NOT** skip straight to submit_answer. **Do NOT** write a long text response without tool calls. Each turn should contain ONLY a single JSON tool call — no surrounding text.
+**Do NOT** write a long text response without tool calls. Each turn should contain ONLY a single JSON tool call — no surrounding text.
+
+### Confidence-Based Submission
+- If you are **highly confident** in the answer after think(), you may call submit_answer without exhaustive searching. Unnecessary tool calls on well-known facts can introduce noise and reduce accuracy.
+- For **complex clinical scenarios**, multi-step reasoning, or unfamiliar topics — use 3-8 turns of tool calls to gather evidence before submitting.
+- **Always use think() at least once** before submit_answer to demonstrate reasoning.
 
 ### Scoring Rules
-- **3-8 turns** is the ideal range. 1-turn answers get **premature_stop** penalty (near-zero reward).
+- **2-8 turns** is the ideal range depending on question complexity.
 - **Always end with submit_answer.** Your response is only recorded when you submit.
 - **One tool call per turn.** Respond with ONLY the JSON object.
 - **Check safety.** Drug interactions, contraindications, critical values — flag them explicitly.
@@ -613,7 +619,9 @@ class AgentRunner:
         if Path(model_path).is_dir():
             repair_model_config(model_path)
 
-        if self.config.backend == "vllm":
+        if self.config.backend == "sglang":
+            self._load_sglang()
+        elif self.config.backend == "vllm":
             self._load_vllm()
         else:
             self._load_transformers()
@@ -638,7 +646,38 @@ class AgentRunner:
             stop=["```\n\n", "\n\nUser:", "\n\nHuman:"],
         )
         logger.info("vLLM model loaded successfully")
-    
+
+    def _load_sglang(self):
+        """Initialize SGLang client (server must be running separately)."""
+        from openai import OpenAI
+
+        server_url = self.config.server_url
+        if not server_url:
+            raise ValueError("server_url must be set for sglang backend")
+
+        self._sglang_client = OpenAI(
+            base_url=f"{server_url}/v1",
+            api_key="none",
+        )
+
+        # Discover model name from server
+        try:
+            models = self._sglang_client.models.list()
+            self._sglang_model_name = models.data[0].id if models.data else "default"
+        except Exception:
+            self._sglang_model_name = "default"
+
+        # Set tokenizer from the model path for chat template
+        from transformers import AutoTokenizer
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.config.model_name_or_path, trust_remote_code=True,
+        )
+        self._is_vl_model = False
+        self.processor = None
+        self.model = None  # No local model
+
+        logger.info(f"SGLang client initialized: {server_url} (model={self._sglang_model_name})")
+
     def _load_transformers(self):
         """Load model with HuggingFace transformers using ModelProfile.
 
@@ -789,11 +828,102 @@ class AgentRunner:
             messages: Conversation messages
             tools: OpenAI-format tool definitions to pass to apply_chat_template(tools=...)
         """
-        if self.config.backend == "vllm":
+        if self.config.backend == "sglang":
+            return self._generate_sglang(messages, tools=tools)
+        elif self.config.backend == "vllm":
             return self._generate_vllm(messages, tools=tools)
         else:
             return self._generate_transformers(messages, tools=tools)
     
+    def _generate_sglang(self, messages: list[dict], tools: Optional[list[dict]] = None) -> str:
+        """Generate with SGLang server via OpenAI-compatible API.
+
+        Supports both text-only and multimodal (image) inputs.
+        For multimodal: uses chat.completions with base64-encoded images.
+        For text-only: uses completions with locally-rendered chat template.
+        """
+        # Check if any message has multimodal content (images)
+        has_images = any(
+            isinstance(msg.get("content"), list) and
+            any(c.get("type") == "image" for c in msg["content"] if isinstance(c, dict))
+            for msg in messages
+        )
+
+        if has_images:
+            return self._generate_sglang_multimodal(messages, tools=tools)
+
+        # Text-only: apply chat template locally for exact parity with HF backend
+        try:
+            text = self.tokenizer.apply_chat_template(
+                messages, tools=tools if tools else None,
+                tokenize=False, add_generation_prompt=True,
+                enable_thinking=False,
+            )
+        except Exception:
+            text = self.tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True,
+                enable_thinking=False,
+            )
+
+        response = self._sglang_client.completions.create(
+            model=self._sglang_model_name,
+            prompt=text,
+            max_tokens=self.config.max_new_tokens,
+            temperature=max(self.config.temperature, 0.01),
+            top_p=self.config.top_p,
+            stop=["<|im_end|>", "<|endoftext|>"],
+        )
+        return response.choices[0].text.strip()
+
+    def _generate_sglang_multimodal(self, messages: list[dict], tools: Optional[list[dict]] = None) -> str:
+        """Generate with SGLang for multimodal (image) inputs via chat completions."""
+        import base64
+
+        # Convert messages to OpenAI chat format with base64 images
+        api_messages = []
+        for msg in messages:
+            content = msg.get("content")
+            if isinstance(content, list):
+                # Multimodal content
+                api_content = []
+                for part in content:
+                    if isinstance(part, dict):
+                        if part.get("type") == "image":
+                            # Convert file:// URI to base64
+                            image_path = part.get("image", "")
+                            if image_path.startswith("file://"):
+                                image_path = image_path[7:]
+                            try:
+                                with open(image_path, "rb") as f:
+                                    img_data = base64.b64encode(f.read()).decode()
+                                # Detect format
+                                ext = image_path.rsplit(".", 1)[-1].lower()
+                                media_type = {"jpg": "jpeg", "jpeg": "jpeg", "png": "png"}.get(ext, "jpeg")
+                                api_content.append({
+                                    "type": "image_url",
+                                    "image_url": {"url": f"data:image/{media_type};base64,{img_data}"}
+                                })
+                            except Exception as e:
+                                logger.warning(f"Failed to load image {image_path}: {e}")
+                        elif part.get("type") == "text":
+                            api_content.append({"type": "text", "text": part.get("text", "")})
+                        else:
+                            api_content.append(part)
+                    elif isinstance(part, str):
+                        api_content.append({"type": "text", "text": part})
+                api_messages.append({"role": msg["role"], "content": api_content})
+            else:
+                api_messages.append(msg)
+
+        response = self._sglang_client.chat.completions.create(
+            model=self._sglang_model_name,
+            messages=api_messages,
+            max_tokens=self.config.max_new_tokens,
+            temperature=max(self.config.temperature, 0.01),
+            top_p=self.config.top_p,
+        )
+        return response.choices[0].message.content.strip()
+
     def _generate_vllm(self, messages: list[dict], tools: Optional[list[dict]] = None) -> str:
         """Generate with vLLM using chat template."""
         from vllm import SamplingParams
@@ -846,11 +976,13 @@ class AgentRunner:
                 try:
                     text = self.tokenizer.apply_chat_template(
                         messages, tools=tools if tools else None,
-                        tokenize=False, add_generation_prompt=True
+                        tokenize=False, add_generation_prompt=True,
+                        enable_thinking=False,
                     )
                 except Exception:
                     text = self.tokenizer.apply_chat_template(
-                        messages, tokenize=False, add_generation_prompt=True
+                        messages, tokenize=False, add_generation_prompt=True,
+                        enable_thinking=False,
                     )
             else:
                 text = ""

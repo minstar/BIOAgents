@@ -447,7 +447,9 @@ def run_benchmark_multiturn(
     from bioagents.gym.agent_env import BioAgentGymEnv
 
     LFQA_BENCHMARKS = {"kqa_golden", "live_qa", "medication_qa", "healthsearch_qa", "kqa_silver"}
+    EHR_BENCHMARKS_SET = {"mimic_iii", "eicu"}
     is_lfqa = benchmark_name in LFQA_BENCHMARKS
+    is_ehr = benchmark_name in EHR_BENCHMARKS_SET
 
     results = []
     correct = 0
@@ -455,6 +457,7 @@ def run_benchmark_multiturn(
     rouge_l_sum = 0.0
     hall_sum = 0.0
     comp_sum = 0.0
+    action_score_sum = 0.0
     t_start = time.time()
 
     for i, task in enumerate(tasks):
@@ -480,7 +483,23 @@ def run_benchmark_multiturn(
             gold = task["correct_answer"].strip()
             options = task.get("options", {})
 
-            if is_lfqa:
+            if is_ehr:
+                # EHR: action-based scoring — check if expected tool calls were made
+                expected_actions = task.get("evaluation_criteria", {}).get("actions", [])
+                called_names = [
+                    t.parsed_tool_call.get("name", "")
+                    for t in turns if t.parsed_tool_call
+                ]
+                action_hits = 0
+                for exp in expected_actions:
+                    exp_name = exp.get("name", "")
+                    if exp_name in called_names:
+                        action_hits += 1
+                action_score = action_hits / max(len(expected_actions), 1)
+                action_score_sum += action_score
+                is_correct = action_score >= 0.5  # at least half of expected actions called
+                rouge_l = None
+            elif is_lfqa:
                 # LFQA: compute ROUGE-L on submitted answer vs gold
                 rouge_l = _compute_rouge_l(submitted, gold)
                 rouge_l_sum += rouge_l
@@ -509,7 +528,12 @@ def run_benchmark_multiturn(
                 "turns": len(turns),
                 "latency": latency,
             }
-            if is_lfqa:
+            if is_ehr:
+                result_entry["action_score"] = round(action_score, 4)
+                result_entry["actions_expected"] = len(expected_actions)
+                result_entry["actions_hit"] = action_hits
+                result_entry["tools_called"] = called_names
+            elif is_lfqa:
                 result_entry["rouge_l"] = round(rouge_l, 4)
                 result_entry["hallucination"] = round(hall, 2)
                 result_entry["comprehensiveness"] = round(comp, 2)
@@ -520,7 +544,15 @@ def run_benchmark_multiturn(
                 elapsed = time.time() - t_start
                 rate = total / elapsed * 60
                 eta = (len(tasks) - total) / max(rate, 0.01)
-                if is_lfqa:
+                if is_ehr:
+                    avg_as = action_score_sum / total
+                    acc = correct / total
+                    logger.info(
+                        f"  [{benchmark_name}] {total}/{len(tasks)} "
+                        f"action_score={avg_as:.3f} acc={acc:.3f} "
+                        f"rate={rate:.1f}/min ETA={eta:.0f}min"
+                    )
+                elif is_lfqa:
                     avg_rl = rouge_l_sum / total
                     avg_h = hall_sum / total
                     avg_c = comp_sum / total
@@ -536,8 +568,8 @@ def run_benchmark_multiturn(
                         f"acc={acc:.3f} rate={rate:.1f}/min ETA={eta:.0f}min"
                     )
 
-            # Periodic save every 100 samples
-            if total % 100 == 0:
+            # Periodic save every 10 samples
+            if total % 10 == 0:
                 _save_partial(benchmark_name, results, correct, total, output_dir)
 
         except Exception as e:
@@ -551,7 +583,12 @@ def run_benchmark_multiturn(
                 "turns": 0,
                 "error": str(e),
             }
-            if is_lfqa:
+            if is_ehr:
+                result_entry["action_score"] = 0.0
+                result_entry["actions_expected"] = 0
+                result_entry["actions_hit"] = 0
+                result_entry["tools_called"] = []
+            elif is_lfqa:
                 result_entry["rouge_l"] = 0.0
                 result_entry["hallucination"] = 100.0
                 result_entry["comprehensiveness"] = 0.0
@@ -573,7 +610,10 @@ def run_benchmark_multiturn(
         "timestamp": datetime.now().isoformat(),
         "results": results,
     }
-    if is_lfqa:
+    if is_ehr:
+        summary["avg_action_score"] = action_score_sum / max(total, 1)
+        summary["metric"] = "action_score (expected tool call coverage)"
+    elif is_lfqa:
         summary["avg_rouge_l"] = rouge_l_sum / max(total, 1)
         summary["avg_hallucination"] = hall_sum / max(total, 1)
         summary["avg_comprehensiveness"] = comp_sum / max(total, 1)
@@ -584,7 +624,16 @@ def run_benchmark_multiturn(
     with open(out_path, "w") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
 
-    if is_lfqa:
+    if is_ehr:
+        logger.info(
+            f"\n{'='*60}\n"
+            f"  {benchmark_name}: action_score={summary['avg_action_score']:.3f} "
+            f"acc={accuracy:.3f} ({correct}/{total})\n"
+            f"  avg_turns={summary['avg_turns']:.1f}\n"
+            f"  time={elapsed:.0f}s  saved={out_path}\n"
+            f"{'='*60}"
+        )
+    elif is_lfqa:
         logger.info(
             f"\n{'='*60}\n"
             f"  {benchmark_name}: rouge_l={summary['avg_rouge_l']:.3f} "
@@ -653,8 +702,8 @@ def _check_answer(submitted: str, gold: str, options: dict) -> bool:
         if m and m.group(1) == gold_letter.upper():
             return True
 
-    # Substring match for free-text answers
-    if gold.lower() in submitted.lower():
+    # Substring match for free-text answers (skip if gold is empty)
+    if gold and gold.lower() in submitted.lower():
         return True
 
     return False
@@ -755,6 +804,11 @@ def main():
                         help="Resume from sample index")
     parser.add_argument("--no-think", action="store_true",
                         help="Disable think() tool (ablation)")
+    parser.add_argument("--backend", default="transformers",
+                        choices=["transformers", "vllm", "sglang"],
+                        help="Inference backend (default: transformers)")
+    parser.add_argument("--server-url", default=None,
+                        help="SGLang server URL (required for sglang backend)")
     args = parser.parse_args()
 
     output_dir = Path(args.output_dir)
@@ -768,13 +822,14 @@ def main():
 
     config = RunConfig(
         model_name_or_path=args.model_path,
-        backend="transformers",
+        backend=args.backend,
         domain=first_domain,
         max_turns=args.max_turns,
         temperature=args.temperature,
         max_new_tokens=args.max_new_tokens,
         log_dir=str(output_dir / "logs"),
         no_think=args.no_think,
+        server_url=args.server_url,
     )
 
     logger.info(f"Loading model: {args.model_path}")

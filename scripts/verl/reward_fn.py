@@ -287,8 +287,16 @@ def compute_score(
                 is_correct = overlap > 0.5
 
         # Cosine length-scaling reward (training only)
+        # For open-ended questions: only apply cosine scaling when answer is
+        # meaningfully correct (overlap > 0.5).  When incorrect, keep the raw
+        # overlap score (0.0-0.5) instead of the cosine wrong-answer schedule,
+        # which produces persistent negative signal on ~27% of data and makes
+        # the model overly cautious / non-answering.
         if COSINE_REWARD_ENABLED and not is_validate:
-            base_reward = cosine_length_reward(is_correct, len(solution_str))
+            if is_correct:
+                # Good answer → reward with length efficiency bonus
+                base_reward = cosine_length_reward(True, len(solution_str))
+            # else: keep base_reward = overlap (0.0–0.5), no cosine penalty
 
         # Penalty for calling tools not in the provided tool list
         n_invalid = count_invalid_tool_calls(solution_str)

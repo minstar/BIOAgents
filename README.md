@@ -97,6 +97,7 @@ An optional **assertion** dimension (w=0.15) is available when rubric annotation
 - **828K medical passages** indexed via BM25 search
 - Sources: PubMed abstracts, clinical guidelines (AHA, ACOG, SSC), medical textbooks
 - Integrated as tool calls within the agent's action space
+- Built upon [Self-BioRAG](https://github.com/dmis-lab/self-biorag) and [OLAPH](https://github.com/dmis-lab/OLAPH)
 
 ---
 

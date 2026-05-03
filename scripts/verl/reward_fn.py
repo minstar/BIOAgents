@@ -52,11 +52,35 @@ def is_degenerate_response(text: str) -> bool:
     1. High ratio of repeated n-grams (n=4) in model-generated text
     2. Exact phrase repetition loops
     3. Very short responses with no tool calls (model gave up)
+    4. Multi-turn degenerate: excessive 'assistant' token repetition
+    5. Gibberish: high Unicode diversity (multilingual garbage tokens)
     """
     if len(text) < DEGENERATE_MIN_LENGTH:
         if "<function=" not in text and "<tool_call>" not in text:
             return True
         return False
+
+    # Check 4: Multi-turn assistant token repetition
+    # Pattern: model generates correct answer then fills with "assistant\nassistant\n..."
+    assistant_count = text.count("\nassistant\n")
+    if assistant_count > 20:
+        return True
+
+    # Check 5: Gibberish detection — high ratio of non-ASCII or high script diversity
+    latter_half = text[len(text) // 2:]
+    if len(latter_half) > 500:
+        non_ascii = sum(1 for c in latter_half if ord(c) > 127)
+        non_ascii_ratio = non_ascii / len(latter_half)
+        if non_ascii_ratio > 0.08:
+            return True
+        # Also check: many unique scripts in latter half = gibberish (random multilingual tokens)
+        words = latter_half.split()
+        if len(words) > 100:
+            # Sample 200 words, count how many have non-ASCII characters
+            sample = words[::max(1, len(words) // 200)]
+            mixed_script = sum(1 for w in sample if any(ord(c) > 127 for c in w))
+            if mixed_script / len(sample) > 0.15:
+                return True
 
     # Strip tool markup before checking repetition
     cleaned = _strip_tool_markup(text)
@@ -73,8 +97,9 @@ def is_degenerate_response(text: str) -> bool:
     if not ngrams:
         return False
     unique_ratio = len(set(ngrams)) / len(ngrams)
-    # Low unique ratio = high repetition (threshold: <15% unique = degenerate)
-    if unique_ratio < 0.15:
+    # Low unique ratio = high repetition (threshold: <30% unique = degenerate)
+    # Raised from 0.15 to catch more subtle repetition patterns
+    if unique_ratio < 0.30:
         return True
 
     # Check for exact phrase loops (same phrase repeated many times)
@@ -264,8 +289,10 @@ def compute_score(
         penalty = n_invalid * INVALID_TOOL_PENALTY
         reward = base_reward - penalty
 
-        # Degenerate filter: wrong answer + repetitive = hard penalty
-        if DEGENERATE_FILTER_ENABLED and not is_validate and not is_correct:
+        # Degenerate filter: repetitive responses get hard penalty regardless of correctness
+        # Critical: must apply to CORRECT answers too, otherwise RL rewards degenerate-but-correct
+        # responses (model answers correctly early, then fills with repetition)
+        if DEGENERATE_FILTER_ENABLED and not is_validate:
             if is_degenerate_response(solution_str):
                 return DEGENERATE_REWARD
         return reward
@@ -303,8 +330,8 @@ def compute_score(
         penalty = n_invalid * INVALID_TOOL_PENALTY
         reward = base_reward - penalty
 
-        # Degenerate filter: low-quality + repetitive = hard penalty
-        if DEGENERATE_FILTER_ENABLED and not is_validate and not is_correct:
+        # Degenerate filter: repetitive responses get hard penalty regardless of correctness
+        if DEGENERATE_FILTER_ENABLED and not is_validate:
             if is_degenerate_response(solution_str):
                 return DEGENERATE_REWARD
         return reward

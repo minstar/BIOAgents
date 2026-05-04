@@ -26,6 +26,10 @@ DEGENERATE_MIN_LENGTH = int(os.environ.get("DEGENERATE_MIN_LENGTH", "200"))
 # gradients that cause grad_norm explosion after step 50.
 DEGENERATE_EXCLUDE = os.environ.get("DEGENERATE_EXCLUDE", "") == "1"
 DEGENERATE_SENTINEL = -999.0  # Must match value in core_algos.py
+# DEGENERATE_GIBBERISH=1: enhanced gibberish detection that catches non-repetitive
+# garbage (random multilingual tokens) which bypasses the n-gram filter.
+# v28 showed model can collapse into gibberish that has unique n-grams.
+DEGENERATE_GIBBERISH = os.environ.get("DEGENERATE_GIBBERISH", "") == "1"
 
 
 def _strip_tool_markup(text: str) -> str:
@@ -86,6 +90,34 @@ def is_degenerate_response(text: str) -> bool:
             sample = words[::max(1, len(words) // 200)]
             mixed_script = sum(1 for w in sample if any(ord(c) > 127 for c in w))
             if mixed_script / len(sample) > 0.15:
+                return True
+
+    # Check 6 (v29): Enhanced gibberish detection for DEGENERATE_GIBBERISH mode
+    # v28 showed model can produce ASCII word salad that passes n-gram check
+    # (unique random words = high n-gram diversity, not repetitive)
+    # Detection: very long response + no coherent structure + low tool usage
+    if DEGENERATE_GIBBERISH and len(text) > 30000:
+        # Long response with no Answer pattern and no submit_answer = likely gibberish
+        has_answer = bool(re.search(r"Answer:\s*\S", text))
+        has_submit = "submit_answer" in text
+        has_tool_response = "</tool_response>" in text
+        # Check word length distribution — gibberish has many short random fragments
+        last_quarter = text[3 * len(text) // 4:]
+        lq_words = last_quarter.split()
+        if len(lq_words) > 200:
+            # Gibberish signal: high ratio of very short words (1-3 chars)
+            short_words = sum(1 for w in lq_words[:500] if len(w) <= 3)
+            short_ratio = short_words / min(500, len(lq_words))
+            # Also check: no medical/English structure (no common words)
+            common_medical = {"the", "is", "of", "and", "in", "to", "a", "for", "with", "that", "this", "patient", "diagnosis"}
+            common_count = sum(1 for w in lq_words[:500] if w.lower() in common_medical)
+            common_ratio = common_count / min(500, len(lq_words))
+            # Gibberish: many short words + few common English words + no answer/tool
+            if short_ratio > 0.4 and common_ratio < 0.05 and not has_answer and not has_submit:
+                return True
+            # Also: non-ASCII in last quarter even at lower threshold
+            non_ascii_lq = sum(1 for c in last_quarter[:2000] if ord(c) > 127)
+            if non_ascii_lq / min(2000, len(last_quarter)) > 0.04 and not has_tool_response:
                 return True
 
     # Strip tool markup before checking repetition

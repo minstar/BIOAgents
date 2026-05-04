@@ -20,6 +20,12 @@ DEGENERATE_FILTER_ENABLED = os.environ.get("DEGENERATE_FILTER", "") == "1"
 DEGENERATE_REWARD = float(os.environ.get("DEGENERATE_REWARD", "-1.0"))
 DEGENERATE_NGRAM_THRESHOLD = float(os.environ.get("DEGENERATE_NGRAM_THRESHOLD", "0.3"))
 DEGENERATE_MIN_LENGTH = int(os.environ.get("DEGENERATE_MIN_LENGTH", "200"))
+# DEGENERATE_EXCLUDE=1: use sentinel reward (-999.0) to completely exclude
+# degenerate responses from GRPO advantage computation (no gradient at all).
+# Without this, degenerate responses with -1.0 reward still produce large
+# gradients that cause grad_norm explosion after step 50.
+DEGENERATE_EXCLUDE = os.environ.get("DEGENERATE_EXCLUDE", "") == "1"
+DEGENERATE_SENTINEL = -999.0  # Must match value in core_algos.py
 
 
 def _strip_tool_markup(text: str) -> str:
@@ -294,6 +300,8 @@ def compute_score(
         # responses (model answers correctly early, then fills with repetition)
         if DEGENERATE_FILTER_ENABLED and not is_validate:
             if is_degenerate_response(solution_str):
+                if DEGENERATE_EXCLUDE:
+                    return DEGENERATE_SENTINEL  # Excluded from batch in core_algos
                 return DEGENERATE_REWARD
         return reward
     else:

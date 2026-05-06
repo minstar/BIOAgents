@@ -1,5 +1,7 @@
 # Healthcare AI GYM for Medical Agents
 
+[![arXiv](https://img.shields.io/badge/arXiv-2605.02943-b31b1b.svg)](https://arxiv.org/abs/2605.02943)
+
 **A Gymnasium-compatible reinforcement learning environment for training medical AI agents through multi-turn clinical tool use.**
 
 Healthcare AI GYM bridges the gap between static medical knowledge retrieval and agentic clinical execution. Built on the Gymnasium interface (`step(action)/render()`), it spans **10 clinical domains** with **3.6K+ tasks**, **135 domain-specific tools**, a **knowledge base of 828K medical passages**, and a **safety-aware 5D reward function** — enabling seamless integration with modern RL training pipelines.

@@ -166,6 +166,76 @@ where `lambda_distill = 4.0` provides strong regularization against agentic coll
 
 Each component addresses a distinct failure mode: EMA prevents KL collapse, outcome hints provide outcome-aware signal, and cosine reward prevents response explosion. Multi-turn collapse is identified as an **agentic-specific** failure mode absent from single-turn OPD.
 
+### Self-Distillation Instability Analysis
+
+During development we identified **three distinct failure modes** in self-distillation for multi-turn agentic RL. These findings complement recent OPD instability literature ([StableOPD](https://arxiv.org/abs/2604.08527), [TCOD](https://arxiv.org/abs/2604.24005), [SCOPE](https://arxiv.org/abs/2604.10688)) while revealing a novel temporal pattern specific to adaptive distillation scheduling.
+
+#### Failure Mode 1: Teacher Corruption Cascade (v29)
+
+| Phase | Steps | Val Acc | KL | Cause |
+|-------|:-----:|:-------:|:--:|-------|
+| Stable training | 1–60 | 55% → **58.0%** | 0.3–0.5 | EMA teacher tracks student well |
+| KL divergence | 61–70 | 58% → 47% | 0.72 → 1.15 | EMA absorbs corrupted student weights |
+| Collapse | 71–79 | → 0% | > 1.5 | Distillation pulls student toward corrupted teacher |
+
+**Root cause**: Unconditional EMA updates (every 5 steps) absorb student drift during RL exploration. Once KL > ~0.7, the corrupted teacher accelerates student degradation via a positive feedback loop.
+
+**Related work**: Matches the "self-consistent illusion" in [Co-Rewarding (ICLR 2026)](https://arxiv.org/abs/2508.00410) and the entropy degradation theory of [ERBP](https://arxiv.org/abs/2512.14879).
+
+#### Failure Mode 2: Frozen Teacher Gap Cascade (v30)
+
+| Phase | Steps | Val Acc | KL | Cause |
+|-------|:-----:|:-------:|:--:|-------|
+| Stable training | 1–60 | 52% → 55.5% | 0.3–0.6 | Frozen teacher provides clean signal |
+| Gap widens | 61–70 | 55% → 45% | 0.6 → 1.1 | Student drifts, teacher signal becomes stale |
+| Collapse | 71–81 | → 3.4% | > 1.4 | Strong distill_coef (4.0) forces student toward irrelevant teacher |
+
+**Root cause**: Static `distill_coef=4.0` makes distillation 10–20x stronger than RL gradient (`pg_loss ≈ 0.03–0.2` vs `distill_loss × 4.0 ≈ 0.8–3.4`). When the frozen teacher becomes stale, this overwhelming signal fights RL optimization → collapse.
+
+**Related work**: Matches the "flawed prefix trap" in [SCOPE](https://arxiv.org/abs/2604.10688) — teacher perplexity on drifted student prefixes degrades guidance to noise.
+
+#### Failure Mode 3: Adaptive Re-engagement Explosion (v31) — Novel
+
+| Phase | Steps | Val Acc | KL | Adaptive Coef | Cause |
+|-------|:-----:|:-------:|:--:|:-------------:|-------|
+| Distill active | 1–40 | 53% → **62.6%** | 0.2–0.5 | 1.5–2.0 | Distillation guides early learning |
+| Distill auto-OFF | 41–120 | 62.6% → **60.3%** | 0.7–3.0 | 0.0–0.1 | KL > 0.7 → distill OFF, pure GRPO |
+| **Re-engagement** | 141–144 | — | 0.5 ← drop | **1.2** ← spike | KL drops → distill re-engages with stale teacher |
+| Grad explosion | 141–144 | — | — | — | grad_norm: 142 → 301 → 280 → 228 |
+| Death | 145–158 | 60% → **51.6%** | 1.0–2.0 | 0.0 | grad vanishes to 0.2, dead batches, learning arrest |
+
+**Root cause**: When the adaptive coefficient drops distillation to near-zero for 100+ steps, the student evolves freely under RL. If KL later drops naturally (due to data variation or cosine LR decay), the adaptive system re-engages distillation toward a **frozen teacher that is 120+ steps stale**. The teacher's signal on the now-drifted student prefixes is noise ([SCOPE](https://arxiv.org/abs/2604.10688)), the log-ratio `log(π_teacher/π_student)` is extreme ([G-OPD](https://arxiv.org/abs/2602.12125)), and multi-turn compounding errors amplify the mismatch ([TCOD](https://arxiv.org/abs/2604.24005)). The result is catastrophic gradient explosion followed by permanent learning arrest.
+
+**This failure mode is not explicitly reported in existing OPD literature.** It arises from the interaction of five documented mechanisms:
+
+1. **Teacher staleness on drifted prefixes** — TCOD, SCOPE
+2. **Sudden objective interference** — RLAD ([arXiv:2602.22495](https://arxiv.org/abs/2602.22495))
+3. **Log-ratio explosion** — G-OPD (λ > 1.5 instability)
+4. **Compounding multi-turn errors** — TCOD
+5. **Repetition runaway** — StableOPD (repetitive tokens receive 4–9x larger KL advantage)
+
+#### Summary of Failure Modes
+
+```
+v29: Teacher updated    → corruption cascade    → death at step 70  (10 steps)
+v30: Teacher frozen     → gap cascade           → death at step 74  (50 steps)
+v31: Teacher frozen     → adaptive re-engagement → death at step 145 (5 steps)
+     + adaptive coef       (novel failure mode)
+```
+
+All three modes share a common root: **self-distillation in multi-turn agentic RL is fundamentally fragile** because the teacher inevitably becomes stale as the student explores under RL. The key insight is that distillation is most valuable in early training (steps 1–40) and should be **monotonically phased out** rather than adaptively toggled.
+
+#### Mitigation Strategies (from Literature)
+
+| Strategy | Source | Description |
+|----------|--------|-------------|
+| Mixture distillation | [StableOPD](https://arxiv.org/abs/2604.08527) | Mix off-policy SFT data to anchor training distribution |
+| Temporal curriculum | [TCOD](https://arxiv.org/abs/2604.24005) | Progressively expand trajectory depth (early turns first) |
+| Teacher perplexity gating | [SCOPE](https://arxiv.org/abs/2604.10688) | Down-weight distillation when teacher is uncertain |
+| Skewed KL target | DistiLLM | Use `α·π_teacher + (1-α)·π_student` to bound density ratios |
+| Monotonic phase-out | **Ours** | Once KL exceeds threshold, permanently disable distillation |
+| Minimum coef floor | General | Never fully disable distillation (keep coef ≥ 0.1) to prevent drift |
+
 ---
 
 ## Architecture
